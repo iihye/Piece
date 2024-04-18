@@ -1,2 +1,4 @@
-package com.ssafy.piece.global.config;public class CorsCoonfig {
+package com.ssafy.piece.global.config;
+
+public class CorsConfig {
 }
