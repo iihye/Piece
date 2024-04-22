@@ -1,5 +1,35 @@
 package com.ssafy.piece.domain.labels.entity;
 
-public class Labels {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Getter
+@Table(name = "labels")
+public class Labels {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long labelId;
+
+    @Column(nullable = false)
+    private PerformanceType performanceType;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String description;
 }
