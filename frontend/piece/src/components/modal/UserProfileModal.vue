@@ -1,16 +1,17 @@
 <template>
     <div class="background-container">
         <div class="main-container">
-            <div class="modal-title">{{ modalTitle }}</div>
-            <div class="modal-content" v-html="modalContent"></div>
-            <div class="button-container">
-                <button class="button-fail" @click="handleFailClick">
-                    {{ buttonFail }}
-                </button>
-                <button class="button-success" @click="handleSuccessClick">
-                    {{ buttonSuccess }}
-                </button>
+            <div class="modal-image">
+                <img class="user-image" :src="userImageUrl" alt="Modal Image" />
             </div>
+            <div class="user-label">{{ userLabel }}</div>
+            <div class="user-name">{{ userName }}</div>
+            <button class="button-chat" @click="handleChatClick">
+                1:1 채팅하기
+            </button>
+            <button class="button-report" @click="handleReportClick">
+                신고하기
+            </button>
         </div>
     </div>
 </template>
@@ -19,22 +20,17 @@
 import { defineProps } from "vue";
 
 defineProps({
-    modalTitle: {
+    userImageUrl: {
         type: String,
     },
-    modalContent: {
+    userLabel: {
         type: String,
     },
-    buttonSuccess: {
+    userName: {
         type: String,
-        default: "성공",
     },
-    buttonFail: {
-        type: String,
-        default: "실패",
-    },
-    handleFailClick: Function,
-    handleSuccessClick: Function,
+    handleChatClick: Function,
+    handleReportClick: Function,
 });
 </script>
 
@@ -65,50 +61,62 @@ defineProps({
     padding: 2rem 1.6rem 2rem 1.6rem;
 }
 
-.modal-title {
-    font-family: "Semi";
-    font-size: 1.4rem;
-    color: var(--black-color);
-    margin-bottom: 2rem;
+.modal-image {
+    margin-bottom: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.modal-content {
+.user-image {
+    width: 6rem;
+    height: 6rem;
+    border: 1px solid var(--gray-color);
+    border-radius: 50%;
+}
+
+.user-label {
     font-family: "Medium";
+    font-size: 1.2rem;
+    color: var(--main-color);
+    margin: 0;
+    margin-bottom: 0.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-name {
+    font-family: "Semi";
     font-size: 1.2rem;
     color: var(--black-color);
     margin: 0;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     display: flex;
-    justify-content: left;
+    justify-content: center;
     align-items: center;
 }
 
-.button-container {
+.button-chat {
     width: 16rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.button-success {
-    width: 7.6rem;
     height: 3.2rem;
     font-family: "Bold";
     font-size: 1rem;
     background-color: var(--main-color);
+    margin-bottom: 0.8rem;
     border: 0;
     border-radius: 0.625rem;
     color: var(--white-color);
 }
 
-.button-fail {
-    width: 7.6rem;
+.button-report {
+    width: 16rem;
     height: 3.2rem;
     font-family: "Bold";
     font-size: 1rem;
-    background-color: var(--gray-color);
+    background-color: var(--gray2-color);
     border: 0;
     border-radius: 0.625rem;
-    color: var(--gray2-color);
+    color: var(--white-color);
 }
 </style>
