@@ -8,11 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,12 +18,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "labels")
 public class Labels {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long labelId;
 
-    @Column(nullable = false)
-    private PerformanceType performanceType;
+//    @Column(nullable = false)
+//    private PerformanceType performanceType;
 
     @Column(nullable = false)
     private String title;
