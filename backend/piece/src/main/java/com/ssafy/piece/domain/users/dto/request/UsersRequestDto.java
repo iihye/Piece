@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-@Data//롬복을 사용하여 기본적인 게터,세터,tostring을 자동생성할 수 있다.
+@Data//롬복을 사용하여 기본적인 게터,세터,toString을 자동생성할 수 있다.
 public class UsersRequestDto {
     //UserRequestDto: 사용자의 입력을 받아 서버로 전송
 

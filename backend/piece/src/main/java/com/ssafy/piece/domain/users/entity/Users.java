@@ -10,11 +10,17 @@ import jakarta.persistence.Table;
 
 
 import java.sql.Timestamp;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Data
+@Getter
+@Setter
 @Entity
+@Builder
 @Table(name = "users")
 
 public class Users {
@@ -41,7 +47,7 @@ public class Users {
     private Boolean tutorial; //튜토리얼여부 (T: 보여준다 F:안보여준다.)
 
     @Column(nullable = false)
-    private Long socialId; //소셜로그인 식별번호
+    private String socialId; //소셜로그인 식별번호(4.23 Long->String 수정)
 
     @Column(nullable = false)
     private Long labelId; // 사용자에게 부여된 칭호의 식별ID
