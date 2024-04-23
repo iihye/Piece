@@ -1,13 +1,13 @@
 <template>
     <div>
         <RouterView />
-        <ConfirmButton />
+        <SmallButton />
     </div>
 </template>
 
 <script setup>
 import { RouterView } from "vue-router";
-import ConfirmButton from "@/components/button/ConfirmButton.vue";
+import SmallButton from "@/components/button/SmallButton.vue";
 </script>
 
 <style></style>
