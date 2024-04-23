@@ -13,19 +13,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Getter
 @Table(name = "pieces")
 
 public class Pieces {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pieceId;
@@ -68,7 +67,7 @@ public class Pieces {
     private String comment;
 
     @Column(nullable = true)
-    private boolean isOpen;
+    private Boolean isOpen;
 
     @Column(nullable = false)
     private String imageFront;
