@@ -14,6 +14,10 @@ public enum SuccessCode implements ResponseCode {
 
     LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃에 성공했습니다."),
 
+    //아래 두개 추가하였습니다.(닉네임 중복확인용)
+    CHECK_NICKNAME_GOOD(HttpStatus.OK, "사용 가능한 닉네임입니다."),
+    CHECK_NICKNAME_BAD(HttpStatus.OK, "이미 사용 중인 닉네임입니다."),
+
     CHECK_EMAIL_GOOD(HttpStatus.OK, "사용 가능한 이메일입니다"),
 
     CHECK_EMAIL_BAD(HttpStatus.OK, "이미 사용 중인 이메일입니다"),

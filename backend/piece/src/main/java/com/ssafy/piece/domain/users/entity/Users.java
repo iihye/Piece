@@ -17,8 +17,6 @@ import lombok.Setter;
 
 
 @Data
-@Getter
-@Setter
 @Entity
 @Builder
 @Table(name = "users")
@@ -26,35 +24,35 @@ import lombok.Setter;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId; //사용자의 고유 식별자
+    private Long userId;
 
     @Column(length = 255, nullable = false)
-    private String email; // 사용자의 이메일입니다.
+    private String email;
 
     @Column(length = 255, nullable = true)
-    private String profileImage; //사용자의 프로필 이미지 URL
+    private String profileImage;
 
     @Column(nullable = false , length = 10)
-    private String nickname; // 사용자 닉네임, 최대 10자
+    private String nickname; //최대 10자
 
     @Column(nullable = false)
-    private Timestamp createdAt ; //계정 생성 시각
+    private Timestamp createdAt ;
 
     @Column(nullable = false)
-    private Timestamp updatedAt ; //계정 정보 수정 시각
+    private Timestamp updatedAt ;
 
     @Column(nullable = false)
-    private Boolean tutorial; //튜토리얼여부 (T: 보여준다 F:안보여준다.)
+    private Boolean isTutorial; //true: 보여준다, false: 안보여준다
 
     @Column(nullable = false)
-    private String socialId; //소셜로그인 식별번호(4.23 Long->String 수정)
+    private String socialId;
 
     @Column(nullable = false)
-    private Long labelId; // 사용자에게 부여된 칭호의 식별ID
+    private Long labelId;
 
     @Column(nullable = false, length = 10)
-    private String username; //사용자의 로그인 아이디, 최대10자
+    private String username; //로그인ID, 최대10자
 
     @Column(nullable = false, length = 255)
-    private String password; //사용자의 로그인 비밀번호,길이는 해시 함수에 따라 달라질 수 있음
+    private String password;
 }

@@ -28,7 +28,11 @@ public enum ErrorCode implements ResponseCode {
     /**
      * User
      */
+
+
     DUPLICATED_USER(HttpStatus.CONFLICT, "이미 가입된 유저 정보입니다."),
+
+    DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "중복된 닉네임입니다."),
 
     DUPLICATED_EMAIL(HttpStatus.CONFLICT, "이미 해당 이메일로 가입된 정보가 존재합니다.."),
 
@@ -43,6 +47,7 @@ public enum ErrorCode implements ResponseCode {
     UPDATE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "이미 승인된 사용자입니다."),
 
     BLOCK_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "이미 정지된 사용자입니다."),;
+
 
 
     private final HttpStatus httpStatus;
