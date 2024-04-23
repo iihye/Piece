@@ -4,11 +4,11 @@
             <div class="modal-title">{{ modalTitle }}</div>
             <div class="modal-content" v-html="modalContent"></div>
             <div class="button-container">
-                <button class="button-fail" @click="handleFailClick">
-                    {{ buttonFail }}
+                <button class="button-cancel" @click="handleCancelClick">
+                    {{ buttonCancel }}
                 </button>
-                <button class="button-success" @click="handleSuccessClick">
-                    {{ buttonSuccess }}
+                <button class="button-warn" @click="handleWarnClick">
+                    {{ buttonWarn }}
                 </button>
             </div>
         </div>
@@ -25,16 +25,16 @@ defineProps({
     modalContent: {
         type: String,
     },
-    buttonSuccess: {
+    buttonCancel: {
         type: String,
-        default: "성공",
+        default: "취소",
     },
-    buttonFail: {
+    buttonWarn: {
         type: String,
-        default: "실패",
+        default: "나가기",
     },
-    handleFailClick: Function,
-    handleSuccessClick: Function,
+    handleCancelClick: Function,
+    handleWarnClick: Function,
 });
 </script>
 
@@ -90,18 +90,18 @@ defineProps({
     align-items: center;
 }
 
-.button-success {
+.button-warn {
     width: 7.6rem;
     height: 3.2rem;
     font-family: "Bold";
     font-size: 1rem;
-    background-color: var(--main-color);
+    background-color: var(--red-color);
     border: 0;
     border-radius: 0.625rem;
     color: var(--white-color);
 }
 
-.button-fail {
+.button-cancel {
     width: 7.6rem;
     height: 3.2rem;
     font-family: "Bold";
