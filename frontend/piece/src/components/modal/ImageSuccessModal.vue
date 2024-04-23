@@ -2,6 +2,7 @@
     <div class="background-container">
         <div class="main-container">
             <div class="modal-title">{{ modalTitle }}</div>
+            <div class="modal-content" v-html="modalContent"></div>
             <div class="modal-img">
                 <img
                     src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Birthday%20Cake.png"
