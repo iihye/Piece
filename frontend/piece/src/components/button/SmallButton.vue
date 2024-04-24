@@ -1,15 +1,29 @@
 <template>
-    <div>
-        <h2>뭐야무우야야</h2>
+    <div class="smallbutton-container">
+        <button @click="smallButtonFunction" class="smallbutton">{{ smallButtonContent }}</button>
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+
+import { defineProps } from 'vue';
+
+defineProps({
+    smallButtonContent: String,
+    smallButtonFunction: Function
+});
+
+</script>
 
 <style>
 @import "@/components/css/color.css";
 
-h2 {
-    color: var(--main-color);
+.smallbutton {
+    background-color: var(--main-color);
+    border: 0;
+    border-radius: 0.625rem;
+    height: 2.5rem;
+    width: 7.5rem;
+    color: var(--white-color);
 }
 </style>
