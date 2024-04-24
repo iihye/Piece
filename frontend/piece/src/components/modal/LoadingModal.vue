@@ -1,9 +1,9 @@
 <template>
-    <div class="background-container">
-        <div class="main-container">
-            <div class="modal-title">{{ modalTitle }}</div>
-            <div class="modal-content" v-html="modalContent"></div>
-            <div class="modal-img">
+    <div class="loadingmodal-background-container">
+        <div class="loadingmodal-main-container">
+            <div class="loadingmodal-modal-title">{{ modalTitle }}</div>
+            <div class="loadingmodal-modal-content" v-html="modalContent"></div>
+            <div class="loadingmodal-modal-img">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 100 100"
@@ -111,8 +111,11 @@
                     </g>
                 </svg>
             </div>
-            <div class="button-container">
-                <button class="button-fail" @click="handleFailClick">
+            <div class="loadingmodal-button-container">
+                <button
+                    class="loadingmodal-button-fail"
+                    @click="handleFailClick"
+                >
                     취소
                 </button>
             </div>
@@ -138,7 +141,7 @@ defineProps({
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
-.background-container {
+.loadingmodal-background-container {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -152,7 +155,7 @@ defineProps({
     align-items: center;
 }
 
-.main-container {
+.loadingmodal-main-container {
     width: flex;
     max-width: 16rem;
     height: flex;
@@ -161,14 +164,14 @@ defineProps({
     padding: 2rem 1.6rem 2rem 1.6rem;
 }
 
-.modal-title {
+.loadingmodal-modal-title {
     font-family: "Semi";
     font-size: 1.4rem;
     color: var(--black-color);
     margin-bottom: 2rem;
 }
 
-.modal-content {
+.loadingmodal-modal-content {
     font-family: "Medium";
     font-size: 1.2rem;
     color: var(--black-color);
@@ -179,21 +182,21 @@ defineProps({
     align-items: center;
 }
 
-.modal-img {
+.loadingmodal-modal-img {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 2rem;
 }
 
-.button-container {
+.loadingmodal-button-container {
     width: 16rem;
     display: flex;
     justify-content: left;
     align-items: center;
 }
 
-.button-fail {
+.loadingmodal-button-fail {
     width: flex;
     height: flex;
     font-family: "Bold";

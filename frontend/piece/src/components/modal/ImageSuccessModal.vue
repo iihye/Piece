@@ -1,9 +1,12 @@
 <template>
-    <div class="background-container">
-        <div class="main-container">
-            <div class="modal-title">{{ modalTitle }}</div>
-            <div class="modal-content" v-html="modalContent"></div>
-            <div class="modal-img">
+    <div class="imagesuccessmodal-background-container">
+        <div class="imagesuccessmodal-main-container">
+            <div class="imagesuccessmodal-modal-title">{{ modalTitle }}</div>
+            <div
+                class="imagesuccessmodal-modal-content"
+                v-html="modalContent"
+            ></div>
+            <div class="imagesuccessmodal-modal-img">
                 <img
                     src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Birthday%20Cake.png"
                     alt="Birthday Cake"
@@ -11,8 +14,11 @@
                     height="160"
                 />
             </div>
-            <div class="button-container">
-                <button class="button-success" @click="handleSuccessClick">
+            <div class="imagesuccessmodal-button-container">
+                <button
+                    class="imagesuccessmodal-button-success"
+                    @click="handleSuccessClick"
+                >
                     확인
                 </button>
             </div>
@@ -35,7 +41,7 @@ defineProps({
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
-.background-container {
+.imagesuccessmodal-background-container {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -49,7 +55,7 @@ defineProps({
     align-items: center;
 }
 
-.main-container {
+.imagesuccessmodal-main-container {
     width: flex;
     max-width: 16rem;
     height: flex;
@@ -58,28 +64,28 @@ defineProps({
     padding: 2rem 1.6rem 2rem 1.6rem;
 }
 
-.modal-title {
+.imagesuccessmodal-modal-title {
     font-family: "Semi";
     font-size: 1.4rem;
     color: var(--black-color);
     margin-bottom: 2rem;
 }
 
-.modal-img {
+.imagesuccessmodal-modal-img {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 2rem;
 }
 
-.button-container {
+.imagesuccessmodal-button-container {
     width: 16rem;
     display: flex;
     justify-content: end;
     align-items: center;
 }
 
-.button-success {
+.imagesuccessmodal-button-success {
     width: flex;
     height: flex;
     font-family: "Bold";
