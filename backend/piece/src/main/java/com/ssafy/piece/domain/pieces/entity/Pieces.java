@@ -23,19 +23,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Table(name = "pieces")
-
 public class Pieces {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pieceId;
 
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private Users user;
 
     @Column(nullable = false)
-    private CultureType cultureType;
+    private CultureType performanceType;
 
     @Column(nullable = false)
     private String title;

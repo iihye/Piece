@@ -1,5 +1,8 @@
 package com.ssafy.piece.domain.pieces.repository;
 
-public interface PiecesRepository {
+import com.ssafy.piece.domain.pieces.entity.Pieces;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PiecesRepository extends JpaRepository<Pieces, Long>{
 
 }
