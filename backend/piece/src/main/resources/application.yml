@@ -10,3 +10,8 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+    app:
+      jwt:
+        secret: "ssafy1234"
+        expiration-ms: 3600000  # 1시간
