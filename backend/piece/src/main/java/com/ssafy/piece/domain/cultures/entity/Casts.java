@@ -3,34 +3,27 @@ package com.ssafy.piece.domain.cultures.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Entity
-@Table(name = "movies")
+@Table(name = "casts")
 @Getter
-public class Movies {
+public class Casts {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "movie_id")
+    @Column(name = "casts_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "culture_id")
     private Cultures cultures;
 
-    private String rank;
+    private String name;
 
-    @Column(name = "open_date")
-    private LocalDateTime openDate;
+    private String image_url;
 
-    private String nation;
-    
 }

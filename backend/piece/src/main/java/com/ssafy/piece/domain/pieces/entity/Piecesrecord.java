@@ -1,7 +1,6 @@
-package com.ssafy.piece.domain.labels.entity;
+package com.ssafy.piece.domain.pieces.entity;
 
-import com.ssafy.piece.domain.users.entity.Users;
-import com.ssafy.piece.global.entity.BaseTime;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,22 +14,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Getter
-@Table(name = "mylabels")
-public class MyLabels extends BaseTime {
+@Table(name = "pieces_record")
+public class Piecesrecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long myLabelId;
+    private Long recordId;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private Users users;
+    @JoinColumn(name = "pieceId")
+    private Pieces piece;
 
-    @ManyToOne
-    @JoinColumn(name = "labelId")
-    private Labels labels;
+    @Column(nullable = false)
+    private String content;
 }
