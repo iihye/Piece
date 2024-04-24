@@ -1,5 +1,6 @@
 package com.ssafy.piece.domain.pieces.entity;
 
+import com.ssafy.piece.domain.cultures.entity.CultureType;
 import com.ssafy.piece.domain.users.entity.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,8 +34,8 @@ public class Pieces {
     @JoinColumn(name = "userId")
     private Users user;
 
-//    @Column(nullable = false)
-//    private PerformanceType performanceType;
+    @Column(nullable = false)
+    private CultureType cultureType;
 
     @Column(nullable = false)
     private String title;
