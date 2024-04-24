@@ -1,13 +1,22 @@
 <template>
-    <div class="background-container">
-        <div class="main-container">
-            <div class="modal-title">{{ modalTitle }}</div>
-            <div class="modal-content" v-html="modalContent"></div>
-            <div class="button-container">
-                <button class="button-cancel" @click="handleCancelClick">
+    <div class="cancelwarnmodal-background-container">
+        <div class="cancelwarnmodal-main-container">
+            <div class="cancelwarnmodal-modal-title">{{ modalTitle }}</div>
+            <div
+                class="cancelwarnmodal-modal-content"
+                v-html="modalContent"
+            ></div>
+            <div class="cancelwarnmodal-button-container">
+                <button
+                    class="cancelwarnmodal-button-cancel"
+                    @click="handleCancelClick"
+                >
                     {{ buttonCancel }}
                 </button>
-                <button class="button-warn" @click="handleWarnClick">
+                <button
+                    class="cancelwarnmodal-button-warn"
+                    @click="handleWarnClick"
+                >
                     {{ buttonWarn }}
                 </button>
             </div>
@@ -42,7 +51,7 @@ defineProps({
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
-.background-container {
+.cancelwarnmodal-background-container {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -56,7 +65,7 @@ defineProps({
     align-items: center;
 }
 
-.main-container {
+.cancelwarnmodal-main-container {
     width: flex;
     max-width: 16rem;
     height: flex;
@@ -65,14 +74,14 @@ defineProps({
     padding: 2rem 1.6rem 2rem 1.6rem;
 }
 
-.modal-title {
+.cancelwarnmodal-modal-title {
     font-family: "Semi";
     font-size: 1.4rem;
     color: var(--black-color);
     margin-bottom: 2rem;
 }
 
-.modal-content {
+.cancelwarnmodal-modal-content {
     font-family: "Medium";
     font-size: 1.2rem;
     color: var(--black-color);
@@ -83,25 +92,14 @@ defineProps({
     align-items: center;
 }
 
-.button-container {
+.cancelwarnmodal-button-container {
     width: 16rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.button-warn {
-    width: 7.6rem;
-    height: 3.2rem;
-    font-family: "Bold";
-    font-size: 1rem;
-    background-color: var(--red-color);
-    border: 0;
-    border-radius: 0.625rem;
-    color: var(--white-color);
-}
-
-.button-cancel {
+.cancelwarnmodal-button-cancel {
     width: 7.6rem;
     height: 3.2rem;
     font-family: "Bold";
@@ -110,5 +108,16 @@ defineProps({
     border: 0;
     border-radius: 0.625rem;
     color: var(--gray2-color);
+}
+
+.cancelwarnmodal-button-warn {
+    width: 7.6rem;
+    height: 3.2rem;
+    font-family: "Bold";
+    font-size: 1rem;
+    background-color: var(--red-color);
+    border: 0;
+    border-radius: 0.625rem;
+    color: var(--white-color);
 }
 </style>

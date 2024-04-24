@@ -1,13 +1,16 @@
 <template>
-    <div class="background-container">
-        <div class="main-container">
-            <div class="modal-title">{{ modalTitle }}</div>
-            <div class="modal-content" v-html="modalContent"></div>
-            <div class="button-container">
-                <button class="button-fail" @click="handleFailClick">
+    <div class="yesnomodal-background-container">
+        <div class="yesnomodal-main-container">
+            <div class="yesnomodal-modal-title">{{ modalTitle }}</div>
+            <div class="yesnomodal-modal-content" v-html="modalContent"></div>
+            <div class="yesnomodal-button-container">
+                <button class="yesnomodal-button-fail" @click="handleFailClick">
                     {{ buttonFail }}
                 </button>
-                <button class="button-success" @click="handleSuccessClick">
+                <button
+                    class="yesnomodal-button-success"
+                    @click="handleSuccessClick"
+                >
                     {{ buttonSuccess }}
                 </button>
             </div>
@@ -42,7 +45,7 @@ defineProps({
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
-.background-container {
+.yesnomodal-background-container {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -56,7 +59,7 @@ defineProps({
     align-items: center;
 }
 
-.main-container {
+.yesnomodal-main-container {
     width: flex;
     max-width: 16rem;
     height: flex;
@@ -65,14 +68,14 @@ defineProps({
     padding: 2rem 1.6rem 2rem 1.6rem;
 }
 
-.modal-title {
+.yesnomodal-modal-title {
     font-family: "Semi";
     font-size: 1.4rem;
     color: var(--black-color);
     margin-bottom: 2rem;
 }
 
-.modal-content {
+.yesnomodal-modal-content {
     font-family: "Medium";
     font-size: 1.2rem;
     color: var(--black-color);
@@ -83,25 +86,14 @@ defineProps({
     align-items: center;
 }
 
-.button-container {
+.yesnomodal-button-container {
     width: 16rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.button-success {
-    width: 7.6rem;
-    height: 3.2rem;
-    font-family: "Bold";
-    font-size: 1rem;
-    background-color: var(--main-color);
-    border: 0;
-    border-radius: 0.625rem;
-    color: var(--white-color);
-}
-
-.button-fail {
+.yesnomodal-button-fail {
     width: 7.6rem;
     height: 3.2rem;
     font-family: "Bold";
@@ -110,5 +102,16 @@ defineProps({
     border: 0;
     border-radius: 0.625rem;
     color: var(--gray2-color);
+}
+
+.yesnomodal-button-success {
+    width: 7.6rem;
+    height: 3.2rem;
+    font-family: "Bold";
+    font-size: 1rem;
+    background-color: var(--main-color);
+    border: 0;
+    border-radius: 0.625rem;
+    color: var(--white-color);
 }
 </style>

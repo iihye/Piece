@@ -1,15 +1,25 @@
 <template>
-    <div class="background-container">
-        <div class="main-container">
-            <div class="modal-image">
-                <img class="user-image" :src="userImageUrl" alt="Modal Image" />
+    <div class="userprofilemodal-background-container">
+        <div class="userprofilemodal-main-container">
+            <div class="userprofilemodal-modal-image">
+                <img
+                    class="userprofilemodal-user-image"
+                    :src="userImageUrl"
+                    alt="Modal Image"
+                />
             </div>
-            <div class="user-label">{{ userLabel }}</div>
-            <div class="user-name">{{ userName }}</div>
-            <button class="button-chat" @click="handleChatClick">
+            <div class="userprofilemodal-user-label">{{ userLabel }}</div>
+            <div class="userprofilemodal-user-name">{{ userName }}</div>
+            <button
+                class="userprofilemodal-button-chat"
+                @click="handleChatClick"
+            >
                 1:1 채팅하기
             </button>
-            <button class="button-report" @click="handleReportClick">
+            <button
+                class="userprofilemodal-button-report"
+                @click="handleReportClick"
+            >
                 신고하기
             </button>
         </div>
@@ -38,7 +48,7 @@ defineProps({
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
-.background-container {
+.userprofilemodal-background-container {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -52,7 +62,7 @@ defineProps({
     align-items: center;
 }
 
-.main-container {
+.userprofilemodal-main-container {
     width: flex;
     max-width: 16rem;
     height: flex;
@@ -61,21 +71,21 @@ defineProps({
     padding: 2rem 1.6rem 2rem 1.6rem;
 }
 
-.modal-image {
+.userprofilemodal-modal-image {
     margin-bottom: 0.8rem;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.user-image {
+.userprofilemodal-user-image {
     width: 6rem;
     height: 6rem;
     border: 1px solid var(--gray-color);
     border-radius: 50%;
 }
 
-.user-label {
+.userprofilemodal-user-label {
     font-family: "Medium";
     font-size: 1.2rem;
     color: var(--main-color);
@@ -86,7 +96,7 @@ defineProps({
     align-items: center;
 }
 
-.user-name {
+.userprofilemodal-user-name {
     font-family: "Semi";
     font-size: 1.2rem;
     color: var(--black-color);
@@ -97,7 +107,7 @@ defineProps({
     align-items: center;
 }
 
-.button-chat {
+.userprofilemodal-button-chat {
     width: 16rem;
     height: 3.2rem;
     font-family: "Bold";
@@ -109,7 +119,7 @@ defineProps({
     color: var(--white-color);
 }
 
-.button-report {
+.userprofilemodal-button-report {
     width: 16rem;
     height: 3.2rem;
     font-family: "Bold";
