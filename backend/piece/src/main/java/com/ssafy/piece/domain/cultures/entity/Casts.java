@@ -14,7 +14,7 @@ import lombok.Getter;
 @Entity
 @Table(name = "casts")
 @Getter
-public class pupuCasts {
+public class Casts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
