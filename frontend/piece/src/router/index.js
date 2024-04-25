@@ -5,9 +5,18 @@ import LoginView from "@/views/login/LoginView.vue";
 import SignInView from "@/views/login/SignInView.vue";
 import KakaoView from "@/views/login/KakaoView.vue";
 import SuccessView from "@/views/login/SuccessView.vue";
+// piecemake
+import PieceMakeView from "@/views/piecemake/PieceMakeView.vue";
+import PieceImageView from "@/views/piecemake/PieceImageView.vue";
+import ImageCropView from "@/views/piecemake/ImageCropView.vue";
+import PieceInfoView from "@/views/piecemake/PieceInfoView.vue";
+import PieceCommentView from "@/views/piecemake/PieceCommentView.vue";
+import PieceFrontView from "@/views/piecemake/PieceFrontView.vue";
+import PieceBackView from "@/views/piecemake/PieceBackView.vue";
+import PieceBackgroundView from "@/views/piecemake/PieceBackgroundView.vue";
+import PieceSaveView from "@/views/piecemake/PieceSaveView.vue";
 // piecelist
 import PieceListMainView from "@/views/piecelist/PieceListMainView.vue";
-import PieceMakeView from "@/views/piecemake/PieceMakeView.vue";
 import ChatView from "@/views/chat/ChatView.vue";
 // mypage
 import MypageView from "@/views/mypage/MypageView.vue";
@@ -47,16 +56,59 @@ const router = createRouter({
             name: "signinSuccess",
             component: SuccessView,
         },
+        // piecemake
+        {
+            path: "/piece",
+            name: "piecemake",
+            component: PieceMakeView,
+        },
+        {
+            path: "/piece/image",
+            name: "pieceimage",
+            component: PieceImageView,
+        },
+        {
+            path: "/piece/image/crop",
+            name: "pieceimagecrop",
+            component: ImageCropView,
+        },
+        {
+            path: "/piece/info",
+            name: "pieceinfo",
+            component: PieceInfoView,
+        },
+        {
+            path: "/piece/comment",
+            name: "piececomment",
+            component: PieceCommentView,
+        },
+        {
+            path: "/piece/front",
+            name: "piecefront",
+            component: PieceFrontView,
+        },
+        {
+            path: "/piece/back",
+            name: "pieceback",
+            component: PieceBackView,
+        },
+        {
+            path: "/piece/background",
+            name: "piecebackground",
+            component: PieceBackgroundView,
+        },
+        {
+            path: "/piece/save",
+            name: "piecesave",
+            component: PieceSaveView,
+        },
+        // piecelist
         {
             path: "/piecelist",
             name: "piecelistmain",
             component: PieceListMainView,
         },
-        {
-            path: "/piecemake",
-            name: "piecemake",
-            component: PieceMakeView,
-        },
+        // chat
         {
             path: "/chat",
             name: "chat",
