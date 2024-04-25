@@ -1,7 +1,9 @@
 package com.ssafy.piece.domain.pieces.service;
 
 import com.ssafy.piece.domain.pieces.dto.request.PiecesAddRequestDto;
+import com.ssafy.piece.domain.pieces.dto.request.RecordUpdateRequestDto;
 import com.ssafy.piece.domain.pieces.dto.response.PiecesDetailResponseDto;
+import com.ssafy.piece.domain.pieces.dto.response.RecordDetailResponseDto;
 import com.ssafy.piece.domain.pieces.entity.Pieces;
 import com.ssafy.piece.domain.pieces.exception.PiecesNotFoundException;
 import com.ssafy.piece.domain.pieces.repository.PiecesRepository;
@@ -67,6 +69,29 @@ public class PiecesService {
 
         piecesRepository.deleteById(pieceId);
     }
+
+    // 기록 수정
+    public void updateRecord(RecordUpdateRequestDto recordUpdateRequestDto) {
+        Pieces pieces = findById(recordUpdateRequestDto.getPieceId());
+
+        pieces.setRecord(recordUpdateRequestDto.getRecord());
+        // 사진 수정
+    }
+
+    // 기록 조회
+    public RecordDetailResponseDto findRecordDetail(Long pieceId) {
+        Pieces pieces = findById(pieceId);
+
+        // 사진 조회
+
+        return RecordDetailResponseDto.builder()
+            .recordId(pieces.getPieceId())
+            .pieceId(pieces.getPieceId())
+            .record(pieces.getRecord())
+            .imgList(null)
+            .build();
+    }
+
 
     // 조각 조회
     public Pieces findById(Long pieceId) {

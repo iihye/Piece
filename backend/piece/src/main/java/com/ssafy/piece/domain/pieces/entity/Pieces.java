@@ -74,4 +74,11 @@ public class Pieces {
 
     @Column(nullable = false)
     private String imageBack;
+
+    @Column(nullable = true)
+    private String record;
+
+    public void setRecord(String record) {
+        this.record = record;
+    }
 }

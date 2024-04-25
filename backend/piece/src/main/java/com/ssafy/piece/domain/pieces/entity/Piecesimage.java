@@ -23,11 +23,11 @@ public class Piecesimage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pieceId;
+    private Long piecesImageId;
 
     @ManyToOne
-    @JoinColumn(name = "recordId")
-    private Piecesrecord pieceRecord;
+    @JoinColumn(name = "pieceId")
+    private Pieces piece;
 
     @Column(nullable = false)
     private String imageUrl;

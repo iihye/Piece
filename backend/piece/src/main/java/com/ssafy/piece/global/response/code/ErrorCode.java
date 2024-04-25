@@ -47,6 +47,9 @@ public enum ErrorCode implements ResponseCode {
     // 조각
     PIECES_NOT_FOUND(HttpStatus.NOT_FOUND, "조각을 찾을 수 없습니다."),
 
+    // 기록
+    RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "기록을 찾을 수 없습니다."),
+
     REQUEST_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "요청에 실패했습니다.");
 
     private final HttpStatus httpStatus;
