@@ -49,8 +49,7 @@ public class PiecesService {
         // user 찾기
         // 조각 권한 있는지 확인
 
-        Pieces pieces = piecesRepository.findById(pieceId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 조각이 없습니다."));
+        Pieces pieces = findById(pieceId);
 
         PiecesDetailResponseDto piecesDetailResponseDto = PiecesDetailResponseDto.builder()
             .pieceId(pieces.getPieceId())

@@ -2,7 +2,6 @@ package com.ssafy.piece.domain.pieces.controller;
 
 import com.ssafy.piece.domain.pieces.dto.request.PiecesAddRequestDto;
 import com.ssafy.piece.domain.pieces.dto.response.PiecesDetailResponseDto;
-import com.ssafy.piece.domain.pieces.entity.Pieces;
 import com.ssafy.piece.domain.pieces.service.PiecesService;
 import com.ssafy.piece.global.response.code.SuccessCode;
 import com.ssafy.piece.global.response.structure.SuccessResponse;
@@ -28,9 +27,9 @@ public class PiecesController {
     // 조각 등록
     @PostMapping()
     public ResponseEntity<Object> piecesAdd(@RequestBody PiecesAddRequestDto piecesAddRequestDto) {
-        Pieces pieces = piecesService.addPieces(piecesAddRequestDto);
+        piecesService.addPieces(piecesAddRequestDto);
 
-        return SuccessResponse.createSuccess(SuccessCode.ADD_PIECE_SUCCESS, pieces);
+        return SuccessResponse.createSuccess(SuccessCode.ADD_PIECE_SUCCESS);
     }
 
     // 조각 상세
