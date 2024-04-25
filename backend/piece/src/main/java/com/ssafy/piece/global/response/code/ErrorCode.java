@@ -46,6 +46,7 @@ public enum ErrorCode implements ResponseCode {
 
     // 조각
     PIECES_NOT_FOUND(HttpStatus.NOT_FOUND, "조각을 찾을 수 없습니다."),
+    PIECES_RECENT_NOT_FOUND(HttpStatus.NOT_FOUND, "1년 전 조각이 존재하지 않습니다."),
 
     // 기록
     RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "기록을 찾을 수 없습니다."),

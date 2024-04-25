@@ -1,6 +1,7 @@
 package com.ssafy.piece.domain.pieces.dto.request;
 
 import com.ssafy.piece.domain.cultures.entity.CultureType;
+import com.ssafy.piece.domain.pieces.entity.OpenType;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class PiecesAddRequestDto {
     private String address;
     private float score;
     private String comment;
-    private boolean isOpen;
+    private OpenType openYn;
     private String imageFront;
     private String imageBack;
 }

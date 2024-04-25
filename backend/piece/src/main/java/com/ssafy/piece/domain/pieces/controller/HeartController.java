@@ -29,9 +29,9 @@ public class HeartController {
     }
 
     // 찜 삭제
-    @DeleteMapping("/{heartId}")
-    public ResponseEntity<Object> heartDelete(@PathVariable Long heartId) {
-        heartService.deleteHeart(heartId);
+    @DeleteMapping("/{pieceId}")
+    public ResponseEntity<Object> heartDelete(@PathVariable Long pieceId) {
+        heartService.deleteHeart(pieceId);
 
         return SuccessResponse.createSuccess(SuccessCode.DELETE_HEART_SUCCESS);
     }

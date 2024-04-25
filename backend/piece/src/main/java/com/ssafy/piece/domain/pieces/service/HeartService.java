@@ -31,8 +31,9 @@ public class HeartService {
     }
 
     // 찜 삭제
-    public void deleteHeart(Long heartId) {
-        // user 찾기
+    public void deleteHeart(Long pieceId) {
+        Long userId = 1L; // user 찾기
+        Long heartId = heartRepository.findByUserIdAndHeartId(userId, pieceId);
 
         heartRepository.deleteById(heartId);
     }

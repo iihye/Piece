@@ -28,6 +28,7 @@ public enum SuccessCode implements ResponseCode {
     ADD_PIECE_SUCCESS(HttpStatus.OK, "조각 생성에 성공했습니다."),
     FIND_PIECE_SUCCESS(HttpStatus.OK, "조각 조회에 성공했습니다."),
     DELETE_PIECE_SUCCESS(HttpStatus.OK, "조각 삭제에 성공했습니다."),
+    FIND_PIECE_RECENT_SUCCESS(HttpStatus.OK, "1년 전 조각 조회에 성공했습니다."),
 
     // 찜
     ADD_HEART_SUCCESS(HttpStatus.OK, "찜 등록에 성공했습니다."),
@@ -37,6 +38,11 @@ public enum SuccessCode implements ResponseCode {
     ADD_RECORD_SUCCESS(HttpStatus.OK, "기록 생성에 성공했습니다."),
     FIND_RECORD_SUCCESS(HttpStatus.OK, "기록 조회에 성공했습니다."),
     UPDATE_RECORD_SUCCESS(HttpStatus.OK, "기록 수정에 성공했습니다."),
+
+    // 조각 리스트
+    FIND_PIECE_LIST_SUCCESS(HttpStatus.OK, "조각 리스트 조회에 성공했습니다."),
+    FIND_MY_PIECE_LIST_SUCCESS(HttpStatus.OK, "내 조각 리스트 조회에 성공했습니다."),
+    FIND_RECENT_PIECE_LIST_SUCCESS(HttpStatus.OK, "최근 조각 리스트 조회에 성공했습니다."),
 
     REQUEST_SUCESS(HttpStatus.OK, "요청에 성공했습니다.");
 

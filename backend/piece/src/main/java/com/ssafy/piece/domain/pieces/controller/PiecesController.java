@@ -2,6 +2,7 @@ package com.ssafy.piece.domain.pieces.controller;
 
 import com.ssafy.piece.domain.pieces.dto.request.PiecesAddRequestDto;
 import com.ssafy.piece.domain.pieces.dto.request.RecordUpdateRequestDto;
+import com.ssafy.piece.domain.pieces.dto.response.PieceRecentResponseDto;
 import com.ssafy.piece.domain.pieces.dto.response.PiecesDetailResponseDto;
 import com.ssafy.piece.domain.pieces.dto.response.RecordDetailResponseDto;
 import com.ssafy.piece.domain.pieces.service.PiecesService;
@@ -68,6 +69,15 @@ public class PiecesController {
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_RECORD_SUCCESS,
             recordDetailResponseDto);
+    }
+
+    // 1년 전 조각 조회
+    @GetMapping("/year")
+    public ResponseEntity<Object> piecesYear() {
+        PieceRecentResponseDto pieceRecentResponseDto = piecesService.findPieceYear();
+
+        return SuccessResponse.createSuccess(SuccessCode.FIND_PIECE_RECENT_SUCCESS,
+            pieceRecentResponseDto);
     }
 
 }

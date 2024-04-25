@@ -2,12 +2,17 @@ package com.ssafy.piece.domain.pieces.service;
 
 import com.ssafy.piece.domain.pieces.dto.request.PiecesAddRequestDto;
 import com.ssafy.piece.domain.pieces.dto.request.RecordUpdateRequestDto;
+import com.ssafy.piece.domain.pieces.dto.response.PieceRecentResponseDto;
 import com.ssafy.piece.domain.pieces.dto.response.PiecesDetailResponseDto;
 import com.ssafy.piece.domain.pieces.dto.response.RecordDetailResponseDto;
 import com.ssafy.piece.domain.pieces.entity.Pieces;
 import com.ssafy.piece.domain.pieces.exception.PiecesNotFoundException;
+import com.ssafy.piece.domain.pieces.exception.PiecesRecentNotFoundException;
 import com.ssafy.piece.domain.pieces.repository.PiecesRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +41,7 @@ public class PiecesService {
             .address(piecesAddRequestDto.getAddress())
             .score(piecesAddRequestDto.getScore())
             .comment(piecesAddRequestDto.getComment())
-            .isOpen(piecesAddRequestDto.isOpen())
+            .openYn(piecesAddRequestDto.getOpenYn())
             .imageFront(piecesAddRequestDto.getImageFront())
             .imageBack(piecesAddRequestDto.getImageBack())
 //            .user(users)
@@ -89,6 +94,25 @@ public class PiecesService {
             .pieceId(pieces.getPieceId())
             .record(pieces.getRecord())
             .imgList(null)
+            .build();
+    }
+
+    // 1년 전 조각 조회
+    public PieceRecentResponseDto findPieceYear() {
+        Long userId = 1L; // user 조회
+
+        LocalDate dateOneYearAgo = LocalDate.now().minusYears(1);
+        LocalDateTime oneYearAgoStart = dateOneYearAgo.atTime(LocalTime.MIN);
+        LocalDateTime oneYearAgoEnd = dateOneYearAgo.atTime(LocalTime.MAX);
+
+        Pieces pieces = piecesRepository.findByPieceIdAndCreatedAt(userId, oneYearAgoStart,
+                oneYearAgoEnd)
+            .orElseThrow(PiecesRecentNotFoundException::new);
+
+        return PieceRecentResponseDto.builder()
+            .pieceId(pieces.getPieceId())
+            .frontImg(pieces.getImageFront())
+            .backImg(pieces.getImageBack())
             .build();
     }
 
