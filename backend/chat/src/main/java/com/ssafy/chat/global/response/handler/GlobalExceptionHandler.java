@@ -1,9 +1,9 @@
-package com.ssafy.piece.global.response.handler;
+package com.ssafy.chat.global.response.handler;
 
-import com.ssafy.piece.global.response.code.ErrorCode;
-import com.ssafy.piece.global.response.code.ResponseCode;
-import com.ssafy.piece.global.response.exception.BusinessException;
-import com.ssafy.piece.global.response.structure.ErrorResponse;
+import com.ssafy.chat.global.response.code.ErrorCode;
+import com.ssafy.chat.global.response.code.ResponseCode;
+import com.ssafy.chat.global.response.exception.BusinessException;
+import com.ssafy.chat.global.response.structure.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;

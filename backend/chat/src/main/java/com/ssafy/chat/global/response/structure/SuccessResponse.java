@@ -1,13 +1,15 @@
-package com.ssafy.piece.global.response.structure;
+package com.ssafy.chat.global.response.structure;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ssafy.piece.global.response.code.SuccessCode;
+import com.ssafy.chat.global.response.code.SuccessCode;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 
 @Getter
+@Setter
 @Builder
 @RequiredArgsConstructor
 public class SuccessResponse<T> {

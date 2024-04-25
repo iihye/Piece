@@ -1,6 +1,6 @@
-package com.ssafy.piece.global.response.exception;
+package com.ssafy.chat.global.response.exception;
 
-import com.ssafy.piece.global.response.code.ResponseCode;
+import com.ssafy.chat.global.response.code.ResponseCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

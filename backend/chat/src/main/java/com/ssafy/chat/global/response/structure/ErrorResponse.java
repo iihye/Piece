@@ -1,6 +1,6 @@
-package com.ssafy.piece.global.response.structure;
+package com.ssafy.chat.global.response.structure;
 
-import com.ssafy.piece.global.response.code.ResponseCode;
+import com.ssafy.chat.global.response.code.ResponseCode;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

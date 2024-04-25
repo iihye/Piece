@@ -1,4 +1,4 @@
-package com.ssafy.piece.global.response.code;
+package com.ssafy.chat.global.response.code;
 
 import org.springframework.http.HttpStatus;
 
