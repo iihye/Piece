@@ -21,7 +21,7 @@ public class Views {
 
     private int movieNumber;
 
-    private int dramaNumber;
+    private int TheaterNumber;
 
     private int musicalNumber;
 
