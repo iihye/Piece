@@ -17,6 +17,14 @@ import PieceBackgroundView from "@/views/piecemake/PieceBackgroundView.vue";
 import PieceSaveView from "@/views/piecemake/PieceSaveView.vue";
 // piecelist
 import PieceListMainView from "@/views/piecelist/PieceListMainView.vue";
+import CakeDetailView from "@/views/cake/CakeDetailView.vue";
+import CakeListView from "@/views/cake/CakeListView.vue";
+import PieceListView from "@/views/piecelist/PieceListView.vue";
+import PieceCalendarView from "@/views/piecelist/PieceCalendarView.vue";
+import PieceListMyView from "@/views/piecelist/PieceListMyView.vue";
+import PieceDetailView from "@/views/piecedetail/PieceDetailView.vue";
+import RecordDetailView from "@/views/piecedetail/RecordDetailView.vue";
+// chat
 import ChatView from "@/views/chat/ChatView.vue";
 // mypage
 import MypageView from "@/views/mypage/MypageView.vue";
@@ -104,9 +112,44 @@ const router = createRouter({
         },
         // piecelist
         {
-            path: "/piecelist",
+            path: "/piecelist/main",
             name: "piecelistmain",
             component: PieceListMainView,
+        },
+        {
+            path: "/piecelist/cake",
+            name: "cakelist",
+            component: CakeListView,
+        },
+        {
+            path: "/piecelist/cake/:cakeId",
+            name: "cakeDetail",
+            component: CakeDetailView,
+        },
+        {
+            path: "/piecelist",
+            name: "pieceList",
+            component: PieceListView,
+        },
+        {
+            path: "/piecelist/my/cal",
+            name: "pieceCalendar",
+            component: PieceCalendarView,
+        },
+        {
+            path: "/piecelist/my/list",
+            name: "pieceListMy",
+            component: PieceListMyView,
+        },
+        {
+            path: "/piecelist/:pieceId",
+            name: "pieceDetail",
+            component: PieceDetailView,
+        },
+        {
+            path: "/piecelist/record/:pieceId",
+            name: "recordDetail",
+            component: RecordDetailView,
         },
         // chat
         {
