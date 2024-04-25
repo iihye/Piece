@@ -21,14 +21,18 @@ public class HeartController {
     private final HeartService heartService;
 
     // 찜 등록
-    @PostMapping("{pieceId}")
+    @PostMapping("/{pieceId}")
     public ResponseEntity<Object> heartAdd(@PathVariable Long pieceId) {
+        heartService.addHeart(pieceId);
+
         return SuccessResponse.createSuccess(SuccessCode.ADD_HEART_SUCCESS);
     }
 
     // 찜 삭제
-    @DeleteMapping("{heartId}")
+    @DeleteMapping("/{heartId}")
     public ResponseEntity<Object> heartDelete(@PathVariable Long heartId) {
+        heartService.deleteHeart(heartId);
+
         return SuccessResponse.createSuccess(SuccessCode.DELETE_HEART_SUCCESS);
     }
 }

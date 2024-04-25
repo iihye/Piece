@@ -29,7 +29,6 @@ public class Pieces {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pieceId;
 
-
     @ManyToOne
     @JoinColumn(name = "userId")
     private Users user;
