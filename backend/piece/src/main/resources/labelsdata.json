@@ -1,0 +1,12 @@
+[
+  {
+    "performanceType": "MOVIE",
+    "title": "영화 애호가",
+    "description": "영화 애호가는 영화를 좋아하는 사람들을 위한 공연입니다."
+  },
+  {
+    "performanceType": "MUSICAL",
+    "title": "뮤지컬 애호가",
+    "description": "뮤지컬 애호가는 영화를 좋아하는 사람들을 위한 공연입니다."
+  }
+]

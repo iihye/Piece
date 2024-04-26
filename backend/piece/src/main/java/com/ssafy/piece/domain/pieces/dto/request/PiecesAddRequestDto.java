@@ -1,6 +1,7 @@
 package com.ssafy.piece.domain.pieces.dto.request;
 
 import com.ssafy.piece.domain.cultures.entity.CultureType;
+import com.ssafy.piece.domain.pieces.entity.GenreType;
 import com.ssafy.piece.domain.pieces.entity.OpenType;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -29,5 +30,5 @@ public class PiecesAddRequestDto {
     private OpenType openYn;
     private String imageFront;
     private String imageBack;
-    private String genre;
+    private GenreType genre;
 }

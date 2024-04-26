@@ -91,7 +91,7 @@ public class Pieces {
     private LocalDateTime createdAt;
 
     @Column(nullable = true)
-    private String genre;
+    private GenreType genre;
 
     public void setRecord(String record) {
         this.record = record;
