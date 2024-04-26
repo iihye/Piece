@@ -1,9 +1,12 @@
 spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/piecechatlogs
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/piece?autoReconnect=true
-    username: ssafy
-    password: 1234
+    username: root
+    password: 1129
   jpa:
     hibernate:
       ddl-auto: create
