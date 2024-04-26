@@ -11,6 +11,11 @@ java {
     sourceCompatibility = '17'
 }
 
+// docker setting
+jar {
+    enabled = false
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
