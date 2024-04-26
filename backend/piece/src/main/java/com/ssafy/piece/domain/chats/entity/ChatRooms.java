@@ -32,7 +32,7 @@ public class ChatRooms extends BaseTime {
     private Long chatRoomId;
 
     @OneToOne
-    @JoinColumn(name = "culture_id")
+    @JoinColumn(name = "culture_id", nullable = true)
     private Cultures culture;
 
     @Column(name = "chatroom_name", nullable = false)
