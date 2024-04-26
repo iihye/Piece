@@ -1,4 +1,4 @@
-package com.ssafy.chat.client;
+package com.ssafy.chat.global.client;
 
 import com.ssafy.chat.global.config.FeignClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;

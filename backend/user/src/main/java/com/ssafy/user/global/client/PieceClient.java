@@ -1,4 +1,4 @@
-package com.ssafy.user.client;
+package com.ssafy.user.global.client;
 
 import com.ssafy.user.global.config.FeignClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
