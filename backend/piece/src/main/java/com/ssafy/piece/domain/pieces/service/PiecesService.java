@@ -1,18 +1,23 @@
 package com.ssafy.piece.domain.pieces.service;
 
+import com.ssafy.piece.domain.cultures.entity.CultureType;
 import com.ssafy.piece.domain.pieces.dto.request.PiecesAddRequestDto;
 import com.ssafy.piece.domain.pieces.dto.request.RecordUpdateRequestDto;
 import com.ssafy.piece.domain.pieces.dto.response.PieceRecentResponseDto;
 import com.ssafy.piece.domain.pieces.dto.response.PiecesDetailResponseDto;
 import com.ssafy.piece.domain.pieces.dto.response.RecordDetailResponseDto;
+import com.ssafy.piece.domain.pieces.entity.GenreType;
 import com.ssafy.piece.domain.pieces.entity.Pieces;
 import com.ssafy.piece.domain.pieces.exception.PiecesNotFoundException;
 import com.ssafy.piece.domain.pieces.exception.PiecesRecentNotFoundException;
 import com.ssafy.piece.domain.pieces.repository.PiecesRepository;
+import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +33,7 @@ public class PiecesService {
     // 조각 등록
     public Pieces addPieces(PiecesAddRequestDto piecesAddRequestDto) {
         // user 찾기
+        GenreType genreType = GenreType.valueOf(String.valueOf(piecesAddRequestDto.getGenre()));
 
         Pieces pieces = Pieces.builder()
             .performanceType(piecesAddRequestDto.getPerformanceType())
@@ -44,7 +50,7 @@ public class PiecesService {
             .openYn(piecesAddRequestDto.getOpenYn())
             .imageFront(piecesAddRequestDto.getImageFront())
             .imageBack(piecesAddRequestDto.getImageBack())
-            .genre(piecesAddRequestDto.getGenre())
+            .genre(genreType)
 //            .user(users)
             .build();
 
@@ -122,5 +128,64 @@ public class PiecesService {
     public Pieces findById(Long pieceId) {
         return piecesRepository.findById(pieceId)
             .orElseThrow(PiecesNotFoundException::new);
+    }
+
+    // 칭호 관련
+    // 장르 3개 이상
+    public boolean isGenreOver(GenreType genre, Long userId) {
+        return piecesRepository.countByGenre(genre, userId) >= 3;
+    }
+
+    // 종류 5개 이상
+    public boolean isPerformanceTypeOver(CultureType performanceType, Long userId) {
+        return piecesRepository.countByPerformanceType(performanceType, userId) >= 5;
+    }
+
+    // 영화 시간
+    public boolean isTimeMovie(LocalTime start, LocalTime end, Long userId) {
+        return piecesRepository.countByTimeMovie(start, end, CultureType.MOVIE, userId) >= 1;
+    }
+
+    // 좌석
+    public boolean isSeat(Long userId) {
+        return piecesRepository.countBySeat("A열", userId) >= 3;
+    }
+
+    // 출연
+    public boolean isCast(Long userId) {
+        List<Tuple> result = piecesRepository.countPiecesByCastForUser(CultureType.CONCERT, userId);
+        for (Tuple tuple : result) {
+            if (tuple.get(1, Long.class).intValue() >= 3) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // 만들기
+    public boolean isPieceMake(int cnt, Long userId) {
+        return piecesRepository.countByUserId(userId) >= cnt;
+    }
+
+    // 새벽
+    public boolean isMidNight(LocalDateTime start, LocalDateTime end, Long userId) {
+        return piecesRepository.findPiecesByCreatedAtBetween(start, end, userId) >= 3;
+    }
+
+    // 관람 당일
+    public boolean isEqualDateAndCreatedAt(Long userId) {
+        return piecesRepository.findPiecesByDateAndCreatedAt(userId) >= 1;
+    }
+
+    // 소비
+    public boolean isConsume(Long userId) {
+        return piecesRepository.sumByUserId(userId) >= 100000;
+    }
+
+    // 장르 5종류 이상
+    public boolean isGenreMany() {
+        Set<String> genreTypes = piecesRepository.countByGenreType();
+        return genreTypes.size() >= 5;
     }
 }

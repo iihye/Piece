@@ -90,6 +90,7 @@ public class Pieces {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private GenreType genre;
 
