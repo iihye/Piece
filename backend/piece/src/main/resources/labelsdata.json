@@ -1,12 +1,157 @@
 [
   {
-    "performanceType": "MOVIE",
-    "title": "영화 애호가",
-    "description": "영화 애호가는 영화를 좋아하는 사람들을 위한 공연입니다."
+    "labelType": "GENRE",
+    "title": "커신 애호가",
+    "description": "공포 장르 조각 만들기"
   },
   {
-    "performanceType": "MUSICAL",
-    "title": "뮤지컬 애호가",
-    "description": "뮤지컬 애호가는 영화를 좋아하는 사람들을 위한 공연입니다."
+    "labelType": "GENRE",
+    "title": "낭만주의자",
+    "description": "로맨스 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "배꼽실종",
+    "description": "코미디 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "강심장",
+    "description": "범죄/스릴러 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "동심이 가득한",
+    "description": "애니 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "눈을 뗄 수 없는",
+    "description": "액션 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "상상할 수 없는",
+    "description": "판타지/SF 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "일상이 드라마",
+    "description": "드라마 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "흥이 넘치는",
+    "description": "음악/뮤지컬 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "어떻게든 살아남는",
+    "description": "전쟁 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "타임머신",
+    "description": "사극/역사 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "공 굴러가요",
+    "description": "스포츠 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "내가 바로 베어그릴스",
+    "description": "재난 장르 조각 만들기"
+  },
+  {
+    "labelType": "GENRE",
+    "title": "인생이 다큐",
+    "description": "다큐 장르 조각 만들기"
+  },
+  {
+    "labelType": "MOVIE",
+    "title": "영화 조각가",
+    "description": "영화 조각 5개 이상 만들기"
+  },
+  {
+    "labelType": "MOVIE",
+    "title": "일찍 일어나는 새",
+    "description": "조조 영화 관람하기"
+  },
+  {
+    "labelType": "MOVIE",
+    "title": "잠들지 않는 올빼미",
+    "description": "심야 영화 관람하기"
+  },
+  {
+    "labelType": "MOVIE",
+    "title": "목건강 주의",
+    "description": "A열에서 영화 관람하기"
+  },
+  {
+    "labelType": "CONCERT",
+    "title": "콘서트 조각가",
+    "description": "콘서트 조각 5개 이상 만들기"
+  },
+  {
+    "labelType": "CONCERT",
+    "title": "찐팬 인증",
+    "description": "특정 아티스트 콘서트 조각 5개 이상 만들기"
+  },
+  {
+    "labelType": "MUSICAL",
+    "title": "뮤지컬 조각가",
+    "description": "뮤지컬 조각 5개 이상 만들기"
+  },
+  {
+    "labelType": "THEATER",
+    "title": "연극 조각가",
+    "description": "연극 조각 5개 이상 만들기"
+  },
+  {
+    "labelType": "PIECES",
+    "title": "새로운",
+    "description": "PIECE에 가입하기"
+  },
+  {
+    "labelType": "PIECES",
+    "title": "한 조각러",
+    "description": "한 조각 만들기"
+  },
+  {
+    "labelType": "PIECES",
+    "title": "열 조각러",
+    "description": "열 조각 만들기"
+  },
+  {
+    "labelType": "PIECES",
+    "title": "새벽감성 충만한",
+    "description": "새벽에 조각 만들기"
+  },
+  {
+    "labelType": "PIECES",
+    "title": "재빠른 문화인",
+    "description": "관람 당일에 조각 만들기"
+  },
+  {
+    "labelType": "PIECES",
+    "title": "내가 바로 소통러",
+    "description": "채팅 목록 5개 이상 보유하기"
+  },
+  {
+    "labelType": "PIECES",
+    "title": "문화계 큰 손",
+    "description": "백만 원이상 소비하기"
+  },
+  {
+    "labelType": "PIECES",
+    "title": "장르 마스터",
+    "description": "장르 칭호 14개 모으기"
+  },
+  {
+    "labelType": "PIECES",
+    "title": "영양가 있는 장르",
+    "description": "서로 다른 장르 조각 만들기"
   }
 ]
