@@ -14,7 +14,7 @@ public class Views {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long viewId;
-    g
+
     private Long userId;
 
     @Column(nullable = false)
