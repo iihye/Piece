@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,11 +30,4 @@ public class ImageMakeController {
         return new ResponseEntity<>(prompt, HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> test(@RequestParam int number) {
-
-        System.out.println(number + "성공");
-
-        return new ResponseEntity<>("성공", HttpStatus.OK);
-    }
 }
