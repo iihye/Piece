@@ -12,7 +12,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class Consumption {
+public class Consumptions {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
