@@ -90,6 +90,9 @@ public class Pieces {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = true)
+    private String genre;
+
     public void setRecord(String record) {
         this.record = record;
     }

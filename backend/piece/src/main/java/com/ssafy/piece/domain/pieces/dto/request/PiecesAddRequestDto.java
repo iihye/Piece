@@ -29,4 +29,5 @@ public class PiecesAddRequestDto {
     private OpenType openYn;
     private String imageFront;
     private String imageBack;
+    private String genre;
 }

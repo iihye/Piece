@@ -44,6 +44,7 @@ public class PiecesService {
             .openYn(piecesAddRequestDto.getOpenYn())
             .imageFront(piecesAddRequestDto.getImageFront())
             .imageBack(piecesAddRequestDto.getImageBack())
+            .genre(piecesAddRequestDto.getGenre())
 //            .user(users)
             .build();
 
