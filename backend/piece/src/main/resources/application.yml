@@ -10,3 +10,8 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+openai:
+  gpt-model: gpt-4-turbo-2024-04-09
+  gpt-key: sk-proj-Q7BUZzPG8k7Dt6d5qrtNT3BlbkFJtUO1S7qdzDUfqP19kaSl
+  gpt-url: https://api.openai.com/v1/chat/completions
