@@ -180,7 +180,7 @@ public class PiecesService {
 
     // 소비
     public boolean isConsume(Long userId) {
-        return piecesRepository.sumByUserId(userId) >= 100000;
+        return piecesRepository.sumByUserId(userId) >= 1000000;
     }
 
     // 장르 5종류 이상

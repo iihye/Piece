@@ -56,7 +56,7 @@ public interface PiecesRepository extends JpaRepository<Pieces, Long> {
     @Query("select count(p) from Pieces p where DATE(p.createdAt) = p.date and p.user.userId = :userId")
     int findPiecesByDateAndCreatedAt(Long userId);
 
-    @Query("select count(p.price) from Pieces p where p.user.userId = :userId")
+    @Query("select sum(p.price) from Pieces p where p.user.userId = :userId")
     int sumByUserId(Long userId);
 
     @Query("select p.genre from Pieces p group by p.genre")

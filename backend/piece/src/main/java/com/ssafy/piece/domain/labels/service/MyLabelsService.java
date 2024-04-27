@@ -185,13 +185,18 @@ public class MyLabelsService {
         }
 
         // 30 1~14 장르 모두 모았는지
-        if (myLabelsRepository.count() == 14) {
-            addMyLabels(23L);
+        if (isCollect(userId)) {
+            addMyLabels(30L);
         }
 
         // 31 서로 다른 장르 조각 모았는지
         if (piecesService.isGenreMany()) {
-            addMyLabels(16L);
+            addMyLabels(31L);
         }
+    }
+
+    // 장르 모두 모으기
+    public boolean isCollect(Long userId){
+        return myLabelsRepository.countByGenreAll(userId) == 14;
     }
 }

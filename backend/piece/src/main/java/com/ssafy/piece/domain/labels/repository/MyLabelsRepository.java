@@ -9,4 +9,7 @@ public interface MyLabelsRepository extends JpaRepository<MyLabels, Long> {
     @Query("select case when count(m) > 0 then true else false end from MyLabels m where m.labels.labelId = :labelId and m.users.userId = :userId")
     Boolean existsByLabelIdAndUserId(Long labelId, Long userId);
 
+    // 칭호 관련
+    @Query("select count(m) from MyLabels m where m.labels.labelId between 1 and 14 and m.users.userId = :userId")
+    int countByGenreAll(Long userId);
 }
