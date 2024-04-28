@@ -18,6 +18,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class ImageMakeService {
 
+    private final WebClient webClient;
+
     @Value("${openai.gpt-model}")
     private String gptModel;
 
@@ -27,13 +29,13 @@ public class ImageMakeService {
     @Value("${openai.gpt-key}")
     private String gptSecret;
 
-    @Value("${openai.dalle-model")
+    @Value("${openai.dalle-model}")
     private String dalleModel;
 
     @Value("${openai.dalle-url}")
     private String dalleUrl;
 
-    @Value(("$openai.dalle-key"))
+    @Value("${openai.dalle-key}")
     private String dalleSecret;
 
     // GPT에게 이미지 전달 + 달리에게 전달할 프롬프트 작성
@@ -82,7 +84,7 @@ public class ImageMakeService {
         String response = wc.post()
             .uri(gptUrl)
             .header("Authorization", "Bearer " + gptSecret)
-            .header("Content-type", "application/json")
+            .header("Content-Type", "application/json")
             .body(BodyInserters.fromValue(request))
             .retrieve()
             .bodyToMono(String.class)
@@ -107,23 +109,25 @@ public class ImageMakeService {
 
         Map<String, Object> request = new HashMap<>();
         request.put("model", dalleModel);
-        request.put("messages", prompt);
+        request.put("prompt", prompt + "이 설명에 어울리는 배경을 만들어줘");
         request.put("n", 1);
 //        request.put("quality", );
         request.put("response_format", "b64_json");
         request.put("size", "1024x1024");
 //        request.put("style","")
 
-        WebClient wc = WebClient.create();
+        System.out.println("3번 : " + request);
 
-        String response = wc.post()
+        String response = webClient.post()
             .uri(dalleUrl)
             .header("Authorization", "Bearer " + dalleSecret)
-            .header("Content-type", "application/json")
+            .header("Content-Type", "application/json")
             .body(BodyInserters.fromValue(request))
             .retrieve()
             .bodyToMono(String.class)
             .block();
+
+        System.out.println("4번 : " + response);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String imageResponse = null;
@@ -138,5 +142,6 @@ public class ImageMakeService {
 
         return imageResponse;
     }
+
 
 }

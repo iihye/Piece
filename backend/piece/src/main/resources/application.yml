@@ -15,6 +15,6 @@ openai:
   gpt-model: gpt-4-turbo-2024-04-09
   gpt-key: sk-proj-Q7BUZzPG8k7Dt6d5qrtNT3BlbkFJtUO1S7qdzDUfqP19kaSl
   gpt-url: https://api.openai.com/v1/chat/completions
-  dalle-modle: dall-e-3
+  dalle-model: dall-e-3
   dalle-key: sk-proj-FWiAKv9Xqpl5Ka5Sbh0DT3BlbkFJdmv2uZB904VeZNslLc9l
   dalle-url: https://api.openai.com/v1/images/generations
