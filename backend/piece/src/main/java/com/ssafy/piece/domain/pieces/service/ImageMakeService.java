@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,16 @@ public class ImageMakeService {
     @Value("${openai.gpt-key}")
     private String gptSecret;
 
-    // GPT에게 이미지 전달
+    @Value("${openai.dalle-model")
+    private String dalleModel;
+
+    @Value("${openai.dalle-url}")
+    private String dalleUrl;
+
+    @Value(("$openai.dalle-key"))
+    private String dalleSecret;
+
+    // GPT에게 이미지 전달 + 달리에게 전달할 프롬프트 작성
     public String MakePrompt(String imageUrl) {
 
         System.out.println("2번 : " + imageUrl);
@@ -39,7 +49,7 @@ public class ImageMakeService {
         imgContent.put("type", "image_url");
         imgContent.put("image_url", imgUrl);
 
-        String prompt = "색상과 분위기를 바탕으로 사진을 200자 이내로 설명해줘";
+        String prompt = "이미지에 그려진 글자는 설명하지말고 색상과 분위기를 바탕으로 사진을 200자 이내로 설명해줘. 맞게 설명했는지 검토 후 답변해줘";
 
         Map<String, Object> textContent = new HashMap<>();
         textContent.put("type", "text");
@@ -69,8 +79,6 @@ public class ImageMakeService {
 
         WebClient wc = WebClient.create();
 
-        System.out.println("3번 : " + request);
-
         String response = wc.post()
             .uri(gptUrl)
             .header("Authorization", "Bearer " + gptSecret)
@@ -79,8 +87,6 @@ public class ImageMakeService {
             .retrieve()
             .bodyToMono(String.class)
             .block();
-
-        System.out.println("4번 " + response);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String contentResponse = null;
@@ -93,7 +99,44 @@ public class ImageMakeService {
             e.printStackTrace();
         }
 
-        System.out.println("5번 " + contentResponse);
         return contentResponse;
     }
+
+    // 달리 이미지 생성
+    public String MakeImage(String prompt) {
+
+        Map<String, Object> request = new HashMap<>();
+        request.put("model", dalleModel);
+        request.put("messages", prompt);
+        request.put("n", 1);
+//        request.put("quality", );
+        request.put("response_format", "b64_json");
+        request.put("size", "1024x1024");
+//        request.put("style","")
+
+        WebClient wc = WebClient.create();
+
+        String response = wc.post()
+            .uri(dalleUrl)
+            .header("Authorization", "Bearer " + dalleSecret)
+            .header("Content-type", "application/json")
+            .body(BodyInserters.fromValue(request))
+            .retrieve()
+            .bodyToMono(String.class)
+            .block();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String imageResponse = null;
+        try {
+            JsonNode responseNode = objectMapper.readTree(response);
+            imageResponse = responseNode.path("data").get(0).path("b64_json").asText();
+            byte[] image = Base64.getDecoder().decode(imageResponse);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return imageResponse;
+    }
+
 }
