@@ -3,6 +3,11 @@ package com.ssafy.piece.domain.pieces.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -10,7 +15,9 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -143,5 +150,43 @@ public class ImageMakeService {
         return imageResponse;
     }
 
+    // S3 업로드를 위한 달리 이미지 (base 64) -> MultipartFile로 변환
+    public MultipartFile convertImage(String img) {
 
+        byte[] image = Base64.getDecoder().decode(img);
+
+        MultipartFile imageFile = null;
+
+        int totalCnt = 1024;
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(totalCnt)) {
+            int offset = 0;
+            while (offset < image.length) {
+                int chunkSize = Math.min(totalCnt, image.length - offset);
+
+                byte[] byteArray = new byte[chunkSize];
+                System.arraycopy(image, offset, byteArray, 0, chunkSize);
+
+                byteArrayOutputStream.write(byteArray);
+                byteArrayOutputStream.flush();
+
+                offset += chunkSize;
+            }
+
+            // ByteArrayOutputStream -> ByteArrayInputStream
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
+                byteArrayOutputStream.toByteArray());
+
+            String fileName =
+                String.valueOf((int) (Math.random() * 900000) + 100000) + LocalDateTime.now()
+                    .format(
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+            // MultipartFile 객체 생성
+            imageFile = new MockMultipartFile(fileName, byteArrayInputStream.readAllBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return imageFile;
+    }
 }
