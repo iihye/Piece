@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    parameters{
+        string(name: 'NAME', defaultValue: 'vue')
+    }
+
+    tools {
+        nodejs "Node20"
+    }
+
+    stages {
+        stage('Vue build'){
+            steps{
+                dir('frontend/piece'){
+                    echo 'Vue build...'
+                    sh 'npm install'
+                    sh 'CI=false npm run build'
+                }
+            }
+        }
+    }
+}
