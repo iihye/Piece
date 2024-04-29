@@ -17,7 +17,7 @@ public class ParticipantsController {
 
     // 채팅방 참여 처리
     @PostMapping("/participate")
-    public ResponseEntity participateChatRoom(
+    public ResponseEntity chatRoomParticipate(
         @RequestBody ParticipantsRequestDto participantRequestDto) {
 
         return ResponseEntity.ok(participantsService.saveParticipants(participantRequestDto));
@@ -25,7 +25,7 @@ public class ParticipantsController {
 
     // 내가 참여한 채팅방 조회
     @PostMapping("/isparticipate")
-    public ResponseEntity selectChatRoom(
+    public ResponseEntity chatRoomSelect(
         @RequestBody IsParticipateRequestDto isParticipateRequestDto) {
         System.out.println("참여 채팅방 조회 요청이 있습니다." + isParticipateRequestDto);
         return ResponseEntity.ok(participantsService.selectChatRoom(isParticipateRequestDto));

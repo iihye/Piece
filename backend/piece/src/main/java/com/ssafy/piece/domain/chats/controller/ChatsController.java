@@ -18,16 +18,16 @@ public class ChatsController {
     private final SimpMessageSendingOperations template;
     private final MongoDBChatsService mongoDBChatsService;
 
-    @MessageMapping("/chat/{chatRoomId}") // Send Destination Queue
-    public void sendMessage(@RequestBody MongoDBChats mongoDBChat) {
+    @MessageMapping("/chats/{chatRoomId}") // Send Destination Queue
+    public void messageSend(@RequestBody MongoDBChats mongoDBChat) {
         template.convertAndSend("/sub/" + mongoDBChat.getChatRoomId(), mongoDBChat);
 
         System.out.println("전송 후 저장 프로세스 작동. " + mongoDBChat);
         mongoDBChatsService.saveMongoDBChat(mongoDBChat);
     }
 
-    @GetMapping("/chat/list/{chatRoomId}")
-    public ResponseEntity listMessage(@PathVariable Long chatRoomId) {
+    @GetMapping("/chats/list/{chatRoomId}")
+    public ResponseEntity messageList(@PathVariable Long chatRoomId) {
         return ResponseEntity.ok(mongoDBChatsService.listMongoDBChat(chatRoomId));
     }
 }

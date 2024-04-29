@@ -19,11 +19,12 @@ public class ChatRoomsController {
 
     // 채팅방 생성
     @PostMapping("/chatrooms/create")
-    public ResponseEntity createChatRoom(@RequestBody ChatRoomsRequestDto chatRoomRequestDto) {
+    public ResponseEntity chatRoomCreate(@RequestBody ChatRoomsRequestDto chatRoomRequestDto) {
         System.out.println("채팅방 생성 요청이 있습니다.");
 
         ChatRooms createdChatRoom = chatRoomService.createChatRoom(chatRoomRequestDto);
-        mongoDBChatRoomsService.createMongoDBChatRoom(createdChatRoom.getChatRoomId());
+        mongoDBChatRoomsService.createMongoDBChatRoom(
+            createdChatRoom.getChatRoomId());
 
         return ResponseEntity.ok(createdChatRoom);
     }
