@@ -1,5 +1,5 @@
 <template>
-    <h1>조각 모아보기</h1>
+    <h1>소비 통계</h1>
 </template>
 
 <script setup></script>
