@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters{
-        string(name: 'NAME', defaultValue: 'springboot')
+        string(name: 'NAME', defaultValue: 'piece')
     }
 
     stages {
@@ -52,7 +52,7 @@ pipeline {
                 dir('backend/piece'){
                     sh '''
                     echo 'Deploy BE...'
-                    docker run -d -p 0:8082 --env-file ./.env --name springboot hyunjinius/springboot:latest
+                    docker run -d -p 0:8082 --env-file ./.env --name piece hyunjinius/springboot:latest
                     '''
                 }
             }
