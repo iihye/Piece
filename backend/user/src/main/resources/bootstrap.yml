@@ -1,0 +1,9 @@
+spring:
+  config:
+    import: "optional:configserver:http://k10b202.p.ssafy.io:8888/"
+  cloud:
+    config:
+      name: user
+      profile: ${PROFILE}
+encrypt:
+  key: ${ENCRYPT_KEY}
