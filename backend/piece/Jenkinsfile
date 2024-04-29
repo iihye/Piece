@@ -34,11 +34,12 @@ pipeline {
                         if (containerExists) {
                             sh "docker stop ${params.NAME}"
                             sh "docker rm ${params.NAME}"
+                            sh "docker rmi hyunjinius/springboot:latest"
                         }
+
 
                         sh '''
                         echo 'Dockerimage build...'
-                        docker rmi hyunjinius/springboot:latest
                         docker build -t hyunjinius/springboot:latest .
                         '''
                     }
