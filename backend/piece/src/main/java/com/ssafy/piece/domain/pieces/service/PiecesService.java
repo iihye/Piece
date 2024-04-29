@@ -31,11 +31,11 @@ public class PiecesService {
     private final PiecesRepository piecesRepository;
 
     // 조각 등록
-    public Pieces addPieces(PiecesAddRequestDto piecesAddRequestDto) {
-        // user 찾기
+    public Pieces addPieces(Long userId, PiecesAddRequestDto piecesAddRequestDto) {
         GenreType genreType = GenreType.valueOf(String.valueOf(piecesAddRequestDto.getGenre()));
 
         Pieces pieces = Pieces.builder()
+            .userId(userId)
             .performanceType(piecesAddRequestDto.getPerformanceType())
             .title(piecesAddRequestDto.getTitle())
             .date(piecesAddRequestDto.getDate())
@@ -51,7 +51,6 @@ public class PiecesService {
             .imageFront(piecesAddRequestDto.getImageFront())
             .imageBack(piecesAddRequestDto.getImageBack())
             .genre(genreType)
-//            .user(users)
             .build();
 
         return piecesRepository.save(pieces);
@@ -59,8 +58,7 @@ public class PiecesService {
 
 
     // 조각 상세
-    public PiecesDetailResponseDto findPieceDetail(Long pieceId) {
-        // user 찾기
+    public PiecesDetailResponseDto findPieceDetail(Long userId, Long pieceId) {
         // 조각 권한 있는지 확인
 
         Pieces pieces = findById(pieceId);
@@ -75,15 +73,16 @@ public class PiecesService {
     }
 
     // 조각 삭제
-    public void deletePiece(Long pieceId) {
-        // user 찾기
+    public void deletePiece(Long userId, Long pieceId) {
         // 조각 생성자인지 확인
 
         piecesRepository.deleteById(pieceId);
     }
 
     // 기록 수정
-    public void updateRecord(RecordUpdateRequestDto recordUpdateRequestDto) {
+    public void updateRecord(Long userId, RecordUpdateRequestDto recordUpdateRequestDto) {
+        // 조각 생성자인지 확인
+
         Pieces pieces = findById(recordUpdateRequestDto.getPieceId());
 
         pieces.setRecord(recordUpdateRequestDto.getRecord());
@@ -91,7 +90,8 @@ public class PiecesService {
     }
 
     // 기록 조회
-    public RecordDetailResponseDto findRecordDetail(Long pieceId) {
+    public RecordDetailResponseDto findRecordDetail(Long userId, Long pieceId) {
+        // 조각 권한 있는지 확인
         Pieces pieces = findById(pieceId);
 
         // 사진 조회
@@ -105,9 +105,7 @@ public class PiecesService {
     }
 
     // 1년 전 조각 조회
-    public PieceRecentResponseDto findPieceYear() {
-        Long userId = 1L; // user 조회
-
+    public PieceRecentResponseDto findPieceYear(Long userId) {
         LocalDate dateOneYearAgo = LocalDate.now().minusYears(1);
         LocalDateTime oneYearAgoStart = dateOneYearAgo.atTime(LocalTime.MIN);
         LocalDateTime oneYearAgoEnd = dateOneYearAgo.atTime(LocalTime.MAX);

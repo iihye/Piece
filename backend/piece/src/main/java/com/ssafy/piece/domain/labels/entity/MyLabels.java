@@ -1,7 +1,7 @@
 package com.ssafy.piece.domain.labels.entity;
 
-import com.ssafy.piece.domain.users.entity.Users;
 import com.ssafy.piece.global.entity.BaseTime;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,10 +28,8 @@ public class MyLabels extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long myLabelId;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private Users users;
-
+    @Column(nullable = false)
+    private Long userId;
 
     @ManyToOne
     @JoinColumn(name = "labelId")

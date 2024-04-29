@@ -18,21 +18,19 @@ public class HeartService {
     private final PiecesService piecesService;
 
     // 찜 생성
-    public void addHeart(Long pieceId) {
-        // user 찾기
+    public void addHeart(Long userId, Long pieceId) {
         Pieces piece = piecesService.findById(pieceId);
 
         Piecesheart piecesheart = Piecesheart.builder()
             .piece(piece)
-//            .user(user)
+            .userId(userId)
             .build();
 
         heartRepository.save(piecesheart);
     }
 
     // 찜 삭제
-    public void deleteHeart(Long pieceId) {
-        Long userId = 1L; // user 찾기
+    public void deleteHeart(Long userId, Long pieceId) {
         Long heartId = heartRepository.findByUserIdAndHeartId(userId, pieceId);
 
         heartRepository.deleteById(heartId);

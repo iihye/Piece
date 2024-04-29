@@ -1,6 +1,6 @@
 package com.ssafy.piece.domain.pieces.entity;
 
-import com.ssafy.piece.domain.users.entity.Users;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +29,6 @@ public class Piecesheart {
     @JoinColumn(name = "pieceId")
     private Pieces piece;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private Users user;
+    @Column(nullable = false)
+    private Long userId;
 }

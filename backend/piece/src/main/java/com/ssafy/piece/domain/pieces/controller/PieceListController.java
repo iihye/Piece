@@ -3,6 +3,7 @@ package com.ssafy.piece.domain.pieces.controller;
 import com.ssafy.piece.domain.pieces.dto.response.PieceListResponseDto;
 import com.ssafy.piece.domain.pieces.dto.response.PieceRecentResponseDto;
 import com.ssafy.piece.domain.pieces.service.PieceListService;
+import com.ssafy.piece.global.annotation.AuthenticatedUser;
 import com.ssafy.piece.global.response.code.SuccessCode;
 import com.ssafy.piece.global.response.structure.SuccessResponse;
 import java.util.List;
@@ -23,8 +24,8 @@ public class PieceListController {
 
     // 조각 리스트
     @GetMapping()
-    public ResponseEntity<Object> findPieces() {
-        List<PieceListResponseDto> pieceListResponseDtos = pieceListService.listPieces();
+    public ResponseEntity<Object> findPieces(@AuthenticatedUser Long userId) {
+        List<PieceListResponseDto> pieceListResponseDtos = pieceListService.listPieces(userId);
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_PIECE_LIST_SUCCESS,
             pieceListResponseDtos);
@@ -32,8 +33,8 @@ public class PieceListController {
 
     // 내 조각 리스트
     @GetMapping("/my")
-    public ResponseEntity<Object> findMyPieces() {
-        List<PieceListResponseDto> pieceListResponseDtos = pieceListService.listMyPieces();
+    public ResponseEntity<Object> findMyPieces(@AuthenticatedUser Long userId) {
+        List<PieceListResponseDto> pieceListResponseDtos = pieceListService.listMyPieces(userId);
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_MY_PIECE_LIST_SUCCESS,
             pieceListResponseDtos);
@@ -41,8 +42,9 @@ public class PieceListController {
 
     // 최근 조각 리스트
     @GetMapping("/recent")
-    public ResponseEntity<Object> findRecentPieces() {
-        List<PieceRecentResponseDto> pieceRecentResponseDtos = pieceListService.listRecentPieces();
+    public ResponseEntity<Object> findRecentPieces(@AuthenticatedUser Long userId) {
+        List<PieceRecentResponseDto> pieceRecentResponseDtos = pieceListService.listRecentPieces(
+            userId);
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_RECENT_PIECE_LIST_SUCCESS,
             pieceRecentResponseDtos);

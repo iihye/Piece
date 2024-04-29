@@ -1,6 +1,7 @@
 package com.ssafy.piece.domain.labels.controller;
 
 import com.ssafy.piece.domain.labels.service.MyLabelsService;
+import com.ssafy.piece.global.annotation.AuthenticatedUser;
 import com.ssafy.piece.global.response.code.SuccessCode;
 import com.ssafy.piece.global.response.structure.SuccessResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,32 +23,33 @@ public class MyLabelsController {
 
     // 칭호 착용
     @PutMapping("/{labelId}")
-    public ResponseEntity<Object> myLabelsWear(@PathVariable Long labelId) {
-        myLabelsService.wearMyLabels(labelId);
+    public ResponseEntity<Object> myLabelsWear(@AuthenticatedUser Long userId,
+        @PathVariable Long labelId) {
+        myLabelsService.wearMyLabels(userId, labelId);
 
         return SuccessResponse.createSuccess(SuccessCode.ADD_MY_LABELS_SUCCESS);
     }
 
     // 칭호 착용 해제
     @PutMapping("/wearoff")
-    public ResponseEntity<Object> myLabelsWearoff() {
-        myLabelsService.wearoffMyLabels();
+    public ResponseEntity<Object> myLabelsWearoff(@AuthenticatedUser Long userId) {
+        myLabelsService.wearoffMyLabels(userId);
 
         return SuccessResponse.createSuccess(SuccessCode.DELETE_MY_LABELS_SUCCESS);
     }
 
     // 칭호 목록
     @GetMapping()
-    public ResponseEntity<Object> myLabelsList() {
+    public ResponseEntity<Object> myLabelsList(@AuthenticatedUser Long userId) {
         return SuccessResponse.createSuccess(SuccessCode.FIND_MY_LABELS_SUCCESS,
-            myLabelsService.listMyLabels());
+            myLabelsService.listMyLabels(userId));
     }
 
     // 칭호 획득 검사
     @GetMapping("/check")
-    public ResponseEntity<Object> myLabelsCheck() {
-        myLabelsService.checkMyLabels();
-        
+    public ResponseEntity<Object> myLabelsCheck(@AuthenticatedUser Long userId) {
+        myLabelsService.checkMyLabels(userId);
+
         return SuccessResponse.createSuccess(SuccessCode.CHECK_MY_LABELS_SUCCESS);
     }
 }

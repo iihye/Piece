@@ -1,7 +1,6 @@
 package com.ssafy.piece.domain.pieces.entity;
 
 import com.ssafy.piece.domain.cultures.entity.CultureType;
-import com.ssafy.piece.domain.users.entity.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -10,8 +9,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,9 +33,8 @@ public class Pieces {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pieceId;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private Users user;
+    @Column(nullable = false)
+    private Long userId;
 
     @Column(nullable = false)
     private CultureType performanceType;

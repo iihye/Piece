@@ -24,22 +24,19 @@ public class PieceListService {
     private final HeartRepository HeartRepository;
 
     // 조각 리스트
-    public List<PieceListResponseDto> listPieces() {
-        Long userId = 1L; // user 찾기
+    public List<PieceListResponseDto> listPieces(Long userId) {
         List<Pieces> pieces = piecesRepository.findByAll();
         return getPieceListResponseDtos(userId, pieces);
     }
 
     // 내 조각 리스트
-    public List<PieceListResponseDto> listMyPieces() {
-        Long userId = 1L; // user 찾기
+    public List<PieceListResponseDto> listMyPieces(Long userId) {
         List<Pieces> pieces = piecesRepository.findByUserId(userId);
         return getPieceListResponseDtos(userId, pieces);
     }
 
     // 최근 조각 리스트
-    public List<PieceRecentResponseDto> listRecentPieces() {
-        Long userId = 1L; // user 찾기
+    public List<PieceRecentResponseDto> listRecentPieces(Long userId) {
         Page<Pieces> piecesPage = piecesRepository.findTopPieces(PageRequest.of(0, 10));
 
         List<PieceRecentResponseDto> pieceListResponseDtos = new ArrayList<>();

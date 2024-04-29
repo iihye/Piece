@@ -8,7 +8,6 @@ import com.ssafy.piece.domain.labels.repository.LabelsRepository;
 import com.ssafy.piece.domain.labels.repository.MyLabelsRepository;
 import com.ssafy.piece.domain.pieces.entity.GenreType;
 import com.ssafy.piece.domain.pieces.service.PiecesService;
-import com.ssafy.piece.domain.users.entity.Users;
 import com.ssafy.piece.domain.users.service.UsersService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -27,42 +26,35 @@ public class MyLabelsService {
 
     private final MyLabelsRepository myLabelsRepository;
     private final LabelsRepository labelsRepository;
-    private final UsersService usersService;
     private final LabelsService labelsService;
     private final PiecesService piecesService;
+    private final UsersService usersService;
 
     // 칭호 착용
-    public void wearMyLabels(Long labelId) {
-        // user 찾기
-        Users users = usersService.findById();
+    public void wearMyLabels(Long userId, Long labelId) {
         Labels labels = labelsService.findById(labelId);
+        usersService.setLabelId(userId, labelId);
 
-        users.setMyLabels(labels);
     }
 
     // 칭호 착용 해제
-    public void wearoffMyLabels() {
-        // user 찾기
-        Users users = usersService.findById();
-
-        users.setMyLabels(null);
+    public void wearoffMyLabels(Long userId) {
+        usersService.setLabelIdNull(userId);
     }
 
     // 칭호 목록
-    public List<LabelsResponseDto> listMyLabels() {
+    public List<LabelsResponseDto> listMyLabels(Long userId) {
         List<LabelsResponseDto> labelsResponseDtos = new ArrayList<>();
-        // user 찾기
-        Users users = usersService.findById();
         Long wearLabelId = null;
-        if (users != null && users.getLabels() != null) {
-            wearLabelId = users.getLabels().getLabelId();
+        if (userId != null && usersService.findLabelId(userId) != null) {
+            wearLabelId = usersService.findLabelId(userId);
         }
 
         List<Labels> labels = labelsRepository.findAll();
 
         for (Labels label : labels) {
             boolean isMyLabels = myLabelsRepository.existsByLabelIdAndUserId(label.getLabelId(),
-                users.getUserId());
+                userId);
             boolean isWearLabel = label.getLabelId().equals(wearLabelId);
 
             LabelsResponseDto labelsResponseDto = LabelsResponseDto.builder()
@@ -81,122 +73,118 @@ public class MyLabelsService {
     }
 
     // 칭호 획득
-    public void addMyLabels(Long labelId) {
-        // user 찾기
-        Users users = usersService.findById();
+    public void addMyLabels(Long userId, Long labelId) {
         Labels labels = labelsService.findById(labelId);
 
         MyLabels myLabels = MyLabels.builder()
-            .users(users)
+            .userId(userId)
             .labels(labels)
             .build();
 
-        if (!myLabelsRepository.existsByLabelIdAndUserId(labelId, users.getUserId())) {
+        if (!myLabelsRepository.existsByLabelIdAndUserId(labelId, userId)) {
             myLabelsRepository.save(myLabels);
         }
     }
 
     // 칭호 획득 검사
-    public void checkMyLabels() {
-        // user 찾기
-        Long userId = 1L;
+    public void checkMyLabels(Long userId) {
 
         // 1~14 장르 검사
         for (GenreType genre : GenreType.values()) {
             if (piecesService.isGenreOver(genre, userId)) {
-                addMyLabels((long) genre.getId());
+                addMyLabels(userId, (long) genre.getId());
             }
         }
 
         // 15 영화 조각 5개
         if (piecesService.isPerformanceTypeOver(CultureType.MOVIE, userId)) {
-            addMyLabels(15L);
+            addMyLabels(userId, 15L);
         }
 
         // 16 조조 영화
         LocalTime morningStart = LocalTime.of(6, 0, 0);
         LocalTime morningEnd = LocalTime.of(10, 0, 0);
         if (piecesService.isTimeMovie(morningStart, morningEnd, userId)) {
-            addMyLabels(16L);
+            addMyLabels(userId, 16L);
         }
 
         // 17 심야 영화
         LocalTime eveningStart = LocalTime.of(22, 0, 0);
         LocalTime eveningEnd = LocalTime.of(23, 59, 59);
         if (piecesService.isTimeMovie(eveningStart, eveningEnd, userId)) {
-            addMyLabels(17L);
+            addMyLabels(userId, 17L);
         }
 
         // 18 A열
         if (piecesService.isSeat(userId)) {
-            addMyLabels(18L);
+            addMyLabels(userId, 18L);
         }
 
         // 19 콘서트 조각 5개
         if (piecesService.isPerformanceTypeOver(CultureType.CONCERT, userId)) {
-            addMyLabels(19L);
+            addMyLabels(userId, 19L);
         }
 
         // 20 특정 아티스트
         if (piecesService.isCast(userId)) {
-            addMyLabels(20L);
+            addMyLabels(userId, 20L);
         }
 
         // 21 뮤지컬 조각 5개
         if (piecesService.isPerformanceTypeOver(CultureType.MUSICAL, userId)) {
-            addMyLabels(21L);
+            addMyLabels(userId, 21L);
         }
 
         // 22 연극 조각 5개
         if (piecesService.isPerformanceTypeOver(CultureType.THEATER, userId)) {
-            addMyLabels(22L);
+            addMyLabels(userId, 22L);
         }
 
         // 23 PIECE 가입
-        addMyLabels(23L);
+        addMyLabels(userId, 23L);
 
         // 24 한 조각 만들기
         if (piecesService.isPieceMake(1, userId)) {
-            addMyLabels(24L);
+            addMyLabels(userId, 24L);
         }
 
         // 25 열 조각 만들기
         if (piecesService.isPieceMake(10, userId)) {
-            addMyLabels(25L);
+            addMyLabels(userId, 25L);
         }
 
         // 26 새벽에 만들기
         LocalDateTime midNightStart = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
         LocalDateTime midNightEnd = LocalDateTime.now().withHour(4).withMinute(0).withSecond(0);
         if (piecesService.isMidNight(midNightStart, midNightEnd, userId)) {
-            addMyLabels(26L);
+            addMyLabels(userId, 26L);
         }
 
         // 27 관람 당일
         if (piecesService.isEqualDateAndCreatedAt(userId)) {
-            addMyLabels(27L);
+            addMyLabels(userId, 27L);
         }
 
-        // 28 채팅방
+        // 28 채팅방 - 미완성
 
         // 29 소비
         if (piecesService.isConsume(userId)) {
-            addMyLabels(29L);
+            addMyLabels(userId, 29L);
         }
 
         // 30 1~14 장르 모두 모았는지
         if (isCollect(userId)) {
-            addMyLabels(30L);
+            addMyLabels(userId, 30L);
         }
 
         // 31 서로 다른 장르 조각 모았는지
         if (piecesService.isGenreMany()) {
-            addMyLabels(31L);
+            addMyLabels(userId, 31L);
         }
     }
 
     // 장르 모두 모으기
-    public boolean isCollect(Long userId){
+    public boolean isCollect(Long userId) {
         return myLabelsRepository.countByGenreAll(userId) == 14;
     }
 }
