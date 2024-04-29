@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+
+    parameters{
+        string(name: 'NAME', defaultValue: 'springboot')
+    }
+
+    stages {
+        stage('SCM') {
+            steps {
+                sh "echo 'SCM...'"
+                checkout scm
+            }
+        }
+
+        stage('Springboot build'){
+            steps{
+                dir('backend/piece'){
+                    sh '''
+                    echo 'Springboot build...'
+                    chmod +x gradlew
+                    ./gradlew clean build
+                    '''
+                }
+            }
+        }
+
+        stage('Dockerimage build'){
+            steps {
+                dir('backend/piece') {
+                    script {
+                        def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep ${params.NAME}", returnStatus: true) == 0
+
+                        if (containerExists) {
+                            sh "docker stop ${params.NAME}"
+                            sh "docker rm ${params.NAME}"
+                        }
+
+                        sh '''
+                        echo 'Dockerimage build...'
+                        docker rmi hyunjinius/springboot:latest
+                        docker build -t hyunjinius/springboot:latest
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy'){
+            steps{
+                dir('backend/piece'){
+                    sh '''
+                    echo 'Deploy BE...'
+                    docker run -d -p 0:8082 --name springboot hyunjinius/springboot:latest
+                    '''
+                }
+            }
+        }
+    }
+}
