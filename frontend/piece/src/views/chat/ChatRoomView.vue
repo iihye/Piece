@@ -23,10 +23,12 @@ onMounted(() => {
 </script>
 
 <style scopped>
+@import "@/components/css/color.css";
+
 #chatRoomListPage{
-  border:1px solid black;
-  width: 400px;
-  height: 85vh;
+  border:0.063rem solid var(--black-color);
+  width: 25rem;
+  height: 42.5rem;
   margin: 0 auto;
 }
 </style>
