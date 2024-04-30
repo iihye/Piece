@@ -1,6 +1,9 @@
 <template>
     <div class="textinput-container">
-        <label for="textInputContent" class="textinput-label">{{ textInputName }}</label>
+        <div class="textinput-name">
+            <label for="textInputContent" class="textinput-label">{{ textInputName }}</label>
+            <span v-if="textInputRequired" class="textinput-required">*</span>
+        </div>
         <input type="text" name="textInputContent" id="textInputContent" :placeholder="textInputPlaceholder"
             class="textinput-input" v-model="textInputValue" @input="textInputFuntion" />
     </div>
@@ -13,6 +16,7 @@ import { ref, defineProps, defineEmits } from 'vue';
 defineProps({
     textInputName: String,
     textInputPlaceholder: String,
+    textInputRequired: Boolean
 });
 
 const textInputValue = ref('');
@@ -28,12 +32,15 @@ const textInputFuntion = () => {
 <style>
 @import "@/components/css/color.css";
 
+.textinput-name {
+    padding-right: 2.5rem;
+}
+
 .textinput-label {
     font-size: 1rem;
 }
 
-.textinput-label::after {
-    content: '*';
+.textinput-required {
     color: var(--red-color);
     vertical-align: 0.2rem;
 }
