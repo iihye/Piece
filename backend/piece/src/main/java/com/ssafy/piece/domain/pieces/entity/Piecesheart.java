@@ -18,17 +18,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Table(name = "pieces_record")
-public class Piecesrecord {
+@Table(name = "pieces_heart")
+public class Piecesheart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long recordId;
+    private Long heartId;
 
     @ManyToOne
     @JoinColumn(name = "pieceId")
     private Pieces piece;
 
     @Column(nullable = false)
-    private String content;
+    private Long userId;
 }
