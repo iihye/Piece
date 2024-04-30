@@ -2,8 +2,6 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-const baseUrl="http://localhost:8080";
-
 export const useChatRoomStore = defineStore(
     'chatroom',
     () => {
@@ -46,7 +44,7 @@ export const useChatRoomStore = defineStore(
         };
 
         try {
-            const response = await axios.post(`${baseUrl}/isparticipate`, chatRoomListRequestDto);
+            const response = await axios.post(`${import.meta.env.VITE_REST_URL}/isparticipate`, chatRoomListRequestDto);
             this.chatRoomListValue = response.data; // 받은 데이터로 상태 업데이트
 
             console.log("응답 결과"+response.data);
