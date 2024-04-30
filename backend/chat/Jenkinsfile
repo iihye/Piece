@@ -52,7 +52,7 @@ pipeline {
                 dir('backend/chat'){
                     sh '''
                     echo 'Deploy BE...'
-                    docker run -d -p 0:8082 --env-file ./.env --name chat hyunjinius/chat:latest
+                    docker run -d --env-file ./.env --name chat hyunjinius/chat:latest
                     '''
                 }
             }

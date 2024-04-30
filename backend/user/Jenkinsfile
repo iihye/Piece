@@ -52,7 +52,7 @@ pipeline {
                 dir('backend/user'){
                     sh '''
                     echo 'Deploy BE...'
-                    docker run -d -p 0:8082 --env-file ./.env --name user hyunjinius/user:latest
+                    docker run -d --env-file ./.env --name user hyunjinius/user:latest
                     '''
                 }
             }
