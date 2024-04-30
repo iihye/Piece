@@ -1,6 +1,6 @@
 <template>
     <div id="chatRoomList">
-        <ul style="list-style:none; padding-inline-start:0px;">
+        <ul style="list-style:none; padding-inline-start:0rem;">
             <li class="chatroomlist-cardItems" v-for="chatRoom in chatRoomList" :key="chatRoom" @click="goToChatConversation(chatRoom.chatRoomId)">
                 <div class="chatroomlist-chatRoomCard">
                     <img class="chatroomlist-chatRoomThumbnail" :src="chatRoom.imageUrl" alt="썸네일" />
@@ -71,26 +71,27 @@ const goToChatConversation = (chatRoomId) => {
 // 페이지가 마운트될 때 chatroomList를 가져오도록 설정
 onMounted(() => {
     fetchRooms(1, 0); // default: 오픈 채팅방
-    // chatRoomList.value=chatRoomStore.getChatRoomList;
 });
 </script>
 
-<style scopped>
+<style scoped>
+@import "@/components/css/color.css";
+
 #chatRoomList{
-    border:1px solid red;
+    border:0.0625rem solid var(--red-color);
 }
 .chatroomlist-chatRoomCard{
     width:29%;
 }
 .chatroomlist-cardItems:hover{
-    background-color: rgb(255, 244, 248);
+    background-color: var(--sub-color);
 }
 .chatroomlist-cardItems:active{
-    background-color: rgb(255, 214, 214);
+    background-color: var(--main-color);
 }
 .chatroomlist-chatRoomName{
     font-weight:bold;
-    font-size:20px;
+    font-size:1.25rem;
 }
 .chatroomlist-cardItems{
     display:flex;
@@ -98,10 +99,10 @@ onMounted(() => {
 }
 .chatroomlist-chatRoomThumbnail{
     width:100%;
-    margin-left:10px;
-    margin-right:10px;
+    margin-left:0.625rem;
+    margin-right:0.625rem;
 }
 .chatroomlist-chatRoomCardInfo{
-    margin-left:20px;
+    margin-left:1.25rem;
 }
 </style>
