@@ -26,6 +26,7 @@
                 {{ title }}
             </div>
             <div
+                v-if="description"
                 :class="{
                     'labelitem-label-content': true,
                     'isMine-color': !isMine,
@@ -35,7 +36,9 @@
             </div>
         </div>
         <div v-if="isWear" class="labelitem-wear-container">
-            <div class="labelitem-wear-title">착용 중</div>
+            <div class="labelitem-wear-title" v-if="title !== '칭호 해제'">
+                착용 중
+            </div>
         </div>
     </div>
 </template>
@@ -62,15 +65,12 @@ function getIconName(labelType) {
             return ["fas", "music"];
         case "THEATER":
             return ["fas", "masks-theater"];
-        default:
+        case "PIECE":
             return ["fas", "cake-candles"];
+        default:
+            return ["fas", "ban"];
     }
 }
-// const handleClick = () => {
-//     if (props.isMine) {
-//         props.handleItemClick();
-//     }
-// };
 </script>
 
 <style>
@@ -139,12 +139,15 @@ function getIconName(labelType) {
 .labelitem-label-title {
     font-family: "Semi";
     font-size: 1rem;
-    margin-bottom: 0.4rem;
+
+    user-select: none;
 }
 
 .labelitem-label-content {
     font-family: "Regular";
     font-size: 1rem;
+    margin-top: 0.4rem;
+    user-select: none;
 }
 
 .labelitem-wear-container {
@@ -157,5 +160,6 @@ function getIconName(labelType) {
     font-family: "Semi";
     font-size: 1rem;
     color: var(--main-color);
+    user-select: none;
 }
 </style>

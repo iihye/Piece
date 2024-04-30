@@ -10,6 +10,7 @@ export const useUserStore = defineStore(
 
         const mypageLabelList = ref({});
         const mypageLabelWear = ref({});
+        const mypageLabelWearoff = ref();
 
         // =========== GETTER ===============
 
@@ -21,6 +22,14 @@ export const useUserStore = defineStore(
             return mypageLabelWear.value;
         });
 
+        const getMypageLabelWearoff = computed(() => {
+            return mypageLabelWearoff.value;
+        });
+
+        const setMypagelabelWearoff = (data) => {
+            mypageLabelWearoff.value = data;
+        };
+
         // =========== ACTION ===============
 
         const findMypageLabelList = function () {
@@ -30,6 +39,7 @@ export const useUserStore = defineStore(
             })
                 .then((res) => {
                     mypageLabelList.value = res.data.data;
+                    checkMypageLabelWear();
                 })
                 .catch((err) => {});
         };
@@ -47,16 +57,40 @@ export const useUserStore = defineStore(
                 .catch((err) => {});
         };
 
+        const deleteMypageLabelWear = function () {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/wearoff`,
+                method: "PUT",
+            })
+                .then((res) => {
+                    findMypageLabelList();
+                })
+                .catch((err) => {});
+        };
+
+        const checkMypageLabelWear = function () {
+            setMypagelabelWearoff(
+                Object.values(mypageLabelList.value).every(
+                    (item) => !item.wearLabels
+                )
+            );
+        };
+
         return {
             // state
             mypageLabelList,
             mypageLabelWear,
+            mypageLabelWearoff,
             // getter
             getMypageLabelList,
             getMypageLabelWear,
+            getMypageLabelWearoff,
+            setMypagelabelWearoff,
             // action
             findMyPageLabelList: findMypageLabelList,
             addMypageLabelWear,
+            deleteMypageLabelWear,
+            checkMypageLabelWear,
         };
     },
     { persist: true }

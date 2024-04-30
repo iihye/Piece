@@ -9,33 +9,39 @@
                 <option value="select-not">보유하지 않은 칭호</option>
             </select>
         </div>
-        <LabelItem
-            v-for="(item, index) in filteredLabelList"
-            :key="index"
-            :labelType="item.labelType"
-            :title="item.title"
-            :description="item.description"
-            :isMine="item.myLabels"
-            :isWear="item.wearLabels"
-            @click="item.myLabels && handleItemClick(item.labelId)"
-        ></LabelItem>
+        <div class="labelview-list-container">
+            <LabelItem
+                :key="0"
+                :labelType="'NONE'"
+                :title="'칭호 해제'"
+                :isMine="true"
+                :isWear="mypageLabelWearoff"
+                @click="handleItemWearoffClick()"
+            ></LabelItem>
+            <LabelItem
+                v-for="(item, index) in filteredLabelList"
+                :key="index"
+                :labelType="item.labelType"
+                :title="item.title"
+                :description="item.description"
+                :isMine="item.myLabels"
+                :isWear="item.wearLabels"
+                @click="item.myLabels && handleItemWearClick(item.labelId)"
+            ></LabelItem>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import LabelItem from "@/components/item/LabelItem.vue";
 
 const store = useUserStore();
-// const isMine = ref(true);
-// const isWear = ref(true);
-// const title = ref("영화 애호가");
-// const description = ref("영화 많이 본 사람");
 const mypageLabelList = computed(() => store.getMypageLabelList);
-const mypageLabelWear = computed(() => store.getMypageLabelWear());
 const selectedOption = ref("select-all");
 const filteredLabelList = computed(() => computeFilteredLabelList());
+const mypageLabelWearoff = computed(() => store.getMypageLabelWearoff);
 
 function computeFilteredLabelList() {
     if (selectedOption.value === "select-all") {
@@ -49,9 +55,14 @@ function computeFilteredLabelList() {
     }
 }
 
-const handleItemClick = (labelId) => {
+const handleItemWearClick = (labelId) => {
     alert("착용하시겠습니까?");
     store.addMypageLabelWear(labelId);
+};
+
+const handleItemWearoffClick = () => {
+    alert("착용을 해제하시겠습니까?");
+    store.deleteMypageLabelWear();
 };
 
 onMounted(async () => {
@@ -65,6 +76,7 @@ onMounted(async () => {
     font-size: 1.4rem;
     color: var(--black-color);
     margin-bottom: 0.6rem;
+    user-select: none;
 }
 
 .labelview-main-content {
@@ -76,6 +88,7 @@ onMounted(async () => {
     display: flex;
     justify-content: left;
     align-items: center;
+    user-select: none;
 }
 
 .labelview-selct-container {
@@ -86,11 +99,30 @@ onMounted(async () => {
 
 .labelview-select-dropbox {
     width: 10rem;
-    height: 2rem;
+    height: 2.4rem;
     font-family: "Medium";
     font-size: 1rem;
     color: var(--gray2-color);
     border: 1px solid var(--gray-color);
     padding-left: 0.2rem;
+}
+
+.labelview-list-container {
+    overflow-y: scroll;
+    height: 70vh;
+}
+
+.labelview-list-container::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.labelview-list-container::-webkit-scrollbar-thumb {
+    background-color: var(--gray2-color);
+    border-radius: 1rem;
+}
+
+.labelview-list-container::-webkit-scrollbar-track {
+    background-color: var(--gray-color);
+    border-radius: 1rem;
 }
 </style>
