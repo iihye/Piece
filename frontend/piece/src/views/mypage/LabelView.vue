@@ -12,19 +12,18 @@
         <LabelItem
             v-for="(item, index) in filteredLabelList"
             :key="index"
-            :isMine="item.myLabels"
-            :isWear="item.wearLabels"
+            :labelType="item.labelType"
             :title="item.title"
             :description="item.description"
-            :handleItemClick="handleItemClick"
+            :isMine="item.myLabels"
+            :isWear="item.wearLabels"
+            @click="item.myLabels && handleItemClick(item.labelId)"
         ></LabelItem>
-
-        <button @click="findMyPageLabelList"></button>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useUserStore } from "@/stores/user";
 import LabelItem from "@/components/item/LabelItem.vue";
 
@@ -34,9 +33,11 @@ const store = useUserStore();
 // const title = ref("영화 애호가");
 // const description = ref("영화 많이 본 사람");
 const mypageLabelList = computed(() => store.getMypageLabelList);
+const mypageLabelWear = computed(() => store.getMypageLabelWear());
 const selectedOption = ref("select-all");
+const filteredLabelList = computed(() => computeFilteredLabelList());
 
-const filteredLabelList = computed(() => {
+function computeFilteredLabelList() {
     if (selectedOption.value === "select-all") {
         return mypageLabelList.value;
     } else if (selectedOption.value === "select-mine") {
@@ -46,30 +47,12 @@ const filteredLabelList = computed(() => {
     } else {
         return [];
     }
-});
+}
 
-const handleItemClick = () => {
-    console.log(mypageLabelList);
+const handleItemClick = (labelId) => {
     alert("착용하시겠습니까?");
+    store.addMypageLabelWear(labelId);
 };
-
-const findMyPageLabelList = () => {
-    console.log("버튼 클릭");
-    mypageLabelList.value = store.getMypageLabelList;
-};
-
-// const findMyPageLabelList = function () {
-//     axios({
-//         url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels`,
-//         method: "GET",
-//     })
-//         .then((res) => {
-//             console.log(res.data.data);
-//             mypageLabelList.value = res.data.data;
-//             // console.log(myLabelList.value);
-//         })
-//         .catch((err) => {});
-// };
 
 onMounted(async () => {
     await store.findMyPageLabelList();

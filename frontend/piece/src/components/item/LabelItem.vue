@@ -1,8 +1,5 @@
 <template>
-    <div
-        :class="{ 'labelitem-modal-container': true, 'isWear-color': isWear }"
-        @click="handleClick"
-    >
+    <div :class="{ 'labelitem-modal-container': true, 'isWear-color': isWear }">
         <div class="labelitem-icon-container">
             <div
                 class="labelitem-icon-background"
@@ -13,7 +10,7 @@
             ></div>
             <font-awesome-icon
                 class="labelitem-icon-icon"
-                :icon="['fas', 'film']"
+                :icon="getIconName(labelType)"
                 :style="{
                     color: isMine ? 'var(--main-color)' : 'var(--gray2-color)',
                 }"
@@ -47,18 +44,33 @@
 import { defineProps } from "vue";
 
 const props = defineProps({
-    isMine: Boolean,
-    isWear: Boolean,
+    labelType: String,
     title: String,
     description: String,
+    isMine: Boolean,
+    isWear: Boolean,
     handleItemClick: Function,
 });
 
-const handleClick = () => {
-    if (props.isMine) {
-        props.handleItemClick();
+function getIconName(labelType) {
+    switch (labelType) {
+        case "GENRE":
+            return ["fas", "tag"];
+        case "MOVIE":
+            return ["fas", "film"];
+        case "CONCERT":
+            return ["fas", "music"];
+        case "THEATER":
+            return ["fas", "masks-theater"];
+        default:
+            return ["fas", "cake-candles"];
     }
-};
+}
+// const handleClick = () => {
+//     if (props.isMine) {
+//         props.handleItemClick();
+//     }
+// };
 </script>
 
 <style>
@@ -112,8 +124,8 @@ const handleClick = () => {
 }
 
 .labelitem-icon-icon {
-    width: 2rem;
-    height: 2rem;
+    width: 1.4rem;
+    height: 1.4rem;
 }
 
 .labelitem-label-container {
