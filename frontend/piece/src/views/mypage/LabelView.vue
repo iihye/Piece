@@ -29,6 +29,20 @@
                 @click="item.myLabels && handleItemWearClick(item.labelId)"
             ></LabelItem>
         </div>
+
+        <!-- 칭호 착용 모달 -->
+        <SuccessModal
+            v-if="wearModal"
+            :modalTitle="'칭호를 착용했어요!'"
+            :handleSuccessClick="handleWearSuccess"
+        />
+
+        <!-- 칭호 착용 해제 모달 -->
+        <SuccessModal
+            v-if="wearoffModal"
+            :modalTitle="'칭호를 해제했어요!'"
+            :handleSuccessClick="handleWearoffSuccess"
+        />
     </div>
 </template>
 
@@ -36,12 +50,17 @@
 import { ref, computed, onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import LabelItem from "@/components/item/LabelItem.vue";
+import SuccessModal from "@/components/modal/SuccessModal.vue";
 
 const store = useUserStore();
+
 const mypageLabelList = computed(() => store.getMypageLabelList);
-const selectedOption = ref("select-all");
 const filteredLabelList = computed(() => computeFilteredLabelList());
 const mypageLabelWearoff = computed(() => store.getMypageLabelWearoff);
+
+const selectedOption = ref("select-all");
+const wearModal = ref(false);
+const wearoffModal = ref(false);
 
 function computeFilteredLabelList() {
     if (selectedOption.value === "select-all") {
@@ -56,13 +75,21 @@ function computeFilteredLabelList() {
 }
 
 const handleItemWearClick = (labelId) => {
-    alert("착용하시겠습니까?");
+    wearModal.value = true;
     store.addMypageLabelWear(labelId);
 };
 
 const handleItemWearoffClick = () => {
-    alert("착용을 해제하시겠습니까?");
+    wearoffModal.value = true;
     store.deleteMypageLabelWear();
+};
+
+const handleWearSuccess = () => {
+    wearModal.value = false;
+};
+
+const handleWearoffSuccess = () => {
+    wearoffModal.value = false;
 };
 
 onMounted(async () => {
