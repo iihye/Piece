@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+
+    parameters{
+        string(name: 'NAME', defaultValue: 'gateway')
+    }
+
+    stages {
+        stage('SCM') {
+            steps {
+                sh "echo 'SCM...'"
+                checkout scm
+            }
+        }
+
+        stage('Springboot build'){
+            steps{
+                dir('backend/gateway'){
+                    sh '''
+                    echo 'Springboot build...'
+                    chmod +x gradlew
+                    ./gradlew clean build
+                    '''
+                }
+            }
+        }
+
+        stage('Dockerimage build'){
+            steps {
+                dir('backend/gateway') {
+                    script {
+                        def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep ${params.NAME}", returnStatus: true) == 0
+
+                        if (containerExists) {
+                            sh "docker stop ${params.NAME}"
+                            sh "docker rm ${params.NAME}"
+                            sh "docker rmi hyunjinius/gateway:latest"
+                        }
+
+
+                        sh '''
+                        echo 'Dockerimage build...'
+                        docker build -t hyunjinius/gateway:latest .
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy'){
+            steps{
+                dir('backend/gateway'){
+                    sh '''
+                    echo 'Deploy BE...'
+                    docker run -d -p 0:8082 --env-file ./.env --name gateway hyunjinius/gateway:latest
+                    '''
+                }
+            }
+        }
+    }
+}
