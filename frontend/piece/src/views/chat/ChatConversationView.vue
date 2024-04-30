@@ -1,8 +1,18 @@
 <template>
     <button @click="handleGoBack">뒤로가깅</button>
     <div id="chatBox"> <!-- v-if 걸어서 채팅방 존재 여부 판독 예정 -->
+        <!-- 오픈채팅 헤더 정보. 헤더에 들어갈 예정 -->
+        <div v-if="chatRoomInfo.isPersonal==false">
+            <h2>오픈채팅 이름:{{ chatRoomInfo.chatRoomName }}</h2>
+            <img :src="chatRoomInfo.culture.imageUrl" alt="해당 채팅방 이미지">
+        </div>
+        <!-- 1:1채팅 헤더 정보. 헤더에 들어갈 예정 -->
+        <div v-else>
+            <h2>상대방 닉네임</h2>
+            <img src="" alt="상대방 프로필사진">
+        </div>
         <div id="messages">
-            <ul style="list-style:none; padding-inline-start: 0px;">
+            <ul style="list-style:none; padding-inline-start: 0rem;">
                 <!-- 저장되어 있던 메시지 목록 -->
                 <li v-for="item in chatMessages" :key="item">
                     <div class="chatconversationview-messageCard" :class="item.senderId!=givenUserNumber? 'chatconversationview-fromCard' : 'chatconversationview-toCard'">
@@ -142,7 +152,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, computed } from 'vue';
 import { useChatRoomStore } from '@/stores/chatroom';
 import { useChatStore } from '@/stores/chat';
 import {useWebSocketStore} from '@/stores/websocket';
@@ -162,6 +172,11 @@ console.log("웹소켓 정보:"+webSocketStore.getStompClient());
 
 const chatMessages=ref([]);
 const storeMessages = ref([]);
+const chatRoomInfo=ref({});
+
+const getInfo = computed(()=>{
+    return chatRoomInfo.value
+})
 
 chatMessages.value.push({
     chatRoomId: 1, // 테스트 용도
@@ -250,7 +265,15 @@ onMounted(() => {
 
     console.log('mounted()');
 
-    subscribe(1);
+    subscribe(chatRoomStore.getChatRoomId);
+    chatRoomStore.getChatRoomInfo(chatRoomStore.getChatRoomId);
+
+    console.log("채팅방 정보:"+chatRoomStore.getChatRoom.chatRoomName);
+
+
+    chatRoomInfo.value=chatRoomStore.getChatRoom;
+
+    console.log("현재 페이지에서 보유한 방 정보:"+JSON.stringify(chatRoomStore.getChatRoom));
 
 });
 </script>
@@ -266,11 +289,11 @@ onMounted(() => {
 /* 메시지 목록 창 */
 #messages{
     display:flex;
-    border:1px solid red;
+    border:0.063rem solid var(--red-color);
     overflow-x: hidden;
     overflow-y: scroll;
     transition: scroll-behavior 0.5s ease-in-out;
-    height:75vh;
+    height:37.5rem;
 }
 #messages::-webkit-scrollbar {
     /* display: none; */
@@ -279,23 +302,21 @@ onMounted(() => {
 #inputWindow{
     bottom:0;
     width:100%;
-    border:1px solid purple;
+    border:0.063rem solid purple;
 }
 #inputGroup{
-    border:1px solid blue;
+    border:0.063rem solid blue;
     display:flex;
     justify-content: center;
 }
 
 /* 전송 버튼 */
 .chatconversationview-generate {
-width:48px;
-/* font-family: inherit;
-font-size: 20px; */
+width:3.4rem;
 background: var(--main-color);
-color: white;
-padding: 1em 1em;
-padding-left: 12px;
+color: var(--white-color);
+padding: 1rem 1rem;
+padding-left: 0.9rem;
 display: flex;
 align-items: center;
 border: none;
@@ -308,7 +329,7 @@ z-index: 3;
 
 .chatconversationview-generate span {
 display: block;
-margin-left: 0.3em;
+margin-left: 0.3rem;
 transition: all 0.3s ease-in-out;
 }
 
@@ -323,11 +344,11 @@ animation: fly-1 0.6s ease-in-out infinite alternate;
 }
 
 .chatconversationview-generate:hover svg {
-transform: translateX(1.2em) rotate(45deg) scale(1.1);
+transform: translateX(1.2rem) rotate(45deg) scale(1.1);
 }
 
 .chatconversationview-generate:hover span {
-transform: translateX(5em);
+transform: translateX(5rem);
 }
 
 .chatconversationview-generate:active {
@@ -339,8 +360,8 @@ transform: scale(0.95);
     /* font-size:1rem; */
     padding-left:1rem;
     width:70%;
-    border-radius:50px;
-    margin-right:10px;
+    border-radius:3.125rem;
+    margin-right:0.625rem;
 }
 
 #messageForm:focus {
@@ -352,9 +373,9 @@ transition: 0.3s;
 
 /* 메세지 카드 */
 .chatconversationview-messageCard{
-    width:370px;
+    width:23.125rem;
     display:flex;
-    border:1px solid blue;
+    border:0.063rem solid blue;
 }
 
 .chatconversationview-fromCard{
@@ -367,14 +388,11 @@ transition: 0.3s;
 
 /* 메시지 버블 */
 .chatconversationview-bubble {
-    border:1px solid green;
+    border:0.063rem solid green;
     border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
-    /* font-family: "SanFrancisco";
-    font-size: 1rem; */
-    /* margin: 0 auto 1rem; */
-    max-width: 600px;
+    max-width: 37.5rem;
 }
 
 .chatconversationview-bubble p {
@@ -411,9 +429,9 @@ p.chatconversationview-fromMe::before {
 p.chatconversationview-fromMe::after {
     background-color: var(--white-color);
     border-bottom-left-radius: 0.5rem;
-    right: -40px;
-    transform: translate(-30px, -2px);
-    width: 10px;
+    right: -2.5rem;
+    transform: translate(-1.875rem, -0.125rem);
+    width: 0.625rem;
 }
 
 p[class^="chatconversationview-from"] {
@@ -450,16 +468,16 @@ p.chatconversationview-fromThem:before {
 p.chatconversationview-fromThem::after {
     background-color: var(--white-color);
     border-bottom-right-radius: 0.5rem;
-    left: 20px;
-    transform: translate(-30px, -2px);
-    width: 10px;
+    left: 1.25rem;
+    transform: translate(-1.875rem, -0.125rem);
+    width: 0.625rem;
 }
 
 /* 프로필 사진 */
 .chatconversationview-profileImage img{
-    padding-top:5px;
-    margin-left:10px;
-    width:50px;
+    padding-top:0.313rem;
+    margin-left:0.625rem;
+    width:3.125rem;
 }
 
 /* 상대 메시지 헤더 */
@@ -470,28 +488,28 @@ p.chatconversationview-fromThem::after {
 
 /* 상대 칭호+이름 */
 .chatconversationview-userHeader{
-    padding-top:5px;
-    padding-left:10px;
+    padding-top:0.313rem;
+    padding-left:0.625rem;
 }
 
 /* 상대 칭호 */
 .chatconversationview-userTitle{
-    padding-left:0px;
+    padding-left:0rem;
     /* font-weight:bold; */
-    color:#ff819e;
+    color:var(--main-color);
 }
 
 /* 상대 이름 */
 .chatconversationview-userName{
-    padding-left:6px;
-    color:#6e6e6e;
+    padding-left:0.375rem;
+    color:var(--gray2-color);
 }
 
 /* 시간 정보 */
 .chatconversationview-sendDate{
-    width:70px;
+    width:4.375rem;
     height:90%;
-    border:1px solid red;
+    border:0.063rem solid (--red-color);
 }
 .chatconversationview-sendDate p{
     text-align: center;
@@ -501,7 +519,7 @@ p.chatconversationview-fromThem::after {
 .chatconversationview-messageAndTimeTo{
     display:flex;
     flex-direction: row;
-    border:1px solid blue;
+    border:0.063rem solid blue;
 }
 .chatconversationview-messageAndTimeTo .sendDate{
     text-align: right;
@@ -509,6 +527,6 @@ p.chatconversationview-fromThem::after {
 .chatconversationview-messageAndTimeFrom{
     display:flex;
     flex-direction: row;
-    border:1px solid purple;
+    border:0.063rem solid purple;
 }
 </style>
