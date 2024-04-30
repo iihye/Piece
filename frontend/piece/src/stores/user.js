@@ -9,6 +9,7 @@ export const useUserStore = defineStore(
         // =========== STATE ===============
 
         const mypageLabelList = ref({});
+        const mypageLabelWear = ref({});
 
         // =========== GETTER ===============
 
@@ -16,25 +17,46 @@ export const useUserStore = defineStore(
             return mypageLabelList.value;
         });
 
+        const getMypageLabelWear = computed(() => {
+            return mypageLabelWear.value;
+        });
+
         // =========== ACTION ===============
 
-        const findMyPageLabelList = function () {
+        const findMypageLabelList = function () {
             axios({
                 url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels`,
                 method: "GET",
             })
                 .then((res) => {
-                    // console.log(res.data.data);
                     mypageLabelList.value = res.data.data;
-                    // console.log(myLabelList.value);
+                })
+                .catch((err) => {});
+        };
+
+        const addMypageLabelWear = function (labelId) {
+            axios({
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/mylabels/${labelId}`,
+                method: "PUT",
+            })
+                .then((res) => {
+                    findMypageLabelList();
                 })
                 .catch((err) => {});
         };
 
         return {
+            // state
             mypageLabelList,
+            mypageLabelWear,
+            // getter
             getMypageLabelList,
-            findMyPageLabelList,
+            getMypageLabelWear,
+            // action
+            findMyPageLabelList: findMypageLabelList,
+            addMypageLabelWear,
         };
     },
     { persist: true }
