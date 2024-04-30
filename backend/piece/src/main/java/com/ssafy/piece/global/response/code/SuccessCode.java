@@ -23,10 +23,13 @@ public enum SuccessCode implements ResponseCode {
     CHECK_EMAIL_BAD(HttpStatus.OK, "이미 사용 중인 이메일입니다"),
 
     JOIN_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
+    NICKNAME_UPDATE_SUCCESS(HttpStatus.OK, "닉네임 변경에 성공했습니다."),
 
     CHECK_PASSWORD_SUCCESS(HttpStatus.OK, "비밀번호 확인에 성공했습니다."),
 
     PASSWORD_UPDATE_SUCCESS(HttpStatus.OK, "비밀번호 변경에 성공했습니다."),;
+
+
 
     private final HttpStatus httpStatus;
 

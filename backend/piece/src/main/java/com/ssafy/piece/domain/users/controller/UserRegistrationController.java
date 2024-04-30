@@ -11,8 +11,10 @@ import com.ssafy.piece.global.response.structure.SuccessResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,42 +32,46 @@ public class UserRegistrationController {
 
     private final UserRegistrationService userRegistrationService;
 
-    @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody UserRegistrationRequestDto requestDto) {
-        userRegistrationService.register(requestDto);
+    @GetMapping("/register")
+    public String register() {
+        return "register.html";  // 회원가입 페이지로 이동
+    }
+
+    @PostMapping("/register") //회원가입
+    public ResponseEntity<Object> addUser(@RequestBody UserRegistrationRequestDto registrationDto) {
+        userRegistrationService.register(registrationDto);
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
+
     }
 
-
-    //GPT가 알려준내용... ->예외처리를 하기 위해 사용한다.(잘 모르겠어요...)
-    @ExceptionHandler(DuplicatedEmailException.class)
-    public ResponseEntity<Object> handleDuplicatedEmail(DuplicatedEmailException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    @GetMapping("/login")
+    public String login() {
+        return "login.html";  // 로그인 페이지로
     }
 
-    @ExceptionHandler(DuplicatedNicknameException.class)
-    public ResponseEntity<Object> handleDuplicatedNickname(DuplicatedNicknameException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    @GetMapping("/my-page")
+    public String myPage(Authentication auth) {
+        // 현재 로그인한 사용자의 정보를 사용할 수 있습니다.
+        return "mypage.html";  // 마이페이지로
     }
 
-
-    @GetMapping("/check-email")
-    public ResponseEntity<Object> checkEmail(@RequestParam String email) {
-        boolean isAvailable = userRegistrationService.checkEmailAvailable(email);
-        if (isAvailable) {
-            return SuccessResponse.createSuccess(SuccessCode.CHECK_EMAIL_GOOD);
-        } else {
-            return SuccessResponse.createSuccess(SuccessCode.CHECK_EMAIL_BAD);
-        }
-    }
-
-    @GetMapping("/check-nickname")
+    @GetMapping("/check-nickname") //닉네임 중복체크
     public ResponseEntity<Object> checkNickname(@RequestParam String nickname) {
         boolean isAvailable = userRegistrationService.checkNicknameAvailable(nickname);
         if (isAvailable) {
             return SuccessResponse.createSuccess(SuccessCode.CHECK_NICKNAME_GOOD);
         } else {
             return SuccessResponse.createSuccess(SuccessCode.CHECK_NICKNAME_BAD);
+        }
+    }
+
+    @GetMapping("/check-email") //이메일 중복 체크
+    public ResponseEntity<Object> checkEmail(@RequestParam String email) {
+        boolean isAvailable = userRegistrationService.checkEmailAvailable(email);
+        if (isAvailable) {
+            return SuccessResponse.createSuccess(SuccessCode.CHECK_EMAIL_GOOD);
+        } else {
+            return SuccessResponse.createSuccess(SuccessCode.CHECK_EMAIL_BAD);
         }
     }
 

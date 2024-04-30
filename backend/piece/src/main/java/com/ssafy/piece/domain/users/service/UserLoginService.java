@@ -2,43 +2,39 @@ package com.ssafy.piece.domain.users.service;
 
 
 import com.ssafy.piece.domain.users.dto.request.UserLoginRequestDto;
+import com.ssafy.piece.domain.users.entity.Users;
 import com.ssafy.piece.domain.users.repository.UsersRepository;
-import com.ssafy.piece.global.security.JwtTokenProvider;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserLoginService {
 
     private final UsersRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager; // 스프링 시큐리티 인증 관리자
-    private final JwtTokenProvider tokenProvider;
 
 
-    public String login(UserLoginRequestDto loginRequest) {
-        try {
-            // 사용자 인증 시도
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    loginRequest.getUsername(),
-                    loginRequest.getPassword()
-                )
-            );
-            if (authentication.isAuthenticated()) {
-                return tokenProvider.generateToken(String.valueOf(authentication));
-            }
-            throw new RuntimeException("인증 실패");
-
+    public boolean login(UserLoginRequestDto loginRequest) {
+        // 사용자 정보 조회
+        Users user = userRepository.findByUsername(loginRequest.getUsername());
+        if (user == null) {
+            // 사용자를 찾을 수 없으면 false 반환
+            return false;
+        }
+        // 비밀번호 검증
+        if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            // 비밀번호가 일치하면 true 반환
+            return true;
+        }
+        // 비밀번호가 일치하지 않으면 false 반환
+        return false;
     }
 }
-
-
 
 

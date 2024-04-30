@@ -1,13 +1,17 @@
 package com.ssafy.piece.domain.users.service;
 
 
+import ch.qos.logback.core.spi.ErrorCodes;
 import com.nimbusds.oauth2.sdk.SuccessResponse;
 import com.ssafy.piece.domain.users.dto.request.UserRegistrationRequestDto;
+import com.ssafy.piece.domain.users.dto.response.UserRegistrationResponseDto;
 import com.ssafy.piece.domain.users.entity.Users;
 import com.ssafy.piece.domain.users.exception.DuplicatedEmailException;
 import com.ssafy.piece.domain.users.exception.DuplicatedNicknameException;
 import com.ssafy.piece.domain.users.repository.UsersRepository;
+import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 /**
@@ -19,34 +23,44 @@ import org.springframework.stereotype.Service;
 public class UserRegistrationService {
 
     private final UsersRepository usersRepository;
-    private final PasswordEncoder passwordEncoder; // 비밀번호 암호화
+    private final BCryptPasswordEncoder passwordEncoder;
+
+
 
 
     /**
      * 사용자의 일반 회원가입을 처리합니다. 새로운 사용자를 데이터베이스에 저장합니다.
      */
-    public Users register(UserRegistrationRequestDto requestDto) { //이메일 중복검사
-        if (usersRepository.existsByEmail(requestDto.getEmail())) {
+    public UserRegistrationResponseDto  register(UserRegistrationRequestDto registrationDto) {
+
+        if (usersRepository.existsByEmail(registrationDto.getEmail())) {
             throw new DuplicatedEmailException();
         }
 
-        if (usersRepository.existsByNickname(requestDto.getNickname())) { //닉네임 중복검사
+        if (usersRepository.existsByNickname(registrationDto.getNickname())) {
             throw new DuplicatedNicknameException();
         }
 
-        // 비밀번호를 해싱하여 안전하게 저장
-        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
         Users newUser = Users.builder()
-            .email(requestDto.getEmail())
-            .username(requestDto.getUsername())
-            .password(encodedPassword)
-            .nickname(requestDto.getNickname())
-            .profileImage(requestDto.getProfileImage()) //선택사항
+            .email(registrationDto.getEmail())
+            .username(registrationDto.getUsername())
+            .password(passwordEncoder.encode(registrationDto.getPassword()))
+            .nickname(registrationDto.getNickname())
+            .profileImage(registrationDto.getProfileImage())
+            .createdAt(new Timestamp(System.currentTimeMillis()))
+            .updatedAt(new Timestamp(System.currentTimeMillis()))
+            .isTutorial(false)  // 기본적으로 튜토리얼 보이지 않도록 설정
+            .socialId("N/A")  // 소셜 ID는 현재 설정되지 않음
+            .labelId(0L)      // 칭호 ID는 임시로 0으로 설정
             .build();
 
-        // 생성된 사용자 정보를 데이터베이스에 저장
-        return usersRepository.save(newUser);
+
+        newUser = usersRepository.save(newUser); //데이터베이스에 새로운 사용자를 저장합니다.
+
+
+        //환영메시지와 함께 DTO를 반환합니다.
+        return new UserRegistrationResponseDto(newUser.getUsername(), "님 안녕하세요! 가입을 환영합니다!");
     }
 
 
