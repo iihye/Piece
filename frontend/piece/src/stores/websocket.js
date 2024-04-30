@@ -20,7 +20,7 @@ export const useWebSocketStore = defineStore(
     // =========== ACTION ===============
     const stompConnect = () => {
       // WebSocket 연결 생성
-      state.socket = new SockJS('http://localhost:8080/ws');
+      state.socket = new SockJS(`${import.meta.env.VITE_WEBSOCKET_URL}`);
 
       // Stomp 클라이언트 생성
       state.stompClient = Stomp.over(state.socket);
