@@ -1,9 +1,13 @@
 <template>
-    <div>
+    <div class="header-container">
         <h1>header</h1>
     </div>
 </template>
 
 <script setup></script>
 
-<style lang="scss" scoped></style>
+<style>
+.header-container {
+    z-index: 85;
+}
+</style>
