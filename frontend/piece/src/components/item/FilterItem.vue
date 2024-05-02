@@ -84,14 +84,14 @@ function getIconName(labelType) {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+    padding: 0.4rem 0.2rem 0.4rem 0.2rem;
     flex-direction: column;
 }
 
 .filteritem-icon-container {
     position: relative;
-    width: 3.4rem;
-    height: 3.4rem;
+    width: 4rem;
+    height: 4rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -101,8 +101,8 @@ function getIconName(labelType) {
     position: absolute;
     top: 0;
     left: 0;
-    width: 3.4rem;
-    height: 3.4rem;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
     background-color: var(--gray-color);
 }
@@ -117,8 +117,8 @@ function getIconName(labelType) {
 }
 
 .filteritem-icon-icon {
-    width: 2rem;
-    height: 2rem;
+    width: 1.8rem;
+    height: 1.8rem;
 }
 
 .filteritem-label-container {
