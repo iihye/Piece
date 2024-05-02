@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -22,7 +23,8 @@ public class LabelsService {
     // 칭호 등록
     public void addLabels() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        File file = new File("src/main/resources/labelsdata.json");
+        ClassPathResource resource = new ClassPathResource("labelsdata.json");
+        File file = new File(resource.getURI());
 
         LabelsRequestDto[] labelsRequestDtos = objectMapper.readValue(file,
             LabelsRequestDto[].class);
