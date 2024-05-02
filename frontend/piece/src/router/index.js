@@ -207,6 +207,12 @@ const router = createRouter({
             name: "cakeList",
             component: CakeListView,
         },
+        {
+            path: '/views/:id',
+            name: 'CakeDetail',
+            component: CakeDetailView,
+            props: true
+        }
     ],
 });
 

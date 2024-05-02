@@ -5,12 +5,13 @@
         </div>
         <div class="cake-details">
             <p><div class="category-box">{{ item.category }}</div> {{ item.status }}</p>
-            <h3>{{ item.title }}</h3>
+            <h3 @click="goToDetail(item.id)">{{ item.title }}</h3>
         </div>
     </div>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 const props = defineProps({
     item: {
         type: Object,
@@ -18,7 +19,11 @@ const props = defineProps({
     }
 });
 
-const { item } = props;
+const router = useRouter();
+
+const goToDetail = (id) => {
+    router.push({ name: 'CakeDetail', params: { id } });
+};
 </script>
 
 <style>
