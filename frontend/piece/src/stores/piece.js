@@ -4,35 +4,27 @@ import { localAxios } from '@/stores/localaxios';
 
 const axiosInstance = localAxios();
 
-export const usePieceStore = defineStore(
-    "piece",
-    () => {
-        // =========== STATE ===============
-
-        const pieceValue=ref({});
-
-        // =========== GETTER ===============
-
-        const getpPieceValue = computed(() => {
-            return pieceValue.value;
-        });
-
-        // =========== SETTER ===============
-
-        const setPieceValue = (data) => {
-            pieceValue.value = data;
-        };
-
-        // =========== ACTION ===============
-        return {
-            // state
-            pieceValue,
-            // getter
-            getpPieceValue,
-            // setter
-            setPieceValue,
-            // action
-        };
+export const usePieceStore = defineStore('piece', {
+    state: () => ({
+        pieceValue: {
+            type: null,
+            name: '',
+            date: null,
+            time: null,
+            cast: '',
+            location: '',
+            director: '',
+            seat: '',
+            price: '',
+        },
+    }),
+    getters: {
+        getPieceValue: (state) => state.pieceValue
     },
-    { persist: true }
-);
+    actions: {
+        setPieceValue(key, value) {
+            this.pieceValue[key] = value;
+        }
+    }
+},
+{persist: true});

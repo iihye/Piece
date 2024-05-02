@@ -7,7 +7,13 @@
     </div>
 
     <div v-if="imageSrc">
-        <VueCropper ref="cropperRef" :src="uploadedImage" :zoomOnWheel="false"/>
+        <VueCropper 
+            ref="cropperRef" 
+            :src="uploadedImage" 
+            :zoomOnWheel="false"
+            :initial-aspect-ratio=9/16
+            :aspect-ratio=9/16
+        />
         <button @click.prevent="cropImage">Crop</button>
     </div>
 

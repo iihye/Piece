@@ -30,10 +30,13 @@ button {
     padding: 0.625rem 1.25rem;
     border: 0.0625rem solid var(--gray-color);
     background-color: var(--white-color);
+    height: 2.25rem;
     cursor: pointer;
     outline: none;
-    border-radius: 1.25rem;
-    margin-right: 0.625rem;
+    border-radius: 0.625rem;
+    /* margin-right: 0.625rem; */
+    /* width: 6rem;
+    height: 2rem; */
     transition: background-color 0.2s, color 0.2s;
   }
   
