@@ -1,8 +1,5 @@
 package com.ssafy.piece.domain.users.service;
 
-
-import ch.qos.logback.core.spi.ErrorCodes;
-import com.nimbusds.oauth2.sdk.SuccessResponse;
 import com.ssafy.piece.domain.users.dto.request.UserRegistrationRequestDto;
 import com.ssafy.piece.domain.users.dto.response.UserRegistrationResponseDto;
 import com.ssafy.piece.domain.users.entity.Users;
@@ -48,8 +45,6 @@ public class UserRegistrationService {
             .password(passwordEncoder.encode(registrationDto.getPassword()))
             .nickname(registrationDto.getNickname())
 //            .profileImage(registrationDto.getProfileImage())
-            .createdAt(new Timestamp(System.currentTimeMillis()))
-            .updatedAt(new Timestamp(System.currentTimeMillis()))
             .isTutorial(true)  // 기본적으로 튜토리얼 보이도록 설정합니다.
             .socialId("N/A")  // 소셜 ID는 현재 설정되지 않음
             .labelId(0L)      // 칭호 ID는 임시로 0으로 설정

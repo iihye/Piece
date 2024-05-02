@@ -4,7 +4,7 @@ import com.ssafy.piece.domain.users.entity.Users;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.data.jpa.repository.Query;
 
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Long> {
@@ -15,7 +15,6 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 
     Users findByEmail(String email); // 이메일로 사용자 조회
 
-
-
-
+    @Query("select u from Users u where u.userId = :userId")
+    Optional<Users> findByUserId(Long userId);
 }

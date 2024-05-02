@@ -1,6 +1,7 @@
 package com.ssafy.piece.domain.users.entity;
 
 
+import com.ssafy.piece.global.entity.BaseTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import jakarta.persistence.Table;
 
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,13 +20,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@Data
 @Entity
 @Builder
 @NoArgsConstructor  // Lombok에 의해 기본 생성자를 추가
 @AllArgsConstructor // 모든 필드를 인자로 받는 생성자 추가 (Builder와 함께 사용)
 @Table(name = "users")
-public class Users {
+@Setter
+@Getter
+public class Users extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,18 +43,12 @@ public class Users {
     private String nickname; //최대 10자
 
     @Column(nullable = false)
-    private Timestamp createdAt;
-
-    @Column(nullable = false)
-    private Timestamp updatedAt;
-
-    @Column(nullable = false)
     private boolean isTutorial; //true: 보여준다, false: 안보여준다
 
     @Column(nullable = false)
     private String socialId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long labelId;
 
     @Column(nullable = false, length = 255)
