@@ -16,6 +16,7 @@
     background-color: var(--white-color);
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .header-all {
