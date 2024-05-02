@@ -54,7 +54,6 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     piecelistDetail.value = res.data.data;
-                    console.log(piecelistDetail.value);
                 })
                 .catch((err) => {});
         };
