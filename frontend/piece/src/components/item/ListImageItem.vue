@@ -68,7 +68,7 @@ const props = defineProps({
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 0 3rem 1rem 3rem;
+    margin: 0 0 1rem 0;
 }
 
 .listImageItem-image-container {
