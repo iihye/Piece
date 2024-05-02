@@ -2,7 +2,7 @@
     <!-- header -->
     <h1>내 조각 리스트 버전</h1>
     <RouterLink :to="{ name: 'pieceCalendar' }">캘린더</RouterLink>
-    
+
     <!-- filter -->
     <div class="piecelistmyview-scroll-container">
         <div class="piecelistmyview-tab-navigation">
@@ -23,26 +23,27 @@
     <!-- list -->
     <div class="piecelistmyview-list-container">
         <div class="piecelistmyview-list-grid">
-            <div v-for="(item, index) in filteredMyList" :key="index" class="piecelistmyview-list-item">
-            <ListImageItem
-                :pieceId="item.pieceId"
-                :performanceType="item.performanceType"
-                :frontImg="item.frontImg"
-                :title="item.title"
-                @click="handleItemClick"
-            ></ListImageItem>
+            <div
+                v-for="(item, index) in filteredMyList"
+                :key="index"
+                class="piecelistmyview-list-item"
+            >
+                <ListImageItem
+                    :pieceId="item.pieceId"
+                    :performanceType="item.performanceType"
+                    :frontImg="item.frontImg"
+                    :title="item.title"
+                    @click="handleItemClick(item)"
+                ></ListImageItem>
+            </div>
         </div>
-        </div>
-        
     </div>
-
-    
 </template>
 
 <script setup>
+import router from "@/router";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { usePiecelistStore } from "@/stores/piecelist";
-import { useRouter } from "vue-router";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListImageItem from "@/components/item/ListImageItem.vue";
 
@@ -56,24 +57,33 @@ function computedFilteredMyList() {
     if (selectedOption.value === "ALL") {
         return piecelistMyList.value;
     } else if (selectedOption.value === "MOVIE") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "MOVIE");
+        return piecelistMyList.value.filter(
+            (item) => item.performanceType === "MOVIE"
+        );
     } else if (selectedOption.value === "THEATER") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "THEATER");
+        return piecelistMyList.value.filter(
+            (item) => item.performanceType === "THEATER"
+        );
     } else if (selectedOption.value === "MUSICAL") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "MUSICAL");
+        return piecelistMyList.value.filter(
+            (item) => item.performanceType === "MUSICAL"
+        );
     } else if (selectedOption.value === "CONCERT") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "CONCERT");
+        return piecelistMyList.value.filter(
+            (item) => item.performanceType === "CONCERT"
+        );
     } else if (selectedOption.value === "ETC") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "ETC");
+        return piecelistMyList.value.filter(
+            (item) => item.performanceType === "ETC"
+        );
     } else {
         return [];
     }
 }
 
-const handleItemClick = () => {
-    alert("선택");
+const handleItemClick = (item) => {
+    router.push({ name: "pieceDetail", params: { pieceId: item.pieceId } });
 };
-
 
 const filterItems = ref([
     {
@@ -149,17 +159,15 @@ onBeforeUnmount(() => {
     document.removeEventListener("mouseup", handleMouseUp);
     tabMenu.value.removeEventListener("mousemove", handleMouseMove);
 });
-
 </script>
 
 <style>
-
 /* filter */
 .piecelistmyview-scroll-container {
     position: relative;
     /* width: 450px; */
     transition: 0.5s ease;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .piecelistmyview-tab-navigation {
@@ -201,15 +209,34 @@ onBeforeUnmount(() => {
 }
 
 /* list */
+.piecelistmyview-list-container {
+    overflow-y: scroll;
+    height: 60vh;
+}
+
+/* .piecelistmyview-list-container::-webkit-scrollbar {
+    width: 0.2rem;
+}
+
+.piecelistmyview-list-container::-webkit-scrollbar-thumb {
+    background-color: var(--gray2-color);
+    border-radius: 1rem;
+}
+
+.piecelistmyview-list-container::-webkit-scrollbar-track {
+    background-color: var(--gray-color);
+    border-radius: 1rem;
+} */
+
 .piecelistmyview-list-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(8rem, 1fr));
-    justify-items: center; 
+    justify-items: center;
     grid-gap: 1rem;
 }
 
 .piecelistmyview-list-item {
-    width: auto; 
+    width: auto;
 }
 
 @media (min-width: 1024px) {

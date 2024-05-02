@@ -36,6 +36,7 @@
 import { defineProps } from "vue";
 
 const props = defineProps({
+    pieceId: Number,
     labelType: String,
     title: String,
     isSelect: Boolean,
@@ -89,8 +90,8 @@ function getIconName(labelType) {
 
 .filteritem-icon-container {
     position: relative;
-    width: 5.4rem;
-    height: 5.4rem;
+    width: 3.4rem;
+    height: 3.4rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -100,8 +101,8 @@ function getIconName(labelType) {
     position: absolute;
     top: 0;
     left: 0;
-    width: 5.4rem;
-    height: 5.4rem;
+    width: 3.4rem;
+    height: 3.4rem;
     border-radius: 50%;
     background-color: var(--gray-color);
 }
@@ -116,8 +117,8 @@ function getIconName(labelType) {
 }
 
 .filteritem-icon-icon {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
 }
 
 .filteritem-label-container {
