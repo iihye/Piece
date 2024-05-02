@@ -33,7 +33,7 @@
                     :performanceType="item.performanceType"
                     :frontImg="item.frontImg"
                     :title="item.title"
-                    @click="handleItemClick"
+                    @click="handleItemClick(item)"
                 ></ListImageItem>
             </div>
         </div>
@@ -41,9 +41,9 @@
 </template>
 
 <script setup>
+import router from "@/router";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { usePiecelistStore } from "@/stores/piecelist";
-import { useRouter } from "vue-router";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListImageItem from "@/components/item/ListImageItem.vue";
 
@@ -81,8 +81,8 @@ function computedFilteredMyList() {
     }
 }
 
-const handleItemClick = () => {
-    alert("선택");
+const handleItemClick = (item) => {
+    router.push({ name: "pieceDetail", params: { pieceId: item.pieceId } });
 };
 
 const filterItems = ref([
@@ -209,6 +209,25 @@ onBeforeUnmount(() => {
 }
 
 /* list */
+.piecelistmyview-list-container {
+    overflow-y: scroll;
+    height: 60vh;
+}
+
+/* .piecelistmyview-list-container::-webkit-scrollbar {
+    width: 0.2rem;
+}
+
+.piecelistmyview-list-container::-webkit-scrollbar-thumb {
+    background-color: var(--gray2-color);
+    border-radius: 1rem;
+}
+
+.piecelistmyview-list-container::-webkit-scrollbar-track {
+    background-color: var(--gray-color);
+    border-radius: 1rem;
+} */
+
 .piecelistmyview-list-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(8rem, 1fr));

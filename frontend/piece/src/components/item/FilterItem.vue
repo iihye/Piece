@@ -36,6 +36,7 @@
 import { defineProps } from "vue";
 
 const props = defineProps({
+    pieceId: Number,
     labelType: String,
     title: String,
     isSelect: Boolean,
