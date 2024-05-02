@@ -54,9 +54,6 @@ public class Users {
     @Column(nullable = false)
     private Long labelId;
 
-    @Column(nullable = false, length = 10)
-    private String username; //로그인ID, 최대10자
-
     @Column(nullable = false, length = 255)
     private String password;
 }

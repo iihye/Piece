@@ -10,5 +10,5 @@ import lombok.Setter;
 public class UserRegistrationResponseDto {
 
     private final String username;
-    private final String message ;//회원가입 성공 or 실패 메시지
+
 }

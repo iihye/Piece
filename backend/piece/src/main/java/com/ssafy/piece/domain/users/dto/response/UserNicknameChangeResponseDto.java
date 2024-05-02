@@ -8,5 +8,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserNicknameChangeResponseDto {
 
-    private String message;
+
 }

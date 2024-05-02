@@ -5,6 +5,9 @@ import com.ssafy.piece.domain.users.dto.request.UserNicknameChangeRequestDto;
 import com.ssafy.piece.domain.users.dto.request.UserPasswordChangeRequestDto;
 import com.ssafy.piece.domain.users.entity.Users;
 import com.ssafy.piece.domain.users.repository.UsersRepository;
+import com.ssafy.piece.global.response.code.ErrorCode;
+import com.ssafy.piece.global.response.code.ResponseCode;
+import com.ssafy.piece.global.response.code.SuccessCode;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,33 +20,30 @@ public class UserSettingService {
     private final UsersRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public boolean changeNickname(Long userId, UserNicknameChangeRequestDto requestDto) {
-        Optional<Users> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            // 중복 닉네임 체크
-            if(userRepository.existsByNickname(requestDto.getNewNickname())) {
-                // 중복된 경우 처리
-                return false;
-            }
+    public ResponseCode changeNickname(Long userId, UserNicknameChangeRequestDto requestDto) {
+        Users user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-            Users user = userOptional.get();
-            user.setNickname(requestDto.getNewNickname());
-            userRepository.save(user);
-            return true;
+        if (userRepository.existsByNickname(requestDto.getNewNickname())) {
+            return SuccessCode.CHECK_NICKNAME_BAD;
         }
-        return false;
+
+        user.setNickname(requestDto.getNewNickname());
+        userRepository.save(user);
+        return SuccessCode.NICKNAME_UPDATE_SUCCESS;
     }
 
 
-    public boolean changePassword(Long userId, UserPasswordChangeRequestDto requestDto) {
-        Optional<Users> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            Users user = userOptional.get();
-            String newPasswordEncoded = passwordEncoder.encode(requestDto.getNewPassword());
-            user.setPassword(newPasswordEncoded);
-            userRepository.save(user);
-            return true;
+    public ResponseCode changePassword(Long userId, UserPasswordChangeRequestDto requestDto) {
+        Users user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (passwordEncoder.matches(requestDto.getNewPassword(), user.getPassword())) {
+            return ErrorCode.DUPLICATED_PASSWORD;
         }
-        return false;
+
+        user.setPassword(passwordEncoder.encode(requestDto.getNewPassword()));
+        userRepository.save(user);
+        return SuccessCode.PASSWORD_UPDATE_SUCCESS;
     }
 }

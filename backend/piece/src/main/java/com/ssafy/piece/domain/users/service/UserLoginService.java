@@ -22,7 +22,7 @@ public class UserLoginService {
 
     public boolean login(UserLoginRequestDto loginRequest) {
         // 사용자 정보 조회
-        Users user = userRepository.findByUsername(loginRequest.getUsername());
+        Users user = userRepository.findByEmail(loginRequest.getEmail());
         if (user == null) {
             // 사용자를 찾을 수 없으면 false 반환
             return false;

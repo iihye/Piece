@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,14 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/users")
+
 public class UserRegistrationController {
 
     private final UserRegistrationService userRegistrationService;
 
-    @GetMapping("/register")
-    public String register() {
-        return "register.html";  // 회원가입 페이지로 이동
-    }
 
     @PostMapping("/register") //회원가입
     public ResponseEntity<Object> addUser(@RequestBody UserRegistrationRequestDto registrationDto) {
@@ -44,16 +42,6 @@ public class UserRegistrationController {
 
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login.html";  // 로그인 페이지로
-    }
-
-    @GetMapping("/my-page")
-    public String myPage(Authentication auth) {
-        // 현재 로그인한 사용자의 정보를 사용할 수 있습니다.
-        return "mypage.html";  // 마이페이지로
-    }
 
     @GetMapping("/check-nickname") //닉네임 중복체크
     public ResponseEntity<Object> checkNickname(@RequestParam String nickname) {

@@ -44,13 +44,13 @@ public class UserRegistrationService {
 
         Users newUser = Users.builder()
             .email(registrationDto.getEmail())
-            .username(registrationDto.getUsername())
+//            .username(registrationDto.getUsername())
             .password(passwordEncoder.encode(registrationDto.getPassword()))
             .nickname(registrationDto.getNickname())
-            .profileImage(registrationDto.getProfileImage())
+//            .profileImage(registrationDto.getProfileImage())
             .createdAt(new Timestamp(System.currentTimeMillis()))
             .updatedAt(new Timestamp(System.currentTimeMillis()))
-            .isTutorial(false)  // 기본적으로 튜토리얼 보이지 않도록 설정
+            .isTutorial(true)  // 기본적으로 튜토리얼 보이도록 설정합니다.
             .socialId("N/A")  // 소셜 ID는 현재 설정되지 않음
             .labelId(0L)      // 칭호 ID는 임시로 0으로 설정
             .build();
@@ -59,8 +59,8 @@ public class UserRegistrationService {
         newUser = usersRepository.save(newUser); //데이터베이스에 새로운 사용자를 저장합니다.
 
 
-        //환영메시지와 함께 DTO를 반환합니다.
-        return new UserRegistrationResponseDto(newUser.getUsername(), "님 안녕하세요! 가입을 환영합니다!");
+
+        return new UserRegistrationResponseDto(newUser.getEmail());
     }
 
 
