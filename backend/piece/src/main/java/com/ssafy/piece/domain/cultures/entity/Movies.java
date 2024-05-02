@@ -26,11 +26,9 @@ public class Movies {
     @JoinColumn(name = "culture_id")
     private Cultures cultures;
 
-    private String rank;
-
     @Column(name = "open_date")
     private LocalDateTime openDate;
 
     private String nation;
-    
+
 }
