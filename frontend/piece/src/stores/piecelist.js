@@ -7,10 +7,15 @@ export const usePiecelistStore = defineStore(
     "piecelist",
     () => {
         // =========== STATE ===============
+        const piecelistList = ref({});
         const piecelistMyList = ref({});
         const piecelistDetail = ref({});
 
         // =========== GETTER ===============
+        const getPiecelistList = computed(() => {
+            return piecelistList.value;
+        });
+
         const getPiecelistMyList = computed(() => {
             return piecelistMyList.value;
         });
@@ -20,6 +25,17 @@ export const usePiecelistStore = defineStore(
         });
 
         // =========== ACTION ===============
+        const findPiecelistList = function () {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/piecelist`,
+                method: "GET",
+            })
+                .then((res) => {
+                    piecelistList.value = res.data.data;
+                })
+                .catch((err) => {});
+        };
+
         const findPiecelistMyList = function () {
             axios({
                 url: `${import.meta.env.VITE_REST_PIECE_API}/piecelist/my`,
@@ -45,12 +61,15 @@ export const usePiecelistStore = defineStore(
 
         return {
             // state
+            piecelistList,
             piecelistMyList,
             piecelistDetail,
             // getter
+            getPiecelistList,
             getPiecelistMyList,
             getPiecelistDetail,
             // action
+            findPiecelistList,
             findPiecelistMyList,
             findPiecelistDetail,
         };
