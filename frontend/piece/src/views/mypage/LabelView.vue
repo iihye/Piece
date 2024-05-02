@@ -136,10 +136,10 @@ onMounted(async () => {
 
 .labelview-list-container {
     overflow-y: scroll;
-    height: 70vh;
+    height: 75vh;
 }
 
-/* .labelview-list-container::-webkit-scrollbar {
+.labelview-list-container::-webkit-scrollbar {
     width: 0.2rem;
 }
 
@@ -151,5 +151,5 @@ onMounted(async () => {
 .labelview-list-container::-webkit-scrollbar-track {
     background-color: var(--gray-color);
     border-radius: 1rem;
-} */
+}
 </style>
