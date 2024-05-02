@@ -13,15 +13,15 @@
         </div>
         <div class="form-group">
             <label for="content-name" class="required-label">공연명</label>
-            <TextInput id="content-name" placeholder="공연명을 입력하세요" v-model="pieceValue.name" />
+            <TextInput id="content-name" placeholder="공연명을 입력하세요" v-model="pieceValue.title" />
         </div>
         <div class="form-group">
             <label for="date-picker" class="required-label">날짜 선택</label>
-            <DatePicker id="date-picker" v-model="pieceValue.date"></DatePicker>
+            <DatePicker id="date-picker" v-model="dateValue"></DatePicker>
         </div>
         <div class="form-group">
             <label for="time-picker">시간 선택</label>
-            <TimePicker id="time-picker" v-model="pieceValue.time"></TimePicker>
+            <TimePicker id="time-picker" v-model="timeValue"></TimePicker>
         </div>
         <div class="form-group">
             <label for="cast-name">출연</label>
@@ -29,11 +29,11 @@
         </div>
         <div class="form-group">
             <label for="location-name">장소</label>
-            <TextInput id="location-name" placeholder="장소를 입력하세요" v-model="pieceValue.location" />
+            <TextInput id="location-name" placeholder="장소를 입력하세요" v-model="pieceValue.address" />
         </div>
         <div class="form-group">
             <label for="director-name">감독</label>
-            <TextInput id="director-name" placeholder="감독을 입력하세요" v-model="pieceValue.director" />
+            <TextInput id="director-name" placeholder="감독을 입력하세요" v-model="pieceValue.supervision" />
         </div>
         <div class="form-group">
             <label for="seat-info">좌석</label>
@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch  } from 'vue';
 import TextInput from '@/components/text/OnlyInput.vue';
 import ButtonGroup from '@/components/button/SelectableButtonGroup.vue';
 import DatePicker from '@/components/custom/CustomDatePicker.vue';
@@ -59,19 +59,57 @@ import {usePieceStore} from '@/stores/piece.js'
 const pieceStore = usePieceStore();
 const pieceValue = pieceStore.pieceValue;
 function updateSelected(optionId) {
-    pieceStore.setPieceValue('type', optionId);
+    pieceStore.setPieceValue('performanceType', optionId);
 }
 
 const options = ref([
-    { id: 'movie', name: '영화' },
-    { id: 'musical', name: '뮤지컬' },
-    { id: 'concert', name: '콘서트' },
-    { id: 'play', name: '연극' },
-    { id: 'other', name: '기타' }
+    { id: 'MOVIE', name: '영화' },
+    { id: 'MUSICAL', name: '뮤지컬' },
+    { id: 'CONCERT', name: '콘서트' },
+    { id: 'THEATER', name: '연극' },
+    { id: 'ETC', name: '기타' }
 ]);
 const selected = ref(null);
 const date = ref(null);
 
+// 컴포넌트 내부의 날짜, 시간 변수 생성
+const dateValue = ref(null);
+const timeValue = ref(null);
+
+// Date 형식을 변환하는 함수
+function formatDate(date) {
+  return date ? new Date(date).toISOString().split('T')[0] : null;
+}
+
+// Time 형식을 변환하는 함수
+function formatTime(time) {
+    if (time) {
+        const { hours, minutes } = time;
+        const formattedHours = hours < 10 ? `0${hours}` : hours;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        return `${formattedHours}:${formattedMinutes}`;
+    } else {
+        return null;
+    }
+}
+
+// 시간, 날짜 형식 지정
+function updateDate(newDate) {
+    pieceStore.setPieceValue('date', formatDate(newDate));
+}
+
+function updateTime(time) {
+    console.log(time.hours)
+  pieceStore.setPieceValue('time', formatTime(time));
+}
+
+watch(dateValue, (newValue) => {
+    updateDate(newValue);
+});
+
+watch(timeValue, (newValue) => {
+    updateTime(newValue);
+});
 </script>
 
 <style>

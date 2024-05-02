@@ -2,7 +2,6 @@
   <div>
     <h1>어떤 조각을 만들까요?</h1>
     <div class="input-div" @drop="handleDrop">
-      <p>여기로 이미지를 드래그하거나 <strong>클릭</strong>하세요.</p>
       <input type="file" class="file" @change="handleFileUpload" accept="image/*"/>
     </div>
 
@@ -66,4 +65,21 @@ const cropImage = () => {
 </script>
 
 
-<style></style>
+<style>
+.cropper-line {
+    background-color: var(--red-color);
+}
+
+.cropper-view-box {
+    display: block;
+    height: 100%;
+    outline: 1px solid var(--red-color);
+    outline-color: var(--red-color);
+    overflow: hidden;
+    width: 100%;
+}
+
+.cropper-point {
+  background-color: var(--red-color);
+}
+</style>

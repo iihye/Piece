@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-function localAxios() {
+function localAxios(url) {
   const instance = axios.create({
-    baseURL: `${import.meta.env.VITE_REST_PIECE_API}/api`,
+    baseURL: url,
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
