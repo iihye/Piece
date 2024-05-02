@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <TheHeader class="TheHeader" />
-        <div>
+        <div class="app-content">
             <RouterView />
         </div>
         <TheFooter class="TheFooter" />
@@ -17,15 +17,33 @@ import TheFooter from "./components/common/TheFooter.vue";
 <style>
 .app {
     max-width: 360px;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
 }
+
+
 .TheHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2.75rem;
 }
+
+.app-content {
+    padding-top: 2.75rem;
+    padding-bottom: 2.75rem;
+    height: 100vh-5.5rem;
+}
+
 .TheFooter {
     position: fixed;
     bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2.75rem;
+    z-index: 85;
 }
 </style>
