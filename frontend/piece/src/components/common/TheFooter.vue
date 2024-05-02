@@ -20,7 +20,7 @@
                         <div class="footer-name">조각만들기</div>
                     </div>
                 </RouterLink>
-                <RouterLink :to="{ name: 'chat' }" class="footer-menu">
+                <RouterLink :to="{ name: 'chatRoom' }" class="footer-menu">
                     <div :class="{ 'footer-set': true, 'active': arrayRoutes.chat.includes(pageName) }">
                         <font-awesome-icon :icon="['fas', 'paper-plane']" class="footer-icon" />
                         <div class="footer-name">채팅</div>
@@ -63,16 +63,18 @@ const arrayRoutes = {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 3.75rem;
     z-index: 85;
     display: grid;
     text-align: center;
+    background-color: var(--white-color);
 }
 
 .footer-all {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    align-items: flex-end;
+    height: 2.75rem;
 }
 
 .footer-menu {
@@ -81,9 +83,9 @@ const arrayRoutes = {
 }
 
 .footer-icon {
-    width: 2rem;
-    height: 2rem;
-    color: var(--gray2-color);
+    width: 1.6rem;
+    height: 1.6rem;
+    color: var(--gray-color);
 }
 
 .footer-name {
