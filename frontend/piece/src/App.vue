@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <TheHeader class="TheHeader" />
-        <div>
+        <div class="app-content">
             <RouterView />
         </div>
         <TheFooter class="TheFooter" />
@@ -22,10 +22,20 @@ import TheFooter from "./components/common/TheFooter.vue";
     display: flex;
     flex-direction: column;
 }
+/* 
 .TheHeader {
-}
+    position: fixed;
+    top: 0;
+    width: 100%;
+} */
+
 .TheFooter {
     position: fixed;
     bottom: 0;
+    width: 100%;
+}
+
+.app-content {
+    z-index: 1;
 }
 </style>
