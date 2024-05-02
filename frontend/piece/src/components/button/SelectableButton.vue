@@ -25,24 +25,26 @@ emits('selected', props.id);
 
 <style>
 @import "@/components/css/color.css";
+@import "@/components/css/font.css";
 
 button {
-    padding: 0.625rem 1.25rem;
-    border: 0.0625rem solid var(--gray-color);
-    background-color: var(--white-color);
-    height: 2.25rem;
-    cursor: pointer;
-    outline: none;
-    border-radius: 0.625rem;
-    /* margin-right: 0.625rem; */
-    /* width: 6rem;
-    height: 2rem; */
-    transition: background-color 0.2s, color 0.2s;
-  }
+  font-family: "Regular";
+  padding: 0.625rem 1.25rem;
+  border: 0.0625rem solid var(--gray-color);
+  background-color: var(--white-color);
+  height: 2.25rem;
+  cursor: pointer;
+  outline: none;
+  border-radius: 0.625rem;
+  /* margin-right: 0.625rem; */
+  /* width: 6rem;
+  height: 2rem; */
+  transition: background-color 0.2s, color 0.2s;
+}
   
-  button.active {
-    background-color: var(--main-color);
-    color: var(--white-color);
-    border-color: var(--main-color);
-  }
+button.active {
+  background-color: var(--main-color);
+  color: var(--white-color);
+  border-color: var(--main-color);
+}
 </style>

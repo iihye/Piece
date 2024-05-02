@@ -7,7 +7,6 @@
                 id="movie-types"
                 groupName="공연 분류"
                 :options="options"
-                
                 @selected="updateSelected"
             />
         </div>
@@ -113,6 +112,8 @@ watch(timeValue, (newValue) => {
 </script>
 
 <style>
+@import "@/components/css/font.css";
+
 .container {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -127,8 +128,9 @@ watch(timeValue, (newValue) => {
 }
 
 label {
-    font-size: 1rem;
-    font-weight: bold;
+    font-family: "Regular";
+    /* font-size: 1.4rem; */
+    /* font-size: 1rem; */
     padding: 10px;
     text-align: left;
 }

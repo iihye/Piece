@@ -26,7 +26,10 @@ const textInputFuntion = () => {
 </script>
 
 <style>
+@import "@/components/css/font.css";
+
 .textinput-input {
+    font-family: "Regular";
     width: 14rem;
     height: 2.25rem;
     border-radius: 0.625rem;
