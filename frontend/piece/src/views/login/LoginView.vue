@@ -40,7 +40,7 @@ const router = useRouter();
 
 const submitLogin = async () => {
   try {
-    const response = await axios.post(`${import.meta.env.VITE_REST_URL}/auth/login`, {
+    const response = await axios.post(`${import.meta.env.VITE_REST_PIECE_API}/auth/login`, {
       email: email.value,
       password: password.value
     });
