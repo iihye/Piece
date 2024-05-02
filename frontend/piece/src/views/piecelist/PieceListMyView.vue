@@ -214,7 +214,7 @@ onBeforeUnmount(() => {
     height: 60vh;
 }
 
-/* .piecelistmyview-list-container::-webkit-scrollbar {
+.piecelistmyview-list-container::-webkit-scrollbar {
     width: 0.2rem;
 }
 
@@ -226,7 +226,7 @@ onBeforeUnmount(() => {
 .piecelistmyview-list-container::-webkit-scrollbar-track {
     background-color: var(--gray-color);
     border-radius: 1rem;
-} */
+}
 
 .piecelistmyview-list-grid {
     display: grid;
@@ -239,9 +239,9 @@ onBeforeUnmount(() => {
     width: auto;
 }
 
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
     .piecelistmyview-list-grid {
         grid-template-columns: repeat(4, minmax(16rem, 5fr));
     }
-}
+} */
 </style>
