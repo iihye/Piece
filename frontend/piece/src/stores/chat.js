@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-const baseUrl="http://localhost:8080";
-
 export const useChatStore = defineStore(
     'chat',
     () => {
@@ -13,7 +11,7 @@ export const useChatStore = defineStore(
         // =========== ACTION ===============
         async function getChatMessageList(chatRoomId) {
             try {
-                const response = await axios.get(`${baseUrl}/chat/list/${chatRoomId}`);
+                const response = await axios.get(`${import.meta.env.VITE_REST_URL}/chats/list/${chatRoomId}`);
 
                 console.log("getChatMessageList()");
 

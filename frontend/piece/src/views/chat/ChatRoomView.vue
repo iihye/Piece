@@ -1,21 +1,35 @@
 <template>
-    <div id="chatRoomListPage">
-      <chatRoomListHeader />
-      <chatRoomList />
-    </div>
-  </template>
-  
-  <script setup>
-  import chatRoomList from '@/components/chat/ChatRoomList.vue'
-  import chatRoomListHeader from '@/components/chat/ChatRoomListHeader.vue';
-  </script>
-  
-  <style scopped>
-  #chatRoomListPage{
-    border:1px solid black;
-    width: 400px;
-    height: 85vh;
-    margin: 0 auto;
+  <div id="chatRoomListPage">
+    <chatRoomListHeader />
+    <chatRoomList />
+  </div>
+</template>
+
+<script setup>
+import {onMounted} from 'vue';
+import chatRoomList from '@/components/chat/ChatRoomList.vue'
+import chatRoomListHeader from '@/components/chat/ChatRoomListHeader.vue';
+import {useWebSocketStore} from '@/stores/websocket';
+
+const webSocketStore=useWebSocketStore();
+
+onMounted(() => {
+  if(webSocketStore.getStompClient()){
+    // webSocketStore.unsubscribe();
+  }else{
+    webSocketStore.stompConnect(); 
   }
-  </style>
-  
+})
+</script>
+
+<style scopped>
+@import "@/components/css/color.css";
+
+#chatRoomListPage{
+  border:0.063rem solid var(--black-color);
+  width: 25rem;
+  height: 42.5rem;
+  margin: 0 auto;
+}
+</style>
+

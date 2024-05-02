@@ -35,11 +35,12 @@ onMounted(() => {
 </script>
 
 <style scopped>
-@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+@import "@/components/css/color.css";
+
 /* Button CSS */
 .chatroomlistheader-chatRoomListButton {
-    margin-top:5px;
-    height: 50px;
+    margin-top:0.3125rem;
+    height: 3.125rem;
     width: 50%;
     border: none;
     background: none;
@@ -47,12 +48,12 @@ onMounted(() => {
 }
 
 .chatroomlistheader-chatRoomListButton {
-  --primary-color: #111;
-  --hovered-color: #ff3c56;
+  --primary-color: var(--black-color);
+  --hovered-color: var(--red-color);
   position: relative;
   display: flex;
   font-family: "Do Hyeon", sans-serif;
-  font-size:18px;
+  font-size:1.125rem;
   gap: 0.5rem;
   align-items: center;
 }
@@ -68,15 +69,14 @@ onMounted(() => {
   content: "";
   width: 0;
   left: 0;
-  bottom: -3px;
+  bottom: -0.1875rem;
   background: var(--hovered-color);
-  height: 2px;
+  height: 0.125rem;
   transition: 0.2s ease-out;
 }
 
 .chatroomlistheader-chatRoomListButton p::before {
   position: absolute;
-  /*   box-sizing: border-box; */
   content: var(--button-content, "");
   width: 0%;
   inset: 0;
@@ -95,23 +95,21 @@ onMounted(() => {
 
 /* 버튼 활성화 관련 css */
 .chatroomlistheader-chatRoomListButton.chatroomlistheader-active {
-  background-color: #e8e8e8;
-  color: #ff3c56; /* 예시로 색상을 변경합니다. */
+  background-color: var(--gray-color);
+  color: var(--red-color);
 }
 
 /* template CSS*/
 #chatRoomListHeader{
     display: flex;
     justify-content: center;
-    /* border:1px solid slateblue; */
     font-family: "Do Hyeon", sans-serif;
 }
 .chatroomlistheader-chatRoomListButton{
-    height: 50px;
+    height: 3.125rem;
     width: 50%;
     text-align: center;
-    line-height: 50px; /* height와 같게 하면 가운데 정렬 */
-    /* border:1px solid red; */
+    line-height: 3.125rem;
 }
 
 </style>
