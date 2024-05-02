@@ -8,4 +8,9 @@
     --black-color: #000000;
     --modal-color: rgba(108, 108, 108, 0.8);
     --red-color: #ff4f4f;
+    --movie-color: #b094ff;
+    --theater-color: #76aacd;
+    --musical-color: #efae6d;
+    --concert-color: #ff9494;
+    --other-color: #161616;
 }
