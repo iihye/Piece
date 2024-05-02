@@ -15,6 +15,9 @@ import TheFooter from "./components/common/TheFooter.vue";
 </script>
 
 <style>
+@import "@/components/css/color.css";
+@import "@/components/css/font.css";
+
 .app {
     max-width: 360px;
     height: 100vh;
