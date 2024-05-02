@@ -139,8 +139,8 @@ onMounted(async () => {
     height: 70vh;
 }
 
-.labelview-list-container::-webkit-scrollbar {
-    width: 0.5rem;
+/* .labelview-list-container::-webkit-scrollbar {
+    width: 0.2rem;
 }
 
 .labelview-list-container::-webkit-scrollbar-thumb {
@@ -151,5 +151,5 @@ onMounted(async () => {
 .labelview-list-container::-webkit-scrollbar-track {
     background-color: var(--gray-color);
     border-radius: 1rem;
-}
+} */
 </style>
