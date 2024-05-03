@@ -9,6 +9,7 @@ export const usePiecelistStore = defineStore(
         // =========== STATE ===============
         const piecelistList = ref({});
         const piecelistMyList = ref({});
+        const piecelistHeartList = ref({});
         const piecelistDetail = ref({});
 
         // =========== GETTER ===============
@@ -17,6 +18,10 @@ export const usePiecelistStore = defineStore(
         });
 
         const getPiecelistMyList = computed(() => {
+            return piecelistMyList.value;
+        });
+
+        const getPiecelistHeartList = computed(() => {
             return piecelistMyList.value;
         });
 
@@ -47,6 +52,17 @@ export const usePiecelistStore = defineStore(
                 .catch((err) => {});
         };
 
+        const findPiecelistHeartList = function () {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/piecelist/heart`,
+                method: "GET",
+            })
+                .then((res) => {
+                    piecelistMyList.value = res.data.data;
+                })
+                .catch((err) => {});
+        };
+
         const findPiecelistDetail = function (pieceId) {
             axios({
                 url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/${pieceId}`,
@@ -62,14 +78,17 @@ export const usePiecelistStore = defineStore(
             // state
             piecelistList,
             piecelistMyList,
+            piecelistHeartList,
             piecelistDetail,
             // getter
             getPiecelistList,
             getPiecelistMyList,
+            getPiecelistHeartList,
             getPiecelistDetail,
             // action
             findPiecelistList,
             findPiecelistMyList,
+            findPiecelistHeartList,
             findPiecelistDetail,
         };
     },
