@@ -53,11 +53,12 @@ const arrayRoutes = {
     myinfo: ['mypage', 'nickname', 'password', 'settings', 'profileImg', 'label', 'piece', 'consume']
 };
 
-
-
 </script>
 
-<style scoped>
+<style>
+@import "@/components/css/color.css";
+@import "@/components/css/font.css";
+
 .footer-container {
     position: fixed;
     bottom: 0;
@@ -90,7 +91,12 @@ const arrayRoutes = {
 
 .footer-name {
     font-size: 0.75rem;
+    font-family: "Medium";
     color: var(--gray2-color);
+}
+
+.footer-name a {
+    text-decoration: none;
 }
 
 .footer-set.active .footer-name,

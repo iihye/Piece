@@ -15,7 +15,7 @@ defineProps({
 
 </script>
 
-<style scoped>
+<style>
 @import "@/components/css/color.css";
 
 .smallbutton {

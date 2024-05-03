@@ -31,7 +31,7 @@ function goToLogin() {
 }
 </script>
 
-<style scoped>
+<style>
 .success-view {
     display: flex;
     flex-direction: column;
