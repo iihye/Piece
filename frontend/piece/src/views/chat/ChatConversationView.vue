@@ -173,12 +173,12 @@ const storeMessages = ref([]);
 const chatRoomInfo=ref({});
 
 chatMessages.value.push({
-    chatRoomId: 1, // 테스트 용도
-    senderId: 2, // 테스트 용도
-    title: "얼박사 킬러",
-    nickname: "김싸피",
-    content: "ㅎㅇ",
-    createdAt: "오전 7:04",
+    // chatRoomId: 1, // 테스트 용도
+    // senderId: 2, // 테스트 용도
+    // title: "얼박사 킬러",
+    // nickname: "김싸피",
+    // content: "ㅎㅇ",
+    // createdAt: "오전 7:04",
 }); // 테스트 데이터
 
 // 채팅 메세지 받기
@@ -187,6 +187,7 @@ async function fetchMessages() {
         const chatLogs = await chatStore.getChatMessageList(1); // 1번 채팅방 메시지 목록 불러오기
 
         chatLogs.forEach(m=>{
+            m.createdAt = new Intl.DateTimeFormat('ko-KR', { hour: 'numeric', minute: 'numeric', hour12: true }).format(new Date(m.createdAt));
             chatMessages.value.push(m);
         });
 
@@ -211,7 +212,7 @@ const send = () => {
         chatRoomId: 1, // 테스트 용도
         senderId: 1, // 테스트 용도
         content: content.value,
-        createdAt: new Intl.DateTimeFormat('ko-KR', { hour: 'numeric', minute: 'numeric', hour12: true }).format(new Date()), // client time
+        createdAt: Date.now()
         };
 
         stompClient.send('/pub/chats/' + '1', JSON.stringify(msg), {});
@@ -236,7 +237,11 @@ const subscribe = (chatRoomId) => {
         console.log(chatRoomId + '번 방으로 메시지를 전달합니다.');
         console.log('tick.body.content:' + JSON.parse(tick.body).content);
 
-        storeMessages.value.push(JSON.parse(tick.body));
+        let message = JSON.parse(tick.body);
+        // TIMESTAMP를 오전 1:30 형태로 변환
+        message.createdAt = new Intl.DateTimeFormat('ko-KR', { hour: 'numeric', minute: 'numeric', hour12: true }).format(new Date(message.createdAt));
+        
+        storeMessages.value.push(message);
         
         console.log("🎈storeMessages:");
 
