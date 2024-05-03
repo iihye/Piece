@@ -38,7 +38,7 @@ public class HeartService {
 
     // 찜 여부 확인
     public boolean isHeart(Long userId, Long pieceId) {
-        Integer heart = heartRepository.findByPieceIdAndUserId(pieceId, userId);
-        return heart != null;
+        boolean heart = heartRepository.findByPieceIdAndUserId(pieceId, userId) > 0;
+        return heart;
     }
 }
