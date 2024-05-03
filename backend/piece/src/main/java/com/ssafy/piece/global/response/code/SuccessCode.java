@@ -22,7 +22,17 @@ public enum SuccessCode implements ResponseCode {
 
     CHECK_PASSWORD_SUCCESS(HttpStatus.OK, "비밀번호 확인에 성공했습니다."),
 
-    PASSWORD_UPDATE_SUCCESS(HttpStatus.OK, "비밀번호 변경에 성공했습니다."),;
+    PASSWORD_UPDATE_SUCCESS(HttpStatus.OK, "비밀번호 변경에 성공했습니다."),
+
+    // Chat
+    CHATROOM_CREATED(HttpStatus.CREATED, "채팅방이 생성되었습니다."),
+    CHATROOM_DELETED(HttpStatus.OK, "채팅방이 삭제되었습니다."),
+    CHATMESSAGE_LIST_SUCCESS(HttpStatus.OK, "채팅메세지 목록을 조회했습니다."),
+    CHATMESSAGE_N_LIST_SUCCESS(HttpStatus.OK, "채팅메세지 목록 n개를 조회했습니다."),
+    PARTICIPATE_SUCCESS(HttpStatus.CREATED, "채팅방에 참여했습니다."),
+    PARTICIPATED_LIST_SUCCESS(HttpStatus.OK, "참여찬 채팅방 목록을 조회했습니다."),
+    LEAVE_CHATROOM_SUCCESS(HttpStatus.OK, "채팅방에서 퇴장했습니다."),
+    PARTICIPANT_COUNT_SUCCESS(HttpStatus.OK, "채팅방 참여 인원 수를 조회했습니다.");
 
     private final HttpStatus httpStatus;
 
