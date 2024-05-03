@@ -39,7 +39,7 @@ const props = defineProps({
 });
 </script>
 
-<stylev scoped>
+<style scoped>
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
@@ -100,4 +100,4 @@ const props = defineProps({
     font-size: 1rem;
     color: var(--black-color);
 }
-</stylev>
+</style>
