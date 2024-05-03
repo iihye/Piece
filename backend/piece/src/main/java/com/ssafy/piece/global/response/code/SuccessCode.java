@@ -59,7 +59,13 @@ public enum SuccessCode implements ResponseCode {
     FIND_MY_LABELS_SUCCESS(HttpStatus.OK, "내 칭호 목록 조회에 성공했습니다."),
     CHECK_MY_LABELS_SUCCESS(HttpStatus.OK, "칭호 획득 검사에 성공했습니다."),
 
-    REQUEST_SUCESS(HttpStatus.OK, "요청에 성공했습니다.");
+    REQUEST_SUCCESS(HttpStatus.OK, "요청에 성공했습니다."),
+
+
+    /**
+     * s3
+     */
+    GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다.");
 
 
     private final HttpStatus httpStatus;
