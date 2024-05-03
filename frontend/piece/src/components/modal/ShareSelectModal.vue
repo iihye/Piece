@@ -1,9 +1,9 @@
 <template>
     <div class="shareselectmodal-background-container">
         <div class="shareselectmodal-main-container">
-            <div class="shareselectmodal-modal-title">
+            <!-- <div class="shareselectmodal-modal-title">
                 공유 방법을 선택해주세요
-            </div>
+            </div> -->
             <div
                 class="shareselectmodal-modal-container"
                 @click="handleLinkClick"
@@ -36,6 +36,36 @@
                     카카오톡으로 공유하기
                 </div>
             </div>
+            <div
+                v-if="isMine"
+                class="shareselectmodal-modal-container"
+                @click="handleDeleteClick"
+            >
+                <div class="shareselectmodal-icon-container">
+                    <div class="shareselectmodal-icon-background"></div>
+                    <font-awesome-icon
+                        class="shareselectmodal-icon-icon"
+                        :icon="['fas', 'trash']"
+                        style="color: var(--main-color)"
+                    />
+                </div>
+                <div class="shareselectmodal-modal-content">조각 삭제하기</div>
+            </div>
+            <div
+                v-if="!isMine"
+                class="shareselectmodal-modal-container"
+                @click="handleReportClick"
+            >
+                <div class="shareselectmodal-icon-container">
+                    <div class="shareselectmodal-icon-background"></div>
+                    <font-awesome-icon
+                        class="shareselectmodal-icon-icon"
+                        :icon="['fas', 'flag']"
+                        style="color: var(--main-color)"
+                    />
+                </div>
+                <div class="shareselectmodal-modal-content">조각 신고하기</div>
+            </div>
 
             <div class="shareselectmodal-button-container">
                 <button
@@ -56,6 +86,9 @@ defineProps({
     handleLinkClick: Function,
     handleKakaoClick: Function,
     handleFailClick: Function,
+    handleDeleteClick: Function,
+    handleReportClick: Function,
+    isMine: Boolean,
 });
 </script>
 
@@ -102,7 +135,7 @@ defineProps({
 
 .shareselectmodal-modal-content {
     font-family: "Regular";
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--black-color);
     margin-left: 0.4rem;
     display: flex;
@@ -117,6 +150,7 @@ defineProps({
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 0.4rem;
 }
 
 .shareselectmodal-icon-background {

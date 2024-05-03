@@ -24,6 +24,7 @@
                     <font-awesome-icon
                         class="pieceDetailView-top-icon"
                         :icon="['fas', 'ellipsis-vertical']"
+                        @click="handleModal"
                     />
                 </div>
             </div>
@@ -68,6 +69,17 @@
                 :isRoundDisable="true"
             ></RoundButton>
         </div>
+
+        <!-- modal -->
+        <ShareSelectModal
+            v-if="selectModal"
+            :handleLinkClick="handleLink"
+            :handleKakaoClick="handleKakao"
+            :handleFailClick="handleFail"
+            :handleDeleteClick="handleDelete"
+            :handleReportClick="handleReport"
+            :isMine="userId === piecelistDetail.userId ? true : false"
+        ></ShareSelectModal>
     </div>
 </template>
 
@@ -76,11 +88,16 @@ import router from "@/router";
 import { ref, computed, onMounted } from "vue";
 import { usePiecelistStore } from "@/stores/piecelist";
 import RoundButton from "@/components/button/RoundButton.vue";
+import ShareSelectModal from "@/components/modal/ShareSelectModal.vue";
 import { useRoute } from "vue-router";
 
 const store = usePiecelistStore();
 const route = useRoute();
 const imgFrontBack = ref(true);
+const selectModal = ref(false);
+// user dummy data 추후 수정
+const userId = ref(2);
+const isMine = computed(() => userId.value === piecelistDetail.value.userId);
 
 // userDetail dummy data 추후 수정
 const userDetail = ref({
@@ -111,6 +128,30 @@ const handleBackListClick = () => {
 
 const handleRecordClick = () => {
     alert("서비스 준비중입니다!");
+};
+
+const handleLink = () => {
+    alert("링크로 공유하기");
+};
+
+const handleKakao = () => {
+    alert("카카오로 공유하기");
+};
+
+const handleDelete = () => {
+    alert("삭제");
+};
+
+const handleReport = () => {
+    alert("신고");
+};
+
+const handleModal = () => {
+    selectModal.value = true;
+};
+
+const handleFail = () => {
+    selectModal.value = false;
 };
 
 onMounted(async () => {
