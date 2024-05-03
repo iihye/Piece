@@ -12,6 +12,7 @@ export const usePiecelistStore = defineStore(
         const piecelistHeartList = ref({});
         const piecelistDetail = ref({});
         const pieceDetailHeart = ref({});
+        const pieceDetailRecord = ref({});
 
         // =========== GETTER ===============
         const getPiecelistList = computed(() => {
@@ -32,6 +33,10 @@ export const usePiecelistStore = defineStore(
 
         const getPieceDetailHeart = computed(() => {
             return pieceDetailHeart.value;
+        });
+
+        const getPieceDetailRecord = computed(() => {
+            return pieceDetailRecord.value;
         });
 
         // =========== ACTION ===============
@@ -112,6 +117,20 @@ export const usePiecelistStore = defineStore(
                 .catch((err) => {});
         };
 
+        const findPieceDetailRecord = function (pieceId) {
+            axios({
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/pieces/record/${pieceId}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    pieceDetailRecord.value = res.data.data;
+                    console.log(pieceDetailRecord.value);
+                })
+                .catch((err) => {});
+        };
+
         return {
             // state
             piecelistList,
@@ -119,12 +138,14 @@ export const usePiecelistStore = defineStore(
             piecelistHeartList,
             piecelistDetail,
             pieceDetailHeart,
+            pieceDetailRecord,
             // getter
             getPiecelistList,
             getPiecelistMyList,
             getPiecelistHeartList,
             getPiecelistDetail,
             getPieceDetailHeart,
+            getPieceDetailRecord,
             // action
             findPiecelistList,
             findPiecelistMyList,
@@ -133,6 +154,7 @@ export const usePiecelistStore = defineStore(
             findPieceDetailHeart,
             addPieceDetailHeart,
             deletePieceDetailHeart,
+            findPieceDetailRecord,
         };
     },
     { persist: true }

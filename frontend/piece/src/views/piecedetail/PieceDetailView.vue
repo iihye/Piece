@@ -127,7 +127,10 @@ const handleBackListClick = () => {
 };
 
 const handleRecordClick = () => {
-    alert("서비스 준비중입니다!");
+    router.push({
+        name: "recordDetail",
+        params: { pieceId: piecelistDetail.value.pieceId },
+    });
 };
 
 const handleLink = () => {
