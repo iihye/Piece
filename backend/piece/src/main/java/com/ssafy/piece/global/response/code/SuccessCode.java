@@ -38,6 +38,7 @@ public enum SuccessCode implements ResponseCode {
     // 찜
     ADD_HEART_SUCCESS(HttpStatus.OK, "찜 등록에 성공했습니다."),
     DELETE_HEART_SUCCESS(HttpStatus.OK, "찜 삭제에 성공했습니다."),
+    IS_HEART_SUCCESS(HttpStatus.OK, "찜 여부 확인에 성공했습니다."),
 
     // 기록
     ADD_RECORD_SUCCESS(HttpStatus.OK, "기록 생성에 성공했습니다."),
@@ -59,7 +60,6 @@ public enum SuccessCode implements ResponseCode {
     CHECK_MY_LABELS_SUCCESS(HttpStatus.OK, "칭호 획득 검사에 성공했습니다."),
 
     REQUEST_SUCESS(HttpStatus.OK, "요청에 성공했습니다.");
-
 
 
     private final HttpStatus httpStatus;
