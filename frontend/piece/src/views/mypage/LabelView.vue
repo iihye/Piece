@@ -8,7 +8,7 @@
             <img
                 class="labelview-preview-img"
                 src="https://i.ibb.co/grMvZS9/your-image.jpg"
-                :alt="title"
+                alt="image"
             />
             <div class="labelview-preview-label">칭호</div>
             <div class="labelview-preview-nickname">이름</div>
@@ -40,7 +40,12 @@
                 :description="item.description"
                 :isMine="item.myLabels"
                 :isWear="item.wearLabels"
-                @click="item.myLabels && handleItemWearClick(item.labelId)"
+                @click="
+                    item.myLabels &&
+                        (item.wearLabels
+                            ? handleItemWearoffClick(item.labelId)
+                            : handleItemWearClick(item.labelId))
+                "
             ></LabelItem>
         </div>
 
