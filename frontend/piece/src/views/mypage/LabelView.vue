@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="labelview-main-container">
         <div class="labelview-main-title">나를 표현하는 칭호를 골라주세요</div>
         <div class="labelview-main-content">칭호를 클릭하여 착용해보세요</div>
 
@@ -113,6 +113,12 @@ onMounted(async () => {
 </script>
 
 <style>
+.labelview-main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .labelview-main-title {
     font-family: "Semi";
     font-size: 1.4rem;
@@ -189,7 +195,7 @@ onMounted(async () => {
 
 .labelview-list-container {
     overflow-y: scroll;
-    height: 50vh;
+    flex: 1;
 }
 
 .labelview-list-container::-webkit-scrollbar {
