@@ -1,36 +1,43 @@
 <template>
-    <!-- filter -->
-    <div class="piecelistview-scroll-container">
-        <div class="piecelistview-tab-navigation">
-            <div class="piecelistview-tab-menu" ref="tabMenu">
-                <FilterItem
-                    v-for="(item, index) in filterItems"
-                    class="piecelistview-tab-btn"
-                    :key="index"
-                    :labelType="item.labelType"
-                    :title="item.title"
-                    :isSelect="item.isSelect"
-                    @click="handleItemSelectClick(index)"
-                ></FilterItem>
+    <div class="piecelistview-main-container">
+        <!-- filter -->
+        <div class="piecelistview-scroll-container">
+            <div class="piecelistview-tab-navigation">
+                <div class="piecelistview-tab-menu" ref="tabMenu">
+                    <FilterItem
+                        v-for="(item, index) in filterItems"
+                        class="piecelistview-tab-btn"
+                        :key="index"
+                        :labelType="item.labelType"
+                        :title="item.title"
+                        :isSelect="item.isSelect"
+                        @click="handleItemSelectClick(index)"
+                    ></FilterItem>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- list -->
-    <div class="piecelistview-list-container">
-        <div class="piecelistview-list-grid">
-            <div
-                v-for="(item, index) in filteredList"
-                :key="index"
-                class="piecelistview-list-item"
-            >
-                <ListImageItem
-                    :pieceId="item.pieceId"
-                    :performanceType="item.performanceType"
-                    :frontImg="item.frontImg"
-                    :title="item.title"
-                    @click="handleItemClick(item)"
-                ></ListImageItem>
+        <!-- list -->
+        <div v-if="filteredList.length === 0" class="piecelistview-list-noitem">
+            <NoItem :content="'모아볼 조각이 없어요'"></NoItem>
+        </div>
+        <div v-else>
+            <div class="piecelistview-list-container">
+                <div class="piecelistview-list-grid">
+                    <div
+                        v-for="(item, index) in filteredList"
+                        :key="index"
+                        class="piecelistview-list-item"
+                    >
+                        <ListImageItem
+                            :pieceId="item.pieceId"
+                            :performanceType="item.performanceType"
+                            :frontImg="item.frontImg"
+                            :title="item.title"
+                            @click="handleItemClick(item)"
+                        ></ListImageItem>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -42,6 +49,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { usePiecelistStore } from "@/stores/piecelist";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListImageItem from "@/components/item/ListImageItem.vue";
+import NoItem from "@/components/item/NoItem.vue";
 
 const store = usePiecelistStore();
 
@@ -158,6 +166,20 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
+.piecelistview-main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.piecelistview-main-container > :first-child {
+    flex: 0 0 auto;
+}
+
+.piecelistview-main-container > :not(:first-child) {
+    flex: 1;
+}
+
 /* filter */
 .piecelistview-scroll-container {
     position: relative;
@@ -233,6 +255,12 @@ onBeforeUnmount(() => {
 
 .piecelistview-list-item {
     width: auto;
+}
+
+.piecelistview-list-noitem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* @media (min-width: 1024px) {

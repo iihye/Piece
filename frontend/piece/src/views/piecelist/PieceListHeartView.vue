@@ -18,12 +18,11 @@
         </div>
 
         <!-- list -->
-
         <div
             v-if="filteredList.length === 0"
             class="piecelistheartview-list-noitem"
         >
-            <NoItem :content="'찜한 목록이 없어요'"></NoItem>
+            <NoItem :content="'찜한 조각이 없어요'"></NoItem>
         </div>
         <div v-else>
             <div class="piecelistheartview-list-container">
