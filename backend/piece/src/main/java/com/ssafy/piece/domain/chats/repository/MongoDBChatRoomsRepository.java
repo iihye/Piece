@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MongoDBChatRoomsRepository extends MongoRepository<MongoDBChatRooms, Long> {
 
+    void deleteByChatRoomId(Long chatRoomId);
 }

@@ -20,4 +20,7 @@ public class MongoDBChatRoomsService {
         mongoDBChatRoomsRepository.save(mongoDBChatRoom);
     }
 
+    public void deleteMongoDBChatRoom(long chatRoomId) {
+        mongoDBChatRoomsRepository.deleteByChatRoomId(chatRoomId);
+    }
 }
