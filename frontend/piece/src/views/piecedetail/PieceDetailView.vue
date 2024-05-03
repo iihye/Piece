@@ -36,9 +36,9 @@ const store = usePiecelistStore();
 const route = useRoute();
 
 const piecelistDetail = computed(() => store.getPiecelistDetail);
-// RoundButtonFunction ( 버튼을 눌렀을 때 실행되는 함수 )
+
 const handleBackListClick = () => {
-    router.push({ name: "pieceListMy" });
+    router.go(-1);
 };
 
 const handleRecordClick = () => {
@@ -47,17 +47,23 @@ const handleRecordClick = () => {
 
 onMounted(async () => {
     const pieceId = route.params.pieceId;
-    console.log(route.params.pieceId);
-    // const pieceId = route.parmas.pieceId;
     await store.findPiecelistDetail(pieceId);
 });
 </script>
 
 <style>
 .pieceDetailView-main-container {
-    /* display: flex;
+    display: flex;
     flex-direction: column;
-    align-items: center; */
+    height: 100%;
+}
+
+.pieceDetailView-main-container > :first-child {
+    flex: 0 0 auto;
+}
+
+.pieceDetailView-main-container > :not(:first-child) {
+    flex: 1;
 }
 
 .pieceDetailView-piece-container {
@@ -78,8 +84,8 @@ onMounted(async () => {
 }
 
 .pieceDetailView-button-button {
-    margin: 0 2px; /* 버튼 사이의 간격 조정 */
-    flex: 1; /* 각 버튼이 컨테이너의 공간을 동등하게 차지하도록 설정 */
+    margin: 0 2px;
+    flex: 1;
 }
 
 .pieceDetailView-button-button button {
