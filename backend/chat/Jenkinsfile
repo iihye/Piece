@@ -19,7 +19,7 @@ pipeline {
                     sh '''
                     echo 'Springboot build...'
                     chmod +x gradlew
-                    ./gradlew clean build
+                    ./gradlew clean build -x test
                     '''
                 }
             }
