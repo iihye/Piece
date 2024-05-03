@@ -29,13 +29,13 @@
 </template>
 
 <script setup>
-import axios from 'axios';
-import TextInput from '@/components/text/TextInput.vue';
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import axios from "axios";
+import TextInput from "@/components/text/TextInput.vue";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
-const email = ref('');
-const password = ref('');
+const email = ref("");
+const password = ref("");
 const router = useRouter();
 
 const submitLogin = async () => {
@@ -55,20 +55,14 @@ const submitLogin = async () => {
 </script>
 
 <style>
-:root {
-    --main-color: #ff9494; /* 핑크 색상 정의 */
-}
-
 .login-form {
-  max-width: 300px;
-  margin: auto;
-  padding: 20px;
-  text-align: center;
+    margin: auto;
+    text-align: center;
 }
 
 .welcome-image {
-  max-width: 100%;
-  margin: 20px 0;
+    max-width: 100%;
+    margin: 20px 0;
 }
 
 .login-button {
@@ -87,8 +81,8 @@ const submitLogin = async () => {
 }
 
 .registration-text {
-  text-align: center;
-  margin-top: 10px;
+    text-align: center;
+    margin-top: 10px;
 }
 
 .registration-button {
