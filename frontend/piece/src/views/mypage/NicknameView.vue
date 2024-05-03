@@ -14,20 +14,39 @@
 </template>
 
 <script setup>
-import TextInput from '@/components/text/TextInput.vue'; // TextInput 컴포넌트 임포트
+import TextInput from '@/components/text/TextInput.vue';
 import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
-const nickname = ref(''); // 새 닉네임을 저장할 변수
+const nickname = ref('');
+const router = useRouter();
 
-// 닉네임 변경 함수
-const submitNickname = () => {
-  // 여기에 닉네임 변경 로직 추가
-  console.log("새 닉네임:", nickname.value);
-  // 닉네임 변경 API 호출 및 결과 처리
+const submitNickname = async () => {
+  try {
+    const userId = getSessionUserId();
+    const response = await axios.put(`${import.meta.env.VITE_REST_PIECE_API}/users/${userId}/nickname`, {
+      newNickname: nickname.value
+    });
+    console.log("닉네임 변경 성공:", response.data);
+    alert('닉네임이 성공적으로 변경되었습니다!');
+    router.push('/');
+  } catch (error) {
+    console.error("닉네임 변경 실패:", error.response ? error.response.data : error);
+    alert('닉네임 변경 실패: ' + (error.response ? error.response.data.message : '서버 에러'));
+  }
 };
+
+function getSessionUserId() {
+  return sessionStorage.getItem('userId');
+}
 </script>
 
 <style scoped>
+:root {
+    --main-color: #ff9494; /* 정의된 색상 변수 */
+}
+
 .nickname-view {
   max-width: 400px;
   margin: auto;
@@ -39,7 +58,7 @@ const submitNickname = () => {
   margin-top: 20px;
   width: 100%;
   padding: 10px;
-  background-color: #FF9494; /* 핑크 색상 */
+  background-color: var(--main-color); /* 변수 사용 */
   color: white;
   border: none;
   border-radius: 4px;
@@ -47,6 +66,6 @@ const submitNickname = () => {
 }
 
 .change-nickname-button:hover {
-  background-color: #FF9494; /* 핑크 색상 */
+  background-color: var(--main-color);
 }
 </style>

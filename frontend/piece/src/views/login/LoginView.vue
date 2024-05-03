@@ -15,11 +15,11 @@
         textInputRequired="true"
       />
       <TextInput
+        class="password-input"
         textInputName="비밀번호"
         textInputPlaceholder="비밀번호를 입력하세요"
         @textInputValue="password = $event"
         textInputRequired="true"
-        type="password"
       />
       <button type="submit" class="login-button">로그인</button>
     </form>
@@ -46,7 +46,7 @@ const submitLogin = async () => {
     });
     console.log("로그인 성공:", response.data);
     alert('로그인 성공!');
-    router.push('/home'); // 성공 시 홈 페이지로 리다이렉트
+    router.push('/'); // 성공 시 홈 페이지로 리다이렉트
   } catch (error) {
     console.error("로그인 실패:", error.response ? error.response.data : error);
     alert('로그인 실패: ' + (error.response ? error.response.data.message : '서버 에러'));
@@ -54,7 +54,11 @@ const submitLogin = async () => {
 };
 </script>
 
-<style scoped>
+<style>
+:root {
+    --main-color: #ff9494; /* 핑크 색상 정의 */
+}
+
 .login-form {
   max-width: 300px;
   margin: auto;
@@ -71,7 +75,7 @@ const submitLogin = async () => {
   margin-top: 20px;
   width: 100%;
   padding: 10px;
-  background-color: #FF9494; /* 핑크 색상 */
+  background-color: var(--main-color); /* 변수를 사용하여 배경 색상 설정 */
   color: white;
   border: none;
   border-radius: 4px;
@@ -79,7 +83,7 @@ const submitLogin = async () => {
 }
 
 .login-button:hover {
-  background-color: #FF9494;
+  background-color: var(--main-color); /* 호버 상태의 배경 색상도 동일하게 적용 */
 }
 
 .registration-text {
@@ -92,9 +96,9 @@ const submitLogin = async () => {
   width: 100%;
   padding: 10px;
   text-align: center;
-  color: #FF9494;
+  color: var(--main-color); /* 변수를 사용하여 텍스트 색상 설정 */
   text-decoration: none;
-  border: 2px solid #FF9494;
+  border: 2px solid var(--main-color); /* 변수를 사용하여 테두리 색상 설정 */
   border-radius: 4px;
   margin-top: 10px;
 }
