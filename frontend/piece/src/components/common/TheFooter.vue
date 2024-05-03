@@ -57,7 +57,7 @@ const arrayRoutes = {
 
 </script>
 
-<style>
+<style scoped>
 .footer-container {
     position: fixed;
     bottom: 0;

@@ -33,7 +33,7 @@ const textInputFuntion = () => {
 }
 </script>
 
-<style>
+<style scoped>
 @import "@/components/css/color.css";
 
 .textinput-name {

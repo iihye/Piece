@@ -53,7 +53,7 @@ onMounted(async () => {
 });
 </script>
 
-<style>
+<style scoped>
 .pieceDetailView-main-container {
     /* display: flex;
     flex-direction: column;

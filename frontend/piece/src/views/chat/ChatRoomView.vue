@@ -22,7 +22,7 @@ onMounted(() => {
 })
 </script>
 
-<style>
+<style scoped>
 @import "@/components/css/color.css";
 
 #chatRoomListPage{

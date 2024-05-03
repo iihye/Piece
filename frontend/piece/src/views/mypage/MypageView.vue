@@ -22,7 +22,7 @@
 
 <script setup></script>
 
-<style>
+<style scoped>
 .mypageview-link {
     display: flex;
 }

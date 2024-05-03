@@ -160,7 +160,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style>
+<style scoped>
 /* filter */
 .piecelistmyview-scroll-container {
     position: relative;

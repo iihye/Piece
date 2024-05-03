@@ -97,7 +97,7 @@ onMounted(async () => {
 });
 </script>
 
-<style>
+<style scoped>
 .labelview-main-title {
     font-family: "Semi";
     font-size: 1.4rem;

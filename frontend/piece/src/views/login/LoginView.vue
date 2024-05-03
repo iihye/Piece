@@ -63,7 +63,7 @@ const submitLogin = async () => {
 };
 </script>
 
-<style>
+<style scoped>
 .login-form {
     margin: auto;
     text-align: center;

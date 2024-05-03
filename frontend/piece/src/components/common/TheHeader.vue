@@ -8,7 +8,7 @@
 
 <script setup></script>
 
-<style>
+<style scoped>
 .header-container {
     z-index: 85;
     height: 2.75rem;
