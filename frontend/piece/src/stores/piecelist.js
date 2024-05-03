@@ -11,6 +11,7 @@ export const usePiecelistStore = defineStore(
         const piecelistMyList = ref({});
         const piecelistHeartList = ref({});
         const piecelistDetail = ref({});
+        const pieceDetailHeart = ref({});
 
         // =========== GETTER ===============
         const getPiecelistList = computed(() => {
@@ -27,6 +28,10 @@ export const usePiecelistStore = defineStore(
 
         const getPiecelistDetail = computed(() => {
             return piecelistDetail.value;
+        });
+
+        const getPieceDetailHeart = computed(() => {
+            return pieceDetailHeart.value;
         });
 
         // =========== ACTION ===============
@@ -74,22 +79,60 @@ export const usePiecelistStore = defineStore(
                 .catch((err) => {});
         };
 
+        const findPieceDetailHeart = function (pieceId) {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/heart/${pieceId}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    pieceDetailHeart.value = res.data.data;
+                })
+                .catch((err) => {});
+        };
+
+        const addPieceDetailHeart = function (pieceId) {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/heart/${pieceId}`,
+                method: "POST",
+            })
+                .then((res) => {
+                    pieceDetailHeart.value = true;
+                })
+                .catch((err) => {});
+        };
+
+        const deletePieceDetailHeart = function (pieceId) {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/heart/${pieceId}`,
+                method: "DELETE",
+            })
+                .then((res) => {
+                    pieceDetailHeart.value = false;
+                })
+                .catch((err) => {});
+        };
+
         return {
             // state
             piecelistList,
             piecelistMyList,
             piecelistHeartList,
             piecelistDetail,
+            pieceDetailHeart,
             // getter
             getPiecelistList,
             getPiecelistMyList,
             getPiecelistHeartList,
             getPiecelistDetail,
+            getPieceDetailHeart,
             // action
             findPiecelistList,
             findPiecelistMyList,
             findPiecelistHeartList,
             findPiecelistDetail,
+            findPieceDetailHeart,
+            addPieceDetailHeart,
+            deletePieceDetailHeart,
         };
     },
     { persist: true }

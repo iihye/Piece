@@ -1,13 +1,59 @@
 <template>
     <div class="pieceDetailView-main-container">
+        <!-- piece -->
         <div class="pieceDetailView-piece-container">
-            <img
-                class="pieceDetailView-piece-img"
-                :src="piecelistDetail.frontImg"
-                :alt="title"
-            />
+            <div class="pieceDetailView-top-container">
+                <!-- user -->
+                <div class="pieceDetailView-user-container">
+                    <img
+                        class="pieceDetailView-user-img"
+                        :src="userDetail.profileImg"
+                        alt="image"
+                    />
+                    <div class="pieceDetailView-name-container">
+                        <div class="pieceDetailView-user-label">
+                            {{ userDetail.label }}
+                        </div>
+                        <div class="pieceDetailView-user-nickname">
+                            {{ userDetail.nickname }}
+                        </div>
+                    </div>
+                </div>
+                <!-- icon -->
+                <div class="pieceDetailView-icon-container">
+                    <font-awesome-icon
+                        class="pieceDetailView-top-icon"
+                        :icon="['fas', 'ellipsis-vertical']"
+                    />
+                </div>
+            </div>
+            <!-- image -->
+            <div class="pieceDetailView-image-container">
+                <img
+                    class="pieceDetailView-image-item"
+                    :src="
+                        imgFrontBack
+                            ? piecelistDetail.frontImg
+                            : piecelistDetail.backImg
+                    "
+                    :alt="piecelistDetail.title"
+                    @click="handleImageClick"
+                />
+            </div>
+            <!-- icon -->
+            <div class="pieceDetailView-heart-container">
+                <font-awesome-icon
+                    class="pieceDetailView-heart-icon"
+                    :icon="
+                        pieceDetailHeart ? ['fas', 'heart'] : ['far', 'heart']
+                    "
+                    style="color: var(--main-color)"
+                    @click="handleHeartClick"
+                />
+            </div>
         </div>
 
+        <!-- button -->
         <div class="pieceDetailView-button-container">
             <RoundButton
                 class="pieceDetailView-button-button"
@@ -34,8 +80,30 @@ import { useRoute } from "vue-router";
 
 const store = usePiecelistStore();
 const route = useRoute();
+const imgFrontBack = ref(true);
 
+// userDetail dummy data 추후 수정
+const userDetail = ref({
+    label: "새로운",
+    nickname: "김싸피",
+    profileImg: "https://i.ibb.co/grMvZS9/your-image.jpg",
+});
 const piecelistDetail = computed(() => store.getPiecelistDetail);
+const pieceDetailHeart = computed(() => store.getPieceDetailHeart);
+
+const handleImageClick = () => {
+    imgFrontBack.value = !imgFrontBack.value;
+};
+
+const handleHeartClick = () => {
+    if (pieceDetailHeart.value) {
+        store.deletePieceDetailHeart(piecelistDetail.value.pieceId);
+        store.findPieceDetailHeart(piecelistDetail.value.pieceId);
+    } else {
+        store.addPieceDetailHeart(piecelistDetail.value.pieceId);
+        store.findPieceDetailHeart(piecelistDetail.value.pieceId);
+    }
+};
 
 const handleBackListClick = () => {
     router.go(-1);
@@ -48,6 +116,7 @@ const handleRecordClick = () => {
 onMounted(async () => {
     const pieceId = route.params.pieceId;
     await store.findPiecelistDetail(pieceId);
+    await store.findPieceDetailHeart(pieceId);
 });
 </script>
 
@@ -58,34 +127,94 @@ onMounted(async () => {
     height: 100%;
 }
 
-.pieceDetailView-main-container > :first-child {
-    flex: 0 0 auto;
+.pieceDetailView-user-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    margin-bottom: 0.6rem;
 }
 
-.pieceDetailView-main-container > :not(:first-child) {
-    flex: 1;
+.pieceDetailView-user-img {
+    width: 3rem;
+    height: 3rem;
+    border: 0.15rem solid var(--gray-color);
+    border-radius: 50%;
+    margin-right: 0.6rem;
+}
+
+.pieceDetailView-user-label {
+    font-family: "bold";
+    font-size: 1rem;
+    color: var(--main-color);
+    margin-bottom: 0.2rem;
+}
+
+.pieceDetailView-user-nickname {
+    font-family: "Semi";
+    font-size: 1rem;
+    color: var(--black-color);
 }
 
 .pieceDetailView-piece-container {
     display: flex;
+    flex: 1;
+    flex-direction: column;
     justify-content: center;
+    align-content: center;
     margin: 20px 0;
 }
 
-.pieceDetailView-piece-img {
+.pieceDetailView-top-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem 0.6rem 2rem;
+}
+
+.pieceDetailView-icon-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.pieceDetailView-top-icon {
+    margin-left: 1rem;
+}
+
+.pieceDetailView-image-container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.pieceDetailView-image-item {
     width: 284px;
     height: 464px;
 }
 
+.pieceDetailView-heart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.6rem 2rem 0 2rem;
+}
+
+.pieceDetailView-heart-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
 .pieceDetailView-button-container {
     display: flex;
-    justify-content: center; /* 가운데 정렬 */
-    bottom: 0;
+    flex: none;
+    justify-content: center;
+    margin: 1rem;
 }
 
 .pieceDetailView-button-button {
-    margin: 0 2px;
     flex: 1;
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
 }
 
 .pieceDetailView-button-button button {
