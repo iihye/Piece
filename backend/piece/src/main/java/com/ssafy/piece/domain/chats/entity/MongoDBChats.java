@@ -2,6 +2,7 @@ package com.ssafy.piece.domain.chats.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
+import java.util.Date;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +30,5 @@ public class MongoDBChats {
     String content;
 
     @Column(nullable = false)
-    String createdAt;
+    Date createdAt;
 }
