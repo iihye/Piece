@@ -1,5 +1,4 @@
 <template>
-    <button @click="handleGoBack">뒤로가깅</button>
     <div id="chatBox"> <!-- v-if 걸어서 채팅방 존재 여부 판독 예정 -->
         <!-- 오픈채팅 헤더 정보. 헤더에 들어갈 예정 -->
         <div v-if="chatRoomInfo.isPersonal==false">
@@ -48,6 +47,7 @@
                                             {{ item.createdAt }}
                                         </p>
                                     </div>
+                                    <!-- <p class="testTime">테스트 시간 27:98</p> -->
                                 </div>
                             </div>
                         </div>
@@ -152,13 +152,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, computed } from 'vue';
+import { ref, onMounted, nextTick} from 'vue';
 import { useChatRoomStore } from '@/stores/chatroom';
 import { useChatStore } from '@/stores/chat';
-import {useWebSocketStore} from '@/stores/websocket';
-import { useRouter } from "vue-router";
+import { useWebSocketStore } from '@/stores/websocket';
 
-const router=useRouter();
 const chatRoomStore = useChatRoomStore();
 const chatStore=useChatStore();
 const webSocketStore=useWebSocketStore();
@@ -174,27 +172,14 @@ const chatMessages=ref([]);
 const storeMessages = ref([]);
 const chatRoomInfo=ref({});
 
-const getInfo = computed(()=>{
-    return chatRoomInfo.value
-})
-
 chatMessages.value.push({
-    chatRoomId: 1, // 테스트 용도
-    senderId: 2, // 테스트 용도
-    title: "얼박사 킬러",
-    nickname: "김싸피",
-    content: "ㅎㅇ",
-    createdAt: "오전 7:04",
+    // chatRoomId: 1, // 테스트 용도
+    // senderId: 2, // 테스트 용도
+    // title: "얼박사 킬러",
+    // nickname: "김싸피",
+    // content: "ㅎㅇ",
+    // createdAt: "오전 7:04",
 }); // 테스트 데이터
-
-// 뒤로 가기
-const handleGoBack = () => {
-    // 실행할 코드 작성
-    console.log('뒤로가기 버튼이 클릭되었습니다.');
-    subscription.unsubscribe();
-    // 뒤로가기 로직 추가
-    router.go(-1);
-};
 
 // 채팅 메세지 받기
 async function fetchMessages() {
@@ -202,6 +187,7 @@ async function fetchMessages() {
         const chatLogs = await chatStore.getChatMessageList(1); // 1번 채팅방 메시지 목록 불러오기
 
         chatLogs.forEach(m=>{
+            m.createdAt = new Intl.DateTimeFormat('ko-KR', { hour: 'numeric', minute: 'numeric', hour12: true }).format(new Date(m.createdAt));
             chatMessages.value.push(m);
         });
 
@@ -211,10 +197,10 @@ async function fetchMessages() {
 }
 
 const scrollToBottom = () => {
-nextTick(() => {
-    const messageBox = document.getElementById('messages');
-    messageBox.scrollTop = messageBox.scrollHeight;
-});
+    nextTick(() => {
+        const messageBox = document.getElementById('messages');
+        messageBox.scrollTop = messageBox.scrollHeight;
+    });
 };
 
 const send = () => {
@@ -226,7 +212,7 @@ const send = () => {
         chatRoomId: 1, // 테스트 용도
         senderId: 1, // 테스트 용도
         content: content.value,
-        createdAt: new Intl.DateTimeFormat('ko-KR', { hour: 'numeric', minute: 'numeric', hour12: true }).format(new Date()), // client time
+        createdAt: Date.now()
         };
 
         stompClient.send('/pub/chats/' + '1', JSON.stringify(msg), {});
@@ -243,7 +229,6 @@ const disconnect = () => {
 };
 
 const subscribe = (chatRoomId) => {
-    //   chatMessages.value = []; // 채팅 데이터 초기화
     storeMessages.value = []; // 추가되었던 채팅 데이터 초기화
 
     console.log('subscribing: ' + '/sub/' + chatRoomId);
@@ -252,7 +237,11 @@ const subscribe = (chatRoomId) => {
         console.log(chatRoomId + '번 방으로 메시지를 전달합니다.');
         console.log('tick.body.content:' + JSON.parse(tick.body).content);
 
-        storeMessages.value.push(JSON.parse(tick.body));
+        let message = JSON.parse(tick.body);
+        // TIMESTAMP를 오전 1:30 형태로 변환
+        message.createdAt = new Intl.DateTimeFormat('ko-KR', { hour: 'numeric', minute: 'numeric', hour12: true }).format(new Date(message.createdAt));
+        
+        storeMessages.value.push(message);
         
         console.log("🎈storeMessages:");
 
@@ -270,20 +259,26 @@ onMounted(() => {
 
     console.log("채팅방 정보:"+chatRoomStore.getChatRoom.chatRoomName);
 
-
     chatRoomInfo.value=chatRoomStore.getChatRoom;
 
     console.log("현재 페이지에서 보유한 방 정보:"+JSON.stringify(chatRoomStore.getChatRoom));
-
 });
 </script>
 
-<style scopped>
-@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+<style>
 @import "@/components/css/color.css";
+@import "@/components/css/font.css";
 
-*{
-    font-family: "Medium";
+.testTime{
+    margin-top: 20%;
+    margin-bottom: 0;
+    font-size: 0.9rem ;
+}
+#chatBox{
+  border:0.063rem solid var(--black-color);
+  width: 25rem;
+  height: 42.5rem;
+  margin: 0 auto;
 }
 
 /* 메시지 목록 창 */
@@ -300,7 +295,7 @@ onMounted(() => {
 }
 
 #inputWindow{
-    bottom:0;
+    /* bottom:0; */
     width:100%;
     border:0.063rem solid purple;
 }
@@ -357,11 +352,12 @@ transform: scale(0.95);
 
 /* 텍스트 입력 창 */
 #messageForm{
-    /* font-size:1rem; */
+    font-size:1rem;
     padding-left:1rem;
     width:70%;
     border-radius:3.125rem;
     margin-right:0.625rem;
+    font-family:"Regular";
 }
 
 #messageForm:focus {
@@ -392,7 +388,7 @@ transition: 0.3s;
     border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
-    max-width: 37.5rem;
+    max-width: 15.0rem;
 }
 
 .chatconversationview-bubble p {
@@ -402,6 +398,7 @@ transition: 0.3s;
     padding: 0.5rem 0.875rem;
     position: relative;
     word-wrap: break-word;
+    font-family:"Regular";
 }
 
 .chatconversationview-bubble p::before,
@@ -495,26 +492,31 @@ p.chatconversationview-fromThem::after {
 /* 상대 칭호 */
 .chatconversationview-userTitle{
     padding-left:0rem;
-    /* font-weight:bold; */
+    font-family:"Semi";
+    font-size:1.1rem;
     color:var(--main-color);
 }
 
 /* 상대 이름 */
 .chatconversationview-userName{
     padding-left:0.375rem;
+    font-family:"Medium";
+    font-size:1.1rem;
     color:var(--gray2-color);
 }
 
 /* 시간 정보 */
 .chatconversationview-sendDate{
-    width:4.375rem;
-    height:90%;
+    width:4.0rem;
+    height:100%;
     border:0.063rem solid (--red-color);
+    font-size:0.9rem;
+    font-family: "Regular";
+    margin-top:15%;
 }
 .chatconversationview-sendDate p{
-    text-align: center;
-    margin-top:45%;
     margin-bottom:0;
+    text-align: bottom;
 }
 .chatconversationview-messageAndTimeTo{
     display:flex;
