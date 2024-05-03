@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class PiecesDetailResponseDto {
 
     private Long pieceId;
+    private Long userId;
     private String title;
     private String frontImg;
     private String backImg;
