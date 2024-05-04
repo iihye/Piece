@@ -21,7 +21,7 @@ defineProps({
 </script>
 
 <style>
-@import "@/components/css/color.css";
+/* @import "@/components/css/color.css"; */
 
 .roundbutton {
     background-color: var(--main-color);

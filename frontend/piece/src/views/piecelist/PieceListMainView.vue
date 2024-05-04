@@ -58,7 +58,7 @@
 
 <script setup></script>
 
-<style>
+<style scoped>
 .piecelistmain-container {
     display: flex;
     flex-direction: row;

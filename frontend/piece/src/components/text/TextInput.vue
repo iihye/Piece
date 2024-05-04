@@ -6,15 +6,10 @@
             }}</label>
             <span v-if="textInputRequired" class="textinput-required">*</span>
         </div>
-        <input
-            type="text"
-            name="textInputContent"
-            id="textInputContent"
-            :placeholder="textInputPlaceholder"
-            class="textinput-input"
-            v-model="textInputValue"
-            @input="textInputFuntion"
-        />
+        <input :type="textInputType" name="textInputContent" id="textInputContent" :placeholder="textInputPlaceholder"
+            class="textinput-input" v-model="textInputValue" @input="textInputFuntion" />
+        <input type="text" name="textInputContent" id="textInputContent" :placeholder="textInputPlaceholder"
+            class="textinput-input" v-model="textInputValue" @input="textInputFuntion" />
     </div>
 </template>
 
@@ -22,9 +17,11 @@
 import { ref, defineProps, defineEmits } from "vue";
 
 defineProps({
+    textInputType: String,
     textInputName: String,
     textInputPlaceholder: String,
-    textInputRequired: Boolean,
+    textInputRequired: Boolean
+
 });
 
 const textInputValue = ref("");
@@ -33,10 +30,10 @@ const emits = defineEmits(["textInputValue"]);
 
 const textInputFuntion = () => {
     emits("textInputValue", textInputValue.value);
-};
+}
 </script>
 
-<style>
+<style scoped>
 @import "@/components/css/color.css";
 
 .textinput-name {

@@ -54,7 +54,7 @@ const submitForm = async () => {
 };
 </script>
 
-<style scoped>
+<style>
 .signup-form {
   max-width: 400px;
   margin: auto;

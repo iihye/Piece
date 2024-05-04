@@ -27,7 +27,7 @@ const submitNickname = () => {
 };
 </script>
 
-<style scoped>
+<style>
 .nickname-view {
   max-width: 400px;
   margin: auto;

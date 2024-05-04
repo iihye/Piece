@@ -1,6 +1,7 @@
 <template>
     <div class="squarebutton-container">
-        <button @click="squareButtonFunction" :disabled="!isSquareDisable" class="squarebutton">{{ squareButtonContent }}</button>
+        <button @click="squareButtonFunction" :disabled="!isSquareDisable" class="squarebutton">{{ squareButtonContent
+            }}</button>
     </div>
 </template>
 
@@ -34,5 +35,4 @@ defineProps({
     height: 4rem;
     color: var(--gray2-color);
 }
-
 </style>
