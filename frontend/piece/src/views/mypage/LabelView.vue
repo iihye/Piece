@@ -113,7 +113,7 @@ const handleWearoffSuccess = () => {
 };
 
 onMounted(async () => {
-    await store.findMyPageLabelList();
+    await store.findMypageLabelList();
 });
 </script>
 
