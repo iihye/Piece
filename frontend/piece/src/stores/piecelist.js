@@ -9,6 +9,7 @@ export const usePiecelistStore = defineStore(
         // =========== STATE ===============
         const piecelistList = ref({});
         const piecelistMyList = ref({});
+        const pieceListMyCalendar = ref([]);
         const piecelistHeartList = ref({});
         const piecelistDetail = ref({});
         const pieceDetailHeart = ref({});
@@ -21,6 +22,10 @@ export const usePiecelistStore = defineStore(
 
         const getPiecelistMyList = computed(() => {
             return piecelistMyList.value;
+        });
+
+        const getPiecelistMyCalendar = computed(() => {
+            return pieceListMyCalendar.value;
         });
 
         const getPiecelistHeartList = computed(() => {
@@ -58,6 +63,18 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     piecelistMyList.value = res.data.data;
+                })
+                .catch((err) => {});
+        };
+
+        const findPiecelistMyCalendar = function (year, month) {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/piecelist/my/${year}/${month}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    pieceListMyCalendar.value = res.data.data;
+                    console.log(pieceListMyCalendar.value);
                 })
                 .catch((err) => {});
         };
@@ -119,9 +136,7 @@ export const usePiecelistStore = defineStore(
 
         const findPieceDetailRecord = function (pieceId) {
             axios({
-                url: `${
-                    import.meta.env.VITE_REST_PIECE_API
-                }/pieces/record/${pieceId}`,
+                url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/record/${pieceId}`,
                 method: "GET",
             })
                 .then((res) => {
@@ -135,6 +150,7 @@ export const usePiecelistStore = defineStore(
             // state
             piecelistList,
             piecelistMyList,
+            pieceListMyCalendar,
             piecelistHeartList,
             piecelistDetail,
             pieceDetailHeart,
@@ -142,6 +158,7 @@ export const usePiecelistStore = defineStore(
             // getter
             getPiecelistList,
             getPiecelistMyList,
+            getPiecelistMyCalendar,
             getPiecelistHeartList,
             getPiecelistDetail,
             getPieceDetailHeart,
@@ -149,6 +166,7 @@ export const usePiecelistStore = defineStore(
             // action
             findPiecelistList,
             findPiecelistMyList,
+            findPiecelistMyCalendar,
             findPiecelistHeartList,
             findPiecelistDetail,
             findPieceDetailHeart,
