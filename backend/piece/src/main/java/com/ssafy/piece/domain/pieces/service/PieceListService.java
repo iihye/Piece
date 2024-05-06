@@ -37,6 +37,12 @@ public class PieceListService {
         return getPieceListResponseDtos(userId, pieces);
     }
 
+    // 찜한 조각 리스트
+    public List<PieceListResponseDto> listHeartPieces(Long userId) {
+        List<Pieces> pieces = piecesRepository.findByUserIdAndHeart(userId);
+        return getPieceListResponseDtos(userId, pieces);
+    }
+
     // 최근 조각 리스트
     public List<PieceRecentResponseDto> listRecentPieces(Long userId) {
         Page<Pieces> piecesPage = piecesRepository.findTopPieces(PageRequest.of(0, 10));

@@ -35,4 +35,10 @@ public class HeartService {
 
         heartRepository.deleteById(heartId);
     }
+
+    // 찜 여부 확인
+    public boolean isHeart(Long userId, Long pieceId) {
+        boolean heart = heartRepository.findByPieceIdAndUserId(pieceId, userId) > 0;
+        return heart;
+    }
 }

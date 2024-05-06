@@ -25,6 +25,9 @@ public interface PiecesRepository extends JpaRepository<Pieces, Long> {
     @Query("select p from Pieces p where p.userId = :userId")
     List<Pieces> findByUserId(Long userId);
 
+    @Query("select p from Pieces p join Piecesheart h on p.pieceId = h.piece.pieceId where h.userId = :userId")
+    List<Pieces> findByUserIdAndHeart(Long userId);
+
     @Query("select p from Pieces p order by p.date desc")
     Page<Pieces> findTopPieces(Pageable pageable);
 

@@ -43,6 +43,16 @@ public class PieceListController {
             pieceListResponseDtos);
     }
 
+    // 찜한 조각 리스트
+    @GetMapping("/heart")
+    public ResponseEntity<Object> findHeartPieces(@AuthenticatedUser Long userId) {
+        List<PieceListResponseDto> pieceListResponseDtos = pieceListService.listHeartPieces(
+            userId);
+
+        return SuccessResponse.createSuccess(SuccessCode.FIND_HEART_PIECE_LIST_SUCCESS,
+            pieceListResponseDtos);
+    }
+
     // 최근 조각 리스트
     @GetMapping("/recent")
     public ResponseEntity<Object> findRecentPieces(@AuthenticatedUser Long userId) {

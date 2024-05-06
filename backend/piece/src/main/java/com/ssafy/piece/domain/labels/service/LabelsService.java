@@ -5,10 +5,11 @@ import com.ssafy.piece.domain.labels.dto.request.LabelsRequestDto;
 import com.ssafy.piece.domain.labels.entity.Labels;
 import com.ssafy.piece.domain.labels.repository.LabelsRepository;
 import jakarta.transaction.Transactional;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -22,9 +23,9 @@ public class LabelsService {
     // 칭호 등록
     public void addLabels() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        File file = new File("src/main/resources/labelsdata.json");
+        InputStream inputStream = new ClassPathResource("labelsdata.json").getInputStream();
 
-        LabelsRequestDto[] labelsRequestDtos = objectMapper.readValue(file,
+        LabelsRequestDto[] labelsRequestDtos = objectMapper.readValue(inputStream,
             LabelsRequestDto[].class);
         for (LabelsRequestDto labelsRequestDto : labelsRequestDtos) {
             Labels labels = Labels.builder()

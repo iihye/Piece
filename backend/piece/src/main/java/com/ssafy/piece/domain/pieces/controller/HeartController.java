@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,5 +38,14 @@ public class HeartController {
         heartService.deleteHeart(userId, pieceId);
 
         return SuccessResponse.createSuccess(SuccessCode.DELETE_HEART_SUCCESS);
+    }
+
+    // 찜 여부 확인
+    @GetMapping("/{pieceId}")
+    public ResponseEntity<Object> heartIs(@AuthenticatedUser Long userId,
+        @PathVariable Long pieceId) {
+        boolean isHeart = heartService.isHeart(userId, pieceId);
+
+        return SuccessResponse.createSuccess(SuccessCode.IS_HEART_SUCCESS, isHeart);
     }
 }

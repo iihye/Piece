@@ -14,11 +14,16 @@ public enum SuccessCode implements ResponseCode {
 
     LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃에 성공했습니다."),
 
+    //아래 두개 추가하였습니다.(닉네임 중복확인용)
+    CHECK_NICKNAME_GOOD(HttpStatus.OK, "사용 가능한 닉네임입니다."),
+    CHECK_NICKNAME_BAD(HttpStatus.OK, "이미 사용 중인 닉네임입니다."),
+
     CHECK_EMAIL_GOOD(HttpStatus.OK, "사용 가능한 이메일입니다"),
 
     CHECK_EMAIL_BAD(HttpStatus.OK, "이미 사용 중인 이메일입니다"),
 
     JOIN_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
+    NICKNAME_UPDATE_SUCCESS(HttpStatus.OK, "닉네임 변경에 성공했습니다."),
 
     CHECK_PASSWORD_SUCCESS(HttpStatus.OK, "비밀번호 확인에 성공했습니다."),
 
@@ -33,6 +38,7 @@ public enum SuccessCode implements ResponseCode {
     // 찜
     ADD_HEART_SUCCESS(HttpStatus.OK, "찜 등록에 성공했습니다."),
     DELETE_HEART_SUCCESS(HttpStatus.OK, "찜 삭제에 성공했습니다."),
+    IS_HEART_SUCCESS(HttpStatus.OK, "찜 여부 확인에 성공했습니다."),
 
     // 기록
     ADD_RECORD_SUCCESS(HttpStatus.OK, "기록 생성에 성공했습니다."),
@@ -42,6 +48,7 @@ public enum SuccessCode implements ResponseCode {
     // 조각 리스트
     FIND_PIECE_LIST_SUCCESS(HttpStatus.OK, "조각 리스트 조회에 성공했습니다."),
     FIND_MY_PIECE_LIST_SUCCESS(HttpStatus.OK, "내 조각 리스트 조회에 성공했습니다."),
+    FIND_HEART_PIECE_LIST_SUCCESS(HttpStatus.OK, "찜한 조각 리스트 조회에 성공했습니다."),
     FIND_RECENT_PIECE_LIST_SUCCESS(HttpStatus.OK, "최근 조각 리스트 조회에 성공했습니다."),
 
     // 칭호
@@ -52,7 +59,14 @@ public enum SuccessCode implements ResponseCode {
     FIND_MY_LABELS_SUCCESS(HttpStatus.OK, "내 칭호 목록 조회에 성공했습니다."),
     CHECK_MY_LABELS_SUCCESS(HttpStatus.OK, "칭호 획득 검사에 성공했습니다."),
 
-    REQUEST_SUCESS(HttpStatus.OK, "요청에 성공했습니다.");
+    REQUEST_SUCCESS(HttpStatus.OK, "요청에 성공했습니다."),
+
+
+    /**
+     * s3
+     */
+    GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다.");
+
 
     private final HttpStatus httpStatus;
 
