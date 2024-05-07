@@ -1,0 +1,29 @@
+server:
+  port: 8761 #???? ??
+
+eureka:
+  instance:
+    hostname: eureka
+    lease-renewal-interval-in-seconds: 5  # ?? ?? ??? 10?? ??
+    lease-expiration-duration-in-seconds: 15  # ?? ??? 30?? ??
+
+  client:
+    register-with-eureka: false # default : true
+    fetch-registry: false # default : true
+  #    serviceUrl:
+  #      # ?? ?????? ?? ??? url ??
+  #      defaultZone:
+  #        http://${eureka.instance.hostname}:${server.port}/eureka/
+
+  server:
+    # ??? ??? ?? ? ?? ?? ?? ??
+    waitTimeInMsWhenSyncEmpty: 5
+    renewal-percent-threshold: 0.85
+    eviction-interval-timer-in-ms: 1000
+    response-cache-update-interval-ms: 5000  # ?? ?? ?? ??? 5?? ??
+#
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
