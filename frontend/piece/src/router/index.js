@@ -25,7 +25,8 @@ import PieceListMyView from "@/views/piecelist/PieceListMyView.vue";
 import PieceDetailView from "@/views/piecedetail/PieceDetailView.vue";
 import RecordDetailView from "@/views/piecedetail/RecordDetailView.vue";
 // chat
-import ChatView from "@/views/chat/ChatView.vue";
+import ChatRoomView from "@/views/chat/ChatRoomView.vue";
+import ChatConversationView from "@/views/chat/ChatConversationView.vue";
 // mypage
 import MypageView from "@/views/mypage/MypageView.vue";
 import NicknameView from "@/views/mypage/NicknameView.vue";
@@ -153,9 +154,14 @@ const router = createRouter({
         },
         // chat
         {
-            path: "/chat",
-            name: "chat",
-            component: ChatView,
+            path: "/chatroom",
+            name: "chatRoom",
+            component: ChatRoomView,
+        },
+        {
+            path:"/chat",
+            name:"chat",
+            component: ChatConversationView,
         },
         // mypage
         {

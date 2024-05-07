@@ -1,19 +1,106 @@
 <template>
-    <div class="footer">
-        <RouterLink :to="{ name: 'main' }">홈 </RouterLink>
-        <RouterLink :to="{ name: 'piecelistmain' }">모아보기 </RouterLink>
-        <RouterLink :to="{ name: 'piecemake' }">조각 만들기 </RouterLink>
-        <RouterLink :to="{ name: 'chat' }">채팅 </RouterLink>
-        <RouterLink :to="{ name: 'mypage' }">내정보 </RouterLink>
-    </div>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-all">
+                <RouterLink :to="{ name: 'main' }" class="footer-menu">
+                    <div :class="{ 'footer-set': true, 'active': pageName === 'main' }">
+                        <font-awesome-icon :icon="['fas', 'house']" class="footer-icon" />
+                        <div class="footer-name">홈</div>
+                    </div>
+                </RouterLink>
+                <RouterLink :to="{ name: 'piecelistmain' }" class="footer-menu">
+                    <div :class="{ 'footer-set': true, 'active': arrayRoutes.list.includes(pageName) }">
+                        <font-awesome-icon :icon="['fas', 'box-open']" class="footer-icon" />
+                        <div class="footer-name">모아보기</div>
+                    </div>
+                </RouterLink>
+                <RouterLink :to="{ name: 'piecemake' }" class="footer-menu">
+                    <div :class="{ 'footer-set': true, 'active': arrayRoutes.make.includes(pageName) }">
+                        <font-awesome-icon :icon="['fas', 'cheese']" class="footer-icon" />
+                        <div class="footer-name">조각만들기</div>
+                    </div>
+                </RouterLink>
+                <RouterLink :to="{ name: 'chatRoom' }" class="footer-menu">
+                    <div :class="{ 'footer-set': true, 'active': arrayRoutes.chat.includes(pageName) }">
+                        <font-awesome-icon :icon="['fas', 'paper-plane']" class="footer-icon" />
+                        <div class="footer-name">채팅</div>
+                    </div>
+                </RouterLink>
+                <RouterLink :to="{ name: 'mypage' }" class="footer-menu">
+                    <div :class="{ 'footer-set': true, 'active': arrayRoutes.myinfo.includes(pageName) }">
+                        <font-awesome-icon :icon="['fas', 'user']" class="footer-icon" />
+                        <div class="footer-name">내정보</div>
+                    </div>
+                </RouterLink>
+            </div>
+        </div>
+    </footer>
 </template>
 
 <script setup>
-import { RouterLink } from "vue-router";
+import { computed } from 'vue';
+import { RouterLink, useRoute } from "vue-router";
+
+const route = useRoute();
+
+const pageName = computed(() => { return route.name });
+
+const arrayRoutes = {
+    home: ['main'],
+    list: ['piecelistmain', 'cakelist', 'cakeDetail', 'pieceList', 'pieceCalendar', 'pieceListMy', 'pieceDetail', 'recordDetail'],
+    make: ['piecemake', 'pieceimage', 'pieceimagecrop', 'pieceinfo', 'piececomment', 'piecefront', 'pieceback', 'piecebackground', 'piecesave',],
+    chat: ['chatRoom', 'chat'],
+    myinfo: ['mypage', 'nickname', 'password', 'settings', 'profileImg', 'label', 'piece', 'consume']
+};
+
 </script>
 
 <style>
-.footer {
-    margin: 2rem;
+@import "@/components/css/color.css";
+@import "@/components/css/font.css";
+
+.footer-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 85;
+    display: grid;
+    text-align: center;
+    background-color: var(--white-color);
+}
+
+.footer-all {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 2.75rem;
+}
+
+.footer-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    color: var(--gray-color);
+}
+
+.footer-name {
+    font-size: 0.75rem;
+    font-family: "Medium";
+    color: var(--gray2-color);
+}
+
+.footer-name a {
+    text-decoration: none;
+}
+
+.footer-set.active .footer-name,
+.footer-set.active .footer-icon {
+    color: var(--main-color);
 }
 </style>

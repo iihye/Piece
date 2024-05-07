@@ -1,6 +1,7 @@
 <template>
     <div class="roundbutton-container">
-        <button @click="roundButtonFunction" :disabled="!isRoundDisable" class="roundbutton">{{ roundButtonContent }}</button>
+        <button @click="roundButtonFunction" :disabled="!isRoundDisable" class="roundbutton">{{ roundButtonContent
+            }}</button>
     </div>
 </template>
 
@@ -17,7 +18,7 @@ defineProps({
 </script>
 
 <style>
-@import "@/components/css/color.css";
+/* @import "@/components/css/color.css"; */
 
 .roundbutton {
     background-color: var(--main-color);
@@ -36,5 +37,4 @@ defineProps({
     height: 4rem;
     color: var(--gray2-color);
 }
-
 </style>

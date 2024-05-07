@@ -136,11 +136,11 @@ onMounted(async () => {
 
 .labelview-list-container {
     overflow-y: scroll;
-    height: 70vh;
+    height: 75vh;
 }
 
 .labelview-list-container::-webkit-scrollbar {
-    width: 0.5rem;
+    width: 0.2rem;
 }
 
 .labelview-list-container::-webkit-scrollbar-thumb {
