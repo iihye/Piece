@@ -65,7 +65,7 @@ const cropImage = () => {
 </script>
 
 
-<style>
+<style scoped>
 .cropper-line {
     background-color: var(--red-color);
 }

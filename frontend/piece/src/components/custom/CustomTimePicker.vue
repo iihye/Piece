@@ -17,7 +17,7 @@ const time = ref({
 });
 </script>
 
-<style>
+<style scoped>
 .input-slot-image {
     height: 13.33px;
     width: auto;

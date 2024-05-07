@@ -1,44 +1,45 @@
 <template>
     <h1>어떤 케이크였나요?</h1>
-    <div class="container">
-        <div class="form-group">
-            <label for="movie-types" class="required-label">공연 분류</label>
+    <div class="pieceinfoview-container">
+        <div class="pieceinfoview-form-group">
+            <label for="movie-types" class="pieceinfoview-required-label">공연 분류</label>
             <ButtonGroup
+                class="pieceinfoview-button-group"
                 id="movie-types"
                 groupName="공연 분류"
                 :options="options"
                 @selected="updateSelected"
             />
         </div>
-        <div class="form-group">
-            <label for="content-name" class="required-label">공연명</label>
+        <div class="pieceinfoview-form-group">
+            <label for="content-name" class="pieceinfoview-required-label">공연명</label>
             <TextInput id="content-name" placeholder="공연명을 입력하세요" v-model="pieceValue.title" />
         </div>
-        <div class="form-group">
-            <label for="date-picker" class="required-label">날짜 선택</label>
+        <div class="pieceinfoview-form-group">
+            <label for="date-picker" class="pieceinfoview-required-label">날짜 선택</label>
             <DatePicker id="date-picker" v-model="dateValue"></DatePicker>
         </div>
-        <div class="form-group">
+        <div class="pieceinfoview-form-group">
             <label for="time-picker">시간 선택</label>
             <TimePicker id="time-picker" v-model="timeValue"></TimePicker>
         </div>
-        <div class="form-group">
+        <div class="pieceinfoview-form-group">
             <label for="cast-name">출연</label>
             <TextInput id="cast-name" placeholder="출연진을 입력하세요" v-model="pieceValue.cast" />
         </div>
-        <div class="form-group">
+        <div class="pieceinfoview-form-group">
             <label for="location-name">장소</label>
             <TextInput id="location-name" placeholder="장소를 입력하세요" v-model="pieceValue.address" />
         </div>
-        <div class="form-group">
+        <div class="pieceinfoview-form-group">
             <label for="director-name">감독</label>
             <TextInput id="director-name" placeholder="감독을 입력하세요" v-model="pieceValue.supervision" />
         </div>
-        <div class="form-group">
+        <div class="pieceinfoview-form-group">
             <label for="seat-info">좌석</label>
             <TextInput id="seat-info" placeholder="좌석을 입력하세요" v-model="pieceValue.seat" />
         </div>
-        <div class="form-group">
+        <div class="pieceinfoview-form-group">
             <label for="content-name">가격</label>
             <TextInput id="content-name" placeholder="가격을 입력하세요" v-model="pieceValue.price" />
         </div>
@@ -111,10 +112,10 @@ watch(timeValue, (newValue) => {
 });
 </script>
 
-<style>
+<style scoped>
 @import "@/components/css/font.css";
 
-.container {
+.pieceinfoview-container {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 20px;
@@ -123,7 +124,7 @@ watch(timeValue, (newValue) => {
     margin: auto;
 }
 
-.form-group {
+.pieceinfoview-form-group {
     display: contents;
 }
 
@@ -135,17 +136,13 @@ label {
     text-align: left;
 }
 
-input, .button-group {
-    grid-column: 2 / 3; 
-}
-
-.button-group {
+.pieceinfoview-button-group {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
-.required-label::after {
+.pieceinfoview-required-label::after {
     content: '*';
     color: var(--red-color);
     vertical-align: 0.2rem;

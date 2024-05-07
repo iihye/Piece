@@ -36,7 +36,7 @@ const format = (date) => {
 }
 </script>
 
-<style>
+<style >
 .dp__theme_light {
     --dp-primary-color: var(--red-color);
 }

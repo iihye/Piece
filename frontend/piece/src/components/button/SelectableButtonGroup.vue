@@ -1,5 +1,5 @@
 <template>
-    <div class="button-group" :id="groupId">
+    <div class="selectablebuttongroup-container" :id="groupId">
         <SelectableButton
             v-for="option in options"
             :key="option.id"
@@ -39,7 +39,7 @@ function updateSelected(id) {
     display: block;
 }
 
-.button-group {
+.selectablebuttongroup-containet {
     display: flex;
     flex-wrap: wrap;
 }
