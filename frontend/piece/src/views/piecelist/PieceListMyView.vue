@@ -20,20 +20,13 @@
         </div>
 
         <!-- list -->
-        <div
-            v-if="filteredMyList.length === 0"
-            class="piecelistmyview-list-noitem"
-        >
+        <div v-if="filteredMyList.length === 0" class="piecelistmyview-list-noitem">
             <NoItem :content="'내 조각이 없어요'"></NoItem>
         </div>
         <div v-else>
             <div class="piecelistmyview-list-container">
                 <div class="piecelistmyview-list-grid">
-                    <div
-                        v-for="(item, index) in filteredMyList"
-                        :key="index"
-                        class="piecelistmyview-list-item"
-                    >
+                    <div v-for="(item, index) in filteredMyList" :key="index" class="piecelistmyview-list-item">
                         <ListImageItem
                             :pieceId="item.pieceId"
                             :performanceType="item.performanceType"
@@ -58,6 +51,8 @@ import NoItem from "@/components/item/NoItem.vue";
 
 const store = usePiecelistStore();
 
+const year = computed(() => store.getYear);
+const month = computed(() => store.getMonth);
 const piecelistMyList = computed(() => store.getPiecelistMyList);
 const filteredMyList = computed(() => computedFilteredMyList());
 const selectedOption = ref("ALL");
@@ -66,25 +61,15 @@ function computedFilteredMyList() {
     if (selectedOption.value === "ALL") {
         return piecelistMyList.value;
     } else if (selectedOption.value === "MOVIE") {
-        return piecelistMyList.value.filter(
-            (item) => item.performanceType === "MOVIE"
-        );
+        return piecelistMyList.value.filter((item) => item.performanceType === "MOVIE");
     } else if (selectedOption.value === "THEATER") {
-        return piecelistMyList.value.filter(
-            (item) => item.performanceType === "THEATER"
-        );
+        return piecelistMyList.value.filter((item) => item.performanceType === "THEATER");
     } else if (selectedOption.value === "MUSICAL") {
-        return piecelistMyList.value.filter(
-            (item) => item.performanceType === "MUSICAL"
-        );
+        return piecelistMyList.value.filter((item) => item.performanceType === "MUSICAL");
     } else if (selectedOption.value === "CONCERT") {
-        return piecelistMyList.value.filter(
-            (item) => item.performanceType === "CONCERT"
-        );
+        return piecelistMyList.value.filter((item) => item.performanceType === "CONCERT");
     } else if (selectedOption.value === "ETC") {
-        return piecelistMyList.value.filter(
-            (item) => item.performanceType === "ETC"
-        );
+        return piecelistMyList.value.filter((item) => item.performanceType === "ETC");
     } else {
         return [];
     }
@@ -161,6 +146,8 @@ onMounted(async () => {
     tabMenu.value.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
     tabMenu.value.addEventListener("mousemove", handleMouseMove);
+
+    await store.findPiecelistMyCalendar(year.value, month.value + 1);
 });
 
 onBeforeUnmount(() => {

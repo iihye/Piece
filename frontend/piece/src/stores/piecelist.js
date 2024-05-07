@@ -122,18 +122,23 @@ export const usePiecelistStore = defineStore(
             const emptyStartDays = Array(startDayOfTheMonth).fill({
                 day: null,
                 imageUrl: null,
+                imageId: null,
             });
-            const daysOfMonth = Array.from({ length: endDayOfTheMonth }, (_, i) => ({
-                day: i + 1,
-                imageUrl: getImageUrlForDay(i + 1, month, year),
-            }));
+            const daysOfMonth = Array.from({ length: endDayOfTheMonth }, (_, i) => {
+                const { frontImg, pieceId } = getImageUrlForDay(i + 1, month, year);
+                return {
+                    day: i + 1,
+                    imageUrl: frontImg,
+                    pieceId: pieceId,
+                };
+            });
             const fullMonth = [...emptyStartDays, ...daysOfMonth];
             const weeks = [];
 
             while (fullMonth.length > 0) {
                 const weekDays = fullMonth.splice(0, 7);
                 while (weekDays.length < 7) {
-                    weekDays.push({ day: null, imageUrl: null });
+                    weekDays.push({ day: null, imageUrl: null, pieceId: null });
                 }
                 weeks.push(weekDays);
             }
@@ -145,7 +150,11 @@ export const usePiecelistStore = defineStore(
         const getImageUrlForDay = function (day, month, year) {
             const fullDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
             const piece = piecelistMyCalendar.value.find((p) => p.date === fullDate);
-            return piece ? piece.frontImg : null;
+            if (piece) {
+                return { frontImg: piece.frontImg, pieceId: piece.pieceId };
+            } else {
+                return { frontImg: null, pieceId: null };
+            }
         };
 
         const findPiecelistHeartList = function () {

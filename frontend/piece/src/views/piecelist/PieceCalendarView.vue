@@ -27,7 +27,12 @@
             </div>
             <div class="piececalendarview-weekdays-week" v-for="(week, index) in state.days" :key="index">
                 <div class="piececalendarview-weekdays-day" v-for="dayData in week" :key="dayData.day">
-                    <img v-if="dayData.imageUrl" :src="dayData.imageUrl" alt="image" />
+                    <img
+                        v-if="dayData.imageUrl"
+                        :src="dayData.imageUrl"
+                        alt="image"
+                        @click="handleDayClick(dayData.pieceId)"
+                    />
                     <div v-else>
                         {{ dayData.day }}
                     </div>
@@ -38,6 +43,7 @@
 </template>
 
 <script setup>
+import router from "@/router";
 import { computed, onMounted } from "vue";
 import { usePiecelistStore } from "@/stores/piecelist";
 
@@ -57,9 +63,16 @@ function changeMonth(val) {
     store.findPiecelistMyCalendar(today.value.getFullYear(), today.value.getMonth() + 1);
 }
 
-onMounted(async () => {
-    await store.findPiecelistMyCalendar(year.value, month.value + 1);
-});
+function handleDayClick(pieceId) {
+    router.push({ name: "pieceDetail", params: { pieceId: pieceId } });
+}
+
+onMounted(
+    async () => {
+        await store.findPiecelistMyCalendar(year.value, month.value + 1);
+    },
+    { once: true }
+);
 </script>
 
 <style>
