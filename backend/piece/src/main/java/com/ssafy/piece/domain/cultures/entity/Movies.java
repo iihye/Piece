@@ -32,5 +32,5 @@ public class Movies {
     private LocalDateTime openDate;
 
     private String nation;
-    
+
 }
