@@ -224,6 +224,15 @@ export const usePiecelistStore = defineStore(
                 .catch((err) => {});
         };
 
+        const deletePieceDetail = function (pieceId) {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/${pieceId}`,
+                method: "DELETE",
+            })
+                .then((res) => {})
+                .catch((err) => {});
+        };
+
         return {
             // state
             piecelistList,
@@ -262,6 +271,7 @@ export const usePiecelistStore = defineStore(
             addPieceDetailHeart,
             deletePieceDetailHeart,
             findPieceDetailRecord,
+            deletePieceDetail,
         };
     },
     { persist: true }

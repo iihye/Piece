@@ -102,7 +102,7 @@ const selectModal = ref(false);
 const linkSuccessModal = ref(false);
 const reportModal = ref(false);
 // user dummy data 추후 수정
-const userId = ref(2);
+const userId = ref(1);
 const isMine = computed(() => userId.value === piecelistDetail.value.userId);
 
 // userDetail dummy data 추후 수정
@@ -155,7 +155,8 @@ const handleKakao = () => {
 };
 
 const handleDelete = () => {
-    alert("삭제");
+    store.deletePieceDetail(piecelistDetail.value.pieceId);
+    router.go(-1);
 };
 
 const handleReport = () => {
