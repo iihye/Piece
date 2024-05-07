@@ -20,7 +20,7 @@
                     <font-awesome-icon
                         class="pieceDetailView-top-icon"
                         :icon="['fas', 'ellipsis-vertical']"
-                        @click="handleModal"
+                        @click="handleModalSuccess"
                     />
                 </div>
             </div>
@@ -65,7 +65,7 @@
             v-if="selectModal"
             :handleLinkClick="handleLink"
             :handleKakaoClick="handleKakao"
-            :handleFailClick="handleFail"
+            :handleFailClick="handleModalFail"
             :handleDeleteClick="handleDelete"
             :handleReportClick="handleReport"
             :isMine="userId === piecelistDetail.userId ? true : false"
@@ -143,7 +143,7 @@ const handleLink = () => {
     const currentUrl = window.location.href;
     navigator.clipboard.writeText(currentUrl);
     linkSuccessModal.value = true;
-    handleFail();
+    handleModalFail();
 };
 
 const handleLinkSuccess = () => {
@@ -164,19 +164,19 @@ const handleReport = () => {
 
 const handleReportFail = () => {
     reportModal.value = false;
-    handleFail();
+    handleModalFail();
 };
 
 const handleReportSuccess = () => {
     reportModal.value = false;
-    handleFail();
+    handleModalFail();
 };
 
-const handleModal = () => {
+const handleModalSuccess = () => {
     selectModal.value = true;
 };
 
-const handleFail = () => {
+const handleModalFail = () => {
     selectModal.value = false;
 };
 
