@@ -41,7 +41,7 @@ public class    UserRegistrationService {
 
         Users newUser = Users.builder()
             .email(registrationDto.getEmail())
-//            .username(registrationDto.getUsername())
+//            .username(registrationDto.getUse  rname())
             .password(passwordEncoder.encode(registrationDto.getPassword()))
             .nickname(registrationDto.getNickname())
 //            .profileImage(registrationDto.getProfileImage())
