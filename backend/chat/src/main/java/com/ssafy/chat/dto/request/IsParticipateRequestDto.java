@@ -2,10 +2,12 @@ package com.ssafy.chat.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
-public class ParticipantsRequestDto {
+@ToString
+public class IsParticipateRequestDto {
 
-    Long chatRoomId;
+    Boolean isPersonal;
 }
