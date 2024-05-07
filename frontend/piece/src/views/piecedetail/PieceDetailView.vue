@@ -76,6 +76,12 @@
             :modalTitle="'링크가 복사되었어요!'"
             :handleSuccessClick="handleLinkSuccess"
         />
+
+        <ReportSelectModal
+            v-if="reportModal"
+            :handleFailClick="handleReportFail"
+            :handleSuccessClick="handleReportSuccess"
+        ></ReportSelectModal>
     </div>
 </template>
 
@@ -87,12 +93,14 @@ import { usePiecelistStore } from "@/stores/piecelist";
 import RoundButton from "@/components/button/RoundButton.vue";
 import ShareSelectModal from "@/components/modal/ShareSelectModal.vue";
 import ImageSuccessModal from "@/components/modal/ImageSuccessModal.vue";
+import ReportSelectModal from "@/components/modal/ReportSelectModal.vue";
 
 const store = usePiecelistStore();
 const route = useRoute();
 const imgFrontBack = ref(true);
 const selectModal = ref(false);
 const linkSuccessModal = ref(false);
+const reportModal = ref(false);
 // user dummy data 추후 수정
 const userId = ref(2);
 const isMine = computed(() => userId.value === piecelistDetail.value.userId);
@@ -151,7 +159,17 @@ const handleDelete = () => {
 };
 
 const handleReport = () => {
-    alert("신고");
+    reportModal.value = true;
+};
+
+const handleReportFail = () => {
+    reportModal.value = false;
+    handleFail();
+};
+
+const handleReportSuccess = () => {
+    reportModal.value = false;
+    handleFail();
 };
 
 const handleModal = () => {
