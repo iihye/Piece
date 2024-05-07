@@ -1,4 +1,4 @@
-import { ref, computed } from "vue";
+import { ref, reactive, computed } from "vue";
 import { defineStore } from "pinia";
 import router from "@/router";
 import axios from "axios";
@@ -9,11 +9,19 @@ export const usePiecelistStore = defineStore(
         // =========== STATE ===============
         const piecelistList = ref({});
         const piecelistMyList = ref({});
-        const pieceListMyCalendar = ref([]);
+        const piecelistMyCalendar = ref([]);
         const piecelistHeartList = ref({});
         const piecelistDetail = ref({});
         const pieceDetailHeart = ref({});
         const pieceDetailRecord = ref({});
+
+        const today = ref(new Date());
+        const year = ref(today.value.getFullYear());
+        const month = ref(today.value.getMonth());
+        const state = reactive({
+            calendarHeader: "",
+            days: [],
+        });
 
         // =========== GETTER ===============
         const getPiecelistList = computed(() => {
@@ -25,7 +33,7 @@ export const usePiecelistStore = defineStore(
         });
 
         const getPiecelistMyCalendar = computed(() => {
-            return pieceListMyCalendar.value;
+            return piecelistMyCalendar.value;
         });
 
         const getPiecelistHeartList = computed(() => {
@@ -43,6 +51,26 @@ export const usePiecelistStore = defineStore(
         const getPieceDetailRecord = computed(() => {
             return pieceDetailRecord.value;
         });
+
+        const getToday = computed(() => {
+            return today.value;
+        });
+
+        const getYear = computed(() => {
+            return year.value;
+        });
+
+        const getMonth = computed(() => {
+            return month.value;
+        });
+
+        const getState = computed(() => {
+            return state;
+        });
+
+        const setToday = function (date) {
+            today.value = date;
+        };
 
         // =========== ACTION ===============
         const findPiecelistList = function () {
@@ -73,10 +101,51 @@ export const usePiecelistStore = defineStore(
                 method: "GET",
             })
                 .then((res) => {
-                    pieceListMyCalendar.value = res.data.data;
-                    console.log(pieceListMyCalendar.value);
+                    if (res.data.code === "FIND_MY_PIECE_LIST_SUCCESS") {
+                        piecelistMyCalendar.value = res.data.data;
+                        calendarImplementation();
+                    } else if (res.data.code === "FIND_MY_PIECE_LIST_NULL_SUCCESS") {
+                        piecelistMyCalendar.value = [];
+                        calendarImplementation();
+                    }
                 })
                 .catch((err) => {});
+        };
+
+        const calendarImplementation = function () {
+            state.days = [];
+            const year = today.value.getFullYear();
+            const month = today.value.getMonth();
+
+            const startDayOfTheMonth = new Date(year, month, 1).getDay();
+            const endDayOfTheMonth = new Date(year, month + 1, 0).getDate();
+            const emptyStartDays = Array(startDayOfTheMonth).fill({
+                day: null,
+                imageUrl: null,
+            });
+            const daysOfMonth = Array.from({ length: endDayOfTheMonth }, (_, i) => ({
+                day: i + 1,
+                imageUrl: getImageUrlForDay(i + 1, month, year),
+            }));
+            const fullMonth = [...emptyStartDays, ...daysOfMonth];
+            const weeks = [];
+
+            while (fullMonth.length > 0) {
+                const weekDays = fullMonth.splice(0, 7);
+                while (weekDays.length < 7) {
+                    weekDays.push({ day: null, imageUrl: null });
+                }
+                weeks.push(weekDays);
+            }
+
+            state.days = weeks;
+            state.calendarHeader = `${year}. ${month + 1}`;
+        };
+
+        const getImageUrlForDay = function (day, month, year) {
+            const fullDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            const piece = piecelistMyCalendar.value.find((p) => p.date === fullDate);
+            return piece ? piece.frontImg : null;
         };
 
         const findPiecelistHeartList = function () {
@@ -150,11 +219,15 @@ export const usePiecelistStore = defineStore(
             // state
             piecelistList,
             piecelistMyList,
-            pieceListMyCalendar,
+            piecelistMyCalendar,
             piecelistHeartList,
             piecelistDetail,
             pieceDetailHeart,
             pieceDetailRecord,
+            today,
+            year,
+            month,
+            state,
             // getter
             getPiecelistList,
             getPiecelistMyList,
@@ -163,10 +236,17 @@ export const usePiecelistStore = defineStore(
             getPiecelistDetail,
             getPieceDetailHeart,
             getPieceDetailRecord,
+            getToday,
+            getYear,
+            getMonth,
+            getState,
+            setToday,
             // action
             findPiecelistList,
             findPiecelistMyList,
             findPiecelistMyCalendar,
+            calendarImplementation,
+            getImageUrlForDay,
             findPiecelistHeartList,
             findPiecelistDetail,
             findPieceDetailHeart,
