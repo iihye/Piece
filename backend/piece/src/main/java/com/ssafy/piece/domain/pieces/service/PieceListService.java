@@ -6,6 +6,8 @@ import com.ssafy.piece.domain.pieces.entity.Pieces;
 import com.ssafy.piece.domain.pieces.repository.HeartRepository;
 import com.ssafy.piece.domain.pieces.repository.PiecesRepository;
 import jakarta.transaction.Transactional;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +60,15 @@ public class PieceListService {
         }
 
         return pieceListResponseDtos;
+    }
+
+    // 내 조각 리스트 캘린더
+    public List<PieceListResponseDto> listCalendarMyPieces(Long userId, int year, int month){
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+
+        List<Pieces> pieces = piecesRepository.findByUserIdAndDateBetween(userId, startOfMonth, endOfMonth);
+        return getPieceListResponseDtos(userId, pieces);
     }
 
 
