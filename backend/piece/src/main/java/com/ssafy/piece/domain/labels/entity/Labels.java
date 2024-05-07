@@ -23,8 +23,8 @@ public class Labels {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long labelId;
 
-//    @Column(nullable = false)
-//    private PerformanceType performanceType;
+    @Column(nullable = false)
+    private LabelType labelType;
 
     @Column(nullable = false)
     private String title;

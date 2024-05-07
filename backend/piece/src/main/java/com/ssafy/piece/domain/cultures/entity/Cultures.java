@@ -1,5 +1,6 @@
 package com.ssafy.piece.domain.cultures.entity;
 
+import com.ssafy.piece.domain.cultures.dto.response.MovieResult;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,14 +31,20 @@ public class Cultures {
 
     private String imageUrl;
 
-    private String genre;
+//    private String state;
 
-    private String state;
+//    private String age;
 
-    private String age;
+//    private String director;
 
-    private String director;
+//    private String runtime;
 
-    private String runtime;
-
+    public Cultures createMovieCulture(MovieResult movieResult) {
+        Cultures cultures = new Cultures();
+        cultures.cultureType = CultureType.MOVIE;
+        cultures.code = movieResult.getId();
+        cultures.title = movieResult.getTitle();
+        cultures.imageUrl = "https://image.tmdb.org/t/p/w400" + movieResult.getPoster_path();
+        return cultures;
+    }
 }
