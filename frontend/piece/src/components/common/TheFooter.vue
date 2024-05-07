@@ -55,7 +55,7 @@ const arrayRoutes = {
 
 </script>
 
-<style>
+<style scoped>
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
@@ -68,6 +68,7 @@ const arrayRoutes = {
     display: grid;
     text-align: center;
     background-color: var(--white-color);
+    font-family: "Medium";
 }
 
 .footer-all {
@@ -81,6 +82,7 @@ const arrayRoutes = {
 .footer-menu {
     display: flex;
     flex-direction: column;
+    text-decoration: none;
 }
 
 .footer-icon {
@@ -91,12 +93,8 @@ const arrayRoutes = {
 
 .footer-name {
     font-size: 0.75rem;
-    font-family: "Medium";
-    color: var(--gray2-color);
-}
 
-.footer-name a {
-    text-decoration: none;
+    color: var(--gray2-color);
 }
 
 .footer-set.active .footer-name,
