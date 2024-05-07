@@ -35,7 +35,7 @@ import TheFooter from "./components/common/TheFooter.vue";
 .app-content {
     padding-top: 2.75rem;
     padding-bottom: 2.75rem;
-    height: 100vh-5.5rem;
+    min-height: calc(100vh - 5.5rem);
 }
 
 .TheFooter {
