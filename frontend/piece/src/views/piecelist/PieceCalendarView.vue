@@ -1,10 +1,21 @@
 <template>
+    <RouterLink :to="{ name: 'pieceListMy' }">리스트</RouterLink>
     <div class="piececalendarview-main-container">
         <!-- header -->
         <div class="piececalendarview-header-container">
-            <button @click="changeMonth(-1)">이전</button>
-            <h2>{{ state.calendarHeader }}</h2>
-            <button @click="changeMonth(1)">다음</button>
+            <font-awesome-icon
+                class="piececalendarview-header-icon"
+                :icon="['fas', 'angle-left']"
+                style="color: var(--gray2-color)"
+                @click="changeMonth(-1)"
+            />
+            <div class="piececalendarview-header-content">{{ state.calendarHeader }}</div>
+            <font-awesome-icon
+                class="piececalendarview-header-icon"
+                :icon="['fas', 'angle-right']"
+                style="color: var(--gray2-color)"
+                @click="changeMonth(1)"
+            />
         </div>
 
         <!-- Calendar -->
@@ -16,8 +27,10 @@
             </div>
             <div class="piececalendarview-weekdays-week" v-for="(week, index) in state.days" :key="index">
                 <div class="piececalendarview-weekdays-day" v-for="dayData in week" :key="dayData.day">
-                    <div>{{ dayData.day }}</div>
-                    <img v-if="dayData.imageUrl" :src="dayData.imageUrl" alt="Day image" />
+                    <img v-if="dayData.imageUrl" :src="dayData.imageUrl" alt="image" />
+                    <div v-else>
+                        {{ dayData.day }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,48 +67,74 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
+    user-select: none;
+}
+
+.piececalendarview-main-container > :first-child {
+    flex: 0 0 auto;
+}
+
+.piececalendarview-main-container > :not(:first-child) {
+    flex: 1;
 }
 
 .piececalendarview-header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    margin-bottom: 0.6rem;
+}
+
+.piececalendarview-header-content {
+    font-family: "Semi";
+    font-size: 1.4rem;
+    color: var(--main-color);
+    margin: 0 1rem 0 1rem;
 }
 
 .piececalendarview-calendar-container {
     width: 100%;
+    height: 100%;
 }
 
-.piececalendarview-weekdays-container,
-.piececalendarview-weekdays-week {
+.piececalendarview-weekdays-container {
     display: flex;
     justify-content: space-around;
 }
 
-.piececalendarview-weekdays-weekday,
-.piececalendarview-weekdays-day {
+.piececalendarview-weekdays-weekday {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: calc(100% / 7);
-    border: 1px solid #ccc;
-    min-height: 100px;
+    height: auto;
+    font-family: "Medium";
+    font-size: 0.8rem;
+    color: var(--gray2-color);
+    margin: 1rem 0 1rem 0;
+}
+
+.piececalendarview-weekdays-week {
+    display: flex;
+    justify-content: space-around;
 }
 
 .piececalendarview-weekdays-day {
-    width: 100px;
+    width: calc(100% / 7);
+    min-height: 100px;
+    font-family: "Regular";
+    font-size: 0.8rem;
     height: 100px;
-    border: 1px solid #ccc;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
+
 .piececalendarview-weekdays-day img {
-    width: 80%;
-    height: auto;
-    max-height: 60px;
+    width: 100%;
+    height: 100%;
 }
 </style>
