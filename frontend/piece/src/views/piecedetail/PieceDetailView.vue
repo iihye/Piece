@@ -5,11 +5,7 @@
             <div class="pieceDetailView-top-container">
                 <!-- user -->
                 <div class="pieceDetailView-user-container">
-                    <img
-                        class="pieceDetailView-user-img"
-                        :src="userDetail.profileImg"
-                        alt="image"
-                    />
+                    <img class="pieceDetailView-user-img" :src="userDetail.profileImg" alt="image" />
                     <div class="pieceDetailView-name-container">
                         <div class="pieceDetailView-user-label">
                             {{ userDetail.label }}
@@ -32,11 +28,7 @@
             <div class="pieceDetailView-image-container">
                 <img
                     class="pieceDetailView-image-item"
-                    :src="
-                        imgFrontBack
-                            ? piecelistDetail.frontImg
-                            : piecelistDetail.backImg
-                    "
+                    :src="imgFrontBack ? piecelistDetail.frontImg : piecelistDetail.backImg"
                     :alt="piecelistDetail.title"
                     @click="handleImageClick"
                 />
@@ -45,9 +37,7 @@
             <div class="pieceDetailView-heart-container">
                 <font-awesome-icon
                     class="pieceDetailView-heart-icon"
-                    :icon="
-                        pieceDetailHeart ? ['fas', 'heart'] : ['far', 'heart']
-                    "
+                    :icon="pieceDetailHeart ? ['fas', 'heart'] : ['far', 'heart']"
                     style="color: var(--main-color)"
                     @click="handleHeartClick"
                 />
@@ -80,21 +70,29 @@
             :handleReportClick="handleReport"
             :isMine="userId === piecelistDetail.userId ? true : false"
         ></ShareSelectModal>
+
+        <ImageSuccessModal
+            v-if="linkSuccessModal"
+            :modalTitle="'링크가 복사되었어요!'"
+            :handleSuccessClick="handleLinkSuccess"
+        />
     </div>
 </template>
 
 <script setup>
 import router from "@/router";
 import { ref, computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { usePiecelistStore } from "@/stores/piecelist";
 import RoundButton from "@/components/button/RoundButton.vue";
 import ShareSelectModal from "@/components/modal/ShareSelectModal.vue";
-import { useRoute } from "vue-router";
+import ImageSuccessModal from "@/components/modal/ImageSuccessModal.vue";
 
 const store = usePiecelistStore();
 const route = useRoute();
 const imgFrontBack = ref(true);
 const selectModal = ref(false);
+const linkSuccessModal = ref(false);
 // user dummy data 추후 수정
 const userId = ref(2);
 const isMine = computed(() => userId.value === piecelistDetail.value.userId);
@@ -134,11 +132,18 @@ const handleRecordClick = () => {
 };
 
 const handleLink = () => {
-    alert("링크로 공유하기");
+    const currentUrl = window.location.href;
+    navigator.clipboard.writeText(currentUrl);
+    linkSuccessModal.value = true;
+    handleFail();
+};
+
+const handleLinkSuccess = () => {
+    linkSuccessModal.value = false;
 };
 
 const handleKakao = () => {
-    alert("카카오로 공유하기");
+    alert("서비스 준비중입니다");
 };
 
 const handleDelete = () => {
