@@ -34,8 +34,9 @@ onMounted(() => {
 });
 </script>
 
-<style scopped>
+<style scoped>
 @import "@/components/css/color.css";
+@import "@/components/css/font.css";
 
 /* Button CSS */
 .chatroomlistheader-chatRoomListButton {
@@ -45,15 +46,14 @@ onMounted(() => {
     border: none;
     background: none;
     cursor: pointer;
+    font-family: "Semi";
 }
 
 .chatroomlistheader-chatRoomListButton {
   --primary-color: var(--black-color);
-  --hovered-color: var(--red-color);
+  --hovered-color: var(--black-color);
   position: relative;
   display: flex;
-  font-family: "Do Hyeon", sans-serif;
-  font-size:1.125rem;
   gap: 0.5rem;
   align-items: center;
 }
@@ -70,7 +70,7 @@ onMounted(() => {
   width: 0;
   left: 0;
   bottom: -0.1875rem;
-  background: var(--hovered-color);
+  background: var(--black-color);
   height: 0.125rem;
   transition: 0.2s ease-out;
 }
@@ -80,7 +80,7 @@ onMounted(() => {
   content: var(--button-content, "");
   width: 0%;
   inset: 0;
-  color: var(--hovered-color);
+  color: var(--black-color);
   overflow: hidden;
   transition: 0s ease-out;
 }
@@ -95,15 +95,14 @@ onMounted(() => {
 
 /* 버튼 활성화 관련 css */
 .chatroomlistheader-chatRoomListButton.chatroomlistheader-active {
-  background-color: var(--gray-color);
-  color: var(--red-color);
+  font-family:"Bold";
+  border-bottom:1px solid var(--black-color);
 }
 
 /* template CSS*/
 #chatRoomListHeader{
     display: flex;
     justify-content: center;
-    font-family: "Do Hyeon", sans-serif;
 }
 .chatroomlistheader-chatRoomListButton{
     height: 3.125rem;

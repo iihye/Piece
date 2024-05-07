@@ -47,7 +47,7 @@ defineProps({
 });
 </script>
 
-<style>
+<style scoped>
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 

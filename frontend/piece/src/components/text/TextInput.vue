@@ -1,39 +1,43 @@
 <template>
     <div class="textinput-container">
         <div class="textinput-name">
-            <label for="textInputContent" class="textinput-label">{{ textInputName }}</label>
+            <label for="textInputContent" class="textinput-label">{{
+                textInputName
+            }}</label>
             <span v-if="textInputRequired" class="textinput-required">*</span>
         </div>
+        <input :type="textInputType" name="textInputContent" id="textInputContent" :placeholder="textInputPlaceholder"
+            class="textinput-input" v-model="textInputValue" @input="textInputFuntion" />
         <input type="text" name="textInputContent" id="textInputContent" :placeholder="textInputPlaceholder"
             class="textinput-input" v-model="textInputValue" @input="textInputFuntion" />
     </div>
 </template>
 
 <script setup>
-
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref, defineProps, defineEmits } from "vue";
 
 defineProps({
+    textInputType: String,
     textInputName: String,
     textInputPlaceholder: String,
     textInputRequired: Boolean
+
 });
 
-const textInputValue = ref('');
+const textInputValue = ref("");
 
 const emits = defineEmits(["textInputValue"]);
 
 const textInputFuntion = () => {
     emits("textInputValue", textInputValue.value);
 }
-
 </script>
 
-<style>
+<style scoped>
 @import "@/components/css/color.css";
 
 .textinput-name {
-    padding-right: 2.5rem;
+    padding-right: 1rem;
 }
 
 .textinput-label {
@@ -50,7 +54,7 @@ const textInputFuntion = () => {
     height: 2.25rem;
     border-radius: 0.625rem;
     border: 1px solid var(--gray-color);
-    padding-left: 0.625rem
+    padding-left: 0.625rem;
 }
 
 .textinput-input:focus {
@@ -65,6 +69,6 @@ const textInputFuntion = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
+    margin-bottom: 0.4rem;
 }
 </style>

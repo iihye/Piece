@@ -24,15 +24,15 @@ const router=useRouter();
 const chatRoomStore = useChatRoomStore();
 
 const chatRoomList = ref([
-    {
-        "chatRoomId": 1,
-        "cultureId": 1,
-        "updatedAt": "업데이트시간",
-        "imageUrl": "src/assets/logo.png", // 전역으로 받아올 예정
-        "chatRoomName": "Vue.js란 과연 무엇인가?",
-        "isPersonal": false,
-        "isOpened": true,
-    }
+    // {
+    //     "chatRoomId": 1,
+    //     "cultureId": 1,
+    //     "updatedAt": "업데이트시간",
+    //     "imageUrl": "src/assets/logo.png", // 전역으로 받아올 예정
+    //     "chatRoomName": "Vue.js란 과연 무엇인가?",
+    //     "isPersonal": false,
+    //     "isOpened": true,
+    // }
 ]); // chatroomList를 reactive하게 만들기 위해 ref 사용
 
 // 채팅방 목록 받기
@@ -76,6 +76,7 @@ onMounted(() => {
 
 <style scoped>
 @import "@/components/css/color.css";
+@import "@/components/css/font.css";
 
 #chatRoomList{
     border:0.0625rem solid var(--red-color);
@@ -90,7 +91,7 @@ onMounted(() => {
     background-color: var(--main-color);
 }
 .chatroomlist-chatRoomName{
-    font-weight:bold;
+    font-family: "Bold";
     font-size:1.25rem;
 }
 .chatroomlist-cardItems{

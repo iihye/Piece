@@ -22,7 +22,7 @@ onMounted(() => {
 })
 </script>
 
-<style scopped>
+<style scoped>
 @import "@/components/css/color.css";
 
 #chatRoomListPage{
@@ -32,4 +32,3 @@ onMounted(() => {
   margin: 0 auto;
 }
 </style>
-

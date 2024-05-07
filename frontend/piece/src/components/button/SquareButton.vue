@@ -16,7 +16,7 @@ defineProps({
 
 </script>
 
-<style>
+<style scoped>
 @import "@/components/css/color.css";
 
 .squarebutton {
