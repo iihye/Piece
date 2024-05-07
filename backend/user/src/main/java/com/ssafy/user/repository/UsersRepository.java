@@ -1,7 +1,9 @@
 package com.ssafy.user.repository;
 
 import com.ssafy.user.entity.Users;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 
@@ -12,4 +14,8 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
     boolean existsByEmail(String email); // 이메일 중복 검사를 위한 메소드
     boolean existsByNickname(String nickname); // 닉네임 중복 검사를 위한 메소드
 
+    Optional<Users> findByEmail(String email); // 이메일로 사용자 조회
+
+    @Query("select u from Users u where u.userId = :userId")
+    Optional<Users> findByUserId(Long userId);
 }
