@@ -36,9 +36,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwtToken = null;
 
-        // JWT 토큰은 "Bearer token" 형식입니다.
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7); //"Bearer " 부분을 건너뜁니다
+            jwtToken = requestTokenHeader.substring(7);
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
@@ -52,17 +51,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             logger.warn("JWT 토큰은 Bearer 문자열로 시작해야 합니다");
         }
 
-        // 토큰에서 유효한 정보를 얻은 후 요청을 허용하기 전에 인증을 수행합니다.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
             if (jwtTokenUtil.validateToken(jwtToken, username)) {
-                // 토큰이 유효한 경우 SecurityContext에 인증 객체를 설정합니다.
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
+
         chain.doFilter(request, response);
     }
 }

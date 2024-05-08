@@ -38,7 +38,7 @@ public class UserLoginController {
                 Map<String, Object> response = new HashMap<>();
                 response.put("token", token);
                 response.put("userId", userId);
-                return  SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS);
+                return  SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS,response);
 
             } else {
                 log.warn("Unauthorized login attempt for user: {}", loginRequest.getEmail());

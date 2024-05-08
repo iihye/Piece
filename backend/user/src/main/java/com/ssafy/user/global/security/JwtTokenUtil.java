@@ -5,11 +5,21 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class JwtTokenUtil {
+
+//    @Value("${jwt.secret}")
+//    private String secretKey;
     public String secretKey = "ssafy1234"; // 환경 변수로 관리하는 것이 좋습니다.
+
+    public Long getUserIdFromToken(String token) {
+        Claims claims = Jwts.parser()
+            .setSigningKey(secretKey.getBytes())
+            .parseClaimsJws(token)
+            .getBody();
+        return Long.parseLong(claims.getSubject());
+    }
 
     public String generateToken(String username) {
         return Jwts.builder()
@@ -17,7 +27,7 @@ public class JwtTokenUtil {
             .setSubject(username)
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10시간 후 만료
-            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
             .compact();
     }
 
@@ -32,7 +42,7 @@ public class JwtTokenUtil {
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
-            .setSigningKey(secretKey)
+            .setSigningKey(secretKey.getBytes())
             .parseClaimsJws(token)
             .getBody();
     }

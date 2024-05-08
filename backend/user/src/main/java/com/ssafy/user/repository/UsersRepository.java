@@ -16,6 +16,8 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 
     Optional<Users> findByEmail(String email); // 이메일로 사용자 조회
 
-    @Query("select u from Users u where u.userId = :userId")
-    Optional<Users> findByUserId(Long userId);
+    Users findByUserId(Long userId); //UserId로 회원을 조회한다.
+
+//    @Query("select u from Users u where u.userId = :userId")
+//    Optional<Users> findByUserId(Long userId);
 }
