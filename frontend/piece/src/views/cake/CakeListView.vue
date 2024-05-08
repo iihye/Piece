@@ -1,18 +1,14 @@
-
-
-
-<!-- 수정해야됨. 아예 무시해주세요 -->
 <template>
     <!-- header -->
     <h1>케이크 모아보기</h1>
 
     <!-- filter -->
-    <div class="cakelist-scroll-container">
-        <div class="cakelist-tab-navigation">
-            <div class="cakelist-tab-menu" ref="tabMenu">
+    <div class="cakelistview-scroll-container">
+        <div class="cakelistview-tab-navigation">
+            <div class="cakelistview-tab-menu" ref="tabMenu">
                 <FilterItem
                     v-for="(item, index) in filterItems"
-                    class="cakelist-tab-btn"
+                    class="cakelistview-tab-btn"
                     :key="index"
                     :labelType="item.labelType"
                     :title="item.title"
@@ -25,9 +21,9 @@
 
 
     <!-- list -->
-    <div class="cake-list-container">
-        <div class="cake-list-grid">
-            <div v-for="(item, index) in filteredMyList" :key="index" class="cake-list-item">
+    <div class="cakelistview-list-container">
+        <div class="cakelistview-list-grid">
+            <div v-for="(item, index) in filteredMyList" :key="index" class="cakelistview-list-item">
             <ListImageItem
                 :pieceId="item.pieceId"
                 :performanceType="item.performanceType"
@@ -51,38 +47,38 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { usePiecelistStore } from "@/stores/piecelist";
 import { useRouter } from "vue-router";
-import CakeItem from '@/components/item/CakeItem.vue'
-import SearchInput from '@/components/modal/SearchInput.vue'
-import FilterItem from '@/components/item/FilterItem.vue'
+import FilterItem from "@/components/item/FilterItem.vue";
 import ListImageItem from "@/components/item/ListImageItem.vue";
+import CakeItem from "@/components/item/CakeItem.vue";
 
 const store = usePiecelistStore();
 
-const piecelistMyList = computed(() => store.getPiecelistMyList);
+const cakeList = computed(() => store.getcakeList);
 const filteredMyList = computed(() => computedFilteredMyList());
 const selectedOption = ref("ALL");
 
 const cakeItems = ref([
-    { id: 1, title: '범죄도시4', image: '@/assets/logo.png', category: '영화', status: '진행 예정' },
-    { id: 2, title: 'IM HERO 임영웅 콘서트', image: 'path/to/image2.jpg', category: '콘서트', status: '진행 예정' },
-    { id: 3, title: '데미안', image: 'path/to/image3.jpg', category: '뮤지컬', status: '진행 중' },
-    { id: 4, title: '아트', image: 'path/to/image4.jpg', category: '전시', status: '진행 예정' }
+    { id: 1, title: '범죄도시4', image: '@/assets/logo.png', alt: '범죄도시4 이미지', category: '영화', status: '진행 예정' },
+    { id: 2, title: 'IM HERO 임영웅 콘서트', image: 'path/to/image2.jpg', alt: '임영웅 이미지', category: '콘서트', status: '진행 예정' },
+    { id: 3, title: '데미안', image: 'path/to/image3.jpg', alt: '데미안 이미지', category: '뮤지컬', status: '진행 중' },
+    { id: 4, title: '아트', image: 'path/to/image4.jpg', alt: '아트 이미지', category: '전시', status: '진행 예정' }
 ]);
 
 function computedFilteredMyList() {
     if (selectedOption.value === "ALL") {
-        return piecelistMyList.value;
+        return cakeList.value;
     } else if (selectedOption.value === "MOVIE") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "MOVIE");
+        return cakeList.value.filter((item) => item.performanceType === "MOVIE");
     } else if (selectedOption.value === "THEATER") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "THEATER");
+        return cakeList.value.filter((item) => item.performanceType === "THEATER");
     } else if (selectedOption.value === "MUSICAL") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "MUSICAL");
+        return cakeList.value.filter((item) => item.performanceType === "MUSICAL");
     } else if (selectedOption.value === "CONCERT") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "CONCERT");
+        return cakeList.value.filter((item) => item.performanceType === "CONCERT");
     } else if (selectedOption.value === "ETC") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "ETC");
+        return cakeList.value.filter((item) => item.performanceType === "ETC");
     } else {
         return [];
     }
@@ -156,7 +152,7 @@ const handleMouseDown = () => {
 };
 
 onMounted(async () => {
-    await store.findPiecelistMyList();
+    await store.findCakeList();
     tabMenu.value.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
     tabMenu.value.addEventListener("mousemove", handleMouseMove);
@@ -173,14 +169,14 @@ onBeforeUnmount(() => {
 <style>
 
 /* filter */
-.cakelist-scroll-container {
+.cakelistview-scroll-container {
     position: relative;
     /* width: 450px; */
     transition: 0.5s ease;
     margin-bottom: 2rem;
 }
 
-.cakelist-tab-navigation {
+.cakelistview-tab-navigation {
     position: relative;
     max-width: fit-content;
     margin: 0 auto;
@@ -189,7 +185,7 @@ onBeforeUnmount(() => {
     align-items: center;
 }
 
-.cakelist-tab-menu {
+.cakelistview-tab-menu {
     list-style: none;
     white-space: nowrap;
     overflow-x: auto;
@@ -197,16 +193,16 @@ onBeforeUnmount(() => {
     scroll-behavior: smooth;
 }
 
-.cakelist-tab-menu.dragging {
+.cakelistview-tab-menu.dragging {
     scroll-behavior: unset;
     cursor: grab;
 }
 
-.cakelist-tab-menu::-webkit-scrollbar {
+.cakelistview-tab-menu::-webkit-scrollbar {
     display: none;
 }
 
-.cakelist-tab-btn {
+.cakelistview-tab-btn {
     display: inline-block;
     margin: 0 0.2rem;
     cursor: pointer;
@@ -214,24 +210,24 @@ onBeforeUnmount(() => {
     transition: 0.3s ease;
 }
 
-.cakelist-tab-menu.dragging .tab-btn {
+.cakelistview-tab-menu.dragging .tab-btn {
     pointer-events: none;
 }
 
 /* list */
-.cake-list-grid {
+.cakelistview-list-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(8rem, 1fr));
     justify-items: center; 
     grid-gap: 1rem;
 }
 
-.cake-list-item {
+.cakelistview-list-item {
     width: auto; 
 }
 
 @media (min-width: 1024px) {
-    .cake-list-grid {
+    .cakelistview-list-grid {
         grid-template-columns: repeat(4, minmax(16rem, 5fr));
     }
 }

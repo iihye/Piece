@@ -201,6 +201,11 @@ const router = createRouter({
             name: "consume",
             component: ConsumeStatisticsView,
         },
+        {
+            path: "/mypage/piece",
+            name: "piecestatistics",
+            component: PieceStatisticsView,
+        },
         // cake
         {
             path: "/cake",
