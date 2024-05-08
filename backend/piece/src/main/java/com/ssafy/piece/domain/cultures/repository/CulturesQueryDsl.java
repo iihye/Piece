@@ -1,15 +1,17 @@
 package com.ssafy.piece.domain.cultures.repository;
 
-import static com.ssafy.piece.domain.cultures.entity.QCultureGenre.cultureGenre;
 import static com.ssafy.piece.domain.cultures.entity.QCultures.cultures;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.piece.domain.cultures.dto.response.CulturesResponse;
 import com.ssafy.piece.domain.cultures.dto.response.CulturesResponseMapper;
+import com.ssafy.piece.domain.cultures.entity.CultureType;
 import com.ssafy.piece.domain.cultures.entity.Cultures;
 import com.ssafy.piece.global.dto.PageResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,16 +36,18 @@ public class CulturesQueryDsl {
      * 검색어 필터도 추후 추가시키면 됨
      */
     @Transactional(readOnly = true)
-    public PageResponse<CulturesResponse> findCultureList(Long genreId, Long cultureId,
+    public PageResponse<CulturesResponse> findCultureList(CultureType cultureType,
+        Long startPageId,
         int pageSize) {
         List<Cultures> list = queryFactory
             .select(cultures)
             .from(cultures)
             .where(
-                ltCultureId(cultureId),
-                equalGenreId(genreId))
+                ltCultureId(startPageId),
+//                equalGenreId(genreId),
+                equalCultureType(cultureType))
             .orderBy(cultures.id.desc())
-            .limit(pageSize + 1)  // Fetch one extra record to check for the next page
+            .limit(pageSize + 1)  // 다음페이지 존재하는지 확인하기 위해 +1
             .fetch();
 
         boolean hasNextPage = list.size() > pageSize;
@@ -59,8 +63,13 @@ public class CulturesQueryDsl {
             .map(CulturesResponseMapper::cultureEntityToDto)
             .collect(Collectors.toList());
 
+        Map<String, String> queryParams = new HashMap<>();
+        if (cultureType != null) {
+            queryParams.put("cultureType", cultureType.toString());
+        }
+
         return PageResponse.create(responseList, hasNextPage, BASE_URL, "cultures", lastId,
-            pageSize);
+            pageSize, queryParams);
     }
 
     private BooleanExpression ltCultureId(Long cultureId) {
@@ -68,8 +77,9 @@ public class CulturesQueryDsl {
         return cultureId != null ? cultures.id.lt(cultureId) : null;
     }
 
-    private BooleanExpression equalGenreId(Long genreId) {
-        return genreId != null ? cultureGenre.genre.id.eq(genreId) : null;
+    private BooleanExpression equalCultureType(CultureType cultureType) {
+        log.info("equalCultureType : {}", cultureType);
+        return cultureType != null ? cultures.cultureType.eq(cultureType) : null;
     }
 
 }
