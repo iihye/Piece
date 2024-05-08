@@ -7,4 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CulturesHeartRepository extends JpaRepository<CulturesHeart, Long> {
 
+    void deleteCulturesHeartByCultureIdAndUserId(Long cultureId, Long userId);
+
+    Boolean existsCulturesHeartByCultureIdAndUserId(Long cultureId, Long userId);
+    
 }

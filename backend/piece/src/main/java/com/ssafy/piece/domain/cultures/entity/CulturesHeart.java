@@ -26,4 +26,12 @@ public class CulturesHeart {
     @Column(nullable = false)
     private Long userId;
 
+    public static CulturesHeart createCulturesHeart(Cultures culture, Long userId) {
+        CulturesHeart culturesHeart = new CulturesHeart();
+        culturesHeart.userId = userId;
+        culturesHeart.culture = culture;
+
+        return culturesHeart;
+    }
+
 }
