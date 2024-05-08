@@ -2,6 +2,7 @@ package com.ssafy.piece.domain.cultures.controller;
 
 import com.ssafy.piece.domain.cultures.dto.response.CulturesResponse;
 import com.ssafy.piece.domain.cultures.dto.response.TmdbDetailResponse;
+import com.ssafy.piece.domain.cultures.entity.CultureType;
 import com.ssafy.piece.domain.cultures.repository.CulturesQueryDsl;
 import com.ssafy.piece.domain.cultures.service.CultureApiService;
 import com.ssafy.piece.domain.cultures.service.CulturesService;
@@ -88,12 +89,13 @@ public class CulturesController {
 
     @GetMapping("")
     public ResponseEntity<Object> getCultureList(
-        @RequestParam(required = false, name = "genreId") Long genreId,
-        @RequestParam(required = false, name = "cultureId") Long cultureId,
+        @RequestParam(required = false, name = "cultureType") CultureType cultureType,
+        @RequestParam(required = false, name = "startPageId") Long startPageId,
         @RequestParam(name = "pageSize") int pageSize
     ) {
-        log.info("genreId : {}, cultureId : {}, pageSize : {}", genreId, cultureId, pageSize);
-        PageResponse<CulturesResponse> res = culturesQueryDsl.findCultureList(genreId, cultureId,
+        log.info("startPageId : {}, pageSize : {}", startPageId, pageSize);
+        PageResponse<CulturesResponse> res = culturesQueryDsl.findCultureList(cultureType,
+            startPageId,
             pageSize);
         return SuccessResponse.createSuccess(SuccessCode.FIND_CAKE_SUCCESS, res);
     }
