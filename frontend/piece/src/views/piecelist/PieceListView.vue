@@ -203,7 +203,7 @@ onBeforeUnmount(() => {
 .piecelistview-main-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: calc(100% - 5rem);
 }
 
 .piecelistview-main-container > :first-child {
