@@ -34,8 +34,8 @@ import TheFooter from "./components/common/TheFooter.vue";
 
 .app-content {
     padding-top: 3.25rem;
-    margin-bottom: 3.25rem;
-    min-height: calc(100vh - 6.5rem);
+    margin-bottom: 3.75rem;
+    min-height: calc(100vh - 8rem);
 }
 
 .TheFooter {
@@ -43,7 +43,7 @@ import TheFooter from "./components/common/TheFooter.vue";
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 3.25rem;
+    height: 4.75rem;
     z-index: 85;
     background-color: var(--white-color);
 }

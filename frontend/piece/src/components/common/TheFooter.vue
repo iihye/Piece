@@ -61,13 +61,14 @@ const arrayRoutes = {
 
 .footer-container {
     position: fixed;
-    bottom: 0.5rem;
+    bottom: 0rem;
     left: 0;
     width: 100%;
     z-index: 85;
     display: grid;
     text-align: center;
     font-family: "Medium";
+    padding: 1rem 0rem;
 }
 
 .footer-all {
@@ -75,7 +76,6 @@ const arrayRoutes = {
     flex-direction: row;
     justify-content: space-around;
     align-items: flex-end;
-    /* height: 2.75rem; */
 }
 
 .footer-menu {
@@ -92,7 +92,6 @@ const arrayRoutes = {
 
 .footer-name {
     font-size: 0.75rem;
-
     color: var(--gray2-color);
 }
 
