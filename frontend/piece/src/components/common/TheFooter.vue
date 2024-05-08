@@ -17,7 +17,7 @@
                 <RouterLink :to="{ name: 'piecemake' }" class="footer-menu">
                     <div :class="{ 'footer-set': true, 'active': arrayRoutes.make.includes(pageName) }">
                         <font-awesome-icon :icon="['fas', 'cheese']" class="footer-icon" />
-                        <div class="footer-name">조각만들기</div>
+                        <div class="footer-name">조각 만들기</div>
                     </div>
                 </RouterLink>
                 <RouterLink :to="{ name: 'chatRoom' }" class="footer-menu">
@@ -61,13 +61,12 @@ const arrayRoutes = {
 
 .footer-container {
     position: fixed;
-    bottom: 0;
+    bottom: 0.5rem;
     left: 0;
     width: 100%;
     z-index: 85;
     display: grid;
     text-align: center;
-    background-color: var(--white-color);
     font-family: "Medium";
 }
 
@@ -76,7 +75,7 @@ const arrayRoutes = {
     flex-direction: row;
     justify-content: space-around;
     align-items: flex-end;
-    height: 2.75rem;
+    /* height: 2.75rem; */
 }
 
 .footer-menu {
