@@ -1,12 +1,12 @@
 <template>
-    <div class="piecelistview-main-container">
+    <div class="piecelistheartview-main-container">
         <!-- filter -->
-        <div class="piecelistview-scroll-container">
-            <div class="piecelistview-tab-navigation">
-                <div class="piecelistview-tab-menu" ref="tabMenu">
+        <div class="piecelistheartview-scroll-container">
+            <div class="piecelistheartview-tab-navigation">
+                <div class="piecelistheartview-tab-menu" ref="tabMenu">
                     <FilterItem
                         v-for="(item, index) in filterItems"
-                        class="piecelistview-tab-btn"
+                        class="piecelistheartview-tab-btn"
                         :key="index"
                         :labelType="item.labelType"
                         :title="item.title"
@@ -18,16 +18,19 @@
         </div>
 
         <!-- list -->
-        <div v-if="filteredList.length === 0" class="piecelistview-list-noitem">
-            <NoItem :content="'모아볼 조각이 없어요'"></NoItem>
+        <div
+            v-if="filteredList.length === 0"
+            class="piecelistheartview-list-noitem"
+        >
+            <NoItem :content="'찜한 조각이 없어요'"></NoItem>
         </div>
         <div v-else>
-            <div class="piecelistview-list-container">
-                <div class="piecelistview-list-grid">
+            <div class="piecelistheartview-list-container">
+                <div class="piecelistheartview-list-grid">
                     <div
                         v-for="(item, index) in filteredList"
                         :key="index"
-                        class="piecelistview-list-item"
+                        class="piecelistheartview-list-item"
                     >
                         <ListImageItem
                             :pieceId="item.pieceId"
@@ -53,31 +56,31 @@ import NoItem from "@/components/item/NoItem.vue";
 
 const store = usePiecelistStore();
 
-const piecelistList = computed(() => store.getPiecelistList);
+const piecelistHeartList = computed(() => store.getPiecelistHeartList);
 const filteredList = computed(() => computedFilteredList());
 const selectedOption = ref("ALL");
 
 function computedFilteredList() {
     if (selectedOption.value === "ALL") {
-        return piecelistList.value;
+        return piecelistHeartList.value;
     } else if (selectedOption.value === "MOVIE") {
-        return piecelistList.value.filter(
+        return piecelistHeartList.value.filter(
             (item) => item.performanceType === "MOVIE"
         );
     } else if (selectedOption.value === "THEATER") {
-        return piecelistList.value.filter(
+        return piecelistHeartList.value.filter(
             (item) => item.performanceType === "THEATER"
         );
     } else if (selectedOption.value === "MUSICAL") {
-        return piecelistList.value.filter(
+        return piecelistHeartList.value.filter(
             (item) => item.performanceType === "MUSICAL"
         );
     } else if (selectedOption.value === "CONCERT") {
-        return piecelistList.value.filter(
+        return piecelistHeartList.value.filter(
             (item) => item.performanceType === "CONCERT"
         );
     } else if (selectedOption.value === "ETC") {
-        return piecelistList.value.filter(
+        return piecelistHeartList.value.filter(
             (item) => item.performanceType === "ETC"
         );
     } else {
@@ -152,7 +155,7 @@ const handleMouseDown = () => {
 };
 
 onMounted(async () => {
-    await store.findPiecelistList();
+    await store.findPiecelistHeartList();
     tabMenu.value.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
     tabMenu.value.addEventListener("mousemove", handleMouseMove);
@@ -166,29 +169,29 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
-.piecelistview-main-container {
+.piecelistheartview-main-container {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-.piecelistview-main-container > :first-child {
+.piecelistheartview-main-container > :first-child {
     flex: 0 0 auto;
 }
 
-.piecelistview-main-container > :not(:first-child) {
+.piecelistheartview-main-container > :not(:first-child) {
     flex: 1;
 }
 
 /* filter */
-.piecelistview-scroll-container {
+.piecelistheartview-scroll-container {
     position: relative;
     /* width: 450px; */
     transition: 0.5s ease;
     margin-bottom: 1rem;
 }
 
-.piecelistview-tab-navigation {
+.piecelistheartview-tab-navigation {
     position: relative;
     max-width: fit-content;
     margin: 0 auto;
@@ -197,7 +200,7 @@ onBeforeUnmount(() => {
     align-items: center;
 }
 
-.piecelistview-tab-menu {
+.piecelistheartview-tab-menu {
     list-style: none;
     white-space: nowrap;
     overflow-x: auto;
@@ -205,16 +208,16 @@ onBeforeUnmount(() => {
     scroll-behavior: smooth;
 }
 
-.piecelistview-tab-menu.dragging {
+.piecelistheartview-tab-menu.dragging {
     scroll-behavior: unset;
     cursor: grab;
 }
 
-.piecelistview-tab-menu::-webkit-scrollbar {
+.piecelistheartview-tab-menu::-webkit-scrollbar {
     display: none;
 }
 
-.piecelistview-tab-btn {
+.piecelistheartview-tab-btn {
     display: inline-block;
     margin: 0 0.2rem;
     cursor: pointer;
@@ -222,42 +225,42 @@ onBeforeUnmount(() => {
     transition: 0.3s ease;
 }
 
-.piecelistview-tab-menu.dragging .tab-btn {
+.piecelistheartview-tab-menu.dragging .tab-btn {
     pointer-events: none;
 }
 
 /* list */
-.piecelistview-list-container {
+.piecelistheartview-list-container {
     overflow-y: scroll;
     height: 60vh;
 }
 
-.piecelistview-list-container::-webkit-scrollbar {
+.piecelistheartview-list-container::-webkit-scrollbar {
     width: 0.2rem;
 }
 
-.piecelistview-list-container::-webkit-scrollbar-thumb {
+.piecelistheartview-list-container::-webkit-scrollbar-thumb {
     background-color: var(--gray2-color);
     border-radius: 1rem;
 }
 
-.piecelistview-list-container::-webkit-scrollbar-track {
+.piecelistheartview-list-container::-webkit-scrollbar-track {
     background-color: var(--gray-color);
     border-radius: 1rem;
 }
 
-.piecelistview-list-grid {
+.piecelistheartview-list-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(8rem, 1fr));
     justify-items: center;
     grid-gap: 1rem;
 }
 
-.piecelistview-list-item {
+.piecelistheartview-list-item {
     width: auto;
 }
 
-.piecelistview-list-noitem {
+.piecelistheartview-list-noitem {
     display: flex;
     justify-content: center;
     align-items: center;

@@ -47,7 +47,7 @@ const pageName = computed(() => { return route.name });
 
 const arrayRoutes = {
     home: ['main'],
-    list: ['piecelistmain', 'cakelist', 'cakeDetail', 'pieceList', 'pieceCalendar', 'pieceListMy', 'pieceDetail', 'recordDetail'],
+    list: ['piecelistmain', 'cakelist', 'cakeDetail', 'pieceList', 'pieceCalendar', 'pieceListMy', 'pieceListHeart', 'pieceDetail', 'recordDetail'],
     make: ['piecemake', 'pieceimage', 'pieceimagecrop', 'pieceinfo', 'piececomment', 'piecefront', 'pieceback', 'piecebackground', 'piecesave',],
     chat: ['chatRoom', 'chat'],
     myinfo: ['mypage', 'nickname', 'password', 'settings', 'profileImg', 'label', 'piece', 'consume']
