@@ -68,7 +68,8 @@ const arrayRoutes = {
     display: grid;
     text-align: center;
     font-family: "Medium";
-    padding: 1rem 0rem;
+    padding-bottom: 0.75rem;
+    padding-top: 0.5rem;
 }
 
 .footer-all {
