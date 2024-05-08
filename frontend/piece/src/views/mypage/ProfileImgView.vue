@@ -33,6 +33,20 @@
             @error="handleError"
             buttonText="사진 올리기"
         />
+
+        <!-- success modal -->
+        <SuccessModal
+            v-if="successModal"
+            :modalTitle="'프로필 이미지가 등록되었어요!'"
+            :handleSuccessClick="handleSuccessClick"
+        />
+
+        <!-- fail modal -->
+        <SuccessModal
+            v-if="failModal"
+            :modalTitle="'다시 시도해주세요!'"
+            :handleSuccessClick="handleFailClick"
+        />
     </div>
 </template>
 
@@ -40,23 +54,39 @@
 import { ref, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
 import FileUploader from "@/components/item/FileUploader.vue";
+import SuccessModal from "@/components/modal/SuccessModal.vue";
 
 const commonStore = useCommonStore();
 
 const profileImage = ref("");
+const successModal = ref(false);
+const failModal = ref(false);
 // const profileImage = ref("https://i.ibb.co/grMvZS9/your-image.jpg");
 
+// TODO: 파일 업로드 localhost -> server 주소로 변경
 function handleUpload(url) {
     profileImage.value = url;
+    successModal.value = true;
 }
 
 function handleError(error) {
     console.error("업로드 실패", error);
+    failModal.value = true;
 }
+
+const handleSuccessClick = () => {
+    successModal.value = false;
+};
+
+const handleFailClick = () => {
+    failModal.value = false;
+};
 
 onMounted(() => {
     commonStore.headerTitle = "프로필 이미지 수정";
     commonStore.headerType = "header2";
+
+    // TODO: suser 정보 불러와서 profileUrl 있으면 불러오기
 });
 </script>
 
