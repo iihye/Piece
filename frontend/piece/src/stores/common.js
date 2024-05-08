@@ -2,53 +2,48 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
 export const useCommonStore = defineStore("common", () => {
-  //  =========== STATE ===============
+    //  =========== STATE ===============
 
-  const headerType = ref("header1");
-  const headerTitle = ref("piece");
-  const headerChatName = ref("");
-  const headerChatImg = ref("");
-  const headerChatCount = ref(0);
+    const headerType = ref("header1");
+    const headerTitle = ref("piece");
+    const headerChatName = ref("");
+    const headerChatImg = ref("");
+    const headerChatCount = ref(0);
 
-  // =========== GETTER ===============
+    // =========== GETTER ===============
 
-  const getHeaderType = computed(() => {
-    console.log("commonStore" + headerType.value);
-    return headerType.value;
-  });
+    const getHeaderType = computed(() => {
+        return headerType.value;
+    });
 
-  const getHeaderTitle = computed(() => {
-    console.log("commonStore" + headerTitle.value);
-    return headerTitle.value;
-  });
+    const getHeaderTitle = computed(() => {
+        return headerTitle.value;
+    });
 
-  const getHeaderChatName = computed(() => {
-    console.log("commonStore" + headerChatName.value);
-    return headerChatName.value;
-  });
+    const getHeaderChatName = computed(() => {
+        return headerChatName.value;
+    });
 
-  const getHeaderChatImg = computed(() => {
-    console.log("commonStore" + headerChatImg.value);
-    return headerChatImg.value;
-  });
+    const getHeaderChatImg = computed(() => {
+        return headerChatImg.value;
+    });
 
-  const getHeaderChatCount = computed(() => {
-    console.log("commonStore" + headerChatCount.value);
-    return headerChatCount.value;
-  });
+    const getHeaderChatCount = computed(() => {
+        return headerChatCount.value;
+    });
 
-  // =========== ACTION ===============
+    // =========== ACTION ===============
 
-  return {
-    headerType,
-    headerTitle,
-    headerChatCount,
-    headerChatName,
-    headerChatImg,
-    getHeaderType,
-    getHeaderTitle,
-    getHeaderChatName,
-    getHeaderChatImg,
-    getHeaderChatCount,
-  };
+    return {
+        headerType,
+        headerTitle,
+        headerChatCount,
+        headerChatName,
+        headerChatImg,
+        getHeaderType,
+        getHeaderTitle,
+        getHeaderChatName,
+        getHeaderChatImg,
+        getHeaderChatCount,
+    };
 });
