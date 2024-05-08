@@ -58,7 +58,7 @@
             </div>
 
             <div class="mypage-router-subcontainer">
-                <div class="mypage-router-title" @click="handleLogoutClick">
+                <div class="mypage-router-item" @click="handleLogoutClick">
                     로그아웃
                 </div>
             </div>
@@ -209,5 +209,17 @@ function handleWithdrawalClick() {
     font-size: 1.2rem;
     color: var(--black-color);
     margin-bottom: 1rem;
+}
+
+.mypage-router-item {
+    font-family: "bold";
+    font-size: 1.2rem;
+    color: var(--black-color);
+    margin-bottom: 1rem;
+    user-select: none;
+}
+
+.mypage-router-item:hover {
+    cursor: pointer;
 }
 </style>

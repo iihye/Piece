@@ -29,7 +29,12 @@ defineProps({
     display: flex;
     justify-content: left;
     align-items: center;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
+    user-select: none;
+}
+
+.icontext-main-container:hover {
+    cursor: pointer;
 }
 
 .icontext-item-content {
