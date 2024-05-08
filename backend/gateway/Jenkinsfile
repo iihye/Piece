@@ -49,7 +49,7 @@ pipeline {
                 dir('backend/gateway') {
                     sh '''
                     echo 'Deploy BE...'
-                    docker run -d --env-file ./.env --name gateway hyunjinius/gateway:latest
+                    docker run -d -p 8000:8000 --env-file ./.env --name gateway hyunjinius/gateway:latest
                     '''
                 }
             }
