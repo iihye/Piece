@@ -4,6 +4,8 @@ import com.ssafy.piece.domain.cultures.entity.CultureType;
 import com.ssafy.piece.domain.pieces.entity.GenreType;
 import com.ssafy.piece.domain.pieces.entity.Pieces;
 import jakarta.persistence.Tuple;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -23,12 +25,17 @@ public interface PiecesRepository extends JpaRepository<Pieces, Long> {
     @Query("select p from Pieces p where p.userId = :userId")
     List<Pieces> findByUserId(Long userId);
 
+    @Query("select p from Pieces p join Piecesheart h on p.pieceId = h.piece.pieceId where h.userId = :userId")
+    List<Pieces> findByUserIdAndHeart(Long userId);
+
     @Query("select p from Pieces p order by p.date desc")
     Page<Pieces> findTopPieces(Pageable pageable);
 
     @Query("select p from Pieces p where p.userId = :userId and p.createdAt BETWEEN :oneYearAgoStart AND :oneYearAgoEnd")
     Optional<Pieces> findByPieceIdAndCreatedAt(Long userId, LocalDateTime oneYearAgoStart,
         LocalDateTime oneYearAgoEnd);
+
+    List<Pieces> findByUserIdAndDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
 
     // 칭호 관련
     @Query("select count(p) from Pieces p where p.genre = :genre and p.userId = :userId")
