@@ -20,6 +20,7 @@ import PieceListMainView from "@/views/piecelist/PieceListMainView.vue";
 import PieceListView from "@/views/piecelist/PieceListView.vue";
 import PieceCalendarView from "@/views/piecelist/PieceCalendarView.vue";
 import PieceListMyView from "@/views/piecelist/PieceListMyView.vue";
+import PieceListHeartView from "@/views/piecelist/PieceListHeartView.vue";
 import PieceDetailView from "@/views/piecedetail/PieceDetailView.vue";
 import RecordDetailView from "@/views/piecedetail/RecordDetailView.vue";
 // chat
@@ -145,6 +146,11 @@ const router = createRouter({
             component: PieceListMyView,
         },
         {
+            path: "/piecelist/heart/list",
+            name: "pieceListHeart",
+            component: PieceListHeartView,
+        },
+        {
             path: "/piecelist/:pieceId",
             name: "pieceDetail",
             component: PieceDetailView,
@@ -161,8 +167,8 @@ const router = createRouter({
             component: ChatRoomView,
         },
         {
-            path:"/chat",
-            name:"chat",
+            path: "/chat",
+            name: "chat",
             component: ChatConversationView,
         },
         // mypage

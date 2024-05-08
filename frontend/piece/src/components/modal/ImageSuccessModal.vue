@@ -2,10 +2,6 @@
     <div class="imagesuccessmodal-background-container">
         <div class="imagesuccessmodal-main-container">
             <div class="imagesuccessmodal-modal-title">{{ modalTitle }}</div>
-            <div
-                class="imagesuccessmodal-modal-content"
-                v-html="modalContent"
-            ></div>
             <div class="imagesuccessmodal-modal-img">
                 <img
                     src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Birthday%20Cake.png"
@@ -15,12 +11,7 @@
                 />
             </div>
             <div class="imagesuccessmodal-button-container">
-                <button
-                    class="imagesuccessmodal-button-success"
-                    @click="handleSuccessClick"
-                >
-                    확인
-                </button>
+                <button class="imagesuccessmodal-button-success" @click="handleSuccessClick">확인</button>
             </div>
         </div>
     </div>

@@ -1,25 +1,24 @@
 <template>
     <div class="listImageItem-main-container">
         <div class="listImageItem-image-container">
-            <div class="listImageItem-item-type"
-                :class="{
-                    'movie-background': performanceType === 'MOVIE',
-                    'theater-background': performanceType === 'THEATER',
-                    'musical-background': performanceType === 'MUSICAL',
-                    'concert-background': performanceType === 'CONCERT',
-                    'other-background': performanceType !== 'MOVIE' && performanceType !== 'THEATER' && performanceType !== 'MUSICAL' && performanceType !== 'CONCERT'
-                }">
+            <div class="listImageItem-item-type" :class="{
+                'movie-background': performanceType === 'MOVIE',
+                'theater-background': performanceType === 'THEATER',
+                'musical-background': performanceType === 'MUSICAL',
+                'concert-background': performanceType === 'CONCERT',
+                'other-background':
+                    performanceType !== 'MOVIE' &&
+                    performanceType !== 'THEATER' &&
+                    performanceType !== 'MUSICAL' &&
+                    performanceType !== 'CONCERT',
+            }">
                 <p v-if="performanceType === 'MOVIE'">영화</p>
                 <p v-else-if="performanceType === 'THEATER'">연극</p>
                 <p v-else-if="performanceType === 'MUSICAL'">뮤지컬</p>
                 <p v-else-if="performanceType === 'CONCERT'">콘서트</p>
                 <p v-else>기타</p>
             </div>
-                <img
-                class="listImageItem-item-img"
-                :src="frontImg"
-                :alt="title"
-            />
+            <img class="listImageItem-item-img" :src="frontImg" :alt="title" />
         </div>
         <div class="listImageItem-item-title">{{ title }}</div>
     </div>
@@ -61,12 +60,12 @@ const props = defineProps({
     background-color: var(--other-color) !important;
 }
 
-.listImageItem-main-container{
+.listImageItem-main-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; 
-    margin: 0 3rem 1rem 3rem;
+    flex-direction: column;
+    margin: 0 0 1rem 0;
 }
 
 .listImageItem-image-container {
@@ -80,22 +79,23 @@ const props = defineProps({
     user-select: none;
     display: inline-block;
     line-height: 0.1rem;
-    padding: 0rem 0.4rem; 
-    border-radius: 0.5rem; 
-    background-color: var(--main-color); 
+    padding: 0rem 0.4rem;
+    border-radius: 0.5rem;
+    background-color: var(--main-color);
     position: absolute;
     top: 0.4rem;
     left: 0.4rem;
 }
 
 .listImageItem-item-img {
-    width: 8rem;
-    height: 10rem;
+    width: 142px;
+    height: 232px;
 }
 
-.listImageItem-item-title{
+.listImageItem-item-title {
     font-family: "Semi";
     font-size: 1rem;
     color: var(--black-color);
+    user-select: none;
 }
 </style>
