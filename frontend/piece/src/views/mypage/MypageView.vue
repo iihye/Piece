@@ -84,7 +84,11 @@
 
 <script setup>
 import router from "@/router";
+import { onMounted } from "vue";
+import { useCommonStore } from "@/stores/common";
 import IconText from "@/components/text/IconText.vue";
+
+const commonStore = useCommonStore();
 
 function handleMypiece() {
     router.push({ name: "pieceListMy" });
@@ -125,6 +129,11 @@ function handleLogoutClick() {
 function handleWithdrawalClick() {
     alert("회원탈퇴 클릭");
 }
+
+onMounted(() => {
+    commonStore.headerTitle = "내 정보";
+    commonStore.headerType = "header2";
+});
 </script>
 
 <style>

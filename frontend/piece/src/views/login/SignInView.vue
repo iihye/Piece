@@ -37,9 +37,12 @@
 
 <script setup>
 import axios from "axios";
-import TextInput from "@/components/text/TextInput.vue";
-import { ref, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useCommonStore } from "@/stores/common";
+import TextInput from "@/components/text/TextInput.vue";
+
+const commonStore = useCommonStore();
 
 const email = ref("");
 const password = ref("");
@@ -84,6 +87,11 @@ const submitForm = async () => {
         router.push({ name: "signin" });
     }
 };
+
+onMounted(() => {
+    commonStore.headerTitle = "이메일로 시작하기";
+    commonStore.headerType = "header2";
+});
 </script>
 
 <style>

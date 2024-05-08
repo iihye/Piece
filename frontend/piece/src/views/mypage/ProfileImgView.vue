@@ -1,31 +1,109 @@
 <template>
-    <div class="profileimgview-main-title">프로필 이미지를 등록해주세요</div>
-    <div class="profileimgview-main-content">원형을 클릭해주세요</div>
-    <div class="profileimgview-container"><img :src="profileImage" alt="프로필 이미지"></div>
-    <FileUploader @uploaded="handleUpload" @error="handleError" buttonText="사진 올리기" />
+    <div class="profileimgview-main-container">
+        <div class="profileimgview-main-title">
+            프로필 이미지를 등록해주세요
+        </div>
+        <div class="profileimgview-main-content">
+            나를 표현하는 프로필 이미지를 등록해주세요
+        </div>
+
+        <div class="profileimgview-sub-container">
+            <div v-if="!profileImage" class="profileimgview-icon-container">
+                <div class="profileimgview-icon-background"></div>
+                <font-awesome-icon
+                    class="profileimgview-icon-icon"
+                    :icon="['fas', 'user']"
+                    style="color: var(--gray2-color); width: 4rem; height: 4rem"
+                />
+            </div>
+
+            <div v-if="profileImage" class="profileimgview-img-container">
+                <img
+                    v-if="profileImage"
+                    class="profileimgview-img-img"
+                    :src="profileImage"
+                    alt="프로필 이미지"
+                />
+            </div>
+        </div>
+
+        <FileUploader
+            class="profileimgview-file-container"
+            @uploaded="handleUpload"
+            @error="handleError"
+            buttonText="사진 올리기"
+        />
+
+        <!-- success modal -->
+        <SuccessModal
+            v-if="successModal"
+            :modalTitle="'프로필 이미지가 등록되었어요!'"
+            :handleSuccessClick="handleSuccessClick"
+        />
+
+        <!-- fail modal -->
+        <SuccessModal
+            v-if="failModal"
+            :modalTitle="'다시 시도해주세요!'"
+            :handleSuccessClick="handleFailClick"
+        />
+    </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import FileUploader from '@/components/item/FileUploader.vue';
+import { ref, onMounted } from "vue";
+import { useCommonStore } from "@/stores/common";
+import FileUploader from "@/components/item/FileUploader.vue";
+import SuccessModal from "@/components/modal/SuccessModal.vue";
 
-const profileImage = ref('@/assets/logo.png');
+const commonStore = useCommonStore();
 
+const profileImage = ref("");
+const successModal = ref(false);
+const failModal = ref(false);
+// const profileImage = ref("https://i.ibb.co/grMvZS9/your-image.jpg");
+
+// TODO: 파일 업로드 localhost -> server 주소로 변경
 function handleUpload(url) {
     profileImage.value = url;
+    successModal.value = true;
 }
 
 function handleError(error) {
-    
+    console.error("업로드 실패", error);
+    failModal.value = true;
 }
+
+const handleSuccessClick = () => {
+    successModal.value = false;
+};
+
+const handleFailClick = () => {
+    failModal.value = false;
+};
+
+onMounted(() => {
+    commonStore.headerTitle = "프로필 이미지 수정";
+    commonStore.headerType = "header2";
+
+    // TODO: suser 정보 불러와서 profileUrl 있으면 불러오기
+});
 </script>
 
 <style>
+.profileimgview-main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 1rem;
+    margin: 0 1rem 0 1rem;
+}
+
 .profileimgview-main-title {
-    font-family: "Semi";
-    font-size: 1.4rem;
+    font-family: "Bold";
+    font-size: 1.6rem;
     color: var(--black-color);
-    margin-bottom: 0.6rem;
+    margin: 0 0 0.6rem 0;
     user-select: none;
 }
 
@@ -41,33 +119,82 @@ function handleError(error) {
     user-select: none;
 }
 
-.profileimgview-container {
-    margin: 20px 0;
+.profileimgeview-sub-container {
+}
+
+.profileimgview-img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
-    width: 150px;
-    height: 150px;
-    overflow: hidden;
-    display: inline-block;
-    background: #eee;
+    margin: 2rem 0 2rem 0;
 }
 
-.profileimgview-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.profileimgview-img-background {
+    position: relative;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    background-color: var(--gray-color);
 }
 
-.button {
-    background-color: #f06767;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
+.profileimgview-img-icon {
+    width: 10rem;
+    height: 10rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.button:hover {
-    background-color: #e05656;
+.profileimgview-img-img {
+    width: 10rem;
+    height: 10rem;
+    border: 0.15rem solid var(--gray-color);
+    border-radius: 50%;
+}
+
+.profileimgview-file-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+/* icon */
+.profileimgview-icon-container {
+    position: relative;
+    width: 10rem;
+    height: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0.4rem;
+}
+
+.profileimgview-icon-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    background-color: var(--gray-color);
+}
+
+.profileimgview-icon-container
+    > .profileimgview-icon-background
+    + .profileimgview-icon-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.profileimgview-sub-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

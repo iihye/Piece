@@ -31,10 +31,13 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import router from "@/router";
+import { ref, onMounted } from "vue";
+import { useCommonStore } from "@/stores/common";
 import SquareButton from "@/components/button/SquareButton.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
+
+const commonStore = useCommonStore();
 
 const nicknameMessage = ref("3자 이상 10자 이내의 한글, 영문만 가능해요");
 const isNickname = ref(false);
@@ -68,6 +71,11 @@ const handleNicknameClick = () => {
 const handleChangeSuccess = () => {
     router.push({ name: "mypage" });
 };
+
+onMounted(() => {
+    commonStore.headerTitle = "닉네임 수정";
+    commonStore.headerType = "header2";
+});
 </script>
 
 <style>

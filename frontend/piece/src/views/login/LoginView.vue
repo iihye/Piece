@@ -55,6 +55,9 @@ import axios from "axios";
 import TextInput from "@/components/text/TextInput.vue";
 import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useCommonStore } from "@/stores/common";
+
+const commonStore = useCommonStore();
 
 const email = ref("");
 const password = ref("");
@@ -91,6 +94,11 @@ const submitLogin = async () => {
         // --------------------
     }
 };
+
+onMounted(() => {
+    commonStore.headerTitle = "로그인";
+    commonStore.headerType = "header2";
+});
 </script>
 
 <style>
