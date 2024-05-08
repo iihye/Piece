@@ -114,6 +114,9 @@ const handleWearoffSuccess = () => {
 
 onMounted(async () => {
     await store.findMypageLabelList();
+    // ---------------------
+    // TODO: 유저 정보 불러오기 api 연결
+    // ---------------------
 });
 </script>
 
@@ -122,13 +125,15 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding-top: 1rem;
+    margin: 0 1rem 0 1rem;
 }
 
 .labelview-main-title {
-    font-family: "Semi";
-    font-size: 1.4rem;
+    font-family: "Bold";
+    font-size: 1.6rem;
     color: var(--black-color);
-    margin-bottom: 0.6rem;
+    margin: 0 0 0.6rem 0;
     user-select: none;
 }
 

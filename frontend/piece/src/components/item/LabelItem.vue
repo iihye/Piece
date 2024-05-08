@@ -1,5 +1,11 @@
 <template>
-    <div :class="{ 'labelitem-modal-container': true, 'isWear-color': isWear }">
+    <div
+        :class="{
+            'labelitem-modal-container': true,
+            'isWear-color': isWear,
+            'hover-class': isMine,
+        }"
+    >
         <div class="labelitem-icon-container">
             <div
                 class="labelitem-icon-background"
@@ -98,6 +104,10 @@ function getIconName(labelType) {
     margin-bottom: 1rem;
 }
 
+.labelitem-modal-container.hover-class:hover {
+    cursor: pointer;
+}
+
 .labelitem-icon-container {
     position: relative;
     width: 3rem;
@@ -141,7 +151,6 @@ function getIconName(labelType) {
 .labelitem-label-title {
     font-family: "Semi";
     font-size: 1rem;
-
     user-select: none;
 }
 

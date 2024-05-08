@@ -12,8 +12,18 @@
                 <div class="mypage-preview-label">낭만 애호가</div>
                 <div class="mypage-preview-nickname">김조각님 반가워요!</div>
                 <div class="mypage-preview-button-container">
-                    <button @click="handleMypiece">내 조각</button>
-                    <button @click="handleMyheart">내 찜</button>
+                    <button
+                        class="mypage-preview-button"
+                        @click="handleMypiece"
+                    >
+                        내 조각
+                    </button>
+                    <button
+                        class="mypage-preview-button"
+                        @click="handleMyheart"
+                    >
+                        내 찜
+                    </button>
                 </div>
             </div>
         </div>
@@ -70,24 +80,6 @@
             </div> -->
         </div>
     </div>
-    <RouterLink class="mypageview-link" :to="{ name: 'nickname' }"
-        >닉네임 변경</RouterLink
-    >
-    <RouterLink class="mypageview-link" :to="{ name: 'password' }"
-        >비밀변호 변경</RouterLink
-    >
-    <RouterLink class="mypageview-link" :to="{ name: 'profileImg' }"
-        >프로필이미지 변경</RouterLink
-    >
-    <RouterLink class="mypageview-link" :to="{ name: 'label' }"
-        >칭호</RouterLink
-    >
-    <RouterLink class="mypageview-link" :to="{ name: 'piece' }"
-        >조각통계</RouterLink
-    >
-    <RouterLink class="mypageview-link" :to="{ name: 'consume' }"
-        >소비통계</RouterLink
-    >
 </template>
 
 <script setup>
@@ -194,6 +186,10 @@ function handleWithdrawalClick() {
     border: none;
     border-radius: 0.4rem;
     margin-right: 0.4rem;
+}
+
+.mypage-preview-button-container button:hover {
+    cursor: pointer;
 }
 
 /* router */
