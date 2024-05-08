@@ -7,8 +7,6 @@ import com.ssafy.piece.global.annotation.AuthenticatedUser;
 import com.ssafy.piece.global.response.code.SuccessCode;
 import com.ssafy.piece.global.response.structure.SuccessResponse;
 import java.util.List;
-
-import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -65,11 +63,17 @@ public class PieceListController {
 
     // 내 조각 리스트 캘린더
     @GetMapping("/my/{year}/{month}")
-    public ResponseEntity<Object> findCalendarMyPieces(@AuthenticatedUser Long userId, @PathVariable int year, @PathVariable int month){
-        List<PieceListResponseDto> pieceListResponseDtos = pieceListService.listCalendarMyPieces(userId, year, month);
+    public ResponseEntity<Object> findCalendarMyPieces(@AuthenticatedUser Long userId,
+        @PathVariable int year, @PathVariable int month) {
+        List<PieceListResponseDto> pieceListResponseDtos = pieceListService.listCalendarMyPieces(
+            userId, year, month);
 
-        return SuccessResponse.createSuccess(SuccessCode.FIND_MY_PIECE_LIST_SUCCESS,
+        if (pieceListResponseDtos.isEmpty()) {
+            return SuccessResponse.createSuccess(SuccessCode.FIND_MY_PIECE_LIST_NULL_SUCCESS,
                 pieceListResponseDtos);
+        }
+        return SuccessResponse.createSuccess(SuccessCode.FIND_MY_PIECE_LIST_SUCCESS,
+            pieceListResponseDtos);
     }
 
 
