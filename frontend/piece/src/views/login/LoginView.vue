@@ -25,7 +25,7 @@
                         textInputPlaceholder="비밀번호를 입력하세요"
                         @textInputValue="password = $event"
                         textInputRequired="true"
-                        type="password"
+                        textInputType="password"
                     />
 
                     <button
@@ -66,7 +66,6 @@ watch([email, password], ([newEmail, newPassword]) => {
 });
 
 const submitLogin = async () => {
-    console.log("버튼 클릭");
     try {
         const response = await axios.post(
             `${import.meta.env.VITE_REST_PIECE_API}/auth/login`,
@@ -75,18 +74,21 @@ const submitLogin = async () => {
                 password: password.value,
             }
         );
-        console.log("로그인 성공:", response.data);
+
+        // --------------------
+        // TODO: alert modal로 바꾸기
         alert("로그인 성공!");
-        router.push("/home"); // 성공 시 홈 페이지로 리다이렉트
+        // --------------------
+
+        router.push({ name: "main" });
     } catch (error) {
-        console.error(
-            "로그인 실패:",
-            error.response ? error.response.data : error
-        );
+        // --------------------
+        // TODO: alert modal로 바꾸기
         alert(
             "로그인 실패: " +
                 (error.response ? error.response.data.message : "서버 에러")
         );
+        // --------------------
     }
 };
 </script>
@@ -96,12 +98,14 @@ const submitLogin = async () => {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding-top: 1rem;
 }
 
 .loginview-main-title {
     font-family: "Bold";
     font-size: 1.6rem;
     color: var(--black-color);
+    margin: 1rem 1rem 2rem 1rem;
     margin-bottom: 0.6rem;
     user-select: none;
 }
@@ -165,7 +169,7 @@ const submitLogin = async () => {
     justify-content: center;
     align-items: center;
     background-color: var(--white-color);
-    border: 0.1rem solid var(--main-color);
+    border: 1px solid var(--main-color);
     border-radius: 0.625rem;
     width: 21.25rem;
     height: 4rem;

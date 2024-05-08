@@ -46,8 +46,7 @@ const textInputFuntion = () => {
 
 .textinput-label {
     font-size: 1rem;
-    font-family: "Semi";
-    font-size: 1rem;
+    font-family: "Medium";
 }
 
 .textinput-required {
@@ -71,7 +70,7 @@ const textInputFuntion = () => {
     width: 14rem;
     height: 2.25rem;
     border-radius: 0.625rem;
-    border: 0;
+    border: 1px solid var(--main-color);
     outline: 1px solid var(--main-color);
 }
 
@@ -80,6 +79,6 @@ const textInputFuntion = () => {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.4rem;
-    height: 2.8rem;
+    height: 3rem;
 }
 </style>
