@@ -28,14 +28,14 @@ import TheFooter from "./components/common/TheFooter.vue";
     top: 0;
     left: 0;
     width: 100%;
-    height: 2.75rem;
+    height: 3.25rem;
     z-index: 85;
 }
 
 .app-content {
-    padding-top: 2.75rem;
+    padding-top: 3.25rem;
     padding-bottom: 2.75rem;
-    height: calc(100vh - 5.5rem);
+    min-height: calc(100vh - 6rem);
 }
 
 .TheFooter {
