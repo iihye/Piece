@@ -17,8 +17,6 @@ import PieceBackgroundView from "@/views/piecemake/PieceBackgroundView.vue";
 import PieceSaveView from "@/views/piecemake/PieceSaveView.vue";
 // piecelist
 import PieceListMainView from "@/views/piecelist/PieceListMainView.vue";
-import CakeDetailView from "@/views/cake/CakeDetailView.vue";
-import CakeListView from "@/views/cake/CakeListView.vue";
 import PieceListView from "@/views/piecelist/PieceListView.vue";
 import PieceCalendarView from "@/views/piecelist/PieceCalendarView.vue";
 import PieceListMyView from "@/views/piecelist/PieceListMyView.vue";
@@ -36,6 +34,10 @@ import ProfileImgView from "@/views/mypage/ProfileImgView.vue";
 import LabelView from "@/views/mypage/LabelView.vue";
 import PieceStatisticsView from "@/views/mypage/PieceStatisticsView.vue";
 import ConsumeStatisticsView from "@/views/mypage/ConsumeStatisticsView.vue";
+//cake
+import CakeDetailView from "@/views/cake/CakeDetailView.vue";
+import CakeListView from "@/views/cake/CakeListView.vue";
+
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -205,6 +207,23 @@ const router = createRouter({
             name: "consume",
             component: ConsumeStatisticsView,
         },
+        {
+            path: "/mypage/piece",
+            name: "piecestatistics",
+            component: PieceStatisticsView,
+        },
+        // cake
+        {
+            path: "/cake",
+            name: "cakeList",
+            component: CakeListView,
+        },
+        {
+            path: '/views/:id',
+            name: 'CakeDetail',
+            component: CakeDetailView,
+            props: true
+        }
     ],
 });
 

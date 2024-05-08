@@ -16,12 +16,15 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/vue-fontawesome": "^3.0.6",
     "@vuepic/vue-datepicker": "^8.5.0",
+    "aws-sdk": "^2.1611.0",
     "axios": "^1.6.8",
     "pinia": "^2.1.7",
     "sockjs-client": "^1.6.1",
     "vue": "^3.4.21",
+    "vue-chartjs": "^5.3.1",
     "vue-cropperjs": "^5.0.0",
     "vue-router": "^4.3.0",
+    "vue3-chart-v2": "^0.8.3",
     "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
