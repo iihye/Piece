@@ -1,9 +1,7 @@
 <template>
     <div class="profileimgview-main-title">프로필 이미지를 등록해주세요</div>
     <div class="profileimgview-main-content">원형을 클릭해주세요</div>
-    <div class="profileimgview-container">
-        <img :src="profileImage" alt="프로필 이미지">
-    </div>
+    <div class="profileimgview-container"><img :src="profileImage" alt="프로필 이미지"></div>
     <FileUploader @uploaded="handleUpload" @error="handleError" buttonText="사진 올리기" />
 </template>
 
@@ -18,7 +16,7 @@ function handleUpload(url) {
 }
 
 function handleError(error) {
-    console.error('업로드 실패', error);
+    
 }
 </script>
 

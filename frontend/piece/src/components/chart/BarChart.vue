@@ -31,13 +31,16 @@ export default {
                         },
                         x: {
                             grid: {
-                                display: false // x축의 그리드 라인을 숨깁니다.
+                                display: false
                             }
                         }
                     },
                     plugins: {
                         legend: {
-                            display: false // 범례를 숨깁니다.
+                            display: false
+                        },
+                        title: {
+                            display: false
                         }
                     },
                     responsive: true,
@@ -52,12 +55,8 @@ export default {
                     },
                     elements: {
                         bar: {
-                            borderRadius: 10 // 바의 모서리를 둥글게 합니다.
+                            borderRadius: 10
                         }
-                    },
-                    // 배경을 투명하게 설정하여 없앱니다.
-                    plugins: {
-                        backgroundColor: 'rgba(0, 0, 0, 0)' 
                     }
                 }
             });
@@ -65,6 +64,13 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+canvas {
+    height: 400px;
+}
+</style>
+
 
 <style scoped>
 canvas {
