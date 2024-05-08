@@ -48,6 +48,7 @@ public enum SuccessCode implements ResponseCode {
     // 조각 리스트
     FIND_PIECE_LIST_SUCCESS(HttpStatus.OK, "조각 리스트 조회에 성공했습니다."),
     FIND_MY_PIECE_LIST_SUCCESS(HttpStatus.OK, "내 조각 리스트 조회에 성공했습니다."),
+    FIND_MY_PIECE_LIST_NULL_SUCCESS(HttpStatus.OK, "내 조각 리스트 조회에 성공했습니다."),
     FIND_HEART_PIECE_LIST_SUCCESS(HttpStatus.OK, "찜한 조각 리스트 조회에 성공했습니다."),
     FIND_RECENT_PIECE_LIST_SUCCESS(HttpStatus.OK, "최근 조각 리스트 조회에 성공했습니다."),
 
@@ -60,6 +61,12 @@ public enum SuccessCode implements ResponseCode {
     CHECK_MY_LABELS_SUCCESS(HttpStatus.OK, "칭호 획득 검사에 성공했습니다."),
 
     REQUEST_SUCCESS(HttpStatus.OK, "요청에 성공했습니다."),
+
+    // cultures(cake)
+    FIND_TMDB_CAKE_SUCCESS(HttpStatus.OK, "TMDB 케이크 조회에 성공했습니다."),
+    ADD_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 좋아요에 성공했습니다."),
+    REMOVE_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 삭제에 성공했습니다."),
+    FIND_CAKE_SUCCESS(HttpStatus.OK, "케이크 조회에 성공했습니다."),
 
     // Chat
     CHATROOM_CREATED(HttpStatus.CREATED, "채팅방이 생성되었습니다."),
@@ -75,6 +82,7 @@ public enum SuccessCode implements ResponseCode {
      * s3
      */
     GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다.");
+
 
     private final HttpStatus httpStatus;
 

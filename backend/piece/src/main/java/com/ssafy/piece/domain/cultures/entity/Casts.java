@@ -18,7 +18,7 @@ public class Casts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "casts_id")
+    @Column(name = "cast_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
