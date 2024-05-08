@@ -1,5 +1,14 @@
 <template>
     <div class="piecelistview-main-container">
+        <!-- search -->
+        <div class="piecelistview-search-container">
+            <SearchInput
+                :handlePrevClick="handlePrev"
+                :handleSearchClick="handleSearch"
+                @searchContent="handleSearchContent"
+            ></SearchInput>
+        </div>
+
         <!-- filter -->
         <div class="piecelistview-scroll-container">
             <div class="piecelistview-tab-navigation">
@@ -46,17 +55,39 @@
 <script setup>
 import router from "@/router";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { useCommonStore } from "@/stores/common";
 import { usePiecelistStore } from "@/stores/piecelist";
+import SearchInput from "@/components/modal/SearchInput.vue";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListImageItem from "@/components/item/ListImageItem.vue";
 import NoItem from "@/components/item/NoItem.vue";
 
+const commonStore = useCommonStore();
 const store = usePiecelistStore();
 
+const searchValue = ref("");
 const piecelistList = computed(() => store.getPiecelistList);
 const filteredList = computed(() => computedFilteredList());
 const selectedOption = ref("ALL");
 
+// search
+// modal에서 prev 클릭했을 때 실행되는 함수
+const handlePrev = () => {
+    alert("이전 클릭");
+};
+
+// modal에서 search 클릭했을 때 실행되는 함수
+const handleSearch = () => {
+    alert("검색 클릭");
+    console.log(searchValue.value);
+};
+
+const handleSearchContent = (value) => {
+    console.log("(부모)자동 완성 받아옴:", value);
+    searchValue.value = value;
+};
+
+// list
 function computedFilteredList() {
     if (selectedOption.value === "ALL") {
         return piecelistList.value;
@@ -152,6 +183,9 @@ const handleMouseDown = () => {
 };
 
 onMounted(async () => {
+    commonStore.headerTitle = "조각 모아보기";
+    commonStore.headerType = "header2";
+
     await store.findPiecelistList();
     tabMenu.value.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
@@ -180,12 +214,16 @@ onBeforeUnmount(() => {
     flex: 1;
 }
 
+.piecelistview-search-container {
+    margin-bottom: 1rem;
+}
+
 /* filter */
 .piecelistview-scroll-container {
     position: relative;
     /* width: 450px; */
     transition: 0.5s ease;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 .piecelistview-tab-navigation {

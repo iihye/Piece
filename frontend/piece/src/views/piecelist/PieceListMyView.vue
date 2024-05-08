@@ -1,6 +1,4 @@
 <template>
-    <!-- header -->
-    <RouterLink :to="{ name: 'pieceCalendar' }">캘린더</RouterLink>
     <div class="piecelistmyview-main-container">
         <!-- filter -->
         <div class="piecelistmyview-scroll-container">
@@ -20,13 +18,20 @@
         </div>
 
         <!-- list -->
-        <div v-if="filteredMyList.length === 0" class="piecelistmyview-list-noitem">
+        <div
+            v-if="filteredMyList.length === 0"
+            class="piecelistmyview-list-noitem"
+        >
             <NoItem :content="'내 조각이 없어요'"></NoItem>
         </div>
         <div v-else>
             <div class="piecelistmyview-list-container">
                 <div class="piecelistmyview-list-grid">
-                    <div v-for="(item, index) in filteredMyList" :key="index" class="piecelistmyview-list-item">
+                    <div
+                        v-for="(item, index) in filteredMyList"
+                        :key="index"
+                        class="piecelistmyview-list-item"
+                    >
                         <ListImageItem
                             :pieceId="item.pieceId"
                             :performanceType="item.performanceType"
@@ -44,11 +49,13 @@
 <script setup>
 import router from "@/router";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { useCommonStore } from "@/stores/common";
 import { usePiecelistStore } from "@/stores/piecelist";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListImageItem from "@/components/item/ListImageItem.vue";
 import NoItem from "@/components/item/NoItem.vue";
 
+const commonStore = useCommonStore();
 const store = usePiecelistStore();
 
 const year = computed(() => store.getYear);
@@ -61,15 +68,25 @@ function computedFilteredMyList() {
     if (selectedOption.value === "ALL") {
         return piecelistMyList.value;
     } else if (selectedOption.value === "MOVIE") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "MOVIE");
+        return piecelistMyList.value.filter(
+            (item) => item.performanceType === "MOVIE"
+        );
     } else if (selectedOption.value === "THEATER") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "THEATER");
+        return piecelistMyList.value.filter(
+            (item) => item.performanceType === "THEATER"
+        );
     } else if (selectedOption.value === "MUSICAL") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "MUSICAL");
+        return piecelistMyList.value.filter(
+            (item) => item.performanceType === "MUSICAL"
+        );
     } else if (selectedOption.value === "CONCERT") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "CONCERT");
+        return piecelistMyList.value.filter(
+            (item) => item.performanceType === "CONCERT"
+        );
     } else if (selectedOption.value === "ETC") {
-        return piecelistMyList.value.filter((item) => item.performanceType === "ETC");
+        return piecelistMyList.value.filter(
+            (item) => item.performanceType === "ETC"
+        );
     } else {
         return [];
     }
@@ -142,6 +159,9 @@ const handleMouseDown = () => {
 };
 
 onMounted(async () => {
+    commonStore.headerTitle = "내 조각 모아보기";
+    commonStore.headerType = "header4";
+
     await store.findPiecelistMyList();
     tabMenu.value.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
