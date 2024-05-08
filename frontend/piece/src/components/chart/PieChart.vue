@@ -1,30 +1,3 @@
-<!-- <template>
-    <div>
-        <canvas ref="canvas" :style="{ width: '100%', maxWidth: '600px' }"></canvas>
-    </div>
-</template>
-
-<script>
-import Chart from 'chart.js/auto';
-
-export default {
-    name: 'PieChart',
-    props: ['data'], // 데이터 prop 추가
-    mounted() {
-        this.createChart();
-    },
-    methods: {
-        createChart() {
-            const ctx = this.$refs.canvas.getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: this.data, // 받은 데이터를 사용하여 차트 생성
-            });
-        }
-    }
-};
-</script> -->
-
 <template>
     <div>
         <canvas ref="canvas" :style="{ width: '100%', maxWidth: '600px' }"></canvas>
@@ -57,12 +30,14 @@ methods: {
             type: 'pie',
             data: this.data,
             options: {
-                responsive: true,
-                legend: {
-                    display: false, // 범례 표시 비활성화
+                plugins: {
+                        legend: {
+                            display: false
+                        }
                     },
+                responsive: true,
                 title: {
-                    display: false, // 제목 비활성화
+                    display: false,
                     }
                 }
             });
@@ -84,7 +59,7 @@ methods: {
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    margin-bottom: 10px; /* 줄바꿈 간격 조정 */
+    margin-bottom: 10px;
 }
 
 .color-box {
@@ -100,6 +75,6 @@ methods: {
 }
 
 .label-count {
-    white-space: nowrap; /* 횟수가 줄바꿈 되지 않도록 */
+    white-space: nowrap;
 }
 </style>

@@ -42,7 +42,6 @@ async function uploadImage(event) {
     try {
         // const { url } = await getPreSignedUrl(fileName);
         const url = await getPreSignedUrl(fileName);
-        console.log("Presigned URL : ", url);
 
         if (!url) {
             emits("error", "URL 받아오기 실패");
@@ -55,8 +54,6 @@ async function uploadImage(event) {
             },
         });
 
-        console.log("Upload response:", uploadResponse); // 업로드 응답 로그
-
         if (uploadResponse.status === 200 || uploadResponse.status === 204) {
             emits("uploaded", URL.createObjectURL(file));
         } else {
@@ -66,8 +63,7 @@ async function uploadImage(event) {
             );
         }
     } catch (error) {
-        console.error("파일 업로드 하면서 에러 생겼음", error);
-        emits("error", error.message);
+        emits('error', error.message);
     }
 }
 </script>
