@@ -1,6 +1,7 @@
 package com.ssafy.piece.domain.cultures.service;
 
 import com.ssafy.piece.domain.cultures.dto.response.MovieResult;
+import com.ssafy.piece.domain.cultures.dto.response.TmdbDetailResponse;
 import com.ssafy.piece.domain.cultures.dto.response.TmdbResponse;
 import com.ssafy.piece.domain.cultures.entity.CultureGenre;
 import com.ssafy.piece.domain.cultures.entity.Cultures;
@@ -65,5 +66,9 @@ public class CultureApiService {
         culturesRepository.saveAll(culturesBatch);
         cultureGenreRepository.saveAll(
             cultureGenreBatch);
+    }
+
+    public TmdbDetailResponse findMovie(String movieId) {
+        return tmdbClient.getTmdbMovie(movieId, "Bearer " + TMDB_API_KEY);
     }
 }

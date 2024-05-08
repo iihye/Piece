@@ -62,6 +62,12 @@ public enum SuccessCode implements ResponseCode {
 
     REQUEST_SUCCESS(HttpStatus.OK, "요청에 성공했습니다."),
 
+    // cultures(cake)
+    FIND_TMDB_CAKE_SUCCESS(HttpStatus.OK, "TMDB 케이크 조회에 성공했습니다."),
+    ADD_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 좋아요에 성공했습니다."),
+    REMOVE_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 삭제에 성공했습니다."),
+    FIND_CAKE_SUCCESS(HttpStatus.OK, "케이크 조회에 성공했습니다."),
+
     /**
      * s3
      */
