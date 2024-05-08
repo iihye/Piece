@@ -49,11 +49,13 @@
 <script setup>
 import router from "@/router";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { useCommonStore } from "@/stores/common";
 import { usePiecelistStore } from "@/stores/piecelist";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListImageItem from "@/components/item/ListImageItem.vue";
 import NoItem from "@/components/item/NoItem.vue";
 
+const commonStore = useCommonStore();
 const store = usePiecelistStore();
 
 const piecelistHeartList = computed(() => store.getPiecelistHeartList);
@@ -155,6 +157,9 @@ const handleMouseDown = () => {
 };
 
 onMounted(async () => {
+    commonStore.headerTitle = "찜한 조각 모아보기";
+    commonStore.headerType = "header2";
+
     await store.findPiecelistHeartList();
     tabMenu.value.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);

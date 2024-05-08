@@ -5,7 +5,11 @@
             <div class="pieceDetailView-top-container">
                 <!-- user -->
                 <div class="pieceDetailView-user-container">
-                    <img class="pieceDetailView-user-img" :src="userDetail.profileImg" alt="image" />
+                    <img
+                        class="pieceDetailView-user-img"
+                        :src="userDetail.profileImg"
+                        alt="image"
+                    />
                     <div class="pieceDetailView-name-container">
                         <div class="pieceDetailView-user-label">
                             {{ userDetail.label }}
@@ -28,7 +32,11 @@
             <div class="pieceDetailView-image-container">
                 <img
                     class="pieceDetailView-image-item"
-                    :src="imgFrontBack ? piecelistDetail.frontImg : piecelistDetail.backImg"
+                    :src="
+                        imgFrontBack
+                            ? piecelistDetail.frontImg
+                            : piecelistDetail.backImg
+                    "
                     :alt="piecelistDetail.title"
                     @click="handleImageClick"
                 />
@@ -37,7 +45,9 @@
             <div class="pieceDetailView-heart-container">
                 <font-awesome-icon
                     class="pieceDetailView-heart-icon"
-                    :icon="pieceDetailHeart ? ['fas', 'heart'] : ['far', 'heart']"
+                    :icon="
+                        pieceDetailHeart ? ['fas', 'heart'] : ['far', 'heart']
+                    "
                     style="color: var(--main-color)"
                     @click="handleHeartClick"
                 />
@@ -88,6 +98,7 @@
 <script setup>
 import router from "@/router";
 import { ref, computed, onMounted } from "vue";
+import { useCommonStore } from "@/stores/common";
 import { useRoute } from "vue-router";
 import { usePiecelistStore } from "@/stores/piecelist";
 import RoundButton from "@/components/button/RoundButton.vue";
@@ -95,7 +106,9 @@ import ShareSelectModal from "@/components/modal/ShareSelectModal.vue";
 import ImageSuccessModal from "@/components/modal/ImageSuccessModal.vue";
 import ReportSelectModal from "@/components/modal/ReportSelectModal.vue";
 
+const commonStore = useCommonStore();
 const store = usePiecelistStore();
+
 const route = useRoute();
 const imgFrontBack = ref(true);
 const selectModal = ref(false);
@@ -182,6 +195,9 @@ const handleModalFail = () => {
 };
 
 onMounted(async () => {
+    commonStore.headerTitle = "조각 상세보기";
+    commonStore.headerType = "header2";
+
     const pieceId = route.params.pieceId;
     await store.findPiecelistDetail(pieceId);
     await store.findPieceDetailHeart(pieceId);

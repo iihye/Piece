@@ -1,7 +1,5 @@
 <template>
-    <RouterLink :to="{ name: 'pieceListMy' }">리스트</RouterLink>
     <div class="piececalendarview-main-container">
-        <!-- header -->
         <div class="piececalendarview-header-container">
             <font-awesome-icon
                 class="piececalendarview-header-icon"
@@ -9,7 +7,9 @@
                 style="color: var(--gray2-color)"
                 @click="changeMonth(-1)"
             />
-            <div class="piececalendarview-header-content">{{ state.calendarHeader }}</div>
+            <div class="piececalendarview-header-content">
+                {{ state.calendarHeader }}
+            </div>
             <font-awesome-icon
                 class="piececalendarview-header-icon"
                 :icon="['fas', 'angle-right']"
@@ -21,12 +21,24 @@
         <!-- Calendar -->
         <div class="piececalendarview-calendar-container">
             <div class="piececalendarview-weekdays-container">
-                <div v-for="day in week" :key="day" class="piececalendarview-weekdays-weekday">
+                <div
+                    v-for="day in week"
+                    :key="day"
+                    class="piececalendarview-weekdays-weekday"
+                >
                     {{ day }}
                 </div>
             </div>
-            <div class="piececalendarview-weekdays-week" v-for="(week, index) in state.days" :key="index">
-                <div class="piececalendarview-weekdays-day" v-for="dayData in week" :key="dayData.day">
+            <div
+                class="piececalendarview-weekdays-week"
+                v-for="(week, index) in state.days"
+                :key="index"
+            >
+                <div
+                    class="piececalendarview-weekdays-day"
+                    v-for="dayData in week"
+                    :key="dayData.day"
+                >
                     <img
                         v-if="dayData.imageUrl"
                         :src="dayData.imageUrl"
@@ -45,8 +57,10 @@
 <script setup>
 import router from "@/router";
 import { computed, onMounted } from "vue";
+import { useCommonStore } from "@/stores/common";
 import { usePiecelistStore } from "@/stores/piecelist";
 
+const commonStore = useCommonStore();
 const store = usePiecelistStore();
 
 const today = computed(() => store.getToday);
@@ -60,12 +74,20 @@ function changeMonth(val) {
     newToday.setMonth(newToday.getMonth() + val);
     store.setToday(newToday);
 
-    store.findPiecelistMyCalendar(today.value.getFullYear(), today.value.getMonth() + 1);
+    store.findPiecelistMyCalendar(
+        today.value.getFullYear(),
+        today.value.getMonth() + 1
+    );
 }
 
 function handleDayClick(pieceId) {
     router.push({ name: "pieceDetail", params: { pieceId: pieceId } });
 }
+
+onMounted(async () => {
+    commonStore.headerTitle = "내 조각 모아보기";
+    commonStore.headerType = "header3";
+});
 
 onMounted(
     async () => {
