@@ -14,7 +14,7 @@ import TheHeader from "./components/common/TheHeader.vue";
 import TheFooter from "./components/common/TheFooter.vue";
 </script>
 
-<style scoped>
+<style>
 .app {
     max-width: 360px;
     min-height: 100vh;
@@ -34,8 +34,8 @@ import TheFooter from "./components/common/TheFooter.vue";
 
 .app-content {
     padding-top: 3.25rem;
-    padding-bottom: 2.75rem;
-    min-height: calc(100vh - 6rem);
+    margin-bottom: 3.25rem;
+    min-height: calc(100vh - 6.5rem);
 }
 
 .TheFooter {
@@ -43,7 +43,8 @@ import TheFooter from "./components/common/TheFooter.vue";
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 2.75rem;
+    height: 3.25rem;
     z-index: 85;
+    background-color: var(--white-color);
 }
 </style>
