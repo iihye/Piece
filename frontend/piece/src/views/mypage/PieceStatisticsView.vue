@@ -5,9 +5,9 @@
     <pie-chart :data="chartData" />
 
     <!-- 조각이 없을 경우 -->
-    <div class="piecestatisticsview-main-content">완성된 조각이 없어요 ㅜㅜ</div>
-    <RouterLink :to="{ name: 'piecemake' }">조각 만들러 가기
-    </RouterLink>
+    <div v-if="noData" class="consumestatisticsview-main-content">완성된 조각이 없어요 ㅜㅜ
+        <RouterLink :to="{ name: 'piecemake' }">조각 만들러 가기</RouterLink>
+    </div>
 </template>
 
 <script>
@@ -22,6 +22,7 @@ export default {
     },
     data() {
         return {
+            noData: false,
             chartData: {
                 labels: ["영화", "연극/뮤지컬", "콘서트", "기타"],
                 datasets: [{
@@ -31,12 +32,6 @@ export default {
             }
         };
     },
-    methods: {
-        updateData(year) {
-            console.log('Updated year to:', year);
-            this.chartData.datasets[0].data = this.chartData.datasets[0].data.map(v => v + 1);
-        }
-    }
 }
 </script>
 
