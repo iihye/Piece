@@ -153,7 +153,6 @@ function getIconName(labelType) {
 }
 
 .labelitem-wear-container {
-    width: 4rem;
     display: flex;
     flex-shrink: 0;
 }

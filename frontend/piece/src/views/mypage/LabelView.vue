@@ -1,7 +1,27 @@
 <template>
-    <div>
+    <div class="labelview-main-container">
         <div class="labelview-main-title">나를 표현하는 칭호를 골라주세요</div>
         <div class="labelview-main-content">칭호를 클릭하여 착용해보세요</div>
+
+        <!-- preview -->
+        <div class="labelview-preview-container">
+            <img
+                class="labelview-preview-img"
+                src="https://i.ibb.co/grMvZS9/your-image.jpg"
+                alt="image"
+            />
+            <div class="labelview-preview-label">칭호</div>
+            <div class="labelview-preview-nickname">이름</div>
+        </div>
+
+        <div class="labelview-button-container">
+            <SmallButton
+                :smallButtonContent="'칭호 해제'"
+                :smallButtonFunction="handleItemWearoffClick"
+            ></SmallButton>
+        </div>
+
+        <!-- select -->
         <div class="labelview-selct-container">
             <select class="labelview-select-dropbox" v-model="selectedOption">
                 <option value="select-all">전체</option>
@@ -9,15 +29,9 @@
                 <option value="select-not">보유하지 않은 칭호</option>
             </select>
         </div>
+
+        <!-- list -->
         <div class="labelview-list-container">
-            <LabelItem
-                :key="0"
-                :labelType="'NONE'"
-                :title="'칭호 해제'"
-                :isMine="true"
-                :isWear="mypageLabelWearoff"
-                @click="handleItemWearoffClick()"
-            ></LabelItem>
             <LabelItem
                 v-for="(item, index) in filteredLabelList"
                 :key="index"
@@ -26,7 +40,12 @@
                 :description="item.description"
                 :isMine="item.myLabels"
                 :isWear="item.wearLabels"
-                @click="item.myLabels && handleItemWearClick(item.labelId)"
+                @click="
+                    item.myLabels &&
+                        (item.wearLabels
+                            ? handleItemWearoffClick(item.labelId)
+                            : handleItemWearClick(item.labelId))
+                "
             ></LabelItem>
         </div>
 
@@ -51,6 +70,7 @@ import { ref, computed, onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import LabelItem from "@/components/item/LabelItem.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
+import SmallButton from "@/components/button/SmallButton.vue"; // 사용할 컴포넌트 import
 
 const store = useUserStore();
 
@@ -93,11 +113,17 @@ const handleWearoffSuccess = () => {
 };
 
 onMounted(async () => {
-    await store.findMyPageLabelList();
+    await store.findMypageLabelList();
 });
 </script>
 
 <style>
+.labelview-main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .labelview-main-title {
     font-family: "Semi";
     font-size: 1.4rem;
@@ -118,6 +144,44 @@ onMounted(async () => {
     user-select: none;
 }
 
+.labelview-preview-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 0.15rem solid var(--main-color);
+    border-radius: 0.625rem;
+    padding: 1rem;
+    margin-bottom: 0.6rem;
+}
+
+.labelview-preview-img {
+    width: 5rem;
+    height: 5rem;
+    border: 0.15rem solid var(--gray-color);
+    border-radius: 50%;
+}
+
+.labelview-preview-label {
+    font-family: "bold";
+    font-size: 1rem;
+    color: var(--main-color);
+    margin-top: 0.8rem;
+}
+
+.labelview-preview-nickname {
+    font-family: "Semi";
+    font-size: 1rem;
+    color: var(--black-color);
+    margin-top: 0.2rem;
+}
+
+.labelview-button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
 .labelview-selct-container {
     display: flex;
     justify-content: right;
@@ -136,7 +200,7 @@ onMounted(async () => {
 
 .labelview-list-container {
     overflow-y: scroll;
-    height: 75vh;
+    flex: 1;
 }
 
 .labelview-list-container::-webkit-scrollbar {

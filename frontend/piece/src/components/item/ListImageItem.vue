@@ -96,5 +96,6 @@ const props = defineProps({
     font-family: "Semi";
     font-size: 1rem;
     color: var(--black-color);
+    user-select: none;
 }
 </style>
