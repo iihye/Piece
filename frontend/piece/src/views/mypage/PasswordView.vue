@@ -53,10 +53,13 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import router from "@/router";
+import { ref, onMounted } from "vue";
+import { useCommonStore } from "@/stores/common";
 import SquareButton from "@/components/button/SquareButton.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
+
+const commonStore = useCommonStore();
 
 const passwordMessage = ref("8자 이상의 영문, 숫자만 가능해요");
 const isPassword = ref(false);
@@ -93,6 +96,11 @@ const handlePasswordClick = () => {
 const handleChangeSuccess = () => {
     router.push({ name: "mypage" });
 };
+
+onMounted(() => {
+    commonStore.headerTitle = "비밀번호 수정";
+    commonStore.headerType = "header2";
+});
 </script>
 
 <style>
