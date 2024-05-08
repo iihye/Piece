@@ -54,6 +54,12 @@ dependencies {
     // feign client
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    // s3
+    implementation 'com.amazonaws:aws-java-sdk-s3'
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.1000')
+//    implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.1.1'
+//    implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:3.1.1'
 }
 
 dependencyManagement {

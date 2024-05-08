@@ -1,6 +1,7 @@
 package com.ssafy.piece.domain.pieces.entity;
 
 import com.ssafy.piece.domain.cultures.entity.CultureType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -9,10 +10,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -89,6 +92,9 @@ public class Pieces {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private GenreType genre;
+
+    @OneToMany(mappedBy = "piece", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Piecesheart> hearts;
 
     public void setRecord(String record) {
         this.record = record;

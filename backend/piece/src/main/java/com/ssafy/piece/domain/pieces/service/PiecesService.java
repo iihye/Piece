@@ -65,6 +65,7 @@ public class PiecesService {
 
         PiecesDetailResponseDto piecesDetailResponseDto = PiecesDetailResponseDto.builder()
             .pieceId(pieces.getPieceId())
+            .userId(pieces.getUserId())
             .title(pieces.getTitle())
             .frontImg(pieces.getImageFront())
             .backImg(pieces.getImageBack())
