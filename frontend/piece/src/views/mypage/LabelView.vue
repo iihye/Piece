@@ -67,11 +67,13 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { useCommonStore } from "@/stores/common";
 import { useUserStore } from "@/stores/user";
 import LabelItem from "@/components/item/LabelItem.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
 import SmallButton from "@/components/button/SmallButton.vue"; // 사용할 컴포넌트 import
 
+const commonStore = useCommonStore();
 const store = useUserStore();
 
 const mypageLabelList = computed(() => store.getMypageLabelList);
@@ -113,6 +115,9 @@ const handleWearoffSuccess = () => {
 };
 
 onMounted(async () => {
+    commonStore.headerTitle = "칭호 목록";
+    commonStore.headerType = "header2";
+
     await store.findMypageLabelList();
     // ---------------------
     // TODO: 유저 정보 불러오기 api 연결
