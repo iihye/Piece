@@ -1,53 +1,58 @@
 <template>
     <!-- header -->
-    <h1>내 조각 리스트 버전</h1>
     <RouterLink :to="{ name: 'pieceCalendar' }">캘린더</RouterLink>
-    
-    <!-- filter -->
-    <div class="piecelistmyview-scroll-container">
-        <div class="piecelistmyview-tab-navigation">
-            <div class="piecelistmyview-tab-menu" ref="tabMenu">
-                <FilterItem
-                    v-for="(item, index) in filterItems"
-                    class="piecelistmyview-tab-btn"
-                    :key="index"
-                    :labelType="item.labelType"
-                    :title="item.title"
-                    :isSelect="item.isSelect"
-                    @click="handleItemSelectClick(index)"
-                ></FilterItem>
+    <div class="piecelistmyview-main-container">
+        <!-- filter -->
+        <div class="piecelistmyview-scroll-container">
+            <div class="piecelistmyview-tab-navigation">
+                <div class="piecelistmyview-tab-menu" ref="tabMenu">
+                    <FilterItem
+                        v-for="(item, index) in filterItems"
+                        class="piecelistmyview-tab-btn"
+                        :key="index"
+                        :labelType="item.labelType"
+                        :title="item.title"
+                        :isSelect="item.isSelect"
+                        @click="handleItemSelectClick(index)"
+                    ></FilterItem>
+                </div>
+            </div>
+        </div>
+
+        <!-- list -->
+        <div v-if="filteredMyList.length === 0" class="piecelistmyview-list-noitem">
+            <NoItem :content="'내 조각이 없어요'"></NoItem>
+        </div>
+        <div v-else>
+            <div class="piecelistmyview-list-container">
+                <div class="piecelistmyview-list-grid">
+                    <div v-for="(item, index) in filteredMyList" :key="index" class="piecelistmyview-list-item">
+                        <ListImageItem
+                            :pieceId="item.pieceId"
+                            :performanceType="item.performanceType"
+                            :frontImg="item.frontImg"
+                            :title="item.title"
+                            @click="handleItemClick(item)"
+                        ></ListImageItem>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- list -->
-    <div class="piecelistmyview-list-container">
-        <div class="piecelistmyview-list-grid">
-            <div v-for="(item, index) in filteredMyList" :key="index" class="piecelistmyview-list-item">
-            <ListImageItem
-                :pieceId="item.pieceId"
-                :performanceType="item.performanceType"
-                :frontImg="item.frontImg"
-                :title="item.title"
-                @click="handleItemClick"
-            ></ListImageItem>
-        </div>
-        </div>
-        
-    </div>
-
-    
 </template>
 
 <script setup>
+import router from "@/router";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { usePiecelistStore } from "@/stores/piecelist";
-import { useRouter } from "vue-router";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListImageItem from "@/components/item/ListImageItem.vue";
+import NoItem from "@/components/item/NoItem.vue";
 
 const store = usePiecelistStore();
 
+const year = computed(() => store.getYear);
+const month = computed(() => store.getMonth);
 const piecelistMyList = computed(() => store.getPiecelistMyList);
 const filteredMyList = computed(() => computedFilteredMyList());
 const selectedOption = ref("ALL");
@@ -70,10 +75,9 @@ function computedFilteredMyList() {
     }
 }
 
-const handleItemClick = () => {
-    alert("선택");
+const handleItemClick = (item) => {
+    router.push({ name: "pieceDetail", params: { pieceId: item.pieceId } });
 };
-
 
 const filterItems = ref([
     {
@@ -142,6 +146,8 @@ onMounted(async () => {
     tabMenu.value.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
     tabMenu.value.addEventListener("mousemove", handleMouseMove);
+
+    await store.findPiecelistMyCalendar(year.value, month.value + 1);
 });
 
 onBeforeUnmount(() => {
@@ -149,17 +155,29 @@ onBeforeUnmount(() => {
     document.removeEventListener("mouseup", handleMouseUp);
     tabMenu.value.removeEventListener("mousemove", handleMouseMove);
 });
-
 </script>
 
 <style>
+.piecelistmyview-main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.piecelistmyview-main-container > :first-child {
+    flex: 0 0 auto;
+}
+
+.piecelistmyview-main-container > :not(:first-child) {
+    flex: 1;
+}
 
 /* filter */
 .piecelistmyview-scroll-container {
     position: relative;
     /* width: 450px; */
     transition: 0.5s ease;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .piecelistmyview-tab-navigation {
@@ -201,20 +219,45 @@ onBeforeUnmount(() => {
 }
 
 /* list */
+.piecelistmyview-list-container {
+    overflow-y: scroll;
+    height: 60vh;
+}
+
+.piecelistmyview-list-container::-webkit-scrollbar {
+    width: 0.2rem;
+}
+
+.piecelistmyview-list-container::-webkit-scrollbar-thumb {
+    background-color: var(--gray2-color);
+    border-radius: 1rem;
+}
+
+.piecelistmyview-list-container::-webkit-scrollbar-track {
+    background-color: var(--gray-color);
+    border-radius: 1rem;
+}
+
 .piecelistmyview-list-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(8rem, 1fr));
-    justify-items: center; 
+    justify-items: center;
     grid-gap: 1rem;
 }
 
 .piecelistmyview-list-item {
-    width: auto; 
+    width: auto;
 }
 
-@media (min-width: 1024px) {
+.piecelistmyview-list-noitem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* @media (min-width: 1024px) {
     .piecelistmyview-list-grid {
         grid-template-columns: repeat(4, minmax(16rem, 5fr));
     }
-}
+} */
 </style>

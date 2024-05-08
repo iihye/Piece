@@ -63,9 +63,11 @@ function getIconName(labelType) {
             return ["fas", "film"];
         case "CONCERT":
             return ["fas", "music"];
+        case "MUSICAL":
+            return ["fas", "masks-theater"];
         case "THEATER":
             return ["fas", "masks-theater"];
-        case "PIECE":
+        case "PIECES":
             return ["fas", "cake-candles"];
         default:
             return ["fas", "ban"];
@@ -151,7 +153,6 @@ function getIconName(labelType) {
 }
 
 .labelitem-wear-container {
-    width: 4rem;
     display: flex;
     flex-shrink: 0;
 }

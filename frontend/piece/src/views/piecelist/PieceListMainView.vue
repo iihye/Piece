@@ -4,31 +4,52 @@
             <RouterLink :to="{ name: 'cakelist' }" class="piecelistmain-square">
                 <div class="piecelistmain-title">케이크 모아보기</div>
                 <div class="piecelistmain-imagebox">
-                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Birthday%20Cake.png"
-                        alt="Birthday Cake" class="piecelistmain-image" />
+                    <img
+                        src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Birthday%20Cake.png"
+                        alt="Birthday Cake"
+                        class="piecelistmain-image"
+                    />
                 </div>
             </RouterLink>
-            <RouterLink :to="{ name: 'pieceListMy' }" class="piecelistmain-square">
+            <RouterLink
+                :to="{ name: 'pieceListMy' }"
+                class="piecelistmain-square"
+            >
                 <div class="piecelistmain-title">내 조각 모아보기</div>
                 <div class="piecelistmain-imagebox">
-                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Spiral%20Calendar.png"
-                        alt="Spiral Calendar" class="piecelistmain-image" />
+                    <img
+                        src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Spiral%20Calendar.png"
+                        alt="Spiral Calendar"
+                        class="piecelistmain-image"
+                    />
                 </div>
             </RouterLink>
         </div>
         <div class="piecelistmain-bottom">
-            <RouterLink :to="{ name: 'pieceList' }" class="piecelistmain-square">
+            <RouterLink
+                :to="{ name: 'pieceList' }"
+                class="piecelistmain-square"
+            >
                 <div class="piecelistmain-title">조각 모아보기</div>
                 <div class="piecelistmain-imagebox">
-                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Shortcake.png"
-                        alt="Shortcake" class="piecelistmain-image" />
+                    <img
+                        src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Shortcake.png"
+                        alt="Shortcake"
+                        class="piecelistmain-image"
+                    />
                 </div>
             </RouterLink>
-            <RouterLink :to="{ name: 'pieceList' }" class="piecelistmain-square">
+            <RouterLink
+                :to="{ name: 'pieceListHeart' }"
+                class="piecelistmain-square"
+            >
                 <div class="piecelistmain-title">찜한 조각 모아보기</div>
                 <div class="piecelistmain-imagebox">
-                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png"
-                        alt="Red Heart" class="piecelistmain-image" />
+                    <img
+                        src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png"
+                        alt="Red Heart"
+                        class="piecelistmain-image"
+                    />
                 </div>
             </RouterLink>
         </div>
@@ -37,7 +58,7 @@
 
 <script setup></script>
 
-<style>
+<style scoped>
 .piecelistmain-container {
     display: flex;
     flex-direction: row;
