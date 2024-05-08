@@ -2,6 +2,7 @@ package com.ssafy.piece.domain.statistics.repository;
 
 import com.ssafy.piece.domain.statistics.entity.Consumptions;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 

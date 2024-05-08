@@ -7,6 +7,9 @@ import com.ssafy.piece.domain.statistics.entity.Consumptions;
 import com.ssafy.piece.domain.statistics.entity.Views;
 import com.ssafy.piece.domain.statistics.repository.ConsumptionsRepository;
 import com.ssafy.piece.domain.statistics.repository.ViewsRepository;
+import com.ssafy.piece.domain.statistics.exception.StatisticsConsumptionNullException;
+import com.ssafy.piece.domain.statistics.exception.StatisticsViewNullException;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class StatisticsService {
 
     private final ViewsRepository viewsRepository;
@@ -25,6 +29,7 @@ public class StatisticsService {
     public void modifyViews(Long userId, CultureType type, LocalDate date) {
 
         Views oldViews = viewsRepository.findByUserIdAndViewYear(userId, date.getYear());
+
         Views views = Views.builder().build();
 
         if (oldViews != null) {
@@ -74,32 +79,33 @@ public class StatisticsService {
         Consumptions consumption = consumptionsRepository.findByuserIdAndConsumptionYearAndConsumptionMonth(
             userId, date.getYear(), date.getMonthValue());
 
-        if (consumption == null) {
-            // 데이터가 없을 경우 새로 생성
-            consumption = Consumptions.builder()
+        Consumptions updateConsumption;
+
+        if(consumption!=null) {
+
+            updateConsumption = Consumptions.builder()
+                .userId(userId)
+                .consumptionYear(date.getYear())
+                .consumptionMonth(date.getMonthValue())
+                .consumptionMoney(consumption.getConsumptionMoney() + price)
+                .build();
+        }else{
+            updateConsumption = Consumptions.builder()
                 .userId(userId)
                 .consumptionYear(date.getYear())
                 .consumptionMonth(date.getMonthValue())
                 .consumptionMoney(price)
                 .build();
-
-            consumptionsRepository.save(consumption);
-        } else {
-            // 데이터가 이미 있을 경우, 기존 금액을 갱신 (예: 더하기, 빼기 등)
-            Consumptions updatedConsumption = Consumptions.builder()
-                .userId(consumption.getUserId())
-                .consumptionYear(consumption.getConsumptionYear())
-                .consumptionMonth(consumption.getConsumptionMonth())
-                .consumptionMoney(consumption.getConsumptionMoney() + price) // 변경하고자 하는 값
-                .build();
-
-        consumptionsRepository.save(updatedConsumption);
         }
+
+        consumptionsRepository.save(updateConsumption);
     }
 
     // 관람 수 통계 조회
     public ViewResponseDto findView(Long userId, int year) {
         Views view = viewsRepository.findByUserIdAndViewYear(userId, year);
+
+            if(view!=null){
         ViewResponseDto result = ViewResponseDto.builder()
             .viewYear(view.getViewYear())
             .movieNumber(view.getMovieNumber())
@@ -108,7 +114,10 @@ public class StatisticsService {
             .concertNumber(view.getConcertNumber())
             .etcNumber(view.getEtcNumber())
             .build();
-        return result;
+                return result;
+            } else{
+                throw new StatisticsViewNullException();
+            }
     }
 
     // 소비 금액 통계 조회
@@ -118,6 +127,10 @@ public class StatisticsService {
 
         List<Consumptions> consumptions = consumptionsRepository.findByUserIdAndConsumptionYear(
             userId, year,sort);
+
+        if (consumptions.isEmpty()) {
+            throw new StatisticsConsumptionNullException();
+        }
 
         List<ConsumptionResponseDto> result = new ArrayList<>();
         for(Consumptions consumption : consumptions) {
