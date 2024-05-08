@@ -91,6 +91,7 @@ const handleChangeSuccess = () => {
     font-family: "Medium";
     font-size: 0.8rem;
     color: var(--gray2-color);
+    user-select: none;
 }
 
 .nicknameview-input-input {
@@ -115,6 +116,7 @@ const handleChangeSuccess = () => {
     font-size: 0.8rem;
     color: var(--gray2-color);
     margin-top: 0.5rem;
+    user-select: none;
 }
 
 .nicknameeview-main-button {
