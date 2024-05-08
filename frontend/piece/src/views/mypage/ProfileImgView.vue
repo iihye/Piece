@@ -1,5 +1,5 @@
 <template>
-    <div class=".profileimgview-main-title">프로필 이미지를 등록해주세요</div>
+    <div class="profileimgview-main-title">프로필 이미지를 등록해주세요</div>
     <div class="profileimgview-main-content">원형을 클릭해주세요</div>
     <div class="profileimgview-container">
         <img :src="profileImage" alt="프로필 이미지">
