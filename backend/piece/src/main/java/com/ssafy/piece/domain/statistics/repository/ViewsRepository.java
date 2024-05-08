@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ViewsRepository extends JpaRepository<Views, Long> {
 
-    Views findByuserIdAndviewYear(Long userId, int year);
+    Views findByUserIdAndViewYear(Long userId, int year);
 
 
 }

@@ -1,13 +1,17 @@
 package com.ssafy.piece.domain.statistics.service;
 
 import com.ssafy.piece.domain.cultures.entity.CultureType;
+import com.ssafy.piece.domain.statistics.dto.response.ConsumptionResponseDto;
+import com.ssafy.piece.domain.statistics.dto.response.ViewResponseDto;
 import com.ssafy.piece.domain.statistics.entity.Consumptions;
 import com.ssafy.piece.domain.statistics.entity.Views;
 import com.ssafy.piece.domain.statistics.repository.ConsumptionsRepository;
 import com.ssafy.piece.domain.statistics.repository.ViewsRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +24,7 @@ public class StatisticsService {
     // 관람 수 계산
     public void modifyViews(Long userId, CultureType type, LocalDate date) {
 
-        Views oldViews = viewsRepository.findByuserIdAndviewYear(userId, date.getYear());
+        Views oldViews = viewsRepository.findByUserIdAndViewYear(userId, date.getYear());
         Views views = Views.builder().build();
 
         if (oldViews != null) {
@@ -67,29 +71,62 @@ public class StatisticsService {
     // 소비 금액 계산
     public void modifyConsumption(Long userId, LocalDate date, int price) {
 
-        Consumptions consumption = consumptionsRepository.findByuserIdAndConsumptionsYearAndConsumptionMonth(
+        Consumptions consumption = consumptionsRepository.findByuserIdAndConsumptionYearAndConsumptionMonth(
             userId, date.getYear(), date.getMonthValue());
 
-        consumption = Consumptions.builder()
-            .userId(userId)
-            .consumptionYear(date.getYear())
-            .consumptionMonth(date.getMonthValue())
-            .consumptionMoney(price)
-            .build();
+        if (consumption == null) {
+            // 데이터가 없을 경우 새로 생성
+            consumption = Consumptions.builder()
+                .userId(userId)
+                .consumptionYear(date.getYear())
+                .consumptionMonth(date.getMonthValue())
+                .consumptionMoney(price)
+                .build();
 
-        consumptionsRepository.save(consumption);
+            consumptionsRepository.save(consumption);
+        } else {
+            // 데이터가 이미 있을 경우, 기존 금액을 갱신 (예: 더하기, 빼기 등)
+            Consumptions updatedConsumption = Consumptions.builder()
+                .userId(consumption.getUserId())
+                .consumptionYear(consumption.getConsumptionYear())
+                .consumptionMonth(consumption.getConsumptionMonth())
+                .consumptionMoney(consumption.getConsumptionMoney() + price) // 변경하고자 하는 값
+                .build();
+
+        consumptionsRepository.save(updatedConsumption);
+        }
     }
 
     // 관람 수 통계 조회
-    public Views findView(Long userId, int year) {
-        Views view = viewsRepository.findByuserIdAndviewYear(userId, year);
-        return view;
+    public ViewResponseDto findView(Long userId, int year) {
+        Views view = viewsRepository.findByUserIdAndViewYear(userId, year);
+        ViewResponseDto result = ViewResponseDto.builder()
+            .viewYear(view.getViewYear())
+            .movieNumber(view.getMovieNumber())
+            .TheaterNumber(view.getTheaterNumber())
+            .musicalNumber(view.getMusicalNumber())
+            .concertNumber(view.getConcertNumber())
+            .etcNumber(view.getEtcNumber())
+            .build();
+        return result;
     }
 
     // 소비 금액 통계 조회
-    public List<Consumptions> findConsumption(Long userId, int year) {
-        List<Consumptions> consumption = consumptionsRepository.findByUserIdAndConsumptionYear(
-            userId, year);
-        return consumption;
+    public List<ConsumptionResponseDto> findConsumption(Long userId, int year) {
+
+        Sort sort = Sort.by(Sort.Direction.ASC, "consumptionMonth");
+
+        List<Consumptions> consumptions = consumptionsRepository.findByUserIdAndConsumptionYear(
+            userId, year,sort);
+
+        List<ConsumptionResponseDto> result = new ArrayList<>();
+        for(Consumptions consumption : consumptions) {
+            result.add(ConsumptionResponseDto.builder()
+                    .consumptionYear(consumption.getConsumptionYear())
+                    .consumptionMonth(consumption.getConsumptionMonth())
+                    .consumptionMoney(consumption.getConsumptionMoney())
+                .build());
+        }
+        return result;
     }
 }

@@ -1,8 +1,13 @@
 package com.ssafy.piece.domain.statistics.controller;
 
+import com.ssafy.piece.domain.statistics.dto.response.ConsumptionResponseDto;
+import com.ssafy.piece.domain.statistics.dto.response.ViewResponseDto;
 import com.ssafy.piece.domain.statistics.entity.Consumptions;
 import com.ssafy.piece.domain.statistics.entity.Views;
 import com.ssafy.piece.domain.statistics.service.StatisticsService;
+import com.ssafy.piece.global.annotation.AuthenticatedUser;
+import com.ssafy.piece.global.response.code.SuccessCode;
+import com.ssafy.piece.global.response.structure.SuccessResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,23 +27,21 @@ public class StatisticsController {
     private final StatisticsService statisticsService;
 
     // 관람 통계 조회
-    @GetMapping("/view")
-    public ResponseEntity<Object> viewDetail(@PathVariable int viewYear) {
+    @GetMapping("/view/{viewYear}")
+    public ResponseEntity<Object> viewDetail(@PathVariable int viewYear, @AuthenticatedUser Long userId) {
 
-        Long userId = 1L;
-        Views view = statisticsService.findView(userId, viewYear);
+        ViewResponseDto view = statisticsService.findView(userId, viewYear);
 
-        return new ResponseEntity<>(view, HttpStatus.OK);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_VIEW_STATISTICS_SUCCESS, view);
     }
 
     // 소비 통계 조회
-    @GetMapping("/consumption")
-    public ResponseEntity<Object> consumptionDetail(@PathVariable int consumptionYear) {
+    @GetMapping("/consumption/{consumptionYear}")
+    public ResponseEntity<Object> consumptionDetail(@PathVariable int consumptionYear, @AuthenticatedUser Long userId) {
 
-        Long userId = 1L;
-        List<Consumptions> consumption = statisticsService.findConsumption(userId, consumptionYear);
+        List<ConsumptionResponseDto> consumption = statisticsService.findConsumption(userId, consumptionYear);
 
-        return new ResponseEntity<>(consumption, HttpStatus.OK);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_CONSUMPTIONS_SUCCESS, consumption);
     }
 
 }

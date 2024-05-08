@@ -65,8 +65,11 @@ public enum SuccessCode implements ResponseCode {
     /**
      * s3
      */
-    GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다.");
+    GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다."),
 
+    // 통계
+    FIND_VIEW_STATISTICS_SUCCESS(HttpStatus.OK,"관람수 통계 조회에 성공했습니다."),
+    FIND_CONSUMPTIONS_SUCCESS(HttpStatus.OK,"소비 통계 조회에 성공했습니다.");
 
     private final HttpStatus httpStatus;
 
