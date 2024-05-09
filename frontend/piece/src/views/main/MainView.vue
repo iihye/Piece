@@ -22,20 +22,25 @@
         <div class="mainview-sub-content">지금 조각이 완성되고 있어요!</div>
     </div> -->
 
-    <RouterLink class="mainview-login-router" :to="{ name: 'login' }"
+    <RouterLink v-if="!isLogin" class="mainview-login-router" :to="{ name: 'login' }"
         >로그인</RouterLink
     >
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
 
 const commonStore = useCommonStore();
+const isLogin = ref(false);
 
 onMounted(() => {
     commonStore.headerTitle = "piece";
     commonStore.headerType = "header1";
+
+    if(localStorage.getItem("accessToken")) {
+        isLogin.value = true;
+    }
 });
 </script>
 

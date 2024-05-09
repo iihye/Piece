@@ -131,6 +131,7 @@ function handleLogoutClick() {
     commonStore.isLogin = false;
     localStorage.clear();
     axios.defaults.headers.common["Authorization"] = undefined;
+    router.push({ name: "main" });
 }
 
 function handleWithdrawalClick() {
