@@ -1,36 +1,37 @@
-package com.ssafy.user.global.security;
+package com.ssafy.gateway.global;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenUtil {
 
+
 //    @Value("${jwt.secret}")
 //    private String secretKey;
-    public String secretKey = "ssafy1234"; // 환경 변수로 관리하는 것이 좋습니다.
+public String secretKey = "ssafy1234"; // 환경 변수로 관리하는 것이 좋습니다.
 
     public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
             .setSigningKey(secretKey.getBytes())
             .parseClaimsJws(token)
             .getBody();
-        return Long.parseLong(claims.getSubject()); // `subject`를 사용자 ID로 사용
+        return Long.parseLong(claims.getSubject());
     }
 
-
-    public String generateToken(Long userId) {
+    public String generateToken(String username) {
         return Jwts.builder()
-            .setSubject(String.valueOf(userId)) // 사용자 ID를 문자열로 변환
+//            .setClaims()
+            .setSubject(username)
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10시간 후 만료
             .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
             .compact();
     }
-
 
     public boolean validateToken(String token, String username) {
         final String tokenUsername = getUsernameFromToken(token);
@@ -43,7 +44,7 @@ public class JwtTokenUtil {
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
-            .setSigningKey(secretKey)
+            .setSigningKey(secretKey.getBytes())
             .parseClaimsJws(token)
             .getBody();
     }
