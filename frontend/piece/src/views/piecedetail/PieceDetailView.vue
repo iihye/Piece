@@ -20,11 +20,10 @@
                     </div>
                 </div>
                 <!-- icon -->
-                <div class="pieceDetailView-icon-container">
+                <div class="pieceDetailView-icon-container" @click="handleModalSuccess">
                     <font-awesome-icon
                         class="pieceDetailView-top-icon"
                         :icon="['fas', 'ellipsis-vertical']"
-                        @click="handleModalSuccess"
                     />
                 </div>
             </div>
