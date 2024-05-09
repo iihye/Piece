@@ -65,6 +65,7 @@ function drawCanvas() {
 }
 
 onMounted(() => {
+    makeStore.selectedLayout = layout1;
     drawCanvas(); // 컴포넌트가 마운트된 후 최초로 캔버스 그리기
     watchEffect(drawCanvas); // 선택된 레이아웃이 변경될 때마다 캔버스 다시 그리기
     commonStore.headerTitle = '조각만들기';
