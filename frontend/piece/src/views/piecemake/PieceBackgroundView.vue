@@ -13,13 +13,14 @@
     <RoundButton :roundButtonContent="'확인'" :roundButtonFunction="next" :isRoundDisable="isRoundDisable"
         class="piecefront-button">
     </RoundButton>
-    <RouterLink :to="{ name: 'piecesave' }">저장</RouterLink>
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect, computed, watch } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 // import { useCommonStore } from '@/stores/common';
 import { usePieceMakeStore } from '@/stores/piecemake';
+import RoundButton from '@/components/button/RoundButton.vue';
+import router from '@/router';
 import '@/components/css/color.css';
 
 // const commonStore = useCommonStore();
@@ -137,7 +138,7 @@ onMounted(() => {
 const isRoundDisable = ref(true);
 
 const next = () => {
-    router.push('/piece/background');
+    router.push('/piece/save');
 }
 
 

@@ -74,8 +74,7 @@ onMounted(() => {
 const isRoundDisable = ref(true);
 
 const next = () => {
-    // 뒷면 사진 저장 필요함
-    router.push('/piece/save');
+    router.push('/piece/background');
 }
 </script>
 
