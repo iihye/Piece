@@ -87,6 +87,7 @@ import router from "@/router";
 import { onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
 import IconText from "@/components/text/IconText.vue";
+import axios from "axios";
 
 const commonStore = useCommonStore();
 
@@ -124,6 +125,12 @@ function handleConsumeClick() {
 
 function handleLogoutClick() {
     alert("로그아웃 클릭");
+
+    // 로그아웃 성공시에 실행
+    commonStore.loginUser = "";
+    commonStore.isLogin = false;
+    localStorage.clear();
+    axios.defaults.headers.common["Authorization"] = undefined;
 }
 
 function handleWithdrawalClick() {
