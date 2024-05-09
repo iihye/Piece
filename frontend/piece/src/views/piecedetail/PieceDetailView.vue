@@ -7,15 +7,15 @@
                 <div class="pieceDetailView-user-container">
                     <img
                         class="pieceDetailView-user-img"
-                        :src="userDetail.profileImg"
+                        :src="pieceUser.profileImage || 'https://i.ibb.co/grMvZS9/your-image.jpg'"
                         alt="image"
                     />
                     <div class="pieceDetailView-name-container">
                         <div class="pieceDetailView-user-label">
-                            {{ userDetail.label }}
+                            {{ pieceUserLabel }}
                         </div>
                         <div class="pieceDetailView-user-nickname">
-                            {{ userDetail.nickname }}
+                            {{ pieceUser.nickname }}
                         </div>
                     </div>
                 </div>
@@ -109,21 +109,26 @@ import ReportSelectModal from "@/components/modal/ReportSelectModal.vue";
 const commonStore = useCommonStore();
 const store = usePiecelistStore();
 
+const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
+const loginUserLabel = computed(() => commonStore.getLoginUserLabel);
+
 const route = useRoute();
 const imgFrontBack = ref(true);
 const selectModal = ref(false);
 const linkSuccessModal = ref(false);
 const reportModal = ref(false);
-// user dummy data 추후 수정
-const userId = ref(1);
-const isMine = computed(() => userId.value === piecelistDetail.value.userId);
+const userId = localStorage.getItem("userId");
+const isMine = computed(() => userId === piecelistDetail.value.userId);
 
 // userDetail dummy data 추후 수정
-const userDetail = ref({
-    label: "새로운",
-    nickname: "김싸피",
-    profileImg: "https://i.ibb.co/grMvZS9/your-image.jpg",
-});
+// const userDetail = ref({
+//     label: "새로운",
+//     nickname: "김싸피",
+//     profileImg: "https://i.ibb.co/grMvZS9/your-image.jpg",
+// });
+const pieceUser = computed(() => store.getPieceUser);
+const pieceUserLabel = computed(() => store.getPieceUserLabel);
+
 const piecelistDetail = computed(() => store.getPiecelistDetail);
 const pieceDetailHeart = computed(() => store.getPieceDetailHeart);
 
@@ -200,6 +205,7 @@ onMounted(async () => {
 
     const pieceId = route.params.pieceId;
     await store.findPiecelistDetail(pieceId);
+    // await store.findPieceUser(piecelistDetail.value.userId);
     await store.findPieceDetailHeart(pieceId);
 });
 </script>
@@ -222,7 +228,7 @@ onMounted(async () => {
 .pieceDetailView-user-img {
     width: 3rem;
     height: 3rem;
-    border: 0.15rem solid var(--gray-color);
+    border: 0.05rem solid var(--gray-color);
     border-radius: 50%;
     margin-right: 0.6rem;
 }
@@ -259,6 +265,10 @@ onMounted(async () => {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+}
+
+.pieceDetailView-icon-container:hover{
+    cursor: pointer;
 }
 
 .pieceDetailView-top-icon {

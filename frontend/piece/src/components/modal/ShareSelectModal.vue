@@ -20,7 +20,8 @@
                     링크로 공유하기
                 </div>
             </div>
-            <div
+            <!-- TODO: 카카오톡으로 공유하기 주석 -->
+            <!-- <div
                 class="shareselectmodal-modal-container"
                 @click="handleKakaoClick"
             >
@@ -35,7 +36,7 @@
                 <div class="shareselectmodal-modal-content">
                     카카오톡으로 공유하기
                 </div>
-            </div>
+            </div> -->
             <div
                 v-if="isMine"
                 class="shareselectmodal-modal-container"

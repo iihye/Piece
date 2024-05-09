@@ -14,6 +14,8 @@ export const usePiecelistStore = defineStore(
         const piecelistDetail = ref({});
         const pieceDetailHeart = ref({});
         const pieceDetailRecord = ref({});
+        const pieceUser = ref({});
+        const pieceUserLabel = ref("");
 
         const today = ref(new Date());
         const year = ref(today.value.getFullYear());
@@ -52,6 +54,14 @@ export const usePiecelistStore = defineStore(
             return pieceDetailRecord.value;
         });
 
+        const getPieceUser = computed(() => {
+            return pieceUser.value;
+        });
+
+        const getPieceUserLabel = computed(() => {
+            return pieceUserLabel.value;
+        });
+
         const getToday = computed(() => {
             return today.value;
         });
@@ -73,6 +83,32 @@ export const usePiecelistStore = defineStore(
         };
 
         // =========== ACTION ===============
+
+        const findPieceUser = function (userId) {
+            axios({
+                url: `${import.meta.env.VITE_REST_USER_API}/users/find/${userId}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    pieceUser.value = res.data;
+                    if (pieceUser.value.labelId !== 0) {
+                        findPieceUserLabel(pieceUser.value.labelId);
+                    }
+                })
+                .catch((err) => {});
+        };
+
+        const findPieceUserLabel = function (labelId) {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/labels/${labelId}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    pieceUserLabel.value = res.data.data;
+                })
+                .catch((err) => {});
+        };
+
         const findPiecelistList = function () {
             axios({
                 url: `${import.meta.env.VITE_REST_PIECE_API}/piecelist`,
@@ -97,18 +133,14 @@ export const usePiecelistStore = defineStore(
 
         const findPiecelistMyCalendar = function (year, month) {
             axios({
-                url: `${
-                    import.meta.env.VITE_REST_PIECE_API
-                }/piecelist/my/${year}/${month}`,
+                url: `${import.meta.env.VITE_REST_PIECE_API}/piecelist/my/${year}/${month}`,
                 method: "GET",
             })
                 .then((res) => {
                     if (res.data.code === "FIND_MY_PIECE_LIST_SUCCESS") {
                         piecelistMyCalendar.value = res.data.data;
                         calendarImplementation();
-                    } else if (
-                        res.data.code === "FIND_MY_PIECE_LIST_NULL_SUCCESS"
-                    ) {
+                    } else if (res.data.code === "FIND_MY_PIECE_LIST_NULL_SUCCESS") {
                         piecelistMyCalendar.value = [];
                         calendarImplementation();
                     }
@@ -128,21 +160,14 @@ export const usePiecelistStore = defineStore(
                 imageUrl: null,
                 imageId: null,
             });
-            const daysOfMonth = Array.from(
-                { length: endDayOfTheMonth },
-                (_, i) => {
-                    const { frontImg, pieceId } = getImageUrlForDay(
-                        i + 1,
-                        month,
-                        year
-                    );
-                    return {
-                        day: i + 1,
-                        imageUrl: frontImg,
-                        pieceId: pieceId,
-                    };
-                }
-            );
+            const daysOfMonth = Array.from({ length: endDayOfTheMonth }, (_, i) => {
+                const { frontImg, pieceId } = getImageUrlForDay(i + 1, month, year);
+                return {
+                    day: i + 1,
+                    imageUrl: frontImg,
+                    pieceId: pieceId,
+                };
+            });
             const fullMonth = [...emptyStartDays, ...daysOfMonth];
             const weeks = [];
 
@@ -159,13 +184,11 @@ export const usePiecelistStore = defineStore(
         };
 
         const getImageUrlForDay = function (day, month, year) {
-            const fullDate = `${year}-${String(month + 1).padStart(
+            const fullDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(
                 2,
                 "0"
-            )}-${String(day).padStart(2, "0")}`;
-            const piece = piecelistMyCalendar.value.find(
-                (p) => p.date === fullDate
-            );
+            )}`;
+            const piece = piecelistMyCalendar.value.find((p) => p.date === fullDate);
             if (piece) {
                 return { frontImg: piece.frontImg, pieceId: piece.pieceId };
             } else {
@@ -191,6 +214,7 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     piecelistDetail.value = res.data.data;
+                    findPieceUser(piecelistDetail.value.userId);
                 })
                 .catch((err) => {});
         };
@@ -230,9 +254,7 @@ export const usePiecelistStore = defineStore(
 
         const findPieceDetailRecord = function (pieceId) {
             axios({
-                url: `${
-                    import.meta.env.VITE_REST_PIECE_API
-                }/pieces/record/${pieceId}`,
+                url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/record/${pieceId}`,
                 method: "GET",
             })
                 .then((res) => {
@@ -268,6 +290,8 @@ export const usePiecelistStore = defineStore(
             piecelistDetail,
             pieceDetailHeart,
             pieceDetailRecord,
+            pieceUser,
+            pieceUserLabel,
             today,
             year,
             month,
@@ -280,12 +304,16 @@ export const usePiecelistStore = defineStore(
             getPiecelistDetail,
             getPieceDetailHeart,
             getPieceDetailRecord,
+            getPieceUser,
+            getPieceUserLabel,
             getToday,
             getYear,
             getMonth,
             getState,
             setToday,
             // action
+            findPieceUser,
+            findPieceUserLabel,
             findPiecelistList,
             findPiecelistMyList,
             findPiecelistMyCalendar,
