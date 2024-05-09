@@ -20,9 +20,9 @@ import testLayout from '@/assets/testlayout.svg';
 import RoundButton from '@/components/button/RoundButton.vue';
 import router from '@/router';
 import { usePieceMakeStore } from "@/stores/piecemake";
-// import { useCommonStore } from '@/stores/common';
+import { useCommonStore } from '@/stores/common';
 
-// const commonStore = useCommonStore();
+const commonStore = useCommonStore();
 const makeStore = usePieceMakeStore();
 
 const layout1 = testLayout;
@@ -67,8 +67,8 @@ function drawCanvas() {
 onMounted(() => {
     drawCanvas(); // 컴포넌트가 마운트된 후 최초로 캔버스 그리기
     watchEffect(drawCanvas); // 선택된 레이아웃이 변경될 때마다 캔버스 다시 그리기
-    // commonStore.headerTitle = '조각만들기';
-    // commonStore.headerType = 'header2';
+    commonStore.headerTitle = '조각만들기';
+    commonStore.headerType = 'header2';
 });
 
 const isRoundDisable = ref(true);

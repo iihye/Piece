@@ -17,13 +17,13 @@
 
 <script setup>
 import { onMounted, ref, computed, watch } from 'vue';
-// import { useCommonStore } from '@/stores/common';
+import { useCommonStore } from '@/stores/common';
 import { usePieceMakeStore } from '@/stores/piecemake';
 import RoundButton from '@/components/button/RoundButton.vue';
 import router from '@/router';
 import '@/components/css/color.css';
 
-// const commonStore = useCommonStore();
+const commonStore = useCommonStore();
 const makeStore = usePieceMakeStore();
 
 const rootStyle = getComputedStyle(document.documentElement);
@@ -131,8 +131,8 @@ function drawTextBox(context, text, x, y) {
 
 onMounted(() => {
     drawCanvas(); // 컴포넌트가 마운트된 후 최초로 캔버스 그리기
-    // commonStore.headerTitle = '조각만들기';
-    // commonStore.headerType = 'header2';
+    commonStore.headerTitle = '조각만들기';
+    commonStore.headerType = 'header2';
 });
 
 const isRoundDisable = ref(true);
