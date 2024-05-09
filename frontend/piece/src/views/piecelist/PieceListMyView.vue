@@ -241,7 +241,6 @@ onBeforeUnmount(() => {
 /* list */
 .piecelistmyview-list-container {
     overflow-y: scroll;
-    height: 60vh;
 }
 
 .piecelistmyview-list-container::-webkit-scrollbar {

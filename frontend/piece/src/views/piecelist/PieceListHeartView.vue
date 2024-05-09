@@ -237,7 +237,6 @@ onBeforeUnmount(() => {
 /* list */
 .piecelistheartview-list-container {
     overflow-y: scroll;
-    height: 70vh;
 }
 
 .piecelistheartview-list-container::-webkit-scrollbar {
