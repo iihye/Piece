@@ -1,41 +1,64 @@
 //package com.ssafy.piece.global.security;
 //
+//import com.ssafy.piece.global.security.JwtAuthenticationFilter.Config;
 //import jakarta.servlet.FilterChain;
 //import jakarta.servlet.ServletException;
 //import jakarta.servlet.ServletRequest;
 //import jakarta.servlet.ServletResponse;
 //import jakarta.servlet.http.HttpServletRequest;
 //import java.io.IOException;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.cloud.gateway.filter.GatewayFilter;
+//import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.server.reactive.ServerHttpRequest;
+//import org.springframework.http.server.reactive.ServerHttpResponse;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.web.filter.GenericFilterBean;
+//import org.springframework.web.server.ServerWebExchange;
+//import reactor.core.publisher.Mono;
 //
-//public class JwtAuthenticationFilter extends GenericFilterBean {
+//public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<Config> {
 //
+//@Autowired
+//private JwtTokenUtil jwtTokenUtil;
 //
-//    private JwtTokenProvider tokenProvider;
+//public JwtAuthenticationFilter() {
+//    super(Config.class);
+//}
 //
-//    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider){
-//        this.tokenProvider = tokenProvider;
-//    }
+//@Override
+//public GatewayFilter apply(Config config) {
+//    return (exchange, chain) -> {
+//        ServerHttpRequest request = exchange.getRequest();
+//        String token = request.getHeaders().getFirst("Authorization");
 //
-//    @Override
-//    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
-//        throws IOException, ServletException {
-//        String token = getTokenFromRequest((HttpServletRequest) request);
-//        if (token != null && tokenProvider.validateToken(token)) {
-//            String username = tokenProvider.getUsernameFromJWT(token);
-//            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, null); // Authorities would be added here
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//        if (token != null && token.startsWith("Bearer ")) {
+//            String jwtToken = token.substring(7);
+//            try {
+//                String userId = String.valueOf(jwtTokenUtil.getUserIdFromToken(jwtToken));
+//                if (userId != null) {
+//                    ServerHttpRequest modifiedRequest = request.mutate()
+//                        .header("Authenticated-User-Id", userId)
+//                        .build();
+//                    return chain.filter(exchange.mutate().request(modifiedRequest).build());
+//                }
+//            } catch (Exception e) {
+//                return this.onError(exchange, "Invalid JWT Token", HttpStatus.UNAUTHORIZED);
+//            }
 //        }
-//        filterChain.doFilter(request, response);
-//    }
+//        return chain.filter(exchange);
+//    };
+//}
 //
-//    private String getTokenFromRequest(HttpServletRequest request) {
-//        String bearerToken = request.getHeader("Authorization");
-//        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-//            return bearerToken.substring(7);
-//        }
-//        return null;
-//    }
+//private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
+//    ServerHttpResponse response = exchange.getResponse();
+//    response.setStatusCode(httpStatus);
+//    return response.setComplete();
+//}
+//
+//public static class Config {
+//    // Configuration properties if required
+//}
 //}

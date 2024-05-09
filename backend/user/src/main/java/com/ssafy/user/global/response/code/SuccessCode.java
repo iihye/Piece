@@ -20,6 +20,8 @@ public enum SuccessCode implements ResponseCode {
 
     JOIN_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
 
+    NICKNAME_UPDATE_SUCCESS(HttpStatus.OK, "닉네임 변경에 성공했습니다."),
+
     CHECK_PASSWORD_SUCCESS(HttpStatus.OK, "비밀번호 확인에 성공했습니다."),
 
     PASSWORD_UPDATE_SUCCESS(HttpStatus.OK, "비밀번호 변경에 성공했습니다."),

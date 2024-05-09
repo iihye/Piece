@@ -1,9 +1,7 @@
-package com.ssafy.piece.domain.users.dto.request;
-
+package com.ssafy.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
 
 @Data
 

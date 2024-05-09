@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * */
 @Service
 @AllArgsConstructor
-public class UserRegistrationService {
+public class    UserRegistrationService {
 
     private final UsersRepository usersRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -55,7 +55,7 @@ public class UserRegistrationService {
 
 
 
-        return new UserRegistrationResponseDto(newUser.getEmail());
+        return new UserRegistrationResponseDto(newUser.getUserId());
     }
 
 
