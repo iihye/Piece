@@ -71,7 +71,7 @@ watch([email, password], ([newEmail, newPassword]) => {
 const submitLogin = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_REST_PIECE_API}/auth/login`,
+            `${import.meta.env.VITE_REST_USER_API}/auth/login`,
             {
                 email: email.value,
                 password: password.value,
@@ -81,6 +81,14 @@ const submitLogin = async () => {
         // --------------------
         // TODO: alert modal로 바꾸기
         alert("로그인 성공!");
+        const res = response.data.data;
+        // commonStore.isLogin = "로그인"
+        commonStore.loginUser = res.userId;
+        commonStore.isLogin = true;
+        const accessToken = res.token;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+        localStorage.setItem('accessToken', `Bearer ${accessToken}`);
+        
         // --------------------
 
         router.push({ name: "main" });
