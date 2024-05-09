@@ -9,6 +9,8 @@ export const useCommonStore = defineStore("common", () => {
     const headerChatName = ref("");
     const headerChatImg = ref("");
     const headerChatCount = ref(0);
+    const isLogin = ref(false);
+    const loginUser = ref("");
 
     // =========== GETTER ===============
 
@@ -32,6 +34,14 @@ export const useCommonStore = defineStore("common", () => {
         return headerChatCount.value;
     });
 
+    const getIsLogin = computed(() => {
+        return isLogin.value;
+    });
+
+    const getLoginUser = computed(() => {
+        return loginUser.value;
+    });
+
     // =========== ACTION ===============
 
     return {
@@ -40,10 +50,14 @@ export const useCommonStore = defineStore("common", () => {
         headerChatCount,
         headerChatName,
         headerChatImg,
+        isLogin,
+        loginUser,
         getHeaderType,
         getHeaderTitle,
         getHeaderChatName,
         getHeaderChatImg,
         getHeaderChatCount,
+        getIsLogin,
+        getLoginUser,
     };
 });
