@@ -88,6 +88,7 @@ const submitLogin = async () => {
         const accessToken = res.token;
         axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
         localStorage.setItem('accessToken', `Bearer ${accessToken}`);
+        localStorage.setItem('userId', res.userId);
         
         // --------------------
 
