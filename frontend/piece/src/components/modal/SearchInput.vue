@@ -1,12 +1,12 @@
 <template>
     <div class="searchinput-main-container">
-        <div class="searchinput-left-container" @click="handlePrevClick">
+        <!-- <div class="searchinput-left-container" @click="handlePrevClick">
             <font-awesome-icon
                 class="searchinput-icon-icon"
                 :icon="['fas', 'arrow-left']"
                 style="color: var(--gray2-color)"
             />
-        </div>
+        </div> -->
         <div class="searchinput-input-container">
             <input
                 class="searchinput-input-content"
@@ -38,7 +38,7 @@ const searchContent = ref("");
 
 const handleSearchAuto = () => {
     if (searchContent.value.length >= 3) {
-        console.log("(자식)자동 완성 감지: ", searchContent.value);
+        // console.log("(자식)자동 완성 감지: ", searchContent.value);
         emits("searchContent", searchContent.value);
     }
 };
@@ -83,15 +83,15 @@ const handleSearchAuto = () => {
 }
 
 .searchinput-input-content {
-    width: calc(100% - 4rem);
+    width: calc(100% - 3rem);
     font-family: "Regular";
     font-size: 1rem;
     color: var(--black-color);
-    margin-top: 0.4rem;
-    padding: 0 2rem 0.4rem 2rem;
+    margin: 0.4rem 0 0 0.4rem;
+    padding: 0 0.4rem 0.4rem 0.4rem;
     border: none;
-    border-bottom: 1px solid var(--gray-color);
-    transition: border-bottom-color 0.1s;
+    border-bottom: 1.4px solid var(--gray-color);
+    transition: border-bottom-color 0.3s;
     display: flex;
     justify-content: center;
     align-items: center;
