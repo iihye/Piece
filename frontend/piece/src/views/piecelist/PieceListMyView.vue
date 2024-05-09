@@ -19,7 +19,7 @@
 
         <!-- list -->
         <div
-            v-if="filteredMyList.length === 0"
+            v-if="!piecelistMyList || filteredMyList.length === 0"
             class="piecelistmyview-list-noitem"
         >
             <NoItem :content="'내 조각이 없어요'"></NoItem>

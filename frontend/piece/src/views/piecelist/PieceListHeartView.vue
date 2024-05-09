@@ -19,7 +19,7 @@
 
         <!-- list -->
         <div
-            v-if="filteredList.length === 0"
+            v-if="!piecelistHeartList || filteredList.length === 0"
             class="piecelistheartview-list-noitem"
         >
             <NoItem :content="'찜한 조각이 없어요'"></NoItem>
