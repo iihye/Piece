@@ -97,14 +97,18 @@ export const usePiecelistStore = defineStore(
 
         const findPiecelistMyCalendar = function (year, month) {
             axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/piecelist/my/${year}/${month}`,
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/piecelist/my/${year}/${month}`,
                 method: "GET",
             })
                 .then((res) => {
                     if (res.data.code === "FIND_MY_PIECE_LIST_SUCCESS") {
                         piecelistMyCalendar.value = res.data.data;
                         calendarImplementation();
-                    } else if (res.data.code === "FIND_MY_PIECE_LIST_NULL_SUCCESS") {
+                    } else if (
+                        res.data.code === "FIND_MY_PIECE_LIST_NULL_SUCCESS"
+                    ) {
                         piecelistMyCalendar.value = [];
                         calendarImplementation();
                     }
@@ -124,14 +128,21 @@ export const usePiecelistStore = defineStore(
                 imageUrl: null,
                 imageId: null,
             });
-            const daysOfMonth = Array.from({ length: endDayOfTheMonth }, (_, i) => {
-                const { frontImg, pieceId } = getImageUrlForDay(i + 1, month, year);
-                return {
-                    day: i + 1,
-                    imageUrl: frontImg,
-                    pieceId: pieceId,
-                };
-            });
+            const daysOfMonth = Array.from(
+                { length: endDayOfTheMonth },
+                (_, i) => {
+                    const { frontImg, pieceId } = getImageUrlForDay(
+                        i + 1,
+                        month,
+                        year
+                    );
+                    return {
+                        day: i + 1,
+                        imageUrl: frontImg,
+                        pieceId: pieceId,
+                    };
+                }
+            );
             const fullMonth = [...emptyStartDays, ...daysOfMonth];
             const weeks = [];
 
@@ -148,8 +159,13 @@ export const usePiecelistStore = defineStore(
         };
 
         const getImageUrlForDay = function (day, month, year) {
-            const fullDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-            const piece = piecelistMyCalendar.value.find((p) => p.date === fullDate);
+            const fullDate = `${year}-${String(month + 1).padStart(
+                2,
+                "0"
+            )}-${String(day).padStart(2, "0")}`;
+            const piece = piecelistMyCalendar.value.find(
+                (p) => p.date === fullDate
+            );
             if (piece) {
                 return { frontImg: piece.frontImg, pieceId: piece.pieceId };
             } else {
@@ -214,12 +230,22 @@ export const usePiecelistStore = defineStore(
 
         const findPieceDetailRecord = function (pieceId) {
             axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/record/${pieceId}`,
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/pieces/record/${pieceId}`,
                 method: "GET",
             })
                 .then((res) => {
                     pieceDetailRecord.value = res.data.data;
-                    console.log(pieceDetailRecord.value);
+
+                    // pieceDetailRecord.value.imgList = [
+                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+                    // ];
+
+                    // console.log(pieceDetailRecord.value);
+                    // console.log(pieceDetailRecord.value.imgList.length);
                 })
                 .catch((err) => {});
         };
