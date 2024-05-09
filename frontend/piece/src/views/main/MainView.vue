@@ -13,14 +13,14 @@
         </div>
     </div>
 
-    <div class="mainview-sub-container">
+    <!-- <div class="mainview-sub-container">
         <img
             class="mainview-sub-image"
             src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Shortcake.png"
             alt="Shortcake"
         />
         <div class="mainview-sub-content">지금 조각이 완성되고 있어요!</div>
-    </div>
+    </div> -->
 
     <RouterLink class="mainview-login-router" :to="{ name: 'login' }"
         >로그인</RouterLink
@@ -42,7 +42,7 @@ onMounted(() => {
 <style>
 .mainview-main-container {
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 7.25rem);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -75,6 +75,7 @@ onMounted(() => {
     font-family: "Semi";
     font-size: 1.2rem;
     text-align: center;
+    user-select: none;
 }
 
 .mainview-sub-container {
