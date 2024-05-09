@@ -63,7 +63,7 @@ export const useCommonStore = defineStore("common", () => {
         })
             .then((res) => {
                 loginUserInfo.value = res.data;
-                if (loginUserInfo.value.labelId !== null) {
+                if (loginUserInfo.value.labelId !== 0) {
                     findUserLabel();
                 } else {
                     loginUserLabel.value = "";
@@ -80,7 +80,6 @@ export const useCommonStore = defineStore("common", () => {
         })
             .then((res) => {
                 loginUserLabel.value = res.data.data;
-                console.log(res.data.data);
             })
             .catch((err) => {});
     };
