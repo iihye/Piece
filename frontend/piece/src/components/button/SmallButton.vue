@@ -1,21 +1,21 @@
 <template>
     <div class="smallbutton-container">
-        <button @click="smallButtonFunction" class="smallbutton">{{ smallButtonContent }}</button>
+        <button @click="smallButtonFunction" class="smallbutton">
+            {{ smallButtonContent }}
+        </button>
     </div>
 </template>
 
 <script setup>
-
-import { defineProps } from 'vue';
+import { defineProps } from "vue";
 
 defineProps({
     smallButtonContent: String,
-    smallButtonFunction: Function
+    smallButtonFunction: Function,
 });
-
 </script>
 
-<style scoped>
+<style>
 @import "@/components/css/color.css";
 
 .smallbutton {
@@ -25,5 +25,7 @@ defineProps({
     height: 2.5rem;
     width: 7.5rem;
     color: var(--white-color);
+    font-family: "Semi";
+    font-size: 1rem;
 }
 </style>

@@ -36,7 +36,7 @@ const props = defineProps({
 });
 </script>
 
-<style scoped>
+<style>
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
@@ -96,5 +96,6 @@ const props = defineProps({
     font-family: "Semi";
     font-size: 1rem;
     color: var(--black-color);
+    user-select: none;
 }
 </style>

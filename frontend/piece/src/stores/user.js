@@ -46,9 +46,7 @@ export const useUserStore = defineStore(
 
         const addMypageLabelWear = function (labelId) {
             axios({
-                url: `${
-                    import.meta.env.VITE_REST_PIECE_API
-                }/mylabels/${labelId}`,
+                url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/${labelId}`,
                 method: "PUT",
             })
                 .then((res) => {
@@ -70,9 +68,7 @@ export const useUserStore = defineStore(
 
         const checkMypageLabelWear = function () {
             setMypagelabelWearoff(
-                Object.values(mypageLabelList.value).every(
-                    (item) => !item.wearLabels
-                )
+                Object.values(mypageLabelList.value).every((item) => !item.wearLabels)
             );
         };
 
@@ -87,7 +83,7 @@ export const useUserStore = defineStore(
             getMypageLabelWearoff,
             setMypagelabelWearoff,
             // action
-            findMyPageLabelList: findMypageLabelList,
+            findMypageLabelList,
             addMypageLabelWear,
             deleteMypageLabelWear,
             checkMypageLabelWear,

@@ -44,11 +44,12 @@ const handleSearchAuto = () => {
 };
 </script>
 
-<style scoped>
+<style>
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
 .searchinput-main-container {
+    position: relative;
     display: flex;
     align-items: center;
 }
@@ -84,7 +85,7 @@ const handleSearchAuto = () => {
 .searchinput-input-content {
     width: calc(100% - 4rem);
     font-family: "Regular";
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: var(--black-color);
     margin-top: 0.4rem;
     padding: 0 2rem 0.4rem 2rem;

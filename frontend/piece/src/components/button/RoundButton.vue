@@ -1,23 +1,27 @@
 <template>
     <div class="roundbutton-container">
-        <button @click="roundButtonFunction" :disabled="!isRoundDisable" class="roundbutton">{{ roundButtonContent }}</button>
+        <button
+            @click="roundButtonFunction"
+            :disabled="!isRoundDisable"
+            class="roundbutton"
+        >
+            {{ roundButtonContent }}
+        </button>
     </div>
 </template>
 
 <script setup>
-
-import { defineProps } from 'vue';
+import { defineProps } from "vue";
 
 defineProps({
     roundButtonContent: String,
     roundButtonFunction: Function,
-    isRoundDisable: Boolean
+    isRoundDisable: Boolean,
 });
-
 </script>
 
-<style scoped>
-@import "@/components/css/color.css";
+<style>
+/* @import "@/components/css/color.css"; */
 
 .roundbutton {
     background-color: var(--main-color);
@@ -26,6 +30,8 @@ defineProps({
     width: 21.25rem;
     height: 4rem;
     color: var(--white-color);
+    font-family: "Semi";
+    font-size: 1rem;
 }
 
 .roundbutton:disabled {
@@ -36,5 +42,4 @@ defineProps({
     height: 4rem;
     color: var(--gray2-color);
 }
-
 </style>

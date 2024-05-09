@@ -1,9 +1,7 @@
 <template>
     <div class="reportselectmodal-background-container">
         <div class="reportselectmodal-main-container">
-            <div class="reportselectmodal-modal-title">
-                어떤 이유로 신고하시나요
-            </div>
+            <div class="reportselectmodal-modal-title">어떤 이유로 신고하시나요</div>
 
             <div
                 class="reportselectmodal-modal-container"
@@ -24,17 +22,10 @@
             </div>
 
             <div class="reportselectmodal-button-container">
-                <button
-                    class="reportselectmodal-button-fail"
-                    @click="handleFailClick"
-                >
-                    취소
-                </button>
+                <button class="reportselectmodal-button-fail" @click="handleFailClick">취소</button>
                 <button
                     class="reportselectmodal-button-success"
-                    @click="
-                        isButtonSuccessDisabled ? handleSuccessClick() : null
-                    "
+                    @click="isButtonSuccessDisabled ? handleSuccessClick() : null"
                     :style="{ color: successClickColor }"
                 >
                     신고하기
@@ -79,7 +70,7 @@ const selectedIconColor = (index) => {
 };
 </script>
 
-<style scoped>
+<style>
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
@@ -109,7 +100,7 @@ const selectedIconColor = (index) => {
 .reportselectmodal-modal-container {
     justify-content: left;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 0.6rem;
 }
 
 .reportselectmodal-modal-title {
@@ -129,8 +120,6 @@ const selectedIconColor = (index) => {
     font-family: "Regular";
     font-size: 1rem;
     color: var(--black-color);
-    margin-left: 0.4rem;
-    margin-bottom: 0.8rem;
     display: flex;
     justify-content: left;
     align-items: center;
@@ -150,6 +139,7 @@ const selectedIconColor = (index) => {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 2rem;
 }
 
 .reportselectmodal-button-fail {
