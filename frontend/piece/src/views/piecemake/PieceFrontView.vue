@@ -74,7 +74,7 @@ onMounted(() => {
 const isRoundDisable = ref(true);
 
 const next = () => {
-    router.push('/piece/background');
+    router.push('/piece/back');
 }
 </script>
 

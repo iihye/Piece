@@ -79,7 +79,7 @@ function drawCanvas() {
 
             // applyFadeInGradient(context, canvas.height * 2 / 3);
 
-            applyGradient(context, canvas.height * 2 / 3 - 50, canvas.height * 2 / 3);
+            applyGradient(context, canvas.height * 2 / 3 - 70, canvas.height * 2 / 3);
 
             context.globalCompositeOperation = 'destination-in';
 
