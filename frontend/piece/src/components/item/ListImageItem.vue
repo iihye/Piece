@@ -1,20 +1,17 @@
 <template>
     <div class="listImageItem-main-container">
         <div class="listImageItem-image-container">
-            <div
-                class="listImageItem-item-type"
-                :class="{
-                    'movie-background': performanceType === 'MOVIE',
-                    'theater-background': performanceType === 'THEATER',
-                    'musical-background': performanceType === 'MUSICAL',
-                    'concert-background': performanceType === 'CONCERT',
-                    'other-background':
-                        performanceType !== 'MOVIE' &&
-                        performanceType !== 'THEATER' &&
-                        performanceType !== 'MUSICAL' &&
-                        performanceType !== 'CONCERT',
-                }"
-            >
+            <div class="listImageItem-item-type" :class="{
+                'movie-background': performanceType === 'MOVIE',
+                'theater-background': performanceType === 'THEATER',
+                'musical-background': performanceType === 'MUSICAL',
+                'concert-background': performanceType === 'CONCERT',
+                'other-background':
+                    performanceType !== 'MOVIE' &&
+                    performanceType !== 'THEATER' &&
+                    performanceType !== 'MUSICAL' &&
+                    performanceType !== 'CONCERT',
+            }">
                 <p v-if="performanceType === 'MOVIE'">영화</p>
                 <p v-else-if="performanceType === 'THEATER'">연극</p>
                 <p v-else-if="performanceType === 'MUSICAL'">뮤지컬</p>
@@ -39,7 +36,7 @@ const props = defineProps({
 });
 </script>
 
-<stylev scoped>
+<style scoped>
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
@@ -100,4 +97,4 @@ const props = defineProps({
     font-size: 1rem;
     color: var(--black-color);
 }
-</stylev>
+</style>

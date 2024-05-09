@@ -17,19 +17,28 @@
 <script setup>
 import { onMounted, ref, watchEffect } from 'vue';
 import testLayout from '@/assets/testlayout.svg';
-import testPoster from '@/assets/testposter.jpg';
 import RoundButton from '@/components/button/RoundButton.vue';
 import router from '@/router';
+import { usePieceMakeStore } from "@/stores/piecemake";
+// import { useCommonStore } from '@/stores/common';
+
+// const commonStore = useCommonStore();
+const makeStore = usePieceMakeStore();
 
 const layout1 = testLayout;
 const layout2 = testLayout;
 const layout3 = testLayout;
 
+const poster = 'https://search.pstatic.net/common?quality=75&direct=true&src=https%3A%2F%2Fmovie-phinf.pstatic.net%2F20210201_56%2F16121602734716k8oV_JPEG%2Fmovie_image.jpg';
+
 const layouts = [layout1, layout2, layout3];
 const selectedLayout = ref(layout1); // 기본 선택된 레이아웃
 
+
+
 function changeLayout(layout) {
     selectedLayout.value = layout; // 선택된 레이아웃 변경
+    makeStore.selectedLayout = layout;
 }
 
 function drawCanvas() {
@@ -46,7 +55,7 @@ function drawCanvas() {
 
         // 두 번째 이미지 로드 및 그리기
         var secondImage = new Image();
-        secondImage.src = testPoster;
+        secondImage.src = poster;
         secondImage.onload = function () {
             context.globalCompositeOperation = 'source-in';
             context.drawImage(secondImage, 0, 0, 284, 468);
@@ -58,12 +67,15 @@ function drawCanvas() {
 onMounted(() => {
     drawCanvas(); // 컴포넌트가 마운트된 후 최초로 캔버스 그리기
     watchEffect(drawCanvas); // 선택된 레이아웃이 변경될 때마다 캔버스 다시 그리기
+    // commonStore.headerTitle = '조각만들기';
+    // commonStore.headerType = 'header2';
 });
 
 const isRoundDisable = ref(true);
 
 const next = () => {
-    router.push('/back');
+    // 뒷면 사진 저장 필요함
+    router.push('/piece/save');
 }
 </script>
 
