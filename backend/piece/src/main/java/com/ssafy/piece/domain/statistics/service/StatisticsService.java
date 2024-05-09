@@ -7,8 +7,6 @@ import com.ssafy.piece.domain.statistics.entity.Consumptions;
 import com.ssafy.piece.domain.statistics.entity.Views;
 import com.ssafy.piece.domain.statistics.repository.ConsumptionsRepository;
 import com.ssafy.piece.domain.statistics.repository.ViewsRepository;
-import com.ssafy.piece.domain.statistics.exception.StatisticsConsumptionNullException;
-import com.ssafy.piece.domain.statistics.exception.StatisticsViewNullException;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,35 +32,37 @@ public class StatisticsService {
 
         if (oldViews != null) {
             oldViews = views;
+        }else{
+            oldViews = Views.builder().build();
         }
 
         switch (type) {
             case MOVIE:
-                views = Views.builder()
+                views = views.builder()
                     .userId(userId)
                     .viewYear(date.getYear())
                     .movieNumber(oldViews.getMovieNumber() + 1)
                     .build();
             case THEATER:
-                views = Views.builder()
+                views = views.builder()
                     .userId(userId)
                     .viewYear(date.getYear())
                     .movieNumber(oldViews.getTheaterNumber() + 1)
                     .build();
             case MUSICAL:
-                views = Views.builder()
+                views = views.builder()
                     .userId(userId)
                     .viewYear(date.getYear())
                     .movieNumber(oldViews.getMusicalNumber() + 1)
                     .build();
             case CONCERT:
-                views = Views.builder()
+                views = views.builder()
                     .userId(userId)
                     .viewYear(date.getYear())
                     .movieNumber(oldViews.getConcertNumber() + 1)
                     .build();
             case ETC:
-                views = Views.builder()
+                views = views.builder()
                     .userId(userId)
                     .viewYear(date.getYear())
                     .movieNumber(oldViews.getEtcNumber() + 1)
@@ -79,33 +79,31 @@ public class StatisticsService {
         Consumptions consumption = consumptionsRepository.findByuserIdAndConsumptionYearAndConsumptionMonth(
             userId, date.getYear(), date.getMonthValue());
 
-        Consumptions updateConsumption;
+        if(consumption==null){
+            consumption = Consumptions.builder().build();
+        }
 
-        if(consumption!=null) {
-
-            updateConsumption = Consumptions.builder()
-                .userId(userId)
-                .consumptionYear(date.getYear())
-                .consumptionMonth(date.getMonthValue())
-                .consumptionMoney(consumption.getConsumptionMoney() + price)
-                .build();
-        }else{
-            updateConsumption = Consumptions.builder()
+            Consumptions updateConsumption = consumption.builder()
                 .userId(userId)
                 .consumptionYear(date.getYear())
                 .consumptionMonth(date.getMonthValue())
                 .consumptionMoney(price)
                 .build();
-        }
 
         consumptionsRepository.save(updateConsumption);
-    }
+        }
 
     // 관람 수 통계 조회
     public ViewResponseDto findView(Long userId, int year) {
         Views view = viewsRepository.findByUserIdAndViewYear(userId, year);
 
-            if(view!=null){
+        if(view==null){
+            view = Views.builder()
+                .userId(userId)
+                .viewYear(year)
+                .build();
+        }
+
         ViewResponseDto result = ViewResponseDto.builder()
             .viewYear(view.getViewYear())
             .movieNumber(view.getMovieNumber())
@@ -114,10 +112,8 @@ public class StatisticsService {
             .concertNumber(view.getConcertNumber())
             .etcNumber(view.getEtcNumber())
             .build();
-                return result;
-            } else{
-                throw new StatisticsViewNullException();
-            }
+
+        return result;
     }
 
     // 소비 금액 통계 조회
@@ -128,8 +124,8 @@ public class StatisticsService {
         List<Consumptions> consumptions = consumptionsRepository.findByUserIdAndConsumptionYear(
             userId, year,sort);
 
-        if (consumptions.isEmpty()) {
-            throw new StatisticsConsumptionNullException();
+        if(consumptions==null){
+            consumptions = new ArrayList<>();
         }
 
         List<ConsumptionResponseDto> result = new ArrayList<>();
