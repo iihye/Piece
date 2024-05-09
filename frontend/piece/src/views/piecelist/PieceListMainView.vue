@@ -69,7 +69,7 @@ const commonStore = useCommonStore();
 
 onMounted(() => {
     commonStore.headerTitle = "모아보기";
-    commonStore.headerType = "header1";
+    commonStore.headerType = "header2";
 });
 </script>
 

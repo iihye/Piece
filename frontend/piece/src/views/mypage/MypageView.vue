@@ -131,7 +131,7 @@ function handleWithdrawalClick() {
 }
 
 onMounted(() => {
-    commonStore.headerTitle = "내 정보";
+    commonStore.headerTitle = "내정보";
     commonStore.headerType = "header2";
 });
 </script>
