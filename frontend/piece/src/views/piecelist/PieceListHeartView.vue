@@ -177,7 +177,7 @@ onBeforeUnmount(() => {
 .piecelistheartview-main-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-height: calc(100vh - 7.25rem);
 }
 
 .piecelistheartview-main-container > :first-child {
@@ -237,7 +237,7 @@ onBeforeUnmount(() => {
 /* list */
 .piecelistheartview-list-container {
     overflow-y: scroll;
-    height: 60vh;
+    height: 70vh;
 }
 
 .piecelistheartview-list-container::-webkit-scrollbar {

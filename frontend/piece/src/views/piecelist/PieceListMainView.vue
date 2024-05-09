@@ -2,10 +2,14 @@
     <div class="piecelistmain-main-container">
         <div class="piecelistmain-container">
             <div class="piecelistmain-top">
-                <RouterLink
+
+                <!-- TODO: 케이크 모아보기 RouterLink 주석 해제 & HandleClick 함수 삭제 -->
+                <!-- <RouterLink
                     :to="{ name: 'cakelist' }"
                     class="piecelistmain-square"
-                >
+                > -->
+                <div class="piecelistmain-square"
+                    @click.prevent="HandleClick">
                     <div class="piecelistmain-title">케이크 모아보기</div>
                     <div class="piecelistmain-imagebox">
                         <img
@@ -14,7 +18,9 @@
                             class="piecelistmain-image"
                         />
                     </div>
-                </RouterLink>
+                </div>
+                <!-- </RouterLink> -->
+                
                 <RouterLink
                     :to="{ name: 'pieceListMy' }"
                     class="piecelistmain-square"
@@ -66,6 +72,10 @@ import { onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
 
 const commonStore = useCommonStore();
+
+const HandleClick = () => {
+    alert("서비스 준비중입니다");
+};
 
 onMounted(() => {
     commonStore.headerTitle = "모아보기";
