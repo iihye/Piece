@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +33,9 @@ public class FileService {
     public String getPreSignedUrl(String prefix, String fileName) {
         if(!prefix.isEmpty()) {
             fileName = createPath(prefix, fileName);
+            log.info("=================================");
+            log.info("filepath is {} ", fileName);
         }
-
         GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(bucket, fileName);
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
         return url.toString();

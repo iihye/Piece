@@ -1,5 +1,6 @@
 package com.ssafy.piece.global.s3.controller;
 
+import com.ssafy.piece.global.annotation.AuthenticatedUser;
 import com.ssafy.piece.global.response.code.SuccessCode;
 import com.ssafy.piece.global.response.structure.SuccessResponse;
 import com.ssafy.piece.global.s3.service.FileService;
@@ -21,9 +22,9 @@ public class FileController {
      * @return
      */
     @GetMapping("/upload/{image}")
-    public ResponseEntity<Object> uploadImage(@PathVariable(name = "image") String image) {
-        String url = fileService.getPreSignedUrl("test", image);
-        log.info("url is " + url);
+    public ResponseEntity<Object> uploadImage(@AuthenticatedUser Long userId, @PathVariable(name = "image") String image) {
+        String url = fileService.getPreSignedUrl(userId.toString(), image);
+        log.info("image is {} and url is {}", image, url);
         return SuccessResponse.createSuccess(SuccessCode.GET_PRESIGNEDURL_SUCCESS, url);
     }
 
