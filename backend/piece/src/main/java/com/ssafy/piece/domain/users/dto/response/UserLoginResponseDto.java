@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserLoginResponseDto {
-    private Long userId; // 사용자의 고유 식별자
+    private String userId; // 사용자의 고유 식별자
     private String username; // 사용자의 로그인 아이디
 
     //아래 세가지는 아직 어려워서 나중에 구현하겠습니다...

@@ -29,10 +29,11 @@ public class UserLoginController {
     @PostMapping("/login") 
     public ResponseEntity<?> login(@RequestBody UserLoginRequestDto loginRequest) {
         try {
-            boolean isAuthenticated = userLoginService.login(loginRequest);
-            if (isAuthenticated) {
+            Long userId = userLoginService.login(loginRequest);
+            if (userId != null) {
                 log.info("Login successful for user: {}", loginRequest.getEmail());
-                return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS);
+                // 로그인 성공 시 사용자의 ID를 반환
+                return ResponseEntity.ok(userId);
             } else {
                 log.warn("Unauthorized login attempt for user: {}", loginRequest.getEmail());
                 return ResponseEntity
