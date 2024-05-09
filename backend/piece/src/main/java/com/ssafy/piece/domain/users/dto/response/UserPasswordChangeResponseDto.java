@@ -8,5 +8,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserPasswordChangeResponseDto {
 
-    private String message;
+//    private String message;
 }
