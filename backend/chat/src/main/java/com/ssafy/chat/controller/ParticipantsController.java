@@ -9,6 +9,7 @@ import com.ssafy.chat.global.response.structure.SuccessResponse;
 import com.ssafy.chat.service.ParticipantsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,16 +25,17 @@ public class ParticipantsController {
     // 채팅방 참여 처리
     @PostMapping("/participate")
     public ResponseEntity chatRoomParticipate(
-        @RequestBody ParticipantsRequestDto participantRequestDto, @AuthenticatedUser Long userId) {
+        @RequestBody ParticipantsRequestDto participantRequestDto) {
         return SuccessResponse.createSuccess(SuccessCode.PARTICIPATE_SUCCESS,
-            participantsService.saveParticipants(participantRequestDto, userId));
+            participantsService.saveParticipants(participantRequestDto));
     }
 
-    // 내가 참여한 채팅방 조회
+    // 내가 참여한 채팅방 조회(개인 채팅방일 경우 마지막 메시지도 같이)
     @PostMapping("/isparticipate")
     public ResponseEntity chatRoomSelect(
         @RequestBody IsParticipateRequestDto isParticipateRequestDto,
         @AuthenticatedUser Long userId) {
+        System.out.println("userId?"+userId);
         return SuccessResponse.createSuccess(SuccessCode.PARTICIPATED_LIST_SUCCESS,
             participantsService.selectChatRoom(isParticipateRequestDto, userId));
     }

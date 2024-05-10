@@ -25,11 +25,13 @@ public class ChatsController {
     private final MongoDBChatsService mongoDBChatsService;
 
     @MessageMapping("/chats/{chatRoomId}") // Send Destination Queue
-    public void messageSend(@RequestBody MongoDBChatMessage mongoDBChatMessage,
-        @AuthenticatedUser Long userId) {
+    public void messageSend(@RequestBody MongoDBChatMessage mongoDBChatMessage
+        ) {
+        System.out.println("🍿"+mongoDBChatMessage);
+        // senderId는 vue.js에서 처리
         MongoDBChats mongoDBChat = MongoDBChats.builder()
             .chatRoomId(mongoDBChatMessage.getChatRoomId())
-            .senderId(userId)
+            .senderId(mongoDBChatMessage.getSenderId())
             .content(mongoDBChatMessage.getContent())
             .createdAt(mongoDBChatMessage.getCreatedAt())
             .build();

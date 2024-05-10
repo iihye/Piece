@@ -3,8 +3,10 @@ package com.ssafy.chat.service;
 import com.ssafy.chat.dto.request.ChatRoomsLeaveRequestDto;
 import com.ssafy.chat.dto.request.IsParticipateRequestDto;
 import com.ssafy.chat.dto.request.ParticipantsRequestDto;
+import com.ssafy.chat.dto.response.IsParticipateResponseDto;
 import com.ssafy.chat.dto.response.ParticipantsResponseDto;
 import com.ssafy.chat.entity.ChatRooms;
+import com.ssafy.chat.entity.MongoDBChats;
 import com.ssafy.chat.entity.Participants;
 import com.ssafy.chat.entity.ParticipantsId;
 import com.ssafy.chat.exception.AlreadyParticipatedException;
@@ -12,9 +14,11 @@ import com.ssafy.chat.repository.ChatRoomsRepository;
 import com.ssafy.chat.repository.MongoDBChatRoomsRepository;
 import com.ssafy.chat.repository.MongoDBChatsRepository;
 import com.ssafy.chat.repository.ParticipantsRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,15 +30,14 @@ public class ParticipantsService {
     private final MongoDBChatRoomsRepository mongoDBChatRoomsRepository;
     private final MongoDBChatsRepository mongoDBChatsRepository;
 
-    public ParticipantsResponseDto saveParticipants(ParticipantsRequestDto participantRequestDto,
-        Long userId) {
+    public ParticipantsResponseDto saveParticipants(ParticipantsRequestDto participantRequestDto) {
         ParticipantsId participantsId = new ParticipantsId(
             participantRequestDto.getChatRoomId(),
-            userId
+            participantRequestDto.getUserId()
         );
 
         // 중복 체크
-        selectParticipants(participantRequestDto, userId);
+        selectParticipants(participantRequestDto, participantRequestDto.getUserId());
 
         Participants participants = participantsRepository.save(Participants.builder()
             .participantsId(participantsId)
@@ -42,17 +45,49 @@ public class ParticipantsService {
 
         ParticipantsResponseDto participantResponseDto = ParticipantsResponseDto.builder()
             .chatRoomId(participantRequestDto.getChatRoomId())
-            .userId(userId)
+            .userId(participantRequestDto.getUserId())
             .createdAt(participants.getCreatedAt())
             .build();
 
         return participantResponseDto;
     }
 
-    public List<ChatRooms> selectChatRoom(IsParticipateRequestDto isParticipateRequestDto,
+    public List<IsParticipateResponseDto> selectChatRoom(IsParticipateRequestDto isParticipateRequestDto,
         Long userId) {
-        return participantsRepository.findIsPersonalChatRoomsByUserId(
+        List<ChatRooms> chatRoomList=participantsRepository.findIsPersonalChatRoomsByUserId(
             userId, isParticipateRequestDto.getIsPersonal());
+
+        List<IsParticipateResponseDto> selectedChatRoomList=new ArrayList<>();
+        for(ChatRooms c: chatRoomList){
+            List<MongoDBChats> lastMessage=mongoDBChatsRepository.findTopNByChatRoomIdOrderByCreatedAtDesc(c.getChatRoomId(), PageRequest.of(0, 1));
+            if(!lastMessage.isEmpty()) { // 메시지 1개라도 보유
+                System.out.println("마지막 메시지 보유:"+lastMessage.get(0).getContent());
+                selectedChatRoomList.add(
+                    IsParticipateResponseDto.builder()
+                        .chatRoomName(c.getChatRoomName())
+                        .chatRoomId(c.getChatRoomId())
+                        .isPersonal(c.getIsPersonal())
+                        .isOpened(c.getIsOpened())
+                        //                    .culture() // feignclient로 얻어야함
+                        .participantCount(countParticipants(c.getChatRoomId()))
+                        .lastMessage(lastMessage.get(0).getContent())
+                        .build()
+                );
+            }else{
+                selectedChatRoomList.add(
+                    IsParticipateResponseDto.builder()
+                        .chatRoomName(c.getChatRoomName())
+                        .chatRoomId(c.getChatRoomId())
+                        .isPersonal(c.getIsPersonal())
+                        .isOpened(c.getIsOpened())
+                        //                    .culture() // feignclient로 얻어야함
+                        .participantCount(countParticipants(c.getChatRoomId()))
+                        .build()
+                );
+            }
+        }
+
+        return selectedChatRoomList;
     }
 
     public void leaveChatRoom(ChatRoomsLeaveRequestDto chatRoomsLeaveRequestDto, Long userId) {
