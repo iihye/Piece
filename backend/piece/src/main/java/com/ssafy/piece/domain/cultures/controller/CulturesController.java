@@ -57,7 +57,7 @@ public class CulturesController {
     @GetMapping("/tmdb/{movieId}")
     public ResponseEntity<Object> getTmdbMovie(@PathVariable("movieId") String movieId) {
         TmdbDetailResponse response = cultureApiService.findMovie(movieId);
-        return SuccessResponse.createSuccess(SuccessCode.FIND_TMDB_CAKE_SUCCESS, response);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_TMDB_CULTURE_SUCCESS, response);
     }
 
     @PostMapping("/heart/{cultureId}")
@@ -97,8 +97,15 @@ public class CulturesController {
         PageResponse<CulturesResponse> res = culturesQueryDsl.findCultureList(cultureType,
             startPageId,
             pageSize);
-        return SuccessResponse.createSuccess(SuccessCode.FIND_CAKE_SUCCESS, res);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_CULTURE_SUCCESS, res);
     }
 
+    @GetMapping("/{cultureId}")
+    public ResponseEntity<Object> getCulture(@PathVariable(name = "cultureId") Long cultureId) {
+        log.info("getCultureId : {}", cultureId);
+
+        return SuccessResponse.createSuccess(SuccessCode.FIND_CULTURE_SUCCESS,
+            culturesService.getCulture(cultureId));
+    }
 
 }
