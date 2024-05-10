@@ -7,8 +7,10 @@ export const usePiecelistStore = defineStore(
     "piecelist",
     () => {
         // =========== STATE ===============
+        const selectedOptionMyList = ref("ALL");
         const piecelistList = ref({});
         const piecelistMyList = ref({});
+        const piecelistMyListFiltered = ref({});
         const piecelistMyCalendar = ref([]);
         const piecelistHeartList = ref({});
         const piecelistDetail = ref({});
@@ -26,12 +28,24 @@ export const usePiecelistStore = defineStore(
         });
 
         // =========== GETTER ===============
+        const getSelectOptionMyList = computed(() => {
+            return selectedOptionMyList.value;
+        });
+
+        const setSelectOptionMyList = function (option) {
+            selectedOptionMyList.value = option;
+        };
+
         const getPiecelistList = computed(() => {
             return piecelistList.value;
         });
 
         const getPiecelistMyList = computed(() => {
             return piecelistMyList.value;
+        });
+
+        const getPiecelistMyListFiltered = computed(() => {
+            return piecelistMyListFiltered.value;
         });
 
         const getPiecelistMyCalendar = computed(() => {
@@ -86,7 +100,9 @@ export const usePiecelistStore = defineStore(
 
         const findPieceUser = function (userId) {
             axios({
-                url: `${import.meta.env.VITE_REST_USER_API}/users/find/${userId}`,
+                url: `${
+                    import.meta.env.VITE_REST_USER_API
+                }/users/find/${userId}`,
                 method: "GET",
             })
                 .then((res) => {
@@ -99,14 +115,18 @@ export const usePiecelistStore = defineStore(
         };
 
         const findPieceUserLabel = function (labelId) {
-            axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/labels/${labelId}`,
-                method: "GET",
-            })
-                .then((res) => {
-                    pieceUserLabel.value = res.data.data;
+            if (loginUserInfo.value.labelId !== null) {
+                axios({
+                    url: `${
+                        import.meta.env.VITE_REST_PIECE_API
+                    }/labels/${labelId}`,
+                    method: "GET",
                 })
-                .catch((err) => {});
+                    .then((res) => {
+                        pieceUserLabel.value = res.data.data;
+                    })
+                    .catch((err) => {});
+            }
         };
 
         const findPiecelistList = function () {
@@ -127,20 +147,53 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     piecelistMyList.value = res.data.data;
+                    piecelistMyListFiltered.value = computedFilteredMyList();
                 })
                 .catch((err) => {});
         };
 
+        function computedFilteredMyList() {
+            if (selectedOptionMyList.value === "ALL") {
+                return piecelistMyList.value;
+            } else if (selectedOptionMyList.value === "MOVIE") {
+                return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "MOVIE"
+                );
+            } else if (selectedOptionMyList.value === "THEATER") {
+                return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "THEATER"
+                );
+            } else if (selectedOptionMyList.value === "MUSICAL") {
+                return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "MUSICAL"
+                );
+            } else if (selectedOptionMyList.value === "CONCERT") {
+                return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "CONCERT"
+                );
+            } else if (selectedOptionMyList.value === "ETC") {
+                return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "ETC"
+                );
+            } else {
+                return [];
+            }
+        }
+
         const findPiecelistMyCalendar = function (year, month) {
             axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/piecelist/my/${year}/${month}`,
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/piecelist/my/${year}/${month}`,
                 method: "GET",
             })
                 .then((res) => {
                     if (res.data.code === "FIND_MY_PIECE_LIST_SUCCESS") {
                         piecelistMyCalendar.value = res.data.data;
                         calendarImplementation();
-                    } else if (res.data.code === "FIND_MY_PIECE_LIST_NULL_SUCCESS") {
+                    } else if (
+                        res.data.code === "FIND_MY_PIECE_LIST_NULL_SUCCESS"
+                    ) {
                         piecelistMyCalendar.value = [];
                         calendarImplementation();
                     }
@@ -160,14 +213,21 @@ export const usePiecelistStore = defineStore(
                 imageUrl: null,
                 imageId: null,
             });
-            const daysOfMonth = Array.from({ length: endDayOfTheMonth }, (_, i) => {
-                const { frontImg, pieceId } = getImageUrlForDay(i + 1, month, year);
-                return {
-                    day: i + 1,
-                    imageUrl: frontImg,
-                    pieceId: pieceId,
-                };
-            });
+            const daysOfMonth = Array.from(
+                { length: endDayOfTheMonth },
+                (_, i) => {
+                    const { frontImg, pieceId } = getImageUrlForDay(
+                        i + 1,
+                        month,
+                        year
+                    );
+                    return {
+                        day: i + 1,
+                        imageUrl: frontImg,
+                        pieceId: pieceId,
+                    };
+                }
+            );
             const fullMonth = [...emptyStartDays, ...daysOfMonth];
             const weeks = [];
 
@@ -184,11 +244,13 @@ export const usePiecelistStore = defineStore(
         };
 
         const getImageUrlForDay = function (day, month, year) {
-            const fullDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(
+            const fullDate = `${year}-${String(month + 1).padStart(
                 2,
                 "0"
-            )}`;
-            const piece = piecelistMyCalendar.value.find((p) => p.date === fullDate);
+            )}-${String(day).padStart(2, "0")}`;
+            const piece = piecelistMyCalendar.value.find(
+                (p) => p.date === fullDate
+            );
             if (piece) {
                 return { frontImg: piece.frontImg, pieceId: piece.pieceId };
             } else {
@@ -254,7 +316,9 @@ export const usePiecelistStore = defineStore(
 
         const findPieceDetailRecord = function (pieceId) {
             axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/record/${pieceId}`,
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/pieces/record/${pieceId}`,
                 method: "GET",
             })
                 .then((res) => {
@@ -283,8 +347,10 @@ export const usePiecelistStore = defineStore(
 
         return {
             // state
+            selectedOptionMyList,
             piecelistList,
             piecelistMyList,
+            piecelistMyListFiltered,
             piecelistMyCalendar,
             piecelistHeartList,
             piecelistDetail,
@@ -297,8 +363,11 @@ export const usePiecelistStore = defineStore(
             month,
             state,
             // getter
+            getSelectOptionMyList,
+            setSelectOptionMyList,
             getPiecelistList,
             getPiecelistMyList,
+            getPiecelistMyListFiltered,
             getPiecelistMyCalendar,
             getPiecelistHeartList,
             getPiecelistDetail,
@@ -312,6 +381,7 @@ export const usePiecelistStore = defineStore(
             getState,
             setToday,
             // action
+            computedFilteredMyList,
             findPieceUser,
             findPieceUserLabel,
             findPiecelistList,

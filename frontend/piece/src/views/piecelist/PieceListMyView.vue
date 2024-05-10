@@ -61,36 +61,8 @@ const store = usePiecelistStore();
 const year = computed(() => store.getYear);
 const month = computed(() => store.getMonth);
 const piecelistMyList = computed(() => store.getPiecelistMyList);
-const filteredMyList = computed(() => computedFilteredMyList());
-const selectedOption = ref("ALL");
-
-function computedFilteredMyList() {
-    if (selectedOption.value === "ALL") {
-        return piecelistMyList.value;
-    } else if (selectedOption.value === "MOVIE") {
-        return piecelistMyList.value.filter(
-            (item) => item.performanceType === "MOVIE"
-        );
-    } else if (selectedOption.value === "THEATER") {
-        return piecelistMyList.value.filter(
-            (item) => item.performanceType === "THEATER"
-        );
-    } else if (selectedOption.value === "MUSICAL") {
-        return piecelistMyList.value.filter(
-            (item) => item.performanceType === "MUSICAL"
-        );
-    } else if (selectedOption.value === "CONCERT") {
-        return piecelistMyList.value.filter(
-            (item) => item.performanceType === "CONCERT"
-        );
-    } else if (selectedOption.value === "ETC") {
-        return piecelistMyList.value.filter(
-            (item) => item.performanceType === "ETC"
-        );
-    } else {
-        return [];
-    }
-}
+const filteredMyList = computed(() => store.getPiecelistMyListFiltered);
+const selectedOption = computed(() => store.getSelectOptionMyList);
 
 const handleItemClick = (item) => {
     router.push({ name: "pieceDetail", params: { pieceId: item.pieceId } });
@@ -136,7 +108,9 @@ const handleItemSelectClick = (index) => {
         }
     }
     filterItems.value[index].isSelect = !filterItems.value[index].isSelect;
-    selectedOption.value = filterItems.value[index].labelType;
+    // selectedOption.value = filterItems.value[index].labelType;
+    store.setSelectOptionMyList(filterItems.value[index].labelType);
+    store.findPiecelistMyList();
 };
 
 // filter
@@ -161,6 +135,19 @@ const handleMouseDown = () => {
 onMounted(async () => {
     commonStore.headerTitle = "내 조각 모아보기";
     commonStore.headerType = "header4";
+
+    const index = filterItems.value.findIndex(
+        (item) => item.labelType === selectedOption.value
+    );
+
+    if (index !== -1) {
+        filterItems.value[0].isSelect = false;
+        filterItems.value[index].isSelect = true;
+    }
+
+    if (index == 5) {
+        tabMenu.value.scrollLeft = 1000;
+    }
 
     await store.findPiecelistMyList();
     tabMenu.value.addEventListener("mousedown", handleMouseDown);
