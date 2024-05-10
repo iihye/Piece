@@ -4,13 +4,18 @@
             <div class="mypage-preview-image-container">
                 <img
                     class="mypage-preview-img"
-                    :src="loginUserInfo.profileImage || 'https://i.ibb.co/grMvZS9/your-image.jpg'"
+                    :src="
+                        loginUserInfo.profileImage ||
+                        'https://i.ibb.co/grMvZS9/your-image.jpg'
+                    "
                     alt="image"
                 />
             </div>
             <div class="mypage-preview-sub-container">
                 <div class="mypage-preview-label">{{ loginUserLabel }}</div>
-                <div class="mypage-preview-nickname">{{loginUserInfo.nickname}}님 반가워요!</div>
+                <div class="mypage-preview-nickname">
+                    {{ loginUserInfo.nickname }}님 반가워요!
+                </div>
                 <div class="mypage-preview-button-container">
                     <button
                         class="mypage-preview-button"
@@ -166,6 +171,7 @@ onMounted(async () => {
     height: 10rem;
     background-color: var(--sub2-color);
     margin-bottom: 1.8rem;
+    user-select: none;
 }
 
 .mypage-preview-image-container {
@@ -229,6 +235,7 @@ onMounted(async () => {
     font-size: 1.2rem;
     color: var(--black-color);
     margin-bottom: 1rem;
+    user-select: none;
 }
 
 .mypage-router-item {

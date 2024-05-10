@@ -134,6 +134,10 @@ defineProps({
     margin-bottom: 1rem;
 }
 
+.shareselectmodal-modal-container:hover {
+    cursor: pointer;
+}
+
 .shareselectmodal-modal-content {
     font-family: "Regular";
     font-size: 1rem;
@@ -142,6 +146,7 @@ defineProps({
     display: flex;
     justify-content: left;
     align-items: center;
+    user-select: none;
 }
 
 .shareselectmodal-icon-container {
@@ -189,5 +194,10 @@ defineProps({
     border: 0;
     border-radius: 0.625rem;
     color: var(--gray2-color);
+    user-select: none;
+}
+
+.shareselectmodal-button-fail:hover {
+    cursor: pointer;
 }
 </style>

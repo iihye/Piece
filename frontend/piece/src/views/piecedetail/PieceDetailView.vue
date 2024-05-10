@@ -7,7 +7,10 @@
                 <div class="pieceDetailView-user-container">
                     <img
                         class="pieceDetailView-user-img"
-                        :src="pieceUser.profileImage || 'https://i.ibb.co/grMvZS9/your-image.jpg'"
+                        :src="
+                            pieceUser.profileImage ||
+                            'https://i.ibb.co/grMvZS9/your-image.jpg'
+                        "
                         alt="image"
                     />
                     <div class="pieceDetailView-name-container">
@@ -20,7 +23,10 @@
                     </div>
                 </div>
                 <!-- icon -->
-                <div class="pieceDetailView-icon-container" @click="handleModalSuccess">
+                <div
+                    class="pieceDetailView-icon-container"
+                    @click="handleModalSuccess"
+                >
                     <font-awesome-icon
                         class="pieceDetailView-top-icon"
                         :icon="['fas', 'ellipsis-vertical']"
@@ -266,7 +272,7 @@ onMounted(async () => {
     align-items: center;
 }
 
-.pieceDetailView-icon-container:hover{
+.pieceDetailView-icon-container:hover {
     cursor: pointer;
 }
 
@@ -297,6 +303,10 @@ onMounted(async () => {
     height: 1.2rem;
 }
 
+.pieceDetailView-heart-icon:hover {
+    cursor: pointer;
+}
+
 .pieceDetailView-button-container {
     display: flex;
     flex: none;
@@ -312,5 +322,9 @@ onMounted(async () => {
 
 .pieceDetailView-button-button button {
     width: 100%;
+}
+
+.pieceDetailView-button-button button:hover {
+    cursor: pointer;
 }
 </style>
