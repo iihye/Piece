@@ -11,5 +11,5 @@ public interface CulturesHeartRepository extends JpaRepository<CulturesHeart, Lo
 
     Boolean existsCulturesHeartByCultureIdAndUserId(Long cultureId, Long userId);
 
-    Long countCulturesHeartByCultureIdAndUserId(Long cultureId, Long userId);
+    Long countCulturesHeartByCultureId(Long cultureId);
 }

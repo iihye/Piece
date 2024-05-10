@@ -52,9 +52,8 @@ public class CulturesService {
     }
 
     @Transactional(readOnly = true)
-    public Long countCultureList(Long userId, Long cultureId) {
-        return culturesHeartRepository.countCulturesHeartByCultureIdAndUserId(cultureId,
-            userId);
+    public Long countCultureList(Long cultureId) {
+        return culturesHeartRepository.countCulturesHeartByCultureId(cultureId);
     }
 
     public CulturesResponse findCulture(Long cultureId) {
