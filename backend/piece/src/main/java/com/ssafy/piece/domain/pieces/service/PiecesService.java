@@ -179,7 +179,11 @@ public class PiecesService {
 
     // 소비
     public boolean isConsume(Long userId) {
-        return piecesRepository.sumByUserId(userId) >= 1000000;
+        if(piecesRepository.countByUserId(userId) > 0) {
+            return piecesRepository.sumByUserId(userId) >= 1000000;
+        } else{
+            return false;
+        }
     }
 
     // 장르 5종류 이상
