@@ -183,8 +183,8 @@ public class PiecesService {
     }
 
     // 장르 5종류 이상
-    public boolean isGenreMany() {
-        Set<String> genreTypes = piecesRepository.countByGenreType();
+    public boolean isGenreMany(Long userId) {
+        Set<String> genreTypes = piecesRepository.countByGenreType(userId);
         return genreTypes.size() >= 5;
     }
 }
