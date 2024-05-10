@@ -122,6 +122,8 @@ export const usePiecelistStore = defineStore(
 
         const setToday = function (date) {
             today.value = date;
+            year.value = today.value.getFullYear();
+            month.value = today.value.getMonth();
         };
 
         // =========== ACTION ===============
