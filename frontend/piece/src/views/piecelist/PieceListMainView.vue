@@ -2,14 +2,10 @@
     <div class="piecelistmain-main-container">
         <div class="piecelistmain-container">
             <div class="piecelistmain-top">
-
-                <!-- TODO: 케이크 모아보기 RouterLink 주석 해제 & HandleClick 함수 삭제 -->
-                <!-- <RouterLink
+                <RouterLink
                     :to="{ name: 'cakelist' }"
                     class="piecelistmain-square"
-                > -->
-                <div class="piecelistmain-square"
-                    @click.prevent="HandleClick">
+                >
                     <div class="piecelistmain-title">케이크 모아보기</div>
                     <div class="piecelistmain-imagebox">
                         <img
@@ -18,11 +14,10 @@
                             class="piecelistmain-image"
                         />
                     </div>
-                </div>
-                <!-- </RouterLink> -->
-                
+                </RouterLink>
+
                 <RouterLink
-                    :to="{ name: 'pieceListMy' }"
+                    :to="{ name: 'pieceCalendar' }"
                     class="piecelistmain-square"
                 >
                     <div class="piecelistmain-title">내 조각 모아보기</div>
@@ -68,18 +63,25 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
+import { usePiecelistStore } from "@/stores/piecelist";
 
 const commonStore = useCommonStore();
+const store = usePiecelistStore();
 
-const HandleClick = () => {
-    alert("서비스 준비중입니다");
-};
+const year = computed(() => store.getYear);
+const month = computed(() => store.getMonth);
 
-onMounted(() => {
+onMounted(async () => {
     commonStore.headerTitle = "모아보기";
     commonStore.headerType = "header2";
+
+    store.setSelectOption("ALL");
+    store.setSelectOptionMyList("ALL");
+    store.setSelectOptionHeartList("ALL");
+
+    await store.findPiecelistMyCalendar(year.value, month.value + 1);
 });
 </script>
 
