@@ -37,10 +37,8 @@ const color6 = rootStyle.getPropertyValue('--back6-color').trim();
 const color7 = rootStyle.getPropertyValue('--back7-color').trim();
 const color8 = rootStyle.getPropertyValue('--back8-color').trim();
 const color9 = rootStyle.getPropertyValue('--back9-color').trim();
-const color10 = rootStyle.getPropertyValue('--white-color').trim();
 
-
-const colors = [color1, color2, color3, color4, color5, color6, color7, color8, color9, color10];
+const colors = [color1, color2, color3, color4, color5, color6, color7, color8, color9;
 const selectedColor = ref(color1); // 기본 색상
 
 const changeColor = (color) => {
