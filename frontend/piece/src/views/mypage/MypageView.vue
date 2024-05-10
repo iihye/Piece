@@ -4,13 +4,18 @@
             <div class="mypage-preview-image-container">
                 <img
                     class="mypage-preview-img"
-                    src="https://i.ibb.co/grMvZS9/your-image.jpg"
+                    :src="
+                        loginUserInfo.profileImage ||
+                        'https://i.ibb.co/grMvZS9/your-image.jpg'
+                    "
                     alt="image"
                 />
             </div>
             <div class="mypage-preview-sub-container">
-                <div class="mypage-preview-label">낭만 애호가</div>
-                <div class="mypage-preview-nickname">김조각님 반가워요!</div>
+                <div class="mypage-preview-label">{{ loginUserLabel }}</div>
+                <div class="mypage-preview-nickname">
+                    {{ loginUserInfo.nickname }}님 반가워요!
+                </div>
                 <div class="mypage-preview-button-container">
                     <button
                         class="mypage-preview-button"
@@ -53,7 +58,8 @@
                 ></IconText>
             </div>
 
-            <div class="mypage-router-subcontainer">
+            <!-- TODO: 조각 통계, 소비 통계 주석 처리 -->
+            <!-- <div class="mypage-router-subcontainer">
                 <div class="mypage-router-title">조각 통계</div>
                 <IconText
                     :itemContent="'조각 통계'"
@@ -65,7 +71,7 @@
                     :itemIcon="['fas', 'chart-simple']"
                     :handleClick="handleConsumeClick"
                 ></IconText>
-            </div>
+            </div> -->
 
             <div class="mypage-router-subcontainer">
                 <div class="mypage-router-item" @click="handleLogoutClick">
@@ -84,11 +90,15 @@
 
 <script setup>
 import router from "@/router";
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue";
 import { useCommonStore } from "@/stores/common";
 import IconText from "@/components/text/IconText.vue";
+import axios from "axios";
 
 const commonStore = useCommonStore();
+
+const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
+const loginUserLabel = computed(() => commonStore.getLoginUserLabel);
 
 function handleMypiece() {
     router.push({ name: "pieceListMy" });
@@ -124,15 +134,24 @@ function handleConsumeClick() {
 
 function handleLogoutClick() {
     alert("로그아웃 클릭");
+
+    // 로그아웃 성공시에 실행
+    commonStore.loginUser = "";
+    commonStore.isLogin = false;
+    localStorage.clear();
+    axios.defaults.headers.common["Authorization"] = undefined;
+    router.push({ name: "main" });
 }
 
 function handleWithdrawalClick() {
     alert("회원탈퇴 클릭");
 }
 
-onMounted(() => {
-    commonStore.headerTitle = "내 정보";
+onMounted(async () => {
+    commonStore.headerTitle = "내정보";
     commonStore.headerType = "header2";
+
+    await commonStore.findLoginUserInfo();
 });
 </script>
 
@@ -152,6 +171,7 @@ onMounted(() => {
     height: 10rem;
     background-color: var(--sub2-color);
     margin-bottom: 1.8rem;
+    user-select: none;
 }
 
 .mypage-preview-image-container {
@@ -163,6 +183,7 @@ onMounted(() => {
     height: 5rem;
     border: 1px solid var(--gray-color);
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .mypage-preview-label {
@@ -214,6 +235,7 @@ onMounted(() => {
     font-size: 1.2rem;
     color: var(--black-color);
     margin-bottom: 1rem;
+    user-select: none;
 }
 
 .mypage-router-item {

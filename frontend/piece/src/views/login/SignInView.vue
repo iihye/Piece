@@ -74,7 +74,7 @@ const submitForm = async () => {
         alert("회원가입이 완료되었습니다!");
         // --------------------
 
-        router.push({ name: "main" });
+        router.push({ name: "login" });
     } catch (error) {
         // --------------------
         // TODO: alert modal로 바꾸기
@@ -98,8 +98,7 @@ onMounted(() => {
 .signinview-main-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding-top: 1rem;
+    min-height: calc(100vh - 7.25rem);
 }
 
 .signinview-main-title {
@@ -135,9 +134,13 @@ onMounted(() => {
     /* font-family: "Semi"; */
     /* font-size: 1rem; */
     position: fixed;
-    bottom: 2.75rem;
+    bottom: 4rem;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.signinview-input-button:hover{
+    cursor: pointer;
 }
 
 .signup-form {

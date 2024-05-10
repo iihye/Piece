@@ -11,7 +11,12 @@
                 />
             </div>
             <div class="imagesuccessmodal-button-container">
-                <button class="imagesuccessmodal-button-success" @click="handleSuccessClick">확인</button>
+                <button
+                    class="imagesuccessmodal-button-success"
+                    @click="handleSuccessClick"
+                >
+                    확인
+                </button>
             </div>
         </div>
     </div>
@@ -60,6 +65,7 @@ defineProps({
     font-size: 1.4rem;
     color: var(--black-color);
     margin-bottom: 2rem;
+    user-select: none;
 }
 
 .imagesuccessmodal-modal-img {
@@ -67,6 +73,7 @@ defineProps({
     justify-content: center;
     align-items: center;
     margin-bottom: 2rem;
+    user-select: none;
 }
 
 .imagesuccessmodal-button-container {
@@ -85,5 +92,10 @@ defineProps({
     border: 0;
     border-radius: 0.625rem;
     color: var(--main-color);
+    user-select: none;
+}
+
+.imagesuccessmodal-button-success:hover {
+    cursor: pointer;
 }
 </style>

@@ -2,10 +2,13 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import router from "@/router";
 import axios from "axios";
+import { useCommonStore } from "@/stores/common";
 
 export const useUserStore = defineStore(
     "user",
     () => {
+        const commonStore = useCommonStore();
+
         // =========== STATE ===============
 
         const mypageLabelList = ref({});
@@ -32,6 +35,17 @@ export const useUserStore = defineStore(
 
         // =========== ACTION ===============
 
+        const checkMypageLabelList = function () {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/check`,
+                method: "GET",
+            })
+                .then((res) => {
+                    findMypageLabelList();
+                })
+                .catch((err) => {});
+        };
+
         const findMypageLabelList = function () {
             axios({
                 url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels`,
@@ -51,6 +65,7 @@ export const useUserStore = defineStore(
             })
                 .then((res) => {
                     findMypageLabelList();
+                    commonStore.findLoginUserInfo();
                 })
                 .catch((err) => {});
         };
@@ -62,6 +77,7 @@ export const useUserStore = defineStore(
             })
                 .then((res) => {
                     findMypageLabelList();
+                    commonStore.findLoginUserInfo();
                 })
                 .catch((err) => {});
         };
@@ -83,6 +99,7 @@ export const useUserStore = defineStore(
             getMypageLabelWearoff,
             setMypagelabelWearoff,
             // action
+            checkMypageLabelList,
             findMypageLabelList,
             addMypageLabelWear,
             deleteMypageLabelWear,

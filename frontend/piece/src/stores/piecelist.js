@@ -14,6 +14,8 @@ export const usePiecelistStore = defineStore(
         const piecelistDetail = ref({});
         const pieceDetailHeart = ref({});
         const pieceDetailRecord = ref({});
+        const pieceUser = ref({});
+        const pieceUserLabel = ref("");
 
         const today = ref(new Date());
         const year = ref(today.value.getFullYear());
@@ -52,6 +54,14 @@ export const usePiecelistStore = defineStore(
             return pieceDetailRecord.value;
         });
 
+        const getPieceUser = computed(() => {
+            return pieceUser.value;
+        });
+
+        const getPieceUserLabel = computed(() => {
+            return pieceUserLabel.value;
+        });
+
         const getToday = computed(() => {
             return today.value;
         });
@@ -73,6 +83,32 @@ export const usePiecelistStore = defineStore(
         };
 
         // =========== ACTION ===============
+
+        const findPieceUser = function (userId) {
+            axios({
+                url: `${import.meta.env.VITE_REST_USER_API}/users/find/${userId}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    pieceUser.value = res.data;
+                    if (pieceUser.value.labelId !== 0) {
+                        findPieceUserLabel(pieceUser.value.labelId);
+                    }
+                })
+                .catch((err) => {});
+        };
+
+        const findPieceUserLabel = function (labelId) {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/labels/${labelId}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    pieceUserLabel.value = res.data.data;
+                })
+                .catch((err) => {});
+        };
+
         const findPiecelistList = function () {
             axios({
                 url: `${import.meta.env.VITE_REST_PIECE_API}/piecelist`,
@@ -148,7 +184,10 @@ export const usePiecelistStore = defineStore(
         };
 
         const getImageUrlForDay = function (day, month, year) {
-            const fullDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            const fullDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(
+                2,
+                "0"
+            )}`;
             const piece = piecelistMyCalendar.value.find((p) => p.date === fullDate);
             if (piece) {
                 return { frontImg: piece.frontImg, pieceId: piece.pieceId };
@@ -175,6 +214,7 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     piecelistDetail.value = res.data.data;
+                    findPieceUser(piecelistDetail.value.userId);
                 })
                 .catch((err) => {});
         };
@@ -219,7 +259,15 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     pieceDetailRecord.value = res.data.data;
-                    console.log(pieceDetailRecord.value);
+
+                    // pieceDetailRecord.value.imgList = [
+                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+                    // ];
+
+                    // console.log(pieceDetailRecord.value);
+                    // console.log(pieceDetailRecord.value.imgList.length);
                 })
                 .catch((err) => {});
         };
@@ -242,6 +290,8 @@ export const usePiecelistStore = defineStore(
             piecelistDetail,
             pieceDetailHeart,
             pieceDetailRecord,
+            pieceUser,
+            pieceUserLabel,
             today,
             year,
             month,
@@ -254,12 +304,16 @@ export const usePiecelistStore = defineStore(
             getPiecelistDetail,
             getPieceDetailHeart,
             getPieceDetailRecord,
+            getPieceUser,
+            getPieceUserLabel,
             getToday,
             getYear,
             getMonth,
             getState,
             setToday,
             // action
+            findPieceUser,
+            findPieceUserLabel,
             findPiecelistList,
             findPiecelistMyList,
             findPiecelistMyCalendar,

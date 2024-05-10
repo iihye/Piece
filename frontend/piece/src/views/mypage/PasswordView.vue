@@ -165,6 +165,6 @@ onMounted(() => {
 
 .passwordview-main-button {
     position: fixed;
-    bottom: 2.75rem;
+    bottom: 4rem;
 }
 </style>

@@ -19,7 +19,7 @@
 
         <!-- list -->
         <div
-            v-if="filteredMyList.length === 0"
+            v-if="!piecelistMyList || filteredMyList.length === 0"
             class="piecelistmyview-list-noitem"
         >
             <NoItem :content="'내 조각이 없어요'"></NoItem>
@@ -181,7 +181,7 @@ onBeforeUnmount(() => {
 .piecelistmyview-main-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-height: calc(100vh - 7.25rem);
 }
 
 .piecelistmyview-main-container > :first-child {
@@ -241,7 +241,6 @@ onBeforeUnmount(() => {
 /* list */
 .piecelistmyview-list-container {
     overflow-y: scroll;
-    height: 60vh;
 }
 
 .piecelistmyview-list-container::-webkit-scrollbar {

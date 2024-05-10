@@ -19,7 +19,7 @@
 
         <!-- list -->
         <div
-            v-if="filteredList.length === 0"
+            v-if="!piecelistHeartList || filteredList.length === 0"
             class="piecelistheartview-list-noitem"
         >
             <NoItem :content="'찜한 조각이 없어요'"></NoItem>
@@ -177,7 +177,7 @@ onBeforeUnmount(() => {
 .piecelistheartview-main-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-height: calc(100vh - 7.25rem);
 }
 
 .piecelistheartview-main-container > :first-child {
@@ -237,7 +237,6 @@ onBeforeUnmount(() => {
 /* list */
 .piecelistheartview-list-container {
     overflow-y: scroll;
-    height: 60vh;
 }
 
 .piecelistheartview-list-container::-webkit-scrollbar {

@@ -78,12 +78,12 @@ const handlePrev = () => {
 
 // modal에서 search 클릭했을 때 실행되는 함수
 const handleSearch = () => {
-    alert("검색 클릭");
-    console.log(searchValue.value);
+    alert("서비스 준비중입니다!");
+    // console.log(searchValue.value);
 };
 
 const handleSearchContent = (value) => {
-    console.log("(부모)자동 완성 받아옴:", value);
+    // console.log("(부모)자동 완성 받아옴:", value);
     searchValue.value = value;
 };
 
@@ -203,7 +203,7 @@ onBeforeUnmount(() => {
 .piecelistview-main-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-height: calc(100vh - 7.25rem);
 }
 
 .piecelistview-main-container > :first-child {
@@ -223,7 +223,6 @@ onBeforeUnmount(() => {
     position: relative;
     /* width: 450px; */
     transition: 0.5s ease;
-    margin-bottom: 2rem;
 }
 
 .piecelistview-tab-navigation {
@@ -267,7 +266,7 @@ onBeforeUnmount(() => {
 /* list */
 .piecelistview-list-container {
     overflow-y: scroll;
-    height: 60vh;
+    height: 66vh;
 }
 
 .piecelistview-list-container::-webkit-scrollbar {

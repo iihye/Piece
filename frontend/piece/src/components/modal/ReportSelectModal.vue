@@ -1,7 +1,9 @@
 <template>
     <div class="reportselectmodal-background-container">
         <div class="reportselectmodal-main-container">
-            <div class="reportselectmodal-modal-title">어떤 이유로 신고하시나요</div>
+            <div class="reportselectmodal-modal-title">
+                어떤 이유로 신고하시나요
+            </div>
 
             <div
                 class="reportselectmodal-modal-container"
@@ -22,10 +24,17 @@
             </div>
 
             <div class="reportselectmodal-button-container">
-                <button class="reportselectmodal-button-fail" @click="handleFailClick">취소</button>
+                <button
+                    class="reportselectmodal-button-fail"
+                    @click="handleFailClick"
+                >
+                    취소
+                </button>
                 <button
                     class="reportselectmodal-button-success"
-                    @click="isButtonSuccessDisabled ? handleSuccessClick() : null"
+                    @click="
+                        isButtonSuccessDisabled ? handleSuccessClick() : null
+                    "
                     :style="{ color: successClickColor }"
                 >
                     신고하기
@@ -108,6 +117,7 @@ const selectedIconColor = (index) => {
     font-size: 1.4rem;
     color: var(--black-color);
     margin-bottom: 2rem;
+    user-select: none;
 }
 
 .reportselectmodal-modal-container {
@@ -123,6 +133,7 @@ const selectedIconColor = (index) => {
     display: flex;
     justify-content: left;
     align-items: center;
+    user-select: none;
 }
 
 .reportselectmodal-icon-container {
@@ -151,6 +162,11 @@ const selectedIconColor = (index) => {
     border: 0;
     border-radius: 0.625rem;
     color: var(--gray2-color);
+    user-select: none;
+}
+
+.reportselectmodal-button-fail:hover {
+    cursor: pointer;
 }
 
 .reportselectmodal-button-success {
@@ -162,5 +178,10 @@ const selectedIconColor = (index) => {
     border: 0;
     border-radius: 0.625rem;
     color: var(--gray2-color);
+    user-select: none;
+}
+
+.reportselectmodal-button-success:hover {
+    cursor: pointer;
 }
 </style>

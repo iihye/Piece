@@ -7,11 +7,11 @@
         <div class="labelview-preview-container">
             <img
                 class="labelview-preview-img"
-                src="https://i.ibb.co/grMvZS9/your-image.jpg"
+                :src="loginUserInfo.profileImage || 'https://i.ibb.co/grMvZS9/your-image.jpg'"
                 alt="image"
             />
-            <div class="labelview-preview-label">칭호</div>
-            <div class="labelview-preview-nickname">이름</div>
+            <div class="labelview-preview-label">{{ loginUserLabel }}</div>
+            <div class="labelview-preview-nickname">{{loginUserInfo.nickname}}</div>
         </div>
 
         <div class="labelview-button-container">
@@ -76,6 +76,9 @@ import SmallButton from "@/components/button/SmallButton.vue"; // 사용할 컴�
 const commonStore = useCommonStore();
 const store = useUserStore();
 
+const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
+const loginUserLabel = computed(() => commonStore.getLoginUserLabel);
+
 const mypageLabelList = computed(() => store.getMypageLabelList);
 const filteredLabelList = computed(() => computeFilteredLabelList());
 const mypageLabelWearoff = computed(() => store.getMypageLabelWearoff);
@@ -118,7 +121,8 @@ onMounted(async () => {
     commonStore.headerTitle = "칭호 목록";
     commonStore.headerType = "header2";
 
-    await store.findMypageLabelList();
+    await commonStore.findLoginUserInfo();
+    await store.checkMypageLabelList();
     // ---------------------
     // TODO: 유저 정보 불러오기 api 연결
     // ---------------------
@@ -129,8 +133,7 @@ onMounted(async () => {
 .labelview-main-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding-top: 1rem;
+    height: calc(100vh - 7.25rem);
     margin: 0 1rem 0 1rem;
 }
 
@@ -163,6 +166,7 @@ onMounted(async () => {
     border-radius: 0.625rem;
     padding: 1rem;
     margin-bottom: 0.6rem;
+    height: 10rem;
 }
 
 .labelview-preview-img {

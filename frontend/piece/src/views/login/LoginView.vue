@@ -71,7 +71,7 @@ watch([email, password], ([newEmail, newPassword]) => {
 const submitLogin = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_REST_PIECE_API}/auth/login`,
+            `${import.meta.env.VITE_REST_USER_API}/auth/login`,
             {
                 email: email.value,
                 password: password.value,
@@ -81,6 +81,15 @@ const submitLogin = async () => {
         // --------------------
         // TODO: alert modal로 바꾸기
         alert("로그인 성공!");
+        const res = response.data.data;
+        // commonStore.isLogin = "로그인"
+        commonStore.loginUser = res.userId;
+        commonStore.isLogin = true;
+        const accessToken = res.token;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+        localStorage.setItem('accessToken', `Bearer ${accessToken}`);
+        localStorage.setItem('userId', res.userId);
+        
         // --------------------
 
         router.push({ name: "main" });
@@ -105,8 +114,7 @@ onMounted(() => {
 .loginview-main-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding-top: 1rem;
+    min-height: calc(100vh - 7.25rem);
 }
 
 .loginview-main-title {
@@ -151,6 +159,10 @@ onMounted(() => {
     color: var(--white-color);
     font-family: "Semi";
     font-size: 1rem;
+}
+
+.loginview-input-button:hover{
+    cursor: pointer;
 }
 
 .loginview-regist-content {
