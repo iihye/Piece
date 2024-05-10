@@ -51,6 +51,11 @@ public class CulturesService {
         return CulturesResponseMapper.cultureEntityToDtoList(list);
     }
 
+    @Transactional(readOnly = true)
+    public Long countCultureList(Long cultureId) {
+        return culturesHeartRepository.countCulturesHeartByCultureId(cultureId);
+    }
+
     public CulturesResponse findCulture(Long cultureId) {
         Cultures cultures = getCulture(cultureId);
         return CulturesResponseMapper.cultureEntityToDto(cultures);

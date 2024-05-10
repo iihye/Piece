@@ -10,5 +10,6 @@ public interface CulturesHeartRepository extends JpaRepository<CulturesHeart, Lo
     void deleteCulturesHeartByCultureIdAndUserId(Long cultureId, Long userId);
 
     Boolean existsCulturesHeartByCultureIdAndUserId(Long cultureId, Long userId);
-    
+
+    Long countCulturesHeartByCultureId(Long cultureId);
 }
