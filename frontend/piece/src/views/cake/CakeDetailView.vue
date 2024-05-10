@@ -1,7 +1,9 @@
 <template>
     <div>
+        <!-- image -->
         <img class="cakedetailview-image-image" :src="data.imageUrl" />
 
+        <!-- heart -->
         <div class="cakedetailview-icon-container">
             <div class="cakedetailview-heart-container">
                 <font-awesome-icon
@@ -16,6 +18,9 @@
             </div>
         </div>
 
+        <hr />
+
+        <!-- title -->
         <div class="cakedetailview-item-container">
             <div
                 class="cakedetailview-item-type"
@@ -41,39 +46,51 @@
             <div class="cakedetailview-item-title">{{ data.title }}</div>
         </div>
 
-        <div>
-            {{ data.content }}
+        <!-- content -->
+        <div class="cakedetailview-content-container">
+            <div class="cakedetailview-content-content">{{ data.content }}</div>
         </div>
 
         <hr />
 
-        <div class="cakedetailview-chat-title">채팅방</div>
-    </div>
-    <!-- <div v-if="item" class="cake-detail-view">
-        <img :src="item.image" alt="poster" class="event-image"/>
-        <img :src="heart" alt="heart" class="heart"/>
-        <img :src="chatting" alt="chat" class="chat"/>
-        <div class="event-info">
-            <p><strong>{{ item.title }}</strong> <div class="status-box">{{ item.status }}</div></p>
-            <p><h4>공연 일시</h4>
-            2024.05.25 ~ 2024.05.26</p>
-            <p><h4>공연 시간</h4>
-            180분</p>
+        <!-- chat -->
+        <div class="cakedetailview-chat-container">
+            <div class="cakedetailview-chat-title">채팅방</div>
+            <div class="cakedetailview-chat-container">
+                <ChatItem
+                    v-for="(item, index) in cakeChatList"
+                    class="cakedetailview-chat-item"
+                    :key="index"
+                    :chatRoomId="item.chatRoomId"
+                    :senderLabel="item.senderLabel"
+                    :senderNickname="item.senderNickname"
+                    :senderImg="item.senderImg"
+                    :content="item.content"
+                    :createdAt="item.createdAt"
+                ></ChatItem>
+            </div>
         </div>
-        <hr>
-        <h4>채팅방</h4>
+
+        <!-- button -->
+        <RoundButton
+            class="cakedetailview-button"
+            :roundButtonContent="'채팅 참여하기'"
+            :roundButtonFunction="handleChatParticipate"
+            :isRoundDisable="true"
+        ></RoundButton>
     </div>
-    <div v-else>
-        <p>Loading or no item found...</p>
-    </div> -->
 </template>
 
 <script setup>
 import router from "@/router";
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
+import { useCakeStore } from "@/stores/cake";
+import ChatItem from "@/components/chat/ChatItem.vue";
+import RoundButton from "@/components/button/RoundButton.vue";
 
 const commonStore = useCommonStore();
+const store = useCakeStore();
 
 const data = ref({
     imageUrl:
@@ -85,51 +102,35 @@ const data = ref({
 });
 
 const cakeHeartState = ref(false);
+const cakeChatList = computed(() => store.getCakeChatList);
+const cakeChatUser = computed(() => store.getCakeChatUser);
+const cakeChatUserLabel = computed(() => store.getCakeChatUserLabel);
 
 const handleHeartClick = () => {
     alert("하트 클릭");
     cakeHeartState.value = !cakeHeartState.value;
+    // TODO: 찜 api 연결
+    // TODO: 찜 명수 업데이트
 };
 
-const item = ref(null);
+const handleChatParticipate = () => {
+    alert("채팅 참여하기 클릭");
+    // TODO: 채팅 참여하기 연결
+};
 
-const fakeDatabase = [
-    {
-        id: 1,
-        title: "범죄도시4",
-        image: "path/to/image1.jpg",
-        category: "영화",
-        status: "진행 예정",
-    },
-    {
-        id: 2,
-        title: "IM HERO 임영웅 콘서트",
-        image: "path/to/image2.jpg",
-        category: "콘서트",
-        status: "진행 예정",
-    },
-    {
-        id: 3,
-        title: "데미안",
-        image: "path/to/image3.jpg",
-        category: "뮤지컬",
-        status: "진행 중",
-    },
-    {
-        id: 4,
-        title: "아트",
-        image: "path/to/image4.jpg",
-        category: "전시",
-        status: "진행 예정",
-    },
-];
-
-onMounted(() => {
+onMounted(async () => {
     commonStore.headerTitle = "케이크 상세보기";
     commonStore.headerType = "header2";
 
     // const itemId = parseInt(route.params.id);
     // item.value = fakeDatabase.find(i => i.id === itemId);
+
+    // TODO: 찜 상태 가져오기
+    // TODO: 찜 명수 업데이트
+    // TODO: 채팅방 가져오기
+    await store.findCakeChatList();
+
+    console.log(cakeChatList.value);
 });
 </script>
 
@@ -139,12 +140,15 @@ onMounted(() => {
     width: 100%;
     height: 360px;
     object-fit: cover;
+    user-select: none;
 }
 
 /* heart */
 .cakedetailview-icon-container {
     display: flex;
     flex-direction: column;
+    margin: 2rem 0 2rem 0;
+    user-select: none;
 }
 
 .cakedetailview-heart-container {
@@ -175,13 +179,14 @@ onMounted(() => {
     color: var(--gray2-color);
 }
 
-/* item */
+/* title */
 .cakedetailview-item-container {
     display: flex;
     justify-self: center;
     align-items: center;
     flex-direction: row;
-    margin-bottom: 0.4rem;
+    margin: 2rem 0rem 0.4rem 0rem;
+    user-select: none;
 }
 
 .cakedetailview-item-type {
@@ -203,36 +208,33 @@ onMounted(() => {
     margin-left: 0.4rem;
 }
 
-.cake-detail-view {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
+/* content */
+.cakedetailview-content-container {
+    margin: 2rem 0 2rem 0;
+    user-select: none;
 }
 
-.event-image {
-    width: 200px;
-    height: auto;
-    margin-bottom: 20px;
+.cakedetailview-content-content {
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--black-color);
 }
 
-.event-info h1 {
-    font-size: 24px;
-    color: #333;
+/* chat */
+.cakedetailview-chat-container {
+    margin: 2rem 0 2rem 0;
+    user-select: none;
 }
 
-.event-info p {
-    font-size: 18px;
-    color: #666;
-    margin: 5px 0;
+.cakedetailview-chat-title {
+    font-family: "Bold";
+    font-size: 1.2rem;
+    color: var(--gray2-color);
+    margin-bottom: 1rem;
 }
 
-.status-box {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 20px;
-    margin-bottom: 5px;
-    background-color: var(--main-color); /* 기본 배경색 */
-    color: #fff; /* 흰색 글씨 */
+/* button */
+.cakedetailview-button {
+    margin: 2rem 0 2rem 0;
 }
 </style>
