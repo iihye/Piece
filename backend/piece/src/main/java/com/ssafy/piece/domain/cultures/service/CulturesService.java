@@ -51,6 +51,11 @@ public class CulturesService {
         return CulturesResponseMapper.cultureEntityToDtoList(list);
     }
 
+    public CulturesResponse findCulture(Long cultureId) {
+        Cultures cultures = getCulture(cultureId);
+        return CulturesResponseMapper.cultureEntityToDto(cultures);
+    }
+
     // 케이크(공연, 영화 등 정보) 조회
     @Transactional(readOnly = true)
     public Cultures getCulture(Long cultureId) {
