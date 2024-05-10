@@ -63,7 +63,7 @@ export const useCommonStore = defineStore("common", () => {
         })
             .then((res) => {
                 loginUserInfo.value = res.data;
-                if (loginUserInfo.value.labelId !== 0) {
+                if (loginUserInfo.value.labelId !== null) {
                     findUserLabel();
                 } else {
                     loginUserLabel.value = "";
@@ -75,7 +75,9 @@ export const useCommonStore = defineStore("common", () => {
     const findUserLabel = function () {
         const userId = localStorage.getItem("userId");
         axios({
-            url: `${import.meta.env.VITE_REST_PIECE_API}/labels/${loginUserInfo.value.labelId}`,
+            url: `${import.meta.env.VITE_REST_PIECE_API}/labels/${
+                loginUserInfo.value.labelId
+            }`,
             method: "GET",
         })
             .then((res) => {
