@@ -1,0 +1,59 @@
+server:
+  port: 0 # Random Port
+  servlet:
+    context-path: /chat
+  baseURL: http://localhost:8000
+spring:
+#  mongodb:
+#    uri: mongodb://localhost:27017/piecechatlogs
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/piece?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ssafy
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    defer-datasource-initialization: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+  application:
+    name: chat
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    hostname: localhost
+    prefer-ip-address: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh, info, metrics, prometheus
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+
+# feign client url 세팅
+external:
+  piece:
+    host: ${server.baseURL}/api/piece
+  user:
+    host: ${server.baseURL}/api/user
+
+# s3
+amazon:
+  aws:
+    access-key: "{cipher}8b9939984097f5954aaf86c22f03fe65056b7eaec721febe38bb64a3064ea9fd435e024fc3974067507d35d44f1cdd82"
+    secret-key: "{cipher}6acc06212aa0a89b45f2af91c5eff76892196e64ee2dd6b77ce5e144bffd0fc42667951e045ae9e52df263433639790f039d6d56ea45773dc5b6be7e6ab8c6c2"
+    region: ap-southeast-2
+    bucket: piecemaker.kr
