@@ -7,12 +7,16 @@ export const usePiecelistStore = defineStore(
     "piecelist",
     () => {
         // =========== STATE ===============
+        const selectedOption = ref("ALL");
         const selectedOptionMyList = ref("ALL");
+        const selectedOptionHeartList = ref("ALL");
         const piecelistList = ref({});
+        const piecelistListFiltered = ref({});
         const piecelistMyList = ref({});
         const piecelistMyListFiltered = ref({});
         const piecelistMyCalendar = ref([]);
         const piecelistHeartList = ref({});
+        const piecelistHeartListFiltered = ref({});
         const piecelistDetail = ref({});
         const pieceDetailHeart = ref({});
         const pieceDetailRecord = ref({});
@@ -28,6 +32,14 @@ export const usePiecelistStore = defineStore(
         });
 
         // =========== GETTER ===============
+        const getSelectOption = computed(() => {
+            return selectedOption.value;
+        });
+
+        const setSelectOption = function (option) {
+            selectedOption.value = option;
+        };
+
         const getSelectOptionMyList = computed(() => {
             return selectedOptionMyList.value;
         });
@@ -36,8 +48,20 @@ export const usePiecelistStore = defineStore(
             selectedOptionMyList.value = option;
         };
 
+        const getSelectOptionHeartList = computed(() => {
+            return selectedOptionHeartList.value;
+        });
+
+        const setSelectOptionHeartList = function (option) {
+            selectedOptionHeartList.value = option;
+        };
+
         const getPiecelistList = computed(() => {
             return piecelistList.value;
+        });
+
+        const getPiecelistListFiltered = computed(() => {
+            return piecelistListFiltered.value;
         });
 
         const getPiecelistMyList = computed(() => {
@@ -54,6 +78,10 @@ export const usePiecelistStore = defineStore(
 
         const getPiecelistHeartList = computed(() => {
             return piecelistMyList.value;
+        });
+
+        const getPiecelistHeartListFiltered = computed(() => {
+            return piecelistHeartListFiltered.value;
         });
 
         const getPiecelistDetail = computed(() => {
@@ -136,6 +164,7 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     piecelistList.value = res.data.data;
+                    piecelistListFiltered.value = computedFilteredList();
                 })
                 .catch((err) => {});
         };
@@ -151,6 +180,34 @@ export const usePiecelistStore = defineStore(
                 })
                 .catch((err) => {});
         };
+
+        function computedFilteredList() {
+            if (selectedOption.value === "ALL") {
+                return piecelistList.value;
+            } else if (selectedOption.value === "MOVIE") {
+                return piecelistList.value.filter(
+                    (item) => item.performanceType === "MOVIE"
+                );
+            } else if (selectedOption.value === "THEATER") {
+                return piecelistList.value.filter(
+                    (item) => item.performanceType === "THEATER"
+                );
+            } else if (selectedOption.value === "MUSICAL") {
+                return piecelistList.value.filter(
+                    (item) => item.performanceType === "MUSICAL"
+                );
+            } else if (selectedOption.value === "CONCERT") {
+                return piecelistList.value.filter(
+                    (item) => item.performanceType === "CONCERT"
+                );
+            } else if (selectedOption.value === "ETC") {
+                return piecelistList.value.filter(
+                    (item) => item.performanceType === "ETC"
+                );
+            } else {
+                return [];
+            }
+        }
 
         function computedFilteredMyList() {
             if (selectedOptionMyList.value === "ALL") {
@@ -173,6 +230,34 @@ export const usePiecelistStore = defineStore(
                 );
             } else if (selectedOptionMyList.value === "ETC") {
                 return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "ETC"
+                );
+            } else {
+                return [];
+            }
+        }
+
+        function computedFilteredHeartList() {
+            if (selectedOptionHeartList.value === "ALL") {
+                return piecelistHeartList.value;
+            } else if (selectedOptionHeartList.value === "MOVIE") {
+                return piecelistHeartList.value.filter(
+                    (item) => item.performanceType === "MOVIE"
+                );
+            } else if (selectedOptionHeartList.value === "THEATER") {
+                return piecelistHeartList.value.filter(
+                    (item) => item.performanceType === "THEATER"
+                );
+            } else if (selectedOptionHeartList.value === "MUSICAL") {
+                return piecelistHeartList.value.filter(
+                    (item) => item.performanceType === "MUSICAL"
+                );
+            } else if (selectedOptionHeartList.value === "CONCERT") {
+                return piecelistHeartList.value.filter(
+                    (item) => item.performanceType === "CONCERT"
+                );
+            } else if (selectedOptionHeartList.value === "ETC") {
+                return piecelistHeartList.value.filter(
                     (item) => item.performanceType === "ETC"
                 );
             } else {
@@ -264,7 +349,9 @@ export const usePiecelistStore = defineStore(
                 method: "GET",
             })
                 .then((res) => {
-                    piecelistMyList.value = res.data.data;
+                    piecelistHeartList.value = res.data.data;
+                    piecelistHeartListFiltered.value =
+                        computedFilteredHeartList();
                 })
                 .catch((err) => {});
         };
@@ -347,12 +434,16 @@ export const usePiecelistStore = defineStore(
 
         return {
             // state
+            selectedOption,
             selectedOptionMyList,
+            selectedOptionHeartList,
             piecelistList,
+            piecelistListFiltered,
             piecelistMyList,
             piecelistMyListFiltered,
             piecelistMyCalendar,
             piecelistHeartList,
+            piecelistHeartListFiltered,
             piecelistDetail,
             pieceDetailHeart,
             pieceDetailRecord,
@@ -363,13 +454,19 @@ export const usePiecelistStore = defineStore(
             month,
             state,
             // getter
+            getSelectOption,
+            setSelectOption,
             getSelectOptionMyList,
             setSelectOptionMyList,
+            getSelectOptionHeartList,
+            setSelectOptionHeartList,
             getPiecelistList,
+            getPiecelistListFiltered,
             getPiecelistMyList,
             getPiecelistMyListFiltered,
             getPiecelistMyCalendar,
             getPiecelistHeartList,
+            getPiecelistHeartListFiltered,
             getPiecelistDetail,
             getPieceDetailHeart,
             getPieceDetailRecord,
@@ -381,11 +478,13 @@ export const usePiecelistStore = defineStore(
             getState,
             setToday,
             // action
-            computedFilteredMyList,
             findPieceUser,
             findPieceUserLabel,
             findPiecelistList,
             findPiecelistMyList,
+            computedFilteredList,
+            computedFilteredMyList,
+            computedFilteredHeartList,
             findPiecelistMyCalendar,
             calendarImplementation,
             getImageUrlForDay,
