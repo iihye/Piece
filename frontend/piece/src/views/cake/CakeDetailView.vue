@@ -19,10 +19,13 @@
 </template>
 
 <script setup>
+import router from "@/router";
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useCommonStore } from "@/stores/common";
 
-const route = useRoute();
+const commonStore = useCommonStore();
+
+
 const item = ref(null);
 
 const fakeDatabase = [
@@ -33,8 +36,11 @@ const fakeDatabase = [
 ];
 
 onMounted(() => {
-    const itemId = parseInt(route.params.id);
-    item.value = fakeDatabase.find(i => i.id === itemId);
+    commonStore.headerTitle = "케이크 상세보기";
+    commonStore.headerType = "header2";
+
+    // const itemId = parseInt(route.params.id);
+    // item.value = fakeDatabase.find(i => i.id === itemId);
 });
 </script>
 
