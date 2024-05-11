@@ -7,10 +7,16 @@ export const usePiecelistStore = defineStore(
     "piecelist",
     () => {
         // =========== STATE ===============
+        const selectedOption = ref("ALL");
+        const selectedOptionMyList = ref("ALL");
+        const selectedOptionHeartList = ref("ALL");
         const piecelistList = ref({});
+        const piecelistListFiltered = ref({});
         const piecelistMyList = ref({});
+        const piecelistMyListFiltered = ref({});
         const piecelistMyCalendar = ref([]);
         const piecelistHeartList = ref({});
+        const piecelistHeartListFiltered = ref({});
         const piecelistDetail = ref({});
         const pieceDetailHeart = ref({});
         const pieceDetailRecord = ref({});
@@ -26,12 +32,44 @@ export const usePiecelistStore = defineStore(
         });
 
         // =========== GETTER ===============
+        const getSelectOption = computed(() => {
+            return selectedOption.value;
+        });
+
+        const setSelectOption = function (option) {
+            selectedOption.value = option;
+        };
+
+        const getSelectOptionMyList = computed(() => {
+            return selectedOptionMyList.value;
+        });
+
+        const setSelectOptionMyList = function (option) {
+            selectedOptionMyList.value = option;
+        };
+
+        const getSelectOptionHeartList = computed(() => {
+            return selectedOptionHeartList.value;
+        });
+
+        const setSelectOptionHeartList = function (option) {
+            selectedOptionHeartList.value = option;
+        };
+
         const getPiecelistList = computed(() => {
             return piecelistList.value;
         });
 
+        const getPiecelistListFiltered = computed(() => {
+            return piecelistListFiltered.value;
+        });
+
         const getPiecelistMyList = computed(() => {
             return piecelistMyList.value;
+        });
+
+        const getPiecelistMyListFiltered = computed(() => {
+            return piecelistMyListFiltered.value;
         });
 
         const getPiecelistMyCalendar = computed(() => {
@@ -40,6 +78,10 @@ export const usePiecelistStore = defineStore(
 
         const getPiecelistHeartList = computed(() => {
             return piecelistMyList.value;
+        });
+
+        const getPiecelistHeartListFiltered = computed(() => {
+            return piecelistHeartListFiltered.value;
         });
 
         const getPiecelistDetail = computed(() => {
@@ -80,13 +122,17 @@ export const usePiecelistStore = defineStore(
 
         const setToday = function (date) {
             today.value = date;
+            year.value = today.value.getFullYear();
+            month.value = today.value.getMonth();
         };
 
         // =========== ACTION ===============
 
         const findPieceUser = function (userId) {
             axios({
-                url: `${import.meta.env.VITE_REST_USER_API}/users/find/${userId}`,
+                url: `${
+                    import.meta.env.VITE_REST_USER_API
+                }/users/find/${userId}`,
                 method: "GET",
             })
                 .then((res) => {
@@ -99,14 +145,18 @@ export const usePiecelistStore = defineStore(
         };
 
         const findPieceUserLabel = function (labelId) {
-            axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/labels/${labelId}`,
-                method: "GET",
-            })
-                .then((res) => {
-                    pieceUserLabel.value = res.data.data;
+            if (loginUserInfo.value.labelId !== null) {
+                axios({
+                    url: `${
+                        import.meta.env.VITE_REST_PIECE_API
+                    }/labels/${labelId}`,
+                    method: "GET",
                 })
-                .catch((err) => {});
+                    .then((res) => {
+                        pieceUserLabel.value = res.data.data;
+                    })
+                    .catch((err) => {});
+            }
         };
 
         const findPiecelistList = function () {
@@ -116,6 +166,7 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     piecelistList.value = res.data.data;
+                    piecelistListFiltered.value = computedFilteredList();
                 })
                 .catch((err) => {});
         };
@@ -127,20 +178,109 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     piecelistMyList.value = res.data.data;
+                    piecelistMyListFiltered.value = computedFilteredMyList();
                 })
                 .catch((err) => {});
         };
 
+        function computedFilteredList() {
+            if (selectedOption.value === "ALL") {
+                return piecelistList.value;
+            } else if (selectedOption.value === "MOVIE") {
+                return piecelistList.value.filter(
+                    (item) => item.performanceType === "MOVIE"
+                );
+            } else if (selectedOption.value === "THEATER") {
+                return piecelistList.value.filter(
+                    (item) => item.performanceType === "THEATER"
+                );
+            } else if (selectedOption.value === "MUSICAL") {
+                return piecelistList.value.filter(
+                    (item) => item.performanceType === "MUSICAL"
+                );
+            } else if (selectedOption.value === "CONCERT") {
+                return piecelistList.value.filter(
+                    (item) => item.performanceType === "CONCERT"
+                );
+            } else if (selectedOption.value === "ETC") {
+                return piecelistList.value.filter(
+                    (item) => item.performanceType === "ETC"
+                );
+            } else {
+                return [];
+            }
+        }
+
+        function computedFilteredMyList() {
+            if (selectedOptionMyList.value === "ALL") {
+                return piecelistMyList.value;
+            } else if (selectedOptionMyList.value === "MOVIE") {
+                return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "MOVIE"
+                );
+            } else if (selectedOptionMyList.value === "THEATER") {
+                return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "THEATER"
+                );
+            } else if (selectedOptionMyList.value === "MUSICAL") {
+                return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "MUSICAL"
+                );
+            } else if (selectedOptionMyList.value === "CONCERT") {
+                return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "CONCERT"
+                );
+            } else if (selectedOptionMyList.value === "ETC") {
+                return piecelistMyList.value.filter(
+                    (item) => item.performanceType === "ETC"
+                );
+            } else {
+                return [];
+            }
+        }
+
+        function computedFilteredHeartList() {
+            if (selectedOptionHeartList.value === "ALL") {
+                return piecelistHeartList.value;
+            } else if (selectedOptionHeartList.value === "MOVIE") {
+                return piecelistHeartList.value.filter(
+                    (item) => item.performanceType === "MOVIE"
+                );
+            } else if (selectedOptionHeartList.value === "THEATER") {
+                return piecelistHeartList.value.filter(
+                    (item) => item.performanceType === "THEATER"
+                );
+            } else if (selectedOptionHeartList.value === "MUSICAL") {
+                return piecelistHeartList.value.filter(
+                    (item) => item.performanceType === "MUSICAL"
+                );
+            } else if (selectedOptionHeartList.value === "CONCERT") {
+                return piecelistHeartList.value.filter(
+                    (item) => item.performanceType === "CONCERT"
+                );
+            } else if (selectedOptionHeartList.value === "ETC") {
+                return piecelistHeartList.value.filter(
+                    (item) => item.performanceType === "ETC"
+                );
+            } else {
+                return [];
+            }
+        }
+
         const findPiecelistMyCalendar = function (year, month) {
             axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/piecelist/my/${year}/${month}`,
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/piecelist/my/${year}/${month}`,
                 method: "GET",
             })
                 .then((res) => {
                     if (res.data.code === "FIND_MY_PIECE_LIST_SUCCESS") {
                         piecelistMyCalendar.value = res.data.data;
                         calendarImplementation();
-                    } else if (res.data.code === "FIND_MY_PIECE_LIST_NULL_SUCCESS") {
+                    } else if (
+                        res.data.code === "FIND_MY_PIECE_LIST_NULL_SUCCESS"
+                    ) {
                         piecelistMyCalendar.value = [];
                         calendarImplementation();
                     }
@@ -160,14 +300,21 @@ export const usePiecelistStore = defineStore(
                 imageUrl: null,
                 imageId: null,
             });
-            const daysOfMonth = Array.from({ length: endDayOfTheMonth }, (_, i) => {
-                const { frontImg, pieceId } = getImageUrlForDay(i + 1, month, year);
-                return {
-                    day: i + 1,
-                    imageUrl: frontImg,
-                    pieceId: pieceId,
-                };
-            });
+            const daysOfMonth = Array.from(
+                { length: endDayOfTheMonth },
+                (_, i) => {
+                    const { frontImg, pieceId } = getImageUrlForDay(
+                        i + 1,
+                        month,
+                        year
+                    );
+                    return {
+                        day: i + 1,
+                        imageUrl: frontImg,
+                        pieceId: pieceId,
+                    };
+                }
+            );
             const fullMonth = [...emptyStartDays, ...daysOfMonth];
             const weeks = [];
 
@@ -184,11 +331,13 @@ export const usePiecelistStore = defineStore(
         };
 
         const getImageUrlForDay = function (day, month, year) {
-            const fullDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(
+            const fullDate = `${year}-${String(month + 1).padStart(
                 2,
                 "0"
-            )}`;
-            const piece = piecelistMyCalendar.value.find((p) => p.date === fullDate);
+            )}-${String(day).padStart(2, "0")}`;
+            const piece = piecelistMyCalendar.value.find(
+                (p) => p.date === fullDate
+            );
             if (piece) {
                 return { frontImg: piece.frontImg, pieceId: piece.pieceId };
             } else {
@@ -202,7 +351,9 @@ export const usePiecelistStore = defineStore(
                 method: "GET",
             })
                 .then((res) => {
-                    piecelistMyList.value = res.data.data;
+                    piecelistHeartList.value = res.data.data;
+                    piecelistHeartListFiltered.value =
+                        computedFilteredHeartList();
                 })
                 .catch((err) => {});
         };
@@ -254,7 +405,9 @@ export const usePiecelistStore = defineStore(
 
         const findPieceDetailRecord = function (pieceId) {
             axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/record/${pieceId}`,
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/pieces/record/${pieceId}`,
                 method: "GET",
             })
                 .then((res) => {
@@ -283,10 +436,16 @@ export const usePiecelistStore = defineStore(
 
         return {
             // state
+            selectedOption,
+            selectedOptionMyList,
+            selectedOptionHeartList,
             piecelistList,
+            piecelistListFiltered,
             piecelistMyList,
+            piecelistMyListFiltered,
             piecelistMyCalendar,
             piecelistHeartList,
+            piecelistHeartListFiltered,
             piecelistDetail,
             pieceDetailHeart,
             pieceDetailRecord,
@@ -297,10 +456,19 @@ export const usePiecelistStore = defineStore(
             month,
             state,
             // getter
+            getSelectOption,
+            setSelectOption,
+            getSelectOptionMyList,
+            setSelectOptionMyList,
+            getSelectOptionHeartList,
+            setSelectOptionHeartList,
             getPiecelistList,
+            getPiecelistListFiltered,
             getPiecelistMyList,
+            getPiecelistMyListFiltered,
             getPiecelistMyCalendar,
             getPiecelistHeartList,
+            getPiecelistHeartListFiltered,
             getPiecelistDetail,
             getPieceDetailHeart,
             getPieceDetailRecord,
@@ -316,6 +484,9 @@ export const usePiecelistStore = defineStore(
             findPieceUserLabel,
             findPiecelistList,
             findPiecelistMyList,
+            computedFilteredList,
+            computedFilteredMyList,
+            computedFilteredHeartList,
             findPiecelistMyCalendar,
             calendarImplementation,
             getImageUrlForDay,

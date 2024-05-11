@@ -89,12 +89,9 @@ onMounted(async () => {
     commonStore.headerType = "header3";
 });
 
-onMounted(
-    async () => {
-        await store.findPiecelistMyCalendar(year.value, month.value + 1);
-    },
-    { once: true }
-);
+onMounted(async () => {
+    await store.findPiecelistMyCalendar(year.value, month.value + 1);
+});
 </script>
 
 <style>
@@ -114,6 +111,10 @@ onMounted(
     flex: 1;
 }
 
+.piececalendarview-header-icon:hover {
+    cursor: pointer;
+}
+
 .piececalendarview-header-container {
     display: flex;
     justify-content: space-between;
@@ -122,10 +123,15 @@ onMounted(
 }
 
 .piececalendarview-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     font-family: "Semi";
     font-size: 1.4rem;
     color: var(--main-color);
     margin: 0 1rem 0 1rem;
+    width: 6rem;
 }
 
 .piececalendarview-calendar-container {
@@ -171,5 +177,9 @@ onMounted(
 .piececalendarview-weekdays-day img {
     width: 100%;
     height: 100%;
+}
+
+.piececalendarview-weekdays-day img:hover {
+    cursor: pointer;
 }
 </style>

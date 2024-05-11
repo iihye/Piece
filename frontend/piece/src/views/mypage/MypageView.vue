@@ -58,8 +58,7 @@
                 ></IconText>
             </div>
 
-            <!-- TODO: 조각 통계, 소비 통계 주석 처리 -->
-            <!-- <div class="mypage-router-subcontainer">
+            <div class="mypage-router-subcontainer">
                 <div class="mypage-router-title">조각 통계</div>
                 <IconText
                     :itemContent="'조각 통계'"
@@ -71,7 +70,7 @@
                     :itemIcon="['fas', 'chart-simple']"
                     :handleClick="handleConsumeClick"
                 ></IconText>
-            </div> -->
+            </div>
 
             <div class="mypage-router-subcontainer">
                 <div class="mypage-router-item" @click="handleLogoutClick">
