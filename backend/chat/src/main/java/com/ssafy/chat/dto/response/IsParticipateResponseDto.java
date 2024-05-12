@@ -1,6 +1,7 @@
 package com.ssafy.chat.dto.response;
 
 import jakarta.persistence.Access;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,9 @@ public class IsParticipateResponseDto {
 
     private Long chatRoomId;
 
-//    private Cultures culture;
+    private CultureResponseDto culture;
+
+    private List<ProcessedUserResponseDto> participants;
 
     private String chatRoomName;
 
