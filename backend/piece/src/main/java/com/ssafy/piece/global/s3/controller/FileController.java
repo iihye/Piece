@@ -24,9 +24,11 @@ public class FileController {
     @GetMapping("/upload/{image}")
     public ResponseEntity<Object> uploadImage(@AuthenticatedUser Long userId, @PathVariable(name = "image") String image) {
         String url = fileService.getPreSignedUrl(userId.toString(), image);
-        log.info("image is {} and url is {}", image, url);
+        log.info("upload image is {} and url is {}", image, url);
         return SuccessResponse.createSuccess(SuccessCode.GET_PRESIGNEDURL_SUCCESS, url);
     }
+
+
 
     /**
      * 이미지 삭제

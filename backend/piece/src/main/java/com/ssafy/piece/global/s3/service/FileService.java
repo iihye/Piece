@@ -26,13 +26,13 @@ public class FileService {
 
     /**
      * presigned url 발급
-     * @param prefix 버킷 디렉토리 이름
-     * @param fileName 클라이언트가 전달한 파일명 파라미터
+     * @param bucketName 버킷 디렉토리 이름
+     * @param fileName 클라이언트가 업로드할 파일명
      * @return presigned url
      */
-    public String getPreSignedUrl(String prefix, String fileName) {
-        if(!prefix.isEmpty()) {
-            fileName = createPath(prefix, fileName);
+    public String getPreSignedUrl(String bucketName, String fileName) {
+        if(!bucketName.isEmpty()) {
+            fileName = createPath(bucketName, fileName);
             log.info("=================================");
             log.info("filepath is {} ", fileName);
         }
