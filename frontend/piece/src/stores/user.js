@@ -88,6 +88,34 @@ export const useUserStore = defineStore(
             );
         };
 
+        const changeMypageNickname = function (userId, nickname) {
+            axios({
+                url: `${import.meta.env.VITE_REST_USER_API}/users/${userId}/nickname`,
+                method: "PUT",
+                data: {
+                    newNickname: nickname,
+                },
+            })
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {});
+        };
+
+        const changeMypagePassword = function (userId, password) {
+            axios({
+                url: `${import.meta.env.VITE_REST_USER_API}/users/${userId}/password`,
+                method: "PUT",
+                data: {
+                    newPassword: password,
+                },
+            })
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {});
+        }
+
         return {
             // state
             mypageLabelList,
@@ -104,6 +132,8 @@ export const useUserStore = defineStore(
             addMypageLabelWear,
             deleteMypageLabelWear,
             checkMypageLabelWear,
+            changeMypageNickname,
+            changeMypagePassword,
         };
     },
     { persist: true }

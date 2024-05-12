@@ -11,6 +11,7 @@
                 minlength="10"
                 required
                 @input="checkPassword"
+                v-model='password'
             />
             <!-- visible -->
             <font-awesome-icon
@@ -56,15 +57,18 @@
 import router from "@/router";
 import { ref, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
+import { useUserStore } from "@/stores/user";
 import SquareButton from "@/components/button/SquareButton.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
 
 const commonStore = useCommonStore();
+const store = useUserStore();
 
 const passwordMessage = ref("8자 이상의 영문, 숫자만 가능해요");
 const isPassword = ref(false);
 const isModal = ref(false);
 const isVisible = ref(true);
+const password = ref("");
 
 const checkPassword = (e) => {
     if (e.target.value < 8) {
@@ -88,9 +92,7 @@ const handleVisibleClick = () => {
 
 const handlePasswordClick = () => {
     isModal.value = true;
-    // ---------------------
-    // TODO: 비밀번호 변경 api 연결
-    // ---------------------
+    store.changeMypagePassword(localStorage.getItem("userId"), password.value);
 };
 
 const handleChangeSuccess = () => {
