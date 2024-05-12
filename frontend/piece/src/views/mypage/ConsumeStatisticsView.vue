@@ -1,3 +1,5 @@
+<!-- ToDo : 값이 0이면 표시 x -->
+<!-- ToDo : 값이 없으면 차트도 보여주지 말고 소비한 내용이 없어요 띄우기 -->
 <template>
     <div class="consumestatisticsview-main-title">조각으로 분석한 소비 통계예요</div>
     <YearSelector @year-changed="updateData" />
