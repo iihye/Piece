@@ -87,6 +87,15 @@ public class CulturesController {
         return SuccessResponse.createSuccess(SuccessCode.REMOVE_CULTURE_HEART_SUCCESS, result);
     }
 
+    @GetMapping("/heart/count/{cultureId}")
+    public ResponseEntity<Object> getCultureHeartCount(
+        @PathVariable(name = "cultureId") Long cultureId) {
+        log.info("getCultureId : {}", cultureId);
+
+        return SuccessResponse.createSuccess(SuccessCode.COUNT_CULTURE_HEART_SUCCESS,
+            culturesService.countCultureList(cultureId));
+    }
+
     @GetMapping("")
     public ResponseEntity<Object> getCultureList(
         @RequestParam(required = false, name = "cultureType") CultureType cultureType,
@@ -105,7 +114,7 @@ public class CulturesController {
         log.info("getCultureId : {}", cultureId);
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_CULTURE_SUCCESS,
-            culturesService.getCulture(cultureId));
+            culturesService.findCulture(cultureId));
     }
 
 }

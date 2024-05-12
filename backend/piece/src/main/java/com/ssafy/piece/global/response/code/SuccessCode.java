@@ -67,6 +67,7 @@ public enum SuccessCode implements ResponseCode {
     ADD_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 좋아요에 성공했습니다."),
     REMOVE_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 삭제에 성공했습니다."),
     FIND_CULTURE_SUCCESS(HttpStatus.OK, "케이크 조회에 성공했습니다."),
+    COUNT_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 좋아요 개수 조회에 성공했습니다."),
 
     // Chat
     CHATROOM_CREATED(HttpStatus.CREATED, "채팅방이 생성되었습니다."),
