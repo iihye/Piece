@@ -16,24 +16,24 @@
     </div>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            year: new Date().getFullYear(),
-            currentYear: new Date().getFullYear(),
-        };
-    },
-    methods: {
-        changeYear(change) {
-            this.year += change;
-            this.$emit("year-changed", this.year);
-        },
-    },
+<script setup>
+import { ref } from 'vue';
+
+const currentYear = new Date().getFullYear();
+const year = ref(currentYear);
+const emit = defineEmits(['year-changed']);
+
+const changeYear = (change) => {
+    // 미래년도는 클릭 안댐
+    if ((year.value === currentYear && change > 0) || (year.value > currentYear)) {
+        return;
+    }
+    year.value += change;
+    emit('year-changed', year.value);
 };
 </script>
 
-<style scoped>
+<style>
 .year-selector {
     display: flex;
     justify-content: center;
