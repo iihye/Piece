@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ParticipantsRepository extends JpaRepository<Participants, ParticipantsId> {
 
@@ -16,6 +17,9 @@ public interface ParticipantsRepository extends JpaRepository<Participants, Part
         "INNER JOIN ChatRooms c ON p.participantsId.chatroomId = c.chatRoomId " +
         "WHERE p.participantsId.userId = :userId AND c.isPersonal = :isPersonal")
     List<ChatRooms> findIsPersonalChatRoomsByUserId(Long userId, Boolean isPersonal);
+
+    @Query("SELECT p.participantsId.userId FROM Participants p WHERE p.participantsId.chatroomId = :chatroomId")
+    List<Long> findUserIdsByChatroomId(@Param("chatroomId") Long chatroomId);
 
     Long countByParticipantsId_ChatroomId(Long chatroomId);
 

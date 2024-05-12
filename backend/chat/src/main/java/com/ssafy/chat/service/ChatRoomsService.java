@@ -14,10 +14,11 @@ public class ChatRoomsService {
     private final ChatRoomsRepository chatRoomRepository;
 
     public ChatRooms createChatRoom(ChatRoomsRequestDto chatRoomRequestDto) {
-        if (chatRoomRepository.findByCultureIdAndIsPersonal(chatRoomRequestDto.getCultureId(),
-            chatRoomRequestDto.getIsPersonal()).isPresent()) {
-            throw new AlreadyCreatedChatRoomException();
-        }
+        // 예외처리 당장 하지않음. 근데 오픈채팅일 경우 중복으로 생성되는 문제 생길거임
+//        if (chatRoomRepository.findByCultureIdAndIsPersonal(chatRoomRequestDto.getCultureId(),
+//            chatRoomRequestDto.getIsPersonal()).isPresent()) {
+//            throw new AlreadyCreatedChatRoomException();
+//        }
 
         ChatRooms chatRooms;
 
