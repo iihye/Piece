@@ -45,7 +45,8 @@ public class CulturesQueryDsl {
             .where(
                 ltCultureId(startPageId),
 //                equalGenreId(genreId),
-                equalCultureType(cultureType))
+                equalCultureType(cultureType),
+                containTitle(title))
             .orderBy(cultures.id.desc())
             .limit(pageSize + 1)  // 다음페이지 존재하는지 확인하기 위해 +1
             .fetch();
@@ -81,5 +82,11 @@ public class CulturesQueryDsl {
         log.info("equalCultureType : {}", cultureType);
         return cultureType != null ? cultures.cultureType.eq(cultureType) : null;
     }
+
+    private BooleanExpression containTitle(String title) {
+        log.info("containTitle : {}", title);
+        return title != null ? cultures.title.contains(title) : null;
+    }
+
 
 }
