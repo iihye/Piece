@@ -72,7 +72,7 @@ const searchQuery = ref('');
 const isFocused = ref(false);
 
 watch(searchQuery, (newValue) => {
-  if (newValue.length > 2) {
+  if (newValue.length >= 2) {
     searchMovieDebouncing(newValue);
   } else {
     searchResults.value = [];

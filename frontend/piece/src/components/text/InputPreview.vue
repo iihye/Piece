@@ -3,9 +3,9 @@
     <div v-if="searchQuery && !searchResults.length">
     검색 결과가 없습니다.
     </div>
-    <div v-else-if="searchResults.length" class="inputpreview-item">
+    <div v-else-if="searchResults.length">
     <div v-for="item in searchResults" :key="item.poster_path">
-      <InputPreviewItem :item="item" @select="handleSelect"></InputPreviewItem>
+      <InputPreviewItem :item="item" :searchQuery="searchQuery" @select="handleSelect"></InputPreviewItem>
     </div>
     </div>
     <div v-else>
@@ -42,8 +42,8 @@ function handleItemMouseDown(event) {
   background-color: #f0f0f0; /* Light grey background on hover */
 }
 
-.inputpreview-item {
-    width: 100%;
+.inputpreview-container {
+    max-width: 50rem;
     padding: 1rem;
     position: absolute;
     z-index: 2;
