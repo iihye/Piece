@@ -9,6 +9,7 @@
             maxlength="10"
             required
             @input="checkNickname"
+            v-model='nickname'
         />
         <div class="nicknameview-input-message">
             {{ nicknameMessage }}
@@ -32,16 +33,19 @@
 
 <script setup>
 import router from "@/router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useCommonStore } from "@/stores/common";
+import { useUserStore } from "@/stores/user";
 import SquareButton from "@/components/button/SquareButton.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
 
 const commonStore = useCommonStore();
+const store = useUserStore();
 
 const nicknameMessage = ref("3자 이상 10자 이내의 한글, 영문만 가능해요");
 const isNickname = ref(false);
 const isModal = ref(false);
+const nickname = ref("");
 
 const checkNickname = (e) => {
     if (e.target.value < 3) {
@@ -61,11 +65,10 @@ const checkNickname = (e) => {
     // ---------------------
 };
 
-const handleNicknameClick = () => {
+const handleNicknameClick = (e) => {
+    console.log(nickname.value);
     isModal.value = true;
-    // ---------------------
-    // TODO: 닉네임 변경 api 연결
-    // ---------------------
+    store.changeMypageNickname(localStorage.getItem("userId"), nickname.value);
 };
 
 const handleChangeSuccess = () => {
