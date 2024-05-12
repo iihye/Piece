@@ -4,7 +4,6 @@ import com.ssafy.piece.domain.cultures.entity.CultureType;
 import com.ssafy.piece.domain.pieces.entity.GenreType;
 import com.ssafy.piece.domain.pieces.entity.Pieces;
 import jakarta.persistence.Tuple;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -66,6 +65,6 @@ public interface PiecesRepository extends JpaRepository<Pieces, Long> {
     @Query("select sum(p.price) from Pieces p where p.userId = :userId")
     int sumByUserId(Long userId);
 
-    @Query("select p.genre from Pieces p group by p.genre")
-    Set<String> countByGenreType();
+    @Query("select p.genre from Pieces p where p.userId = :userId group by p.genre")
+    Set<String> countByGenreType(Long userId);
 }
