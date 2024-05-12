@@ -76,11 +76,11 @@ public class CultureApiService {
 
     public List<SimpleMovieResponse> searchMovie(String name) {
         TmdbResponse response = tmdbClient.searchTMDBMovie(name, "Bearer " + TMDB_API_KEY);
-        SimpleMovieResponse.builder()
-            .poster_path("https://image.tmdb.org/t/p/w400" + response)
-            .build();
 //        response.getResults().stream()
-
-        return CulturesResponseMapper.movieResultToSimpleMovieResponseList(response);
+        List<MovieResult> list = response.getResults();
+        if (list.size() > 5) {
+            list.subList(5, list.size()).clear();
+        }
+        return CulturesResponseMapper.movieResultToSimpleMovieResponseList(list);
     }
 }

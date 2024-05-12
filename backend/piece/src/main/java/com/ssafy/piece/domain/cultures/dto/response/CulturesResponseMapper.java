@@ -35,8 +35,8 @@ public class CulturesResponseMapper {
     }
 
     public static List<SimpleMovieResponse> movieResultToSimpleMovieResponseList(
-        TmdbResponse response) {
-        return response.getResults().stream()
+        List<MovieResult> list) {
+        return list.stream()
             .map(CulturesResponseMapper::movieResultToSimpleMovieResponse)
             .collect(Collectors.toList());
     }
