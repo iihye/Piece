@@ -14,6 +14,8 @@ export const useUserStore = defineStore(
         const mypageLabelList = ref({});
         const mypageLabelWear = ref({});
         const mypageLabelWearoff = ref();
+        const nicknameMessage = ref("3자 이상 10자 이내의 한글, 영문만 가능해요");
+        const isNickname = ref(false);
 
         // =========== GETTER ===============
 
@@ -32,6 +34,18 @@ export const useUserStore = defineStore(
         const setMypagelabelWearoff = (data) => {
             mypageLabelWearoff.value = data;
         };
+
+        const getNicknameMessage = computed(() => {
+            return nicknameMessage.value;
+        });
+
+        const setNicknameMessage = (data) => {
+            nicknameMessage.value = data;
+        };
+
+        const getIsNickname = computed(() => {
+            return isNickname.value;
+        });
 
         // =========== ACTION ===============
 
@@ -96,9 +110,7 @@ export const useUserStore = defineStore(
                     newNickname: nickname,
                 },
             })
-                .then((res) => {
-                    console.log(res);
-                })
+                .then((res) => {})
                 .catch((err) => {});
         };
 
@@ -114,18 +126,41 @@ export const useUserStore = defineStore(
                     console.log(res);
                 })
                 .catch((err) => {});
-        }
+        };
+
+        const checkNickname = function (nickname) {
+            axios({
+                url: `${
+                    import.meta.env.VITE_REST_USER_API
+                }/users/check-nickname?nickname=${nickname}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    nicknameMessage.value = res.data.message;
+                    if (res.data.code === "CHECK_NICKNAME_GOOD") {
+                        isNickname.value = true;
+                    } else {
+                        isNickname.value = false;
+                    }
+                })
+                .catch((err) => {});
+        };
 
         return {
             // state
             mypageLabelList,
             mypageLabelWear,
             mypageLabelWearoff,
+            nicknameMessage,
+            isNickname,
             // getter
             getMypageLabelList,
             getMypageLabelWear,
             getMypageLabelWearoff,
             setMypagelabelWearoff,
+            getNicknameMessage,
+            setNicknameMessage,
+            getIsNickname,
             // action
             checkMypageLabelList,
             findMypageLabelList,
@@ -134,6 +169,7 @@ export const useUserStore = defineStore(
             checkMypageLabelWear,
             changeMypageNickname,
             changeMypagePassword,
+            checkNickname,
         };
     },
     { persist: true }
