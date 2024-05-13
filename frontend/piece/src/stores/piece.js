@@ -19,6 +19,7 @@ export const usePieceStore = defineStore('piece', () => {
         price: 0,
         score: 0,
         comment: null,
+        isPrivate: false,
         openYn: 'Y',
         imageFront: 'if',
         imageBack: 'ib',

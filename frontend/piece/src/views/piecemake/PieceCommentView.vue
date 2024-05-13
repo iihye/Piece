@@ -23,15 +23,23 @@
             </div>
 
         </div>
-        <div class="form-group">
-            <div class="label-and-counter">
+        <div class="pieveimageview-form-group">
+            <div class="pieveimageview-label-and-counter">
                 <label for="comment" class="pieveimageview-required-label">한줄평</label>
                 <div>{{ characterCount }}/50</div>
             </div>
-            <textarea id="comment" placeholder="한줄평을 남겨주세요"
+            <textarea class="pieveimageview-textarea"id="comment" placeholder="한줄평을 남겨주세요"
             :value="commentInput"
             @input="handleInput"
             maxlength="50"></textarea>
+        </div>
+        <div class="piececommentview-private-container">
+            <div>
+                <label for="is-public">조각 비공개</label>
+            </div>
+            <div>
+                <input type="checkbox" id="is-public" name="scales" checked v-model="pieceValue.isPrivate"/>
+            </div>
         </div>
     </div>
     <div class="piecemake-button-container">
@@ -88,7 +96,7 @@ function leave() {
 </script>
 
 <style>
-.label-and-counter {
+.pieveimageview-label-and-counter {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -102,6 +110,11 @@ function leave() {
 
 .piececommentview-starinfo {
     display: flex;
+}
+
+.piececommentview-private-container {
+    display: flex;
+    margin-top: 0.625rem;
 }
 
 .pieveimageview-star-rating {
@@ -121,11 +134,11 @@ function leave() {
     margin-right: -0.25rem; /* Slight overlap to prevent gap detection */
 }
 
-.form-group {
+.pieveimageview-form-group {
     margin-top: 20px;
 }
 
-textarea {
+.pieveimageview-textarea {
     width: 100%;
     height: 100px;
     border-radius: 5px;
@@ -148,5 +161,10 @@ textarea {
   right: 0;
   bottom: 4rem;
   text-align: center;
+}
+
+#is-public {
+    accent-color: var(--red-color);
+    margin-left: 0.625rem;
 }
 </style>
