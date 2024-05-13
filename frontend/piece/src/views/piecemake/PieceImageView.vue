@@ -80,9 +80,13 @@ watch(searchQuery, (newValue) => {
 });
 
 const getFetchImageFromUrl = (async (imageUrl) => {
-  imageSrc.value = imageUrl;
-  uploadedImage.value = imageUrl;
-  originalImage.value = imageUrl;
+  const data = await pieceStore.fetchImage(imageUrl);
+  if (imageUrl) {
+    // searchResults.value = data;
+    imageSrc.value = data;
+    uploadedImage.value = data;
+    originalImage.value = data;
+  }
 })
 
 const searchMovieDebouncing = debounce(async (query) => {
@@ -96,7 +100,6 @@ const emit = defineEmits(['select']);
 const hover = ref(false);
 
 function handleSelect(item) {
-  console.log(item.poster_path);
   getFetchImageFromUrl(item.poster_path);
   handleBlur();
   emit('select', item);

@@ -1,7 +1,7 @@
 <template>
-  <div @click="handleClick(item)" @mouseover="hover = true" @mouseleave="hover = false" :class="{ 'hover': hover }">
-    <img :src="item.poster_path" alt="Poster" class="movie-poster" />
-    <span class="movie-title" v-html="highlightSearchQuery(item.title)"></span>
+  <div class="inputpreviewitem-container" @click="handleClick(item)" @mouseover="hover = true" @mouseleave="hover = false" :class="{ 'inputpreviewitem-hover': hover }">
+    <img :src="item.poster_path" alt="Poster" class="inputpreviewitem-movie-poster" />
+    <span class="inputpreviewitem-movie-title" v-html="highlightSearchQuery(item.title)"></span>
   </div>
 </template>
 
@@ -30,23 +30,23 @@ function highlightSearchQuery(title) {
 </script>
 
 <style scoped>
-div {
+.inputpreviewitem-container {
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.hover {
-  background-color: #f0f0f0; /* Light grey background on hover */
+.inputpreviewitem-hover {
+  background-color: var(--gray-color); /* Light grey background on hover */
 }
 
-.movie-poster {
+.inputpreviewitem-movie-poster {
   width: 50px;
   height: 75px;
   object-fit: cover;
   margin-right: 10px;
 }
 
-.movie-title {
+.inputpreviewitem-movie-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

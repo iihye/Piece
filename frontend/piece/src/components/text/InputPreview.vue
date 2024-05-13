@@ -26,7 +26,6 @@ defineProps({
 });
 
 const emit = defineEmits(['select']);
-const hover = ref(false);
 
 function handleSelect(item) {
   emit('select', item);
@@ -38,10 +37,6 @@ function handleItemMouseDown(event) {
 </script>
 
 <style>
-.hover {
-  background-color: #f0f0f0; /* Light grey background on hover */
-}
-
 .inputpreview-container {
     max-width: 50rem;
     padding: 1rem;
