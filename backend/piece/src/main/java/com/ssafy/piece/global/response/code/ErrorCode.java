@@ -55,6 +55,10 @@ public enum ErrorCode implements ResponseCode {
 
     REQUEST_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "요청에 실패했습니다."),
 
+    // 케이크
+    CAKE_NOT_FOUND(HttpStatus.NOT_FOUND, "기록을 찾을 수 없습니다."),
+    CAKE_HEART_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 해당 기록이 존재합니다."),
+    FETCH_IMAGE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 변환에 실패하였습니다."),
     /**
      * s3
      */

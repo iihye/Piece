@@ -1,6 +1,9 @@
 package com.ssafy.piece.domain.cultures.service;
 
+import com.ssafy.piece.domain.cultures.dto.response.CulturesResponseMapper;
 import com.ssafy.piece.domain.cultures.dto.response.MovieResult;
+import com.ssafy.piece.domain.cultures.dto.response.SimpleMovieResponse;
+import com.ssafy.piece.domain.cultures.dto.response.TmdbDetailResponse;
 import com.ssafy.piece.domain.cultures.dto.response.TmdbResponse;
 import com.ssafy.piece.domain.cultures.entity.CultureGenre;
 import com.ssafy.piece.domain.cultures.entity.Cultures;
@@ -65,5 +68,19 @@ public class CultureApiService {
         culturesRepository.saveAll(culturesBatch);
         cultureGenreRepository.saveAll(
             cultureGenreBatch);
+    }
+
+    public TmdbDetailResponse findMovie(String movieId) {
+        return tmdbClient.getTmdbMovie(movieId, "Bearer " + TMDB_API_KEY);
+    }
+
+    public List<SimpleMovieResponse> searchMovie(String name) {
+        TmdbResponse response = tmdbClient.searchTMDBMovie(name, "Bearer " + TMDB_API_KEY);
+//        response.getResults().stream()
+        List<MovieResult> list = response.getResults();
+        if (list.size() > 5) {
+            list.subList(5, list.size()).clear();
+        }
+        return CulturesResponseMapper.movieResultToSimpleMovieResponseList(list);
     }
 }
