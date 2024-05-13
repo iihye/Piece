@@ -90,15 +90,17 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
+import { useCommonStore } from "@/stores/common";
 import { usePieceStore } from "@/stores/piece.js";
 import RoundButton from "@/components/button/RoundButton.vue";
 import SmallButton from "@/components/button/SmallButton.vue";
 import TextInput from "@/components/text/OnlyInput.vue";
 import InputPreview from "@/components/text/InputPreview.vue";
 
+const commonStore = useCommonStore();
 const pieceStore = usePieceStore();
 
 const imageSrc = ref(null);
@@ -223,6 +225,11 @@ const handleDocumentClick = (event) => {
 };
 
 document.addEventListener("click", handleDocumentClick);
+
+onMounted(async () => {
+    commonStore.headerTitle = "조각 만들기";
+    commonStore.headerType = "header2";
+});
 </script>
 
 <style>
