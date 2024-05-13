@@ -1,85 +1,249 @@
 <template>
-  <div>
+  <div class="pieceimageview-container">
     <h1>어떤 조각을 만들까요?</h1>
-    <div class="input-div" @drop="handleDrop">
-      <input type="file" class="file" @change="handleFileUpload" accept="image/*"/>
+    <div class="pieceimageview-search-area">
+      <TextInput
+        placeholder="포스터를 찾아보세요!"
+        v-model="searchQuery"
+        @focus="handleFocus"
+        @update:modelValue="value => searchQuery = value"
+      />
+      <InputPreview
+        :searchQuery="searchQuery"
+        :searchResults="searchResults"
+        :isFocused="isFocused"
+        @select="handleSelect"
+      />
     </div>
 
-    <div v-if="imageSrc">
+    <div class="pieceimageview-upload-area" @click="triggerFileInput" :class="{ 'no-click': imageSrc }">
+      <input type="file" @change="handleFileUpload" accept="image/*" ref="fileInput" style="display: none;" />
+      <div class="pieceimageview-explain" v-if="!imageSrc">
+        <font-awesome-icon :icon="['fas', 'image']" style="color : var(--red-color)"/>
+        <p class="pieceimageview-explain-strong">조각에 넣을 사진을 선택해주세요</p>
+        <p>사진 선택은 필수에요</p>
+      </div>
+      <div v-if="imageSrc">
         <VueCropper 
-            ref="cropperRef" 
-            :src="uploadedImage" 
-            :zoomOnWheel="false"
-            :initial-aspect-ratio=9/16
-            :aspect-ratio=9/16
+          class="pieceImageView-crop-area"
+          ref="cropperRef" 
+          :src="uploadedImage" 
+          :zoomOnWheel="false"
+          :viewMode="2"
+          :background="false"
+          :autoCropArea="1"
+          :initial-aspect-ratio="7/10"
+          :aspect-ratio="7/10"
+          @crop="debouncedCropImage"
         />
-        <button @click.prevent="cropImage">Crop</button>
+      </div>
     </div>
+    <SmallButton v-if="imageSrc" @click.prevent="resetImage" :smallButtonContent="'이미지초기화'"/>
 
-    <div v-if="croppedImage">
-      <img :src="croppedImage" alt="Image Preview" style="max-width: 100%; height: auto;" />
-    </div>
-
-    <hr>
-    <RouterLink :to="{ name: 'pieceimagecrop' }">사진 올리기</RouterLink>
-    <RouterLink :to="{ name: 'pieceinfo' }">사진 다 올리고 다음</RouterLink>
+    <div class="piecemake-button-container">
+      <RouterLink :to="{ name: 'pieceinfo' }">
+        <RoundButton :roundButtonContent="'다음'" :isRoundDisable="isRoundDisable"></RoundButton>
+      </RouterLink>
+    </div> 
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
+import { usePieceStore } from '@/stores/piece.js';
+import RoundButton from '@/components/button/RoundButton.vue';
+import SmallButton from '@/components/button/SmallButton.vue';
+import TextInput from '@/components/text/OnlyInput.vue';
+import InputPreview from '@/components/text/InputPreview.vue';
+
+const pieceStore = usePieceStore();
 
 const imageSrc = ref(null);
 const croppedImage = ref(null);
-const uploadedImage = ref('');
+const uploadedImage = ref(null); 
+const originalImage = ref(null);
 const cropperRef = ref(null);
+const fileInput = ref(null);
+const isRoundDisable = ref(false);
+
+const searchResults = ref([]);
+const searchQuery = ref('');
+const isFocused = ref(false);
+
+watch(searchQuery, (newValue) => {
+  if (newValue.length >= 2) {
+    searchMovieDebouncing(newValue);
+  } else {
+    searchResults.value = [];
+  }
+});
+
+const getFetchImageFromUrl = (async (imageUrl) => {
+  const data = await pieceStore.fetchImage(imageUrl);
+  if (imageUrl) {
+    // searchResults.value = data;
+    imageSrc.value = data;
+    uploadedImage.value = data;
+    originalImage.value = data;
+  }
+})
+
+// function getFetchImageFromUrl(imageUrl) {
+//     imageSrc.value = imageUrl;
+//     uploadedImage.value = imageUrl;
+//     originalImage.value = imageUrl;
+// }
+
+const searchMovieDebouncing = debounce(async (query) => {
+  const data = await pieceStore.getSearchMovieList(query);
+  if (data) {
+    searchResults.value = data;
+  }
+}, 250)
+
+const emit = defineEmits(['select']);
+
+function handleSelect(item) {
+  resetImage();
+  getFetchImageFromUrl(item.poster_path);
+  handleBlur();
+  emit('select', item);
+}
+
+function triggerFileInput() {
+  if (!imageSrc.value) {
+    fileInput.value.click();
+  }
+}
+
+const handleFocus = () => {
+  isFocused.value = true;
+};
+
+const handleBlur = () => {
+  isFocused.value = false;
+};
 
 function handleFileUpload(event) {
   const file = event.target.files[0];
-  if (file && file.type.startsWith('image/')) {
+  if (file.type.startsWith('image/')) {
     const reader = new FileReader();
     reader.onload = e => {
       imageSrc.value = e.target.result;
       uploadedImage.value = e.target.result;
+      originalImage.value = e.target.result;
     };
     reader.readAsDataURL(file);
   } else {
-    imageSrc.value = null;
     alert('Please upload an image file.');
   }
 }
 
-onMounted(() => {
-  if (uploadedImage.value && cropperRef.value) {
-    cropperRef.value.cropper.replace(uploadedImage.value);
-  }
-});
-
 const cropImage = () => {
   if (cropperRef.value && cropperRef.value.cropper) {
     croppedImage.value = cropperRef.value.cropper.getCroppedCanvas().toDataURL();
+    uploadedImage.value = croppedImage.value;
   }
 };
+
+const debouncedCropImage = debounce(cropImage, 100);
+
+const resetImage = () => {
+  imageSrc.value = null;
+  croppedImage.value = null;
+  uploadedImage.value = '';
+  originalImage.value = '';
+};
+
+watch(uploadedImage, (newValue) => {
+  isRoundDisable.value = Boolean(newValue);
+});
+
+// debounce
+function debounce(func, delay) {
+  let timeoutId;
+
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+
+const handleDocumentClick = (event) => {
+  if (!event.target.closest('.pieceimageview-container')) {
+    handleBlur();
+  }
+};
+
+document.addEventListener('click', handleDocumentClick);
 </script>
 
-
 <style scoped>
-.cropper-line {
-    background-color: var(--red-color);
+.pieceimageview-container {
+  max-width: 50rem;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.cropper-view-box {
-    display: block;
-    height: 100%;
-    outline: 1px solid var(--red-color);
-    outline-color: var(--red-color);
-    overflow: hidden;
-    width: 100%;
+.pieceimageview-explain {
+  text-align: center;
 }
 
+.pieceimageview-explain-strong{
+  font-family: "Semi";
+  font-size: 1.4rem;
+  color: (--black-color);
+}
+
+.pieceimageview-upload-area {
+  width: 18.75rem;
+  height: 25.25rem;
+  border: 0.125rem dashed var(--gray-color);
+  padding: 1.25rem;
+  text-align: center;
+  margin-bottom: 1.25rem;
+  cursor: pointer;
+  position: relative;
+  
+  display: flex;
+  align-items: center;
+}
+
+.pieceimageview-upload-area.no-click {
+  cursor: default;
+}
+
+.cropper-view-box,
+.cropper-face,
+.cropper-line,
 .cropper-point {
-  background-color: var(--red-color);
+  display: none;
+}
+
+.piecemake-button-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 4rem;
+  text-align: center;
+}
+
+.pieceimageview-search-area {
+  width: 15rem;
+  margin-bottom: 1rem;
+  align-self: end;
+}
+
+.pieceImageView-crop-area {
+  width: 18.75rem;
+  height: 25.25rem;
+  object-fit: cover;
 }
 </style>
