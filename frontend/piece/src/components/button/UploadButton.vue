@@ -1,14 +1,21 @@
 <template>
-    <button @click="uploadImage">사진 올리기</button>
-    <input type="file" ref="fileInput" @change="handleFileSelected" style="display: none" />
+    <div class="fileuploader-button">
+        <button @click="uploadImage">사진 올리기</button>
+        <input
+            type="file"
+            ref="fileInput"
+            @change="handleFileSelected"
+            style="display: none"
+        />
+    </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
+import { ref } from "vue";
+import axios from "axios";
 
 // 이벤트를 정의하고 내보내는 부분
-const emit = defineEmits(['uploadSuccess', 'uploadError']);
+const emit = defineEmits(["uploadSuccess", "uploadError"]);
 
 // 파일 입력 참조
 const fileInput = ref(null);
@@ -20,29 +27,40 @@ function uploadImage() {
 
 // 파일이 선택되었을 때 실행될 함수
 async function handleFileSelected(event) {
+    console.log("file selected");
     const file = event.target.files[0];
     if (!file) {
-        emit('uploadError', 'No file selected');
+        emit("uploadError", "No file selected");
         return;
     }
 
     try {
-        const presignedURL = await axios.get(`http://localhost:8000/api/piece/upload/${encodeURIComponent(file.name)}`);
-        console.log('file is : ', file);
+        console.log("file uploaded");
+        const presignedURL = await axios.get(
+            `http://localhost:8000/api/piece/upload/${encodeURIComponent(
+                file.name
+            )}`
+        );
+        console.log("filename: ", file.name);
+        console.log("file is : ", file);
 
         const URL = presignedURL.data.data;
-        console.log('url is : ', URL);
+        console.log("url is : ", URL);
+        console.log("file type is : ", file.type);
         const uploadFile = await axios.put(URL, file, {
-            headers: { 'Content-Type': file.type }
+            headers: {
+                "Content-Type": file.type,
+                Authorization: undefined, // Authorization 헤더 제외
+            },
         });
 
         if (uploadFile.status === 200 || uploadFile.status === 204) {
-            emit('uploadSuccess', 'Image uploaded successfully');
+            emit("uploadSuccess", "Image uploaded successfully");
         } else {
-            emit('uploadError', 'Failed to upload image');
+            emit("uploadError", "Failed to upload image");
         }
     } catch (error) {
-        emit('uploadError', error.message);
+        emit("uploadError", error.message);
     }
 }
 </script>
@@ -96,8 +114,7 @@ export default {
 };
 </script> -->
 
-  
-  <!-- <script setup>
+<!-- <script setup>
   import { ref } from 'vue';
   import axios from 'axios';
   
@@ -143,8 +160,8 @@ export default {
     }
   }
   </script> -->
-  
-  <!-- <template>
+
+<!-- <template>
     <div>
       <button @click="uploadImage">사진 올리기</button>
       <input type="file" ref="fileInput" @change="handleFileSelected" style="display: none" />
@@ -356,7 +373,6 @@ const handleFileSelected = async (event) => {
 };
 </script> -->
 
-
 <!-- <template>
     <div>
       <input type="file" @change="handleFileUpload" />
@@ -410,7 +426,7 @@ const handleFileSelected = async (event) => {
   };
   </script>
    -->
-   <!-- <template>
+<!-- <template>
     <div>
       <button @click="selectFile">Upload File</button>
       <p v-if="uploadStatus">{{ uploadStatus }}</p>
@@ -514,3 +530,21 @@ const selectFile = async () => {
     input.click();
 };
 </script> -->
+<style>
+.fileuploader-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fileuploader-button button {
+    background-color: var(--main-color);
+    border: 0;
+    border-radius: 0.625rem;
+    height: 2.5rem;
+    width: 7.5rem;
+    color: var(--white-color);
+    font-family: "Semi";
+    font-size: 1rem;
+}
+</style>

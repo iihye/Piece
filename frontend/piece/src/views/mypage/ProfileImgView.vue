@@ -25,14 +25,14 @@
                     alt="프로필 이미지"
                 />
             </div>
-        </div>
 
-        <FileUploader
-            class="profileimgview-file-container"
-            @uploaded="handleUpload"
-            @error="handleError"
-            buttonText="사진 올리기"
-        />
+            <UploadButton
+                class="profileimgview-file-container"
+                @uploaded="handleUpload"
+                @error="handleError"
+                buttonText="사진 올리기"
+            />
+        </div>
 
         <!-- success modal -->
         <SuccessModal
@@ -55,6 +55,7 @@ import { ref, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
 import FileUploader from "@/components/item/FileUploader.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
+import UploadButton from "@/components/button/UploadButton.vue";
 
 const commonStore = useCommonStore();
 
@@ -196,5 +197,6 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 </style>
