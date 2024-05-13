@@ -105,7 +105,7 @@ public class CulturesController {
     ) {
         log.info("startPageId : {}, pageSize : {}", startPageId, pageSize);
         PageResponse<CulturesResponse> res = culturesQueryDsl.findCultureList(cultureType,
-            startPageId,
+            startPageId,title,
             pageSize);
         return SuccessResponse.createSuccess(SuccessCode.FIND_CULTURE_SUCCESS, res);
     }

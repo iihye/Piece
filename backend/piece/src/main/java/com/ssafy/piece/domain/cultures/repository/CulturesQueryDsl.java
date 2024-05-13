@@ -37,7 +37,7 @@ public class CulturesQueryDsl {
      */
     @Transactional(readOnly = true)
     public PageResponse<CulturesResponse> findCultureList(CultureType cultureType,
-        Long startPageId,
+        Long startPageId,String title,
         int pageSize) {
         List<Cultures> list = queryFactory
             .select(cultures)

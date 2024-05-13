@@ -7,17 +7,18 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface PieceSerchRepository extends JpaRepository<Pieces, Long> {
 
-    @Query("select p from Pieces p where"+
-        " (p.title LIKE %:keyword% )OR"+
-        "(p.comment LIKE %:keyword%) OR"+
-        "(p.record LIKE %:keyword%)")
+    @Query("select p from Pieces p where "+
+        "p.openYn='Y' AND "+
+        "(p.title like concat('%', :keyword, '%') OR "+
+        "p.comment like concat('%', :keyword, '%') OR "+
+        "p.record like concat('%', :keyword, '%'))")
     List<Pieces> findBykeyword(String keyword);
 
-    @Query("select p from Pieces p where"+
-        "(p.userId=:userId)OR"+
-        " (p.title LIKE %:keyword% )OR"+
-        "(p.comment LIKE %:keyword%) OR"+
-        "(p.record LIKE %:keyword%)")
+    @Query("select p from Pieces p where "+
+        "(p.userId=:userId) AND "+
+        "(p.title like concat('%', :keyword, '%') OR "+
+        "p.comment like concat('%', :keyword, '%') OR "+
+        "p.record like concat('%', :keyword, '%'))")
     List<Pieces> findBykeywordAndUserId(String keyword,Long userId);
 
 }

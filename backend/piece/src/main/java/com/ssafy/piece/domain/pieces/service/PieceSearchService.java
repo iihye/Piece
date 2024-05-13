@@ -19,6 +19,7 @@ public class PieceSearchService {
 
     // 공개된 조각 검색하기
     public List<PieceListResponseDto> searchPiece(String keyword, Long userId){
+        
         List<Pieces> list =pieceSerchRepository.findBykeyword(keyword);
 
         List<PieceListResponseDto> result = new ArrayList<>();
