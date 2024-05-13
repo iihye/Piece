@@ -69,14 +69,26 @@ public enum SuccessCode implements ResponseCode {
     FIND_CULTURE_SUCCESS(HttpStatus.OK, "케이크 조회에 성공했습니다."),
     COUNT_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 좋아요 개수 조회에 성공했습니다."),
 
+
     // 검색
     SEARCH_PIECE_SUCCESS(HttpStatus.OK,"조각 검색에 성공했습니다."),
     SEARCH_MY_PIECE_SUCCESS(HttpStatus.OK,"내 조각 검색에 성공했습니다."),
 
+    FETCH_IMAGE_SUCCESS(HttpStatus.OK, "이미지 변환에 성공하였습니다."),
+
+
     /**
      * s3
      */
-    GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다.");
+    GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다."),
+    DOWNLOAD_IMAGE_SUCCESS(HttpStatus.OK, "이미지 다운로드에 성공했습니다."),
+
+    // 통계
+    FIND_VIEW_STATISTICS_SUCCESS(HttpStatus.OK, "관람수 통계 조회에 성공했습니다."),
+    FIND_CONSUMPTIONS_SUCCESS(HttpStatus.OK, "소비 통계 조회에 성공했습니다."),
+
+    // 뒷면 이미지 생성
+    CREATE_IMAGE_SUCCESS(HttpStatus.OK, "뒷면 이미지 생성에 성공했습니다.");
 
 
     private final HttpStatus httpStatus;

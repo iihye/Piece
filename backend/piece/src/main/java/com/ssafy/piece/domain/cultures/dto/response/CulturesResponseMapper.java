@@ -26,4 +26,18 @@ public class CulturesResponseMapper {
             .map(CulturesResponseMapper::cultureEntityToDto)
             .collect(Collectors.toList());
     }
+
+    public static SimpleMovieResponse movieResultToSimpleMovieResponse(MovieResult movie) {
+        return SimpleMovieResponse.builder()
+            .poster_path("https://image.tmdb.org/t/p/w400" + movie.getPoster_path())
+            .title(movie.getTitle())
+            .build();
+    }
+
+    public static List<SimpleMovieResponse> movieResultToSimpleMovieResponseList(
+        List<MovieResult> list) {
+        return list.stream()
+            .map(CulturesResponseMapper::movieResultToSimpleMovieResponse)
+            .collect(Collectors.toList());
+    }
 }
