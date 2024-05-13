@@ -117,4 +117,21 @@ public class CulturesController {
             culturesService.findCulture(cultureId));
     }
 
+    @GetMapping("/tmdb/search")
+    public ResponseEntity<Object> searchTMDBMovie(
+        @RequestParam(name = "movieName") String movieName
+    ) {
+        log.info("searchTMDBMovie : {}", movieName);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_TMDB_CULTURE_SUCCESS,
+            cultureApiService.searchMovie(movieName));
+    }
+
+    @GetMapping("/image")
+    public ResponseEntity<Object> fetchImage(
+        @RequestParam(name = "imageUrl") String imageUrl
+    ) {
+        return SuccessResponse.createSuccess(SuccessCode.FETCH_IMAGE_SUCCESS,
+            culturesService.fetchImage(imageUrl));
+    }
+
 }

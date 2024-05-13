@@ -6,15 +6,20 @@ import com.ssafy.piece.domain.cultures.dto.response.CulturesResponseMapper;
 import com.ssafy.piece.domain.cultures.entity.Cultures;
 import com.ssafy.piece.domain.cultures.entity.CulturesHeart;
 import com.ssafy.piece.domain.cultures.exception.CakeNotFoundException;
+import com.ssafy.piece.domain.cultures.exception.FetchImageErrorException;
 import com.ssafy.piece.domain.cultures.repository.CulturesHeartRepository;
 import com.ssafy.piece.domain.cultures.repository.CulturesRepository;
 import com.ssafy.piece.global.response.code.ErrorCode;
 import com.ssafy.piece.global.response.exception.EntityAlreadyExistException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Base64;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
@@ -66,5 +71,18 @@ public class CulturesService {
     public Cultures getCulture(Long cultureId) {
         return culturesRepository.findById(cultureId)
             .orElseThrow(CakeNotFoundException::new);
+    }
+
+    public String fetchImage(String url) {
+        try {
+            URL imageUrl = new URL(url);
+            String extension = url.substring(url.lastIndexOf('.') + 1);
+            byte[] imageData = new RestTemplate().getForObject(url, byte[].class);
+
+            String base64Image = Base64.getEncoder().encodeToString(imageData);
+            return "data:image/" + extension + ";base64," + base64Image;
+        } catch (MalformedURLException e) {
+            throw new FetchImageErrorException();
+        }
     }
 }

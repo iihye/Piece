@@ -26,4 +26,11 @@ public interface TmdbClient {
         @RequestHeader("Authorization") String tmdbApiKey
     );
 
+    @GetMapping("/search/movie?include_adult=false&language=ko-KR")
+    TmdbResponse searchTMDBMovie(
+        @RequestParam(name = "query") String query,
+        @RequestHeader("Authorization") String tmdbApiKey
+
+    );
+
 }

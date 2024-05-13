@@ -68,7 +68,7 @@ public enum SuccessCode implements ResponseCode {
     REMOVE_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 삭제에 성공했습니다."),
     FIND_CULTURE_SUCCESS(HttpStatus.OK, "케이크 조회에 성공했습니다."),
     COUNT_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 좋아요 개수 조회에 성공했습니다."),
-
+    FETCH_IMAGE_SUCCESS(HttpStatus.OK, "이미지 변환에 성공하였습니다."),
     /**
      * s3
      */
