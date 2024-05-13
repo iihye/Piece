@@ -77,7 +77,7 @@ export const usePiecelistStore = defineStore(
         });
 
         const getPiecelistHeartList = computed(() => {
-            return piecelistMyList.value;
+            return piecelistHeartList.value;
         });
 
         const getPiecelistHeartListFiltered = computed(() => {
