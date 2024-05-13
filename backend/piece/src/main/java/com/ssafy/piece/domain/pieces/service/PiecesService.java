@@ -51,6 +51,7 @@ public class PiecesService {
             .imageFront(piecesAddRequestDto.getImageFront())
             .imageBack(piecesAddRequestDto.getImageBack())
             .genre(genreType)
+            .isPrivate(piecesAddRequestDto.getIsPrivate())
             .build();
 
         return piecesRepository.save(pieces);
@@ -179,9 +180,9 @@ public class PiecesService {
 
     // 소비
     public boolean isConsume(Long userId) {
-        if(piecesRepository.countByUserId(userId) > 0) {
+        if (piecesRepository.countByUserId(userId) > 0) {
             return piecesRepository.sumByUserId(userId) >= 1000000;
-        } else{
+        } else {
             return false;
         }
     }

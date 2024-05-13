@@ -33,6 +33,7 @@ public class Cultures {
 
     private String title;
 
+    @Column(nullable = true, name = "image_url")
     private String imageUrl;
 
     @BatchSize(size = 30)
