@@ -2,6 +2,7 @@ package com.ssafy.user.controller;
 
 import com.ssafy.user.dto.request.UserNicknameChangeRequestDto;
 import com.ssafy.user.dto.request.UserPasswordChangeRequestDto;
+import com.ssafy.user.global.annotation.AuthenticatedUser;
 import com.ssafy.user.global.response.code.ResponseCode;
 import com.ssafy.user.global.response.code.SuccessCode;
 import com.ssafy.user.global.response.structure.SuccessResponse;
@@ -36,5 +37,13 @@ public class UserSettingController {
         @RequestBody UserPasswordChangeRequestDto requestDto) {
         ResponseCode responseCode = userSettingService.changePassword(userId, requestDto);
         return SuccessResponse.createSuccess(SuccessCode.PASSWORD_UPDATE_SUCCESS);
+    }
+
+    // 튜토리얼 다시 보지 않기
+    @PutMapping("/tutorial")
+    public ResponseEntity<Object> setTutorial(@AuthenticatedUser Long userId) {
+        userSettingService.setTutorial(userId);
+
+        return SuccessResponse.createSuccess(SuccessCode.TUTORIAL_SUCCESS);
     }
 }
