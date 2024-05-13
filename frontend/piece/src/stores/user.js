@@ -14,7 +14,9 @@ export const useUserStore = defineStore(
         const mypageLabelList = ref({});
         const mypageLabelWear = ref({});
         const mypageLabelWearoff = ref();
-        const nicknameMessage = ref("3자 이상 10자 이내의 한글, 영문만 가능해요");
+        const nicknameMessage = ref(
+            "3자 이상 10자 이내의 한글, 영문만 가능해요"
+        );
         const isNickname = ref(false);
 
         // =========== GETTER ===============
@@ -74,7 +76,9 @@ export const useUserStore = defineStore(
 
         const addMypageLabelWear = function (labelId) {
             axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/${labelId}`,
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/mylabels/${labelId}`,
                 method: "PUT",
             })
                 .then((res) => {
@@ -98,13 +102,17 @@ export const useUserStore = defineStore(
 
         const checkMypageLabelWear = function () {
             setMypagelabelWearoff(
-                Object.values(mypageLabelList.value).every((item) => !item.wearLabels)
+                Object.values(mypageLabelList.value).every(
+                    (item) => !item.wearLabels
+                )
             );
         };
 
         const changeMypageNickname = function (userId, nickname) {
             axios({
-                url: `${import.meta.env.VITE_REST_USER_API}/users/${userId}/nickname`,
+                url: `${
+                    import.meta.env.VITE_REST_USER_API
+                }/users/${userId}/nickname`,
                 method: "PUT",
                 data: {
                     newNickname: nickname,
@@ -116,7 +124,9 @@ export const useUserStore = defineStore(
 
         const changeMypagePassword = function (userId, password) {
             axios({
-                url: `${import.meta.env.VITE_REST_USER_API}/users/${userId}/password`,
+                url: `${
+                    import.meta.env.VITE_REST_USER_API
+                }/users/${userId}/password`,
                 method: "PUT",
                 data: {
                     newPassword: password,
@@ -146,6 +156,15 @@ export const useUserStore = defineStore(
                 .catch((err) => {});
         };
 
+        const checkTutorial = function () {
+            axios({
+                url: `${import.meta.env.VITE_REST_USER_API}/users/tutorial`,
+                method: "PUT",
+            })
+                .then((res) => {})
+                .catch((err) => {});
+        };
+
         return {
             // state
             mypageLabelList,
@@ -170,6 +189,7 @@ export const useUserStore = defineStore(
             changeMypageNickname,
             changeMypagePassword,
             checkNickname,
+            checkTutorial,
         };
     },
     { persist: true }
