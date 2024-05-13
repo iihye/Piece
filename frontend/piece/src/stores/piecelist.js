@@ -137,7 +137,10 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     pieceUser.value = res.data;
-                    if (pieceUser.value.labelId !== 0) {
+                    if (
+                        pieceUser.value.labelId !== 0 &&
+                        pieceUser.value.labelId !== null
+                    ) {
                         findPieceUserLabel(pieceUser.value.labelId);
                     }
                 })
@@ -145,18 +148,14 @@ export const usePiecelistStore = defineStore(
         };
 
         const findPieceUserLabel = function (labelId) {
-            if (loginUserInfo.value.labelId !== null) {
-                axios({
-                    url: `${
-                        import.meta.env.VITE_REST_PIECE_API
-                    }/labels/${labelId}`,
-                    method: "GET",
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/labels/${labelId}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    pieceUserLabel.value = res.data.data;
                 })
-                    .then((res) => {
-                        pieceUserLabel.value = res.data.data;
-                    })
-                    .catch((err) => {});
-            }
+                .catch((err) => {});
         };
 
         const findPiecelistList = function () {
