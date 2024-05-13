@@ -7,11 +7,16 @@
         <div class="labelview-preview-container">
             <img
                 class="labelview-preview-img"
-                :src="loginUserInfo.profileImage || 'https://i.ibb.co/grMvZS9/your-image.jpg'"
+                :src="
+                    loginUserInfo.profileImage ||
+                    'https://i.ibb.co/grMvZS9/your-image.jpg'
+                "
                 alt="image"
             />
             <div class="labelview-preview-label">{{ loginUserLabel }}</div>
-            <div class="labelview-preview-nickname">{{loginUserInfo.nickname}}</div>
+            <div class="labelview-preview-nickname">
+                {{ loginUserInfo.nickname }}
+            </div>
         </div>
 
         <div class="labelview-button-container">
@@ -134,6 +139,7 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 7.25rem);
+    padding-top: 1rem;
     margin: 0 1rem 0 1rem;
 }
 
@@ -141,7 +147,7 @@ onMounted(async () => {
     font-family: "Bold";
     font-size: 1.6rem;
     color: var(--black-color);
-    margin: 0 0 0.6rem 0;
+    margin: 0 0 0.4rem 0;
     user-select: none;
 }
 
