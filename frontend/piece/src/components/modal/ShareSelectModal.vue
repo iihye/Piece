@@ -20,7 +20,8 @@
                     링크로 공유하기
                 </div>
             </div>
-            <div
+            <!-- TODO: 카카오톡으로 공유하기 주석 -->
+            <!-- <div
                 class="shareselectmodal-modal-container"
                 @click="handleKakaoClick"
             >
@@ -35,7 +36,7 @@
                 <div class="shareselectmodal-modal-content">
                     카카오톡으로 공유하기
                 </div>
-            </div>
+            </div> -->
             <div
                 v-if="isMine"
                 class="shareselectmodal-modal-container"
@@ -133,6 +134,10 @@ defineProps({
     margin-bottom: 1rem;
 }
 
+.shareselectmodal-modal-container:hover {
+    cursor: pointer;
+}
+
 .shareselectmodal-modal-content {
     font-family: "Regular";
     font-size: 1rem;
@@ -141,6 +146,7 @@ defineProps({
     display: flex;
     justify-content: left;
     align-items: center;
+    user-select: none;
 }
 
 .shareselectmodal-icon-container {
@@ -188,5 +194,10 @@ defineProps({
     border: 0;
     border-radius: 0.625rem;
     color: var(--gray2-color);
+    user-select: none;
+}
+
+.shareselectmodal-button-fail:hover {
+    cursor: pointer;
 }
 </style>

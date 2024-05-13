@@ -15,8 +15,9 @@
                         />
                     </div>
                 </RouterLink>
+
                 <RouterLink
-                    :to="{ name: 'pieceListMy' }"
+                    :to="{ name: 'pieceCalendar' }"
                     class="piecelistmain-square"
                 >
                     <div class="piecelistmain-title">내 조각 모아보기</div>
@@ -62,14 +63,25 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
+import { usePiecelistStore } from "@/stores/piecelist";
 
 const commonStore = useCommonStore();
+const store = usePiecelistStore();
 
-onMounted(() => {
+const year = computed(() => store.getYear);
+const month = computed(() => store.getMonth);
+
+onMounted(async () => {
     commonStore.headerTitle = "모아보기";
     commonStore.headerType = "header2";
+
+    store.setSelectOption("ALL");
+    store.setSelectOptionMyList("ALL");
+    store.setSelectOptionHeartList("ALL");
+
+    await store.findPiecelistMyCalendar(year.value, month.value + 1);
 });
 </script>
 

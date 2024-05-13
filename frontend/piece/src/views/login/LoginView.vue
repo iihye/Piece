@@ -88,6 +88,7 @@ const submitLogin = async () => {
         const accessToken = res.token;
         axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
         localStorage.setItem('accessToken', `Bearer ${accessToken}`);
+        localStorage.setItem('userId', res.userId);
         
         // --------------------
 
@@ -113,8 +114,7 @@ onMounted(() => {
 .loginview-main-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding-top: 1rem;
+    min-height: calc(100vh - 7.25rem);
 }
 
 .loginview-main-title {
@@ -159,6 +159,10 @@ onMounted(() => {
     color: var(--white-color);
     font-family: "Semi";
     font-size: 1rem;
+}
+
+.loginview-input-button:hover{
+    cursor: pointer;
 }
 
 .loginview-regist-content {

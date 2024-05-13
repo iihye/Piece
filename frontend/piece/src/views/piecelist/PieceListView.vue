@@ -27,7 +27,10 @@
         </div>
 
         <!-- list -->
-        <div v-if="filteredList.length === 0" class="piecelistview-list-noitem">
+        <div
+            v-if="!piecelistList || filteredList.length === 0"
+            class="piecelistview-list-noitem"
+        >
             <NoItem :content="'모아볼 조각이 없어요'"></NoItem>
         </div>
         <div v-else>
@@ -67,8 +70,8 @@ const store = usePiecelistStore();
 
 const searchValue = ref("");
 const piecelistList = computed(() => store.getPiecelistList);
-const filteredList = computed(() => computedFilteredList());
-const selectedOption = ref("ALL");
+const filteredList = computed(() => store.getPiecelistListFiltered);
+const selectedOption = computed(() => store.getSelectOption);
 
 // search
 // modal에서 prev 클릭했을 때 실행되는 함수
@@ -78,43 +81,16 @@ const handlePrev = () => {
 
 // modal에서 search 클릭했을 때 실행되는 함수
 const handleSearch = () => {
-    alert("검색 클릭");
-    console.log(searchValue.value);
+    alert("서비스 준비중입니다!");
+    // console.log(searchValue.value);
 };
 
 const handleSearchContent = (value) => {
-    console.log("(부모)자동 완성 받아옴:", value);
+    // console.log("(부모)자동 완성 받아옴:", value);
     searchValue.value = value;
 };
 
 // list
-function computedFilteredList() {
-    if (selectedOption.value === "ALL") {
-        return piecelistList.value;
-    } else if (selectedOption.value === "MOVIE") {
-        return piecelistList.value.filter(
-            (item) => item.performanceType === "MOVIE"
-        );
-    } else if (selectedOption.value === "THEATER") {
-        return piecelistList.value.filter(
-            (item) => item.performanceType === "THEATER"
-        );
-    } else if (selectedOption.value === "MUSICAL") {
-        return piecelistList.value.filter(
-            (item) => item.performanceType === "MUSICAL"
-        );
-    } else if (selectedOption.value === "CONCERT") {
-        return piecelistList.value.filter(
-            (item) => item.performanceType === "CONCERT"
-        );
-    } else if (selectedOption.value === "ETC") {
-        return piecelistList.value.filter(
-            (item) => item.performanceType === "ETC"
-        );
-    } else {
-        return [];
-    }
-}
 
 const handleItemClick = (item) => {
     router.push({ name: "pieceDetail", params: { pieceId: item.pieceId } });
@@ -160,7 +136,9 @@ const handleItemSelectClick = (index) => {
         }
     }
     filterItems.value[index].isSelect = !filterItems.value[index].isSelect;
-    selectedOption.value = filterItems.value[index].labelType;
+    // selectedOption.value = filterItems.value[index].labelType;
+    store.setSelectOption(filterItems.value[index].labelType);
+    store.findPiecelistList();
 };
 
 // filter
@@ -186,6 +164,19 @@ onMounted(async () => {
     commonStore.headerTitle = "조각 모아보기";
     commonStore.headerType = "header2";
 
+    const index = filterItems.value.findIndex(
+        (item) => item.labelType === selectedOption.value
+    );
+
+    if (index !== -1) {
+        filterItems.value[0].isSelect = false;
+        filterItems.value[index].isSelect = true;
+    }
+
+    if (index == 5) {
+        tabMenu.value.scrollLeft = 1000;
+    }
+
     await store.findPiecelistList();
     tabMenu.value.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
@@ -203,7 +194,7 @@ onBeforeUnmount(() => {
 .piecelistview-main-container {
     display: flex;
     flex-direction: column;
-    height: calc(100% - 5rem);
+    min-height: calc(100vh - 7.25rem);
 }
 
 .piecelistview-main-container > :first-child {
@@ -223,7 +214,6 @@ onBeforeUnmount(() => {
     position: relative;
     /* width: 450px; */
     transition: 0.5s ease;
-    margin-bottom: 2rem;
 }
 
 .piecelistview-tab-navigation {
@@ -267,7 +257,7 @@ onBeforeUnmount(() => {
 /* list */
 .piecelistview-list-container {
     overflow-y: scroll;
-    height: 60vh;
+    height: 66vh;
 }
 
 .piecelistview-list-container::-webkit-scrollbar {

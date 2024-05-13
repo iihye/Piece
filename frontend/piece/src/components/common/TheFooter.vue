@@ -44,7 +44,8 @@
                         <div class="footer-name">조각 만들기</div>
                     </div>
                 </RouterLink>
-                <RouterLink :to="{ name: 'chatRoom' }" class="footer-menu">
+                <!-- TODO: 채팅 router 주소 바꾸기 -->
+                <RouterLink :to="{ name: 'main' }" class="footer-menu">
                     <div
                         :class="{
                             'footer-set': true,
