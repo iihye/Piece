@@ -72,8 +72,10 @@ public enum SuccessCode implements ResponseCode {
     /**
      * s3
      */
-    GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다.");
+    GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다."),
 
+    // 뒷면 이미지 생성
+    CREATE_IMAGE_SUCCESS(HttpStatus.OK,"뒷면 이미지 생성에 성공했습니다.");
 
     private final HttpStatus httpStatus;
 
