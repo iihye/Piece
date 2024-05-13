@@ -221,6 +221,7 @@ onBeforeUnmount(() => {
 
 .cakelistview-list-item {
     width: auto;
+    cursor: pointer;
 }
 
 .cakelistview-list-noitem {

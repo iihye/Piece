@@ -129,8 +129,6 @@ onMounted(async () => {
     // TODO: 찜 명수 업데이트
     // TODO: 채팅방 가져오기
     await store.findCakeChatList();
-
-    console.log(cakeChatList.value);
 });
 </script>
 
