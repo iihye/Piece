@@ -41,20 +41,25 @@
         </div>
         <div class="pieceinfoview-form-group">
             <label for="content-name">가격</label>
-            <TextInput id="content-name" placeholder="가격을 입력하세요" v-model="pieceValue.price" />
+            <TextInput id="content-name" placeholder="가격을 입력하세요" v-model="pieceValue.price" inputType="number" />
         </div>
-        <RouterLink :to="{ name: 'piececomment' }">감상평 작성</RouterLink>
+    </div>
+    <div class="piecemake-button-container">
+        <RouterLink :to="{ name: 'piececomment' }">
+            <RoundButton :roundButtonContent="'다음'" :isRoundDisable="isRoundDisable"></RoundButton>
+        </RouterLink>
     </div>
 
 </template>
 
 <script setup>
-import { ref, watch  } from 'vue';
+import { ref, watch, computed } from 'vue';
 import TextInput from '@/components/text/OnlyInput.vue';
 import ButtonGroup from '@/components/button/SelectableButtonGroup.vue';
 import DatePicker from '@/components/custom/CustomDatePicker.vue';
 import TimePicker from '@/components/custom/CustomTimePicker.vue';
 import {usePieceStore} from '@/stores/piece.js'
+import RoundButton from '@/components/button/RoundButton.vue';
 
 const pieceStore = usePieceStore();
 const pieceValue = pieceStore.pieceValue;
@@ -71,6 +76,10 @@ const options = ref([
 ]);
 const selected = ref(null);
 const date = ref(null);
+
+const isRoundDisable = computed(() => {
+    return !(!pieceValue.performanceType || !pieceValue.title || !dateValue.value);
+});
 
 // 컴포넌트 내부의 날짜, 시간 변수 생성
 const dateValue = ref(null);
@@ -99,7 +108,6 @@ function updateDate(newDate) {
 }
 
 function updateTime(time) {
-    console.log(time.hours)
   pieceStore.setPieceValue('time', formatTime(time));
 }
 
@@ -118,10 +126,12 @@ watch(timeValue, (newValue) => {
 .pieceinfoview-container {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 20px;
+    gap: 1.25rem;
     /* align-items: center; */
-    max-width: 600px;
+    max-width: 37.5rem;
     margin: auto;
+    margin-bottom: 2rem;
+
 }
 
 .pieceinfoview-form-group {
@@ -130,21 +140,29 @@ watch(timeValue, (newValue) => {
 
 label {
     font-family: "Regular";
-    /* font-size: 1.4rem; */
-    /* font-size: 1rem; */
-    padding: 10px;
+    font-size: 1.4rem;
+    font-size: 1rem;
+    padding: 0.625rem;
     text-align: left;
 }
 
 .pieceinfoview-button-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 0.625rem;
 }
 
 .pieceinfoview-required-label::after {
     content: '*';
     color: var(--red-color);
     vertical-align: 0.2rem;
+}
+
+.piecemake-button-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 4rem;
+  text-align: center;
 }
 </style>
