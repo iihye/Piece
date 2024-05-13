@@ -24,7 +24,6 @@ const year = ref(currentYear);
 const emit = defineEmits(['year-changed']);
 
 const changeYear = (change) => {
-    // 미래년도는 클릭 안댐
     if ((year.value === currentYear && change > 0) || (year.value > currentYear)) {
         return;
     }

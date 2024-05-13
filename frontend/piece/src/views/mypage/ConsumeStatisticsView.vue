@@ -14,6 +14,22 @@
     </div>
 </template>
 
+<!-- <template>
+    <div class="consumestatisticsview-main-title">조각으로 분석한 소비 통계예요</div>
+    <YearSelector @year-changed="updateData" />
+    <BarChart :chartData="chartData" />
+    <hr />
+    <div class="consumestatisticsview-main-content">
+        <NoItem v-if="noData" content="소비한 내용이 없어요 ㅜㅜ"  />
+        <RouterLink :to="{ name: 'piecemake' }">조각 만들러 가기</RouterLink>
+    </div>
+    <div v-for="(amount, index) in chartData.datasets[0].data" :key="index" class="monthly-consumption">
+        <span>{{ chartData.labels[index] }}</span>
+        <span class="amount">{{ amount.toLocaleString() }}원</span>
+    </div>
+</template> -->
+
+
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
