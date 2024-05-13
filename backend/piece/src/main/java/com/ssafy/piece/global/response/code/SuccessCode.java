@@ -78,11 +78,11 @@ public enum SuccessCode implements ResponseCode {
     DOWNLOAD_IMAGE_SUCCESS(HttpStatus.OK, "이미지 다운로드에 성공했습니다."),
 
     // 통계
-    FIND_VIEW_STATISTICS_SUCCESS(HttpStatus.OK,"관람수 통계 조회에 성공했습니다."),
-    FIND_CONSUMPTIONS_SUCCESS(HttpStatus.OK,"소비 통계 조회에 성공했습니다.");
+    FIND_VIEW_STATISTICS_SUCCESS(HttpStatus.OK, "관람수 통계 조회에 성공했습니다."),
+    FIND_CONSUMPTIONS_SUCCESS(HttpStatus.OK, "소비 통계 조회에 성공했습니다."),
 
     // 뒷면 이미지 생성
-    CREATE_IMAGE_SUCCESS(HttpStatus.OK,"뒷면 이미지 생성에 성공했습니다.");
+    CREATE_IMAGE_SUCCESS(HttpStatus.OK, "뒷면 이미지 생성에 성공했습니다.");
 
 
     private final HttpStatus httpStatus;
