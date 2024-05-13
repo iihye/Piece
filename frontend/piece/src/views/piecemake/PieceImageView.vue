@@ -3,7 +3,7 @@
     <h1>어떤 조각을 만들까요?</h1>
     <div class="pieceimageview-search-area">
       <TextInput
-        placeholder="영화명을 검색해보세요!"
+        placeholder="포스터를 찾아보세요!"
         v-model="searchQuery"
         @focus="handleFocus"
         @update:modelValue="value => searchQuery = value"
@@ -25,6 +25,7 @@
       </div>
       <div v-if="imageSrc">
         <VueCropper 
+          class="pieceImageView-crop-area"
           ref="cropperRef" 
           :src="uploadedImage" 
           :zoomOnWheel="false"
@@ -33,7 +34,7 @@
           :autoCropArea="1"
           :initial-aspect-ratio="7/10"
           :aspect-ratio="7/10"
-          @crop="cropImage"
+          @crop="debouncedCropImage"
         />
       </div>
     </div>
@@ -89,6 +90,12 @@ const getFetchImageFromUrl = (async (imageUrl) => {
   }
 })
 
+// function getFetchImageFromUrl(imageUrl) {
+//     imageSrc.value = imageUrl;
+//     uploadedImage.value = imageUrl;
+//     originalImage.value = imageUrl;
+// }
+
 const searchMovieDebouncing = debounce(async (query) => {
   const data = await pieceStore.getSearchMovieList(query);
   if (data) {
@@ -97,27 +104,12 @@ const searchMovieDebouncing = debounce(async (query) => {
 }, 250)
 
 const emit = defineEmits(['select']);
-const hover = ref(false);
 
 function handleSelect(item) {
+  resetImage();
   getFetchImageFromUrl(item.poster_path);
   handleBlur();
   emit('select', item);
-}
-
-async function fetchImageFromUrl(imageUrl) {
-  try {
-    const blob = await imageUrl.blob();
-    const reader = new FileReader();
-    reader.onload = e => {
-      imageSrc.value = e.target.result;
-      uploadedImage.value = e.target.result;
-      originalImage.value = e.target.result;
-    };
-    reader.readAsDataURL(blob);
-  } catch (error) {
-    console.error('Failed to fetch image:', error);
-  }
 }
 
 function triggerFileInput() {
@@ -155,6 +147,8 @@ const cropImage = () => {
     uploadedImage.value = croppedImage.value;
   }
 };
+
+const debouncedCropImage = debounce(cropImage, 100);
 
 const resetImage = () => {
   imageSrc.value = null;
@@ -210,7 +204,7 @@ document.addEventListener('click', handleDocumentClick);
 
 .pieceimageview-upload-area {
   width: 18.75rem;
-  height: 26.25rem;
+  height: 25.25rem;
   border: 0.125rem dashed var(--gray-color);
   padding: 1.25rem;
   text-align: center;
@@ -243,5 +237,13 @@ document.addEventListener('click', handleDocumentClick);
 
 .pieceimageview-search-area {
   width: 15rem;
+  margin-bottom: 1rem;
+  align-self: end;
+}
+
+.pieceImageView-crop-area {
+  width: 18.75rem;
+  height: 25.25rem;
+  object-fit: cover;
 }
 </style>
