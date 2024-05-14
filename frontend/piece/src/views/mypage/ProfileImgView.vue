@@ -50,7 +50,7 @@
             @click="handleUploadClick"
         /> -->
 
-                <!-- 업로드 버튼 -->
+        <!-- 업로드 버튼 -->
         <UploadButton
             roundButtonContent="사진 올리기"
             @SUCCESS="handleSuccessUpload"
@@ -59,6 +59,10 @@
             @ERROR="handleErrorUpload"
             @click="handleUploadClick"
         />
+
+        <delete-image-button
+            v-if="loginUserInfo.profileImage" @click="deleteImage">
+        </delete-image-button>
 
         <!-- success modal -->
         <SuccessModal
@@ -85,6 +89,10 @@ import SuccessModal from "@/components/modal/SuccessModal.vue";
 import UploadButton from "@/components/button/UploadButton.vue";
 import router from "@/router";
 
+// 추가
+import DeleteImageButton from "@/components/button/DeleteImageButton.vue";
+
+
 
 const commonStore = useCommonStore();
 const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
@@ -104,7 +112,7 @@ const profileImage = ref("");
 // }
 
 
-// ProfileImgView.vue
+// users profileImage에 이미지경로 저장
 const handleSuccessUpload = async (s3path) => {
     console.log("받은 S3 경로:", s3path);
     try {
@@ -116,6 +124,21 @@ const handleSuccessUpload = async (s3path) => {
         await commonStore.findLoginUserInfo(); // 사용자 정보 업데이트
     } catch (error) {
         console.error("S3 경로 저장 실패:", error);
+        failModal.value = true;
+    }
+};
+
+// users profileImage 삭제
+const deleteImage = async () => {
+    try {
+        console.log('이미지 삭제');
+        await fileUploadStore.deleteProfileImage();  // 이미지 삭제 요청
+        // userStore.updateProfileImage('');
+        userStore.updateProfileImage('');  // 로컬 사용자 정보 업데이트
+        await commonStore.findLoginUserInfo();  // 사용자 정보 다시 로드
+        successModal.value = true;
+    } catch (error) {
+        console.error('이미지 삭제 과정에서 오류 발생:', error);
         failModal.value = true;
     }
 };
@@ -211,6 +234,8 @@ onMounted(async () => {
     border-radius: 50%;
     margin: 2rem 0 2rem 0;
 }
+
+
 
 .profileimgview-img-background {
     position: relative;

@@ -43,27 +43,28 @@ export const useFileUploadStore = defineStore ('fileupload', () => {
         }
     }
 
-
     // =========== USER ===============
-    // async function putUserS3FilePath(url.s3path) {
-    //     try {
-    //         // test
-    //         console.log(`s3path is ${encodeURIComponent(url.s3path)}`);
-    //         const response = await axios.put(`${import.meta.env.VITE_REST_USER_API}/save/${encodeURIComponent(url.s3path)}`);
-    //         console.log('파일 경로 저장 성공!');
-    //     } catch (error) {
-    //         console.error('파일 경로 저장 실패', error.message);
-    //     }
-    // }
+    async function deleteProfileImage() {
+        try {
+            console.log('이미지 삭제 시작');
+            const response = await axios.delete(`${import.meta.env.VITE_REST_USER_API}/users/delete/profileimage`);
+            console.log('이미지 삭제 성공:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('이미지 삭제 실패:', error.response.data);
+            throw error;
+        }
+    }
+
+
 
 
     // =========== PIECE ===============
 
-
-
     return {
         getPreSignedUrl,
         putFileUpload,
+        deleteProfileImage,
 
     };
 });
