@@ -34,4 +34,18 @@ public class UsersService {
         return usersRepository.findByUserId(userId)
             .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다.")); // 추후 수정
     }
+
+
+    /**
+     *
+     * @param prefix  userId
+     * @param S3Path  이미지 저장된 s3 경로
+     */
+    public void updateUserProfileImage(String prefix, String S3Path) {
+        Long userId = Long.parseLong(prefix);
+        Users user = usersRepository.findByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        user.setProfileImage(S3Path);
+        usersRepository.save(user);
+    }
 }
