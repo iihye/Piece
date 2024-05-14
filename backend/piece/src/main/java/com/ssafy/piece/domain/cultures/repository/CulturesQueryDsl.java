@@ -44,7 +44,6 @@ public class CulturesQueryDsl {
             .from(cultures)
             .where(
                 ltCultureId(startPageId),
-//                equalGenreId(genreId),
                 equalCultureType(cultureType))
             .orderBy(cultures.id.desc())
             .limit(pageSize + 1)  // 다음페이지 존재하는지 확인하기 위해 +1
@@ -57,12 +56,10 @@ public class CulturesQueryDsl {
         list.stream()
             .map(Cultures::getCultureGenre)
             .forEach(Hibernate::initialize);
-
         List<CulturesResponse> responseList = list
             .stream()
             .map(CulturesResponseMapper::cultureEntityToDto)
             .collect(Collectors.toList());
-
         Map<String, String> queryParams = new HashMap<>();
         if (cultureType != null) {
             queryParams.put("cultureType", cultureType.toString());

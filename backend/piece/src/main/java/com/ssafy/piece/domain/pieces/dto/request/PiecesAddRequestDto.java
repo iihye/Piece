@@ -31,4 +31,5 @@ public class PiecesAddRequestDto {
     private String imageFront;
     private String imageBack;
     private GenreType genre;
+    private Boolean isPrivate;
 }
