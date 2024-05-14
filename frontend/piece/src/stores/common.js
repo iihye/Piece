@@ -89,6 +89,7 @@ export const useCommonStore = defineStore("common", () => {
             .catch((err) => {});
     };
 
+
     return {
         // state
         headerType,
