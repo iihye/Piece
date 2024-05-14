@@ -27,11 +27,18 @@
             </div>
         </div>
 
-        <FileUploader
+        <!-- <UploadButton
             class="profileimgview-file-container"
             @uploaded="handleUpload"
             @error="handleError"
             buttonText="사진 올리기"
+        /> -->
+
+        <!-- 업로드 버튼 -->
+        <UploadButton
+            roundButtonContent="사진 올리기"
+            @uploadSuccess="handleUpload"
+            @uploadError="handleError"
         />
 
         <!-- success modal -->
@@ -53,26 +60,34 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
-import FileUploader from "@/components/item/FileUploader.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
+import UploadButton from '@/components/button/UploadButton.vue';
 
 const commonStore = useCommonStore();
 
 const profileImage = ref("");
 const successModal = ref(false);
 const failModal = ref(false);
-// const profileImage = ref("https://i.ibb.co/grMvZS9/your-image.jpg");
 
-// TODO: 파일 업로드 localhost -> server 주소로 변경
 function handleUpload(url) {
     profileImage.value = url;
     successModal.value = true;
 }
 
 function handleError(error) {
-    console.error("업로드 실패", error);
+    console.error('업로드 실패:', error);
     failModal.value = true;
 }
+
+// const handleUpload = (url) => {
+//     profileImage.value = url;
+//     successModal.value = true;
+// };
+
+// const handleError = (error) => {
+//     console.error("업로드 실패", error);
+//     failModal.value = true;
+// };
 
 const handleSuccessClick = () => {
     successModal.value = false;
@@ -119,8 +134,8 @@ onMounted(() => {
     user-select: none;
 }
 
-.profileimgeview-sub-container {
-}
+/* .profileimgeview-sub-container {
+} */
 
 .profileimgview-img-container {
     display: flex;
@@ -196,5 +211,6 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 </style>

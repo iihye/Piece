@@ -1,15 +1,24 @@
-<template>
+<!-- <template>
     <div>
         <FileUploader @uploaded="handleUpload" @error="handleError" buttonText="Upload New Image" />
     </div>
 </template>
 
 <script setup>
-import FileUploader from '@/components/item/FileUploader.vue';
+import FileUploader from './FileUploader.vue';
 
 function handleUpload(url) {
+    console.log('Image uploaded:', url);
 }
 
 function handleError(error) {
+    console.error('Upload Error:', error);
 }
-</script>
+</script> -->
+
+<template>
+    </template>
+
+<script></script>
+
+<style></style>
