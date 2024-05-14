@@ -13,6 +13,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ParticipantsRequestDto {
-    Long userId; // authenticateduser도입에 따라 수정 필요
+    Long userId;
     Long chatRoomId;
 }
