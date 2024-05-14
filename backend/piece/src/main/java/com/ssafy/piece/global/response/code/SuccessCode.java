@@ -69,6 +69,11 @@ public enum SuccessCode implements ResponseCode {
     FIND_CULTURE_SUCCESS(HttpStatus.OK, "케이크 조회에 성공했습니다."),
     COUNT_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 좋아요 개수 조회에 성공했습니다."),
 
+    // 기록
+    ADD_REPORTS_SUCCESS(HttpStatus.OK, "조각 신고에 성공했습니다."),
+    ADD_REPORTS_COMMENTS_SUCCESS(HttpStatus.OK, "문의 작성에 성공했습니다."),
+    ADD_REPORTS_NOTICES_SUCCESS(HttpStatus.OK, "공지 작성에 성공했습니다."),
+
     /**
      * s3
      */
