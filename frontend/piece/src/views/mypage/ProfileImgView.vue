@@ -41,11 +41,21 @@
         /> -->
 
         <!-- 업로드 버튼 -->
-        <UploadButton
+        <!-- <UploadButton
             roundButtonContent="사진 올리기"
             @uploadSuccess="handleUpload"
             @uploadError="handleError"
             @SUCCESS="handleSuccessUpload"
+            @ERROR="handleErrorUpload"
+            @click="handleUploadClick"
+        /> -->
+
+                <!-- 업로드 버튼 -->
+        <UploadButton
+            roundButtonContent="사진 올리기"
+            @SUCCESS="handleSuccessUpload"
+            @uploadSuccess="handleUpload"
+            @uploadError="handleError"
             @ERROR="handleErrorUpload"
             @click="handleUploadClick"
         />
@@ -69,48 +79,95 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
+import { useUserStore } from "@/stores/user";
+import { useFileUploadStore } from "@/stores/fileupload";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
 import UploadButton from "@/components/button/UploadButton.vue";
 import router from "@/router";
 
+
 const commonStore = useCommonStore();
 const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
-
-const profileImage = ref("");
 const successModal = ref(false);
 const failModal = ref(false);
 
-async function handleUpload(url) {
-    console.log("handleUpload");
+// 추가
+const fileUploadStore = useFileUploadStore();
+const userStore = useUserStore();
+const profileImage = ref("");
+
+// async function handleUpload(url) {
+//     console.log("handleUpload");
+//     profileImage.value = url;
+
+//     await commonStore.findLoginUserInfo();
+// }
+
+
+// ProfileImgView.vue
+const handleSuccessUpload = async (s3path) => {
+    console.log("받은 S3 경로:", s3path);
+    try {
+        await fileUploadStore.putUserS3FilePath(s3path); // s3path를 백엔드로 전송
+        console.log("S3 경로 저장 성공.");
+        successModal.value = true;
+        // 밑에줄 추가
+        userStore.updateProfileImage(s3path);
+        await commonStore.findLoginUserInfo(); // 사용자 정보 업데이트
+    } catch (error) {
+        console.error("S3 경로 저장 실패:", error);
+        failModal.value = true;
+    }
+};
+
+
+async function handleUpload(url, s3path) {
+
     profileImage.value = url;
+    // commonStore.updateProfileImage(s3path);
+    userStore.updateProfileImage(s3path)
 
-    await commonStore.findLoginUserInfo();
-}
-
-function handleError(error) {
-    console.error("업로드 실패:", error);
-    failModal.value = true;
-}
-
-const handleSuccessUpload = () => {
     successModal.value = true;
     commonStore.findLoginUserInfo();
-};
+}
+
+// const handleSuccessUpload = () => {
+//     successModal.value = true;
+//     commonStore.findLoginUserInfo();
+// };
+
 
 const handleSuccessClick = () => {
     successModal.value = false;
     router.go(-1);
 };
 
+
+function handleError(error) {
+    console.error("업로드 실패:", error);
+    failModal.value = true;
+}
+
+// const handleSuccessUpload = () => {
+//     console.log('handleSuccessUpload');
+//     useFileUploadStore.putUserS3FilePath(s3path);
+//     successModal.value = true;
+//     commonStore.findLoginUserInfo();
+// };
+
+
+
 const handleFailClick = () => {
     failModal.value = false;
     router.go(-1);
 };
 
+
 onMounted(async () => {
     commonStore.headerTitle = "프로필 이미지 수정";
     commonStore.headerType = "header2";
 
+    // 추가
     await commonStore.findLoginUserInfo();
 });
 </script>
