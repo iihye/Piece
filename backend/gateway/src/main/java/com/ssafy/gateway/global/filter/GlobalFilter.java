@@ -1,118 +1,84 @@
-package com.ssafy.gateway.global.filter;
+package com.ssafy.gateway.global.filter; // 패키지 선언
 
-import com.ssafy.gateway.global.JwtTokenUtil;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
+import com.ssafy.gateway.global.JwtTokenUtil; // JwtTokenUtil 클래스를 import합니다.
+import lombok.extern.slf4j.Slf4j; // Slf4j 로깅 라이브러리를 사용하기 위한 어노테이션 import
+import org.springframework.beans.factory.annotation.Autowired; // Spring의 Autowired 어노테이션을 import합니다.
+import org.springframework.cloud.gateway.filter.GatewayFilter; // Spring Cloud GatewayFilter를 import합니다.
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory; // GatewayFilterFactory 클래스를 import합니다.
+import org.springframework.http.HttpStatus; // HTTP 상태 코드를 정의하는 클래스를 import합니다.
+import org.springframework.http.server.reactive.ServerHttpRequest; // 비동기 요청을 처리하는 클래스를 import합니다.
+import org.springframework.stereotype.Component; // Spring의 Component 어노테이션을 import합니다.
+import org.springframework.web.server.ServerWebExchange; // 서버 교환 정보를 다루는 클래스를 import합니다.
+import reactor.core.publisher.Mono; // 비동기 처리를 위한 Reactor의 Mono 클래스를 import합니다.
 
-/**
- * 모든 요청의 jwt 정보를 통해 사용자 정보를 서비스들에 전달시켜주는 필터. 사용자 정보는 헤더에 담아서 전달. 추후 jwt인가 로직이 구현 완료되면 세부사항 수정할것
- */
-@Component
-@Slf4j
+@Component // 이 클래스를 Spring 컨테이너가 관리하는 컴포넌트로 선언합니다.
+@Slf4j // 로그를 기록하기 위한 Slf4j 사용하도록 설정합니다.
+public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Config> { // GatewayFilter의 설정을 확장하는 클래스 정의
 
-public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Config> {
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil; // JWT 유틸리티 클래스를 주입받습니다.
+    @Autowired // 자동으로 의존성을 주입받기 위해 Autowired 어노테이션 사용
+    private JwtTokenUtil jwtTokenUtil; // JwtTokenUtil의 인스턴스를 주입받습니다.
 
     public GlobalFilter() {
-        super(Config.class); // 부모 클래스의 생성자를 호출하여 Config 클래스를 사용합니다.
+        super(Config.class); // 부모 클래스의 생성자 호출, 필터의 설정 타입을 명시합니다.
     }
 
-        @Override
-    public GatewayFilter apply(Config config) {
-        return (exchange, chain) -> {
-            ServerHttpRequest request = exchange.getRequest();
-            String authHeader = request.getHeaders().getFirst("Authorization");
+    @Override
+    public GatewayFilter apply(Config config) { // 필터 로직을 정의하는 메서드
+        return (exchange, chain) -> { // GatewayFilter 인터페이스의 apply 메서드를 람다식으로 구현
+            ServerHttpRequest request = exchange.getRequest(); // 현재 요청을 가져옵니다.
+            String path = request.getURI().getPath();
+            String authorizationHeader = request.getHeaders().getFirst("Authorization"); // Authorization 헤더를 추출합니다.
 
-            if (authHeader != null && authHeader.startsWith("Bearer ")) { // "Bearer " 접두어를 제거하여 순수 토큰을 얻습니다.
-                String jwtToken = authHeader.substring(7);
-                log.info("JWT Token: {}", jwtToken);
-                try {
-                    String userId = jwtTokenUtil.getUserIdFromToken(jwtToken);// 토큰으로부터 사용자 ID를 추출합니다.
-                    log.info("User ID: {}", userId);
-                    ServerHttpRequest modifiedRequest = request.mutate()
-                        .header("Authenticated-User-Header", userId.toString()) // 추출된 사용자 ID를 새 헤더에 추가합니다.
-                        .build();
-                    return chain.filter(exchange.mutate().request(modifiedRequest).build()); // 수정된 요청으로 체인을 계속합니다
-                } catch (Exception e) {
-                    log.error("Invalid JWT Token: {}", e.getMessage());
-                    return onError(exchange, "Invalid JWT Token", HttpStatus.UNAUTHORIZED);
-                }
+            log.info("게이트웨이에서 요청 받음. Authorization 헤더: {}", authorizationHeader); // 헤더 받는 로그
+
+            // 로그인 경로에 대한 요청은 헤더 검사를 건너뜁니다.
+            if (path.startsWith("/auth/login")) {
+                return chain.filter(exchange);
             }
 
-            return chain.filter(exchange); // JWT 토큰이 없거나 올바르지 않으면 원본 요청으로 체인을 계속합니다.
+            // 닉네임,이메일 중복 검사 요청에 대한 인증 필터 예외 처리
+            if (path.startsWith("/users/check-nickname") || path.startsWith("/users/check-email")) {
+                return chain.filter(exchange);  // 인증 필터 없이 체인을 계속
+            }
+
+
+
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) { // Authorization 헤더가 Bearer 토큰을 포함하는지 검사합니다.
+                String jwtToken = authorizationHeader.substring(7); // Bearer 다음에 오는 JWT 토큰을 추출합니다.
+                log.info("헤더에서 JWT 추출 성공: {}", jwtToken); // JWT 추출 로그
+
+                try {
+                    Long userId = jwtTokenUtil.getUserIdFromToken(jwtToken); // 토큰에서 사용자 ID를 추출합니다.
+                    log.debug("추출된 사용자 ID: {}", userId); // 로그에 사용자 ID를 기록합니다.
+
+                    // 요청 헤더에 인증된 사용자 ID를 추가합니다.
+                    ServerHttpRequest modifiedRequest = request.mutate()
+                        .header("Authenticated-User-ID", userId.toString())
+                        .build(); // 요청을 수정하여 새로운 Authorization 헤더로 사용자 ID를 포함시킵니다.
+                    log.debug("새 헤더가 추가된 요청을 전달합니다."); // 수정된 요청에 대한 로그 기록
+
+                    return chain.filter(exchange.mutate().request(modifiedRequest).build()); // 수정된 요청으로 다음 필터 체인을 계속합니다.
+                } catch (Exception e) {
+                    // JWT 토큰 처리 중 오류 발생 시 로그를 기록하고 401 Unauthorized 상태 코드를 반환합니다.
+                    log.error("JWT 토큰 처리 중 오류 발생: {}", e.getMessage(), e); // 오류 로그 기록
+                    return onError(exchange, "유효하지 않은 JWT 토큰", HttpStatus.UNAUTHORIZED); // 오류 응답 반환
+                }
+            } else {
+
+                // Authorization 헤더가 없거나 Bearer 타입이 아닐 경우 경고 로그를 남깁니다.
+                log.warn("Authorization 헤더가 없거나 Bearer 문자열로 시작하지 않습니다."); // 경고 로그 기록
+                return chain.filter(exchange); // 요청을 다음 필터 체인으로 전달합니다.
+            }
         };
     }
 
-//    @Override
-//    public GatewayFilter apply(Config config) {
-//        return (exchange, chain) -> {
-//            ServerHttpRequest request = exchange.getRequest();
-//            String authHeader = request.getHeaders().getFirst("Authorization"); // Authorization 헤더에서 JWT 토큰을 추출합니다.
-//
-//
-//            if (authHeader != null && authHeader.startsWith("Bearer ")) { // "Bearer " 접두어를 제거하여 순수 토큰을 얻습니다.
-//                String jwtToken = authHeader.substring(7);
-//                try {
-//                    Long userId = jwtTokenUtil.getUserIdFromToken(jwtToken);// 토큰으로부터 사용자 ID를 추출합니다.
-//                    ServerHttpRequest modifiedRequest = request.mutate()
-//                        .header("Authenticated-User-Id", userId.toString()) // 추출된 사용자 ID를 새 헤더에 추가합니다.
-//                        .build();
-//                    return chain.filter(exchange.mutate().request(modifiedRequest).build()); // 수정된 요청으로 체인을 계속합니다
-//                } catch (Exception e) {
-//                    log.error("Invalid JWT Token: {}", e.getMessage());
-//                    return onError(exchange, "Invalid JWT Token", HttpStatus.UNAUTHORIZED);
-//                }
-//            }
-//
-//            return chain.filter(exchange); // JWT 토큰이 없거나 올바르지 않으면 원본 요청으로 체인을 계속합니다.
-//        };
-//    }
-
-    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
-        return response.setComplete();
+    private Mono<Void> onError(ServerWebExchange exchange, String errorMessage, HttpStatus httpStatus) { // 오류 응답을 처리하는 메서드
+        exchange.getResponse().setStatusCode(httpStatus); // HTTP 상태 코드 설정
+        log.error("오류 상태 응답: {} - {}", httpStatus, errorMessage); // 오류 상태와 메시지 로그 기록
+        return exchange.getResponse().setComplete(); // 응답 완료
     }
 
-
-
-//    @Override
-//    public GatewayFilter apply(Config config) {
-//        return (exchange, chain) -> {
-//            ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
-//                .header("Authenticated-User-Header", "1")
-//                .build();
-//            if (config.isPreLogger()) {
-//                log.info("Request ID: {}", modifiedRequest.getId());
-//            }
-//
-//            return chain.filter(exchange.mutate().request(modifiedRequest).build())
-//                .then(Mono.fromRunnable(() -> {
-//                    if (config.isPostLogger()) {
-//                        log.info("Response Status Code: {}",
-//                            exchange.getResponse().getStatusCode());
-//                    }
-//                }));
-//        };
-//    }
-
-    @Getter
-    @Setter
     public static class Config {
-
-        private boolean preLogger;
-        private boolean postLogger;
+        // 필요한 설정이 있으면 추가할 수 있습니다.
     }
 }
