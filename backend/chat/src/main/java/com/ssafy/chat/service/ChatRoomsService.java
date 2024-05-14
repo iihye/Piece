@@ -1,6 +1,7 @@
 package com.ssafy.chat.service;
 
-import com.ssafy.chat.dto.request.ChatRoomsRequestDto;
+import com.ssafy.chat.dto.request.OpenChatRoomsCreateRequestDto;
+import com.ssafy.chat.dto.request.PersonalChatRoomsCreateRequestDto;
 import com.ssafy.chat.entity.ChatRooms;
 import com.ssafy.chat.exception.AlreadyCreatedChatRoomException;
 import com.ssafy.chat.repository.ChatRoomsRepository;
@@ -13,31 +14,34 @@ public class ChatRoomsService {
 
     private final ChatRoomsRepository chatRoomRepository;
 
-    public ChatRooms createChatRoom(ChatRoomsRequestDto chatRoomRequestDto) {
-        // 예외처리 당장 하지않음. 근데 오픈채팅일 경우 중복으로 생성되는 문제 생길거임
-//        if (chatRoomRepository.findByCultureIdAndIsPersonal(chatRoomRequestDto.getCultureId(),
-//            chatRoomRequestDto.getIsPersonal()).isPresent()) {
-//            throw new AlreadyCreatedChatRoomException();
-//        }
+    public ChatRooms createPersonalChatRoom(Long userId, PersonalChatRoomsCreateRequestDto personalChatRoomsCreateRequestDto){
+        // 이미 모두가 참여하고 있는 1:1 방이라면 생성하지 않는다.
+        if(chatRoomRepository.existsPersonalChatRoomByParticipants(userId,
+            personalChatRoomsCreateRequestDto.getPartnerId())){
 
-        ChatRooms chatRooms;
-
-        System.out.println("culture id:" + chatRoomRequestDto.getCultureId());
-
-        if (chatRoomRequestDto.getCultureId() == null) { // 사설 채팅방
-            chatRooms = ChatRooms.builder()
-                .chatRoomName(chatRoomRequestDto.getChatRoomName())
-                .isOpened(true)
-                .isPersonal(chatRoomRequestDto.getIsPersonal())
-                .build();
-        } else { // culture 채팅방
-            chatRooms = ChatRooms.builder()
-                .cultureId(chatRoomRequestDto.getCultureId())
-                .chatRoomName(chatRoomRequestDto.getChatRoomName())
-                .isOpened(true)
-                .isPersonal(chatRoomRequestDto.getIsPersonal())
-                .build();
+            throw new AlreadyCreatedChatRoomException();
         }
+
+        ChatRooms chatRooms = ChatRooms.builder()
+            .chatRoomName(personalChatRoomsCreateRequestDto.getChatRoomName())
+            .isOpened(true)
+            .isPersonal(true)
+            .build();
+
+        return chatRoomRepository.save(chatRooms);
+    }
+    public ChatRooms createOpenChatRoom(OpenChatRoomsCreateRequestDto openChatRoomsCreateRequestDto){
+        // 이미 있는 오픈 방이라면 생성하지 않는다.
+        if(chatRoomRepository.existsByCultureId(openChatRoomsCreateRequestDto.getCultureId())){
+            throw new AlreadyCreatedChatRoomException();
+        }
+
+            ChatRooms chatRooms = ChatRooms.builder()
+            .cultureId(openChatRoomsCreateRequestDto.getCultureId())
+            .chatRoomName(openChatRoomsCreateRequestDto.getChatRoomName())
+            .isOpened(true)
+            .isPersonal(false)
+            .build();
 
         return chatRoomRepository.save(chatRooms);
     }
