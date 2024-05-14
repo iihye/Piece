@@ -31,4 +31,13 @@ public class MongoDBChats {
 
     @Column(nullable = false)
     Date createdAt;
+
+    @Column(nullable = false)
+    String profileImage;
+
+    @Column(nullable = false)
+    String nickname;
+
+    @Column(nullable = false)
+    String title;
 }
