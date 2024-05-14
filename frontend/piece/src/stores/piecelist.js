@@ -2,10 +2,13 @@ import { ref, reactive, computed } from "vue";
 import { defineStore } from "pinia";
 import router from "@/router";
 import axios from "axios";
+import { useCommonStore } from "@/stores/common";
 
 export const usePiecelistStore = defineStore(
     "piecelist",
     () => {
+        const commonStore = useCommonStore();
+
         // =========== STATE ===============
         const selectedOption = ref("ALL");
         const selectedOptionMyList = ref("ALL");
@@ -22,6 +25,8 @@ export const usePiecelistStore = defineStore(
         const pieceDetailRecord = ref({});
         const pieceUser = ref({});
         const pieceUserLabel = ref("");
+        const isMine = ref(false);
+        const pieceDetaiLViewId = ref(0);
 
         const today = ref(new Date());
         const year = ref(today.value.getFullYear());
@@ -103,6 +108,18 @@ export const usePiecelistStore = defineStore(
         const getPieceUserLabel = computed(() => {
             return pieceUserLabel.value;
         });
+
+        const getIsMine = computed(() => {
+            return isMine.value;
+        });
+
+        const getPieceDetailViewId = computed(() => {
+            return pieceDetaiLViewId.value;
+        });
+
+        const setPieceDetailViewId = function (id) {
+            pieceDetaiLViewId.value = id;
+        };
 
         const getToday = computed(() => {
             return today.value;
@@ -365,6 +382,15 @@ export const usePiecelistStore = defineStore(
                 .then((res) => {
                     piecelistDetail.value = res.data.data;
                     findPieceUser(piecelistDetail.value.userId);
+
+                    if (
+                        localStorage.getItem("userId") ==
+                        piecelistDetail.value.userId
+                    ) {
+                        isMine.value = true;
+                    } else {
+                        isMine.value = false;
+                    }
                 })
                 .catch((err) => {});
         };
@@ -450,6 +476,8 @@ export const usePiecelistStore = defineStore(
             pieceDetailRecord,
             pieceUser,
             pieceUserLabel,
+            isMine,
+            pieceDetaiLViewId,
             today,
             year,
             month,
@@ -473,6 +501,9 @@ export const usePiecelistStore = defineStore(
             getPieceDetailRecord,
             getPieceUser,
             getPieceUserLabel,
+            getIsMine,
+            getPieceDetailViewId,
+            setPieceDetailViewId,
             getToday,
             getYear,
             getMonth,

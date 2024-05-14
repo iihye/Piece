@@ -205,7 +205,7 @@ onMounted(async () => {
     commonStore.headerTitle = "자세히 기록하기";
     commonStore.headerType = "header2";
 
-    const pieceId = route.params.pieceId;
+    const pieceId = store.getPieceDetailViewId;
     await store.findPieceDetailRecord(pieceId);
 
     // slider

@@ -75,6 +75,7 @@
                 :isRoundDisable="true"
             ></RoundButton>
             <RoundButton
+                v-if="isMine"
                 class="pieceDetailView-button-button"
                 :roundButtonContent="'자세히 기록하기'"
                 :roundButtonFunction="handleRecordClick"
@@ -192,6 +193,8 @@ const pieceUserLabel = computed(() => store.getPieceUserLabel);
 const piecelistDetail = computed(() => store.getPiecelistDetail);
 const pieceDetailHeart = computed(() => store.getPieceDetailHeart);
 
+const isMine = computed(() => store.getIsMine);
+
 const handleImageClick = () => {
     imgFrontBack.value = !imgFrontBack.value;
     if (imgFrontBack.value) {
@@ -248,8 +251,8 @@ const handleBackListClick = () => {
 const handleRecordClick = () => {
     router.push({
         name: "recordDetail",
-        params: { pieceId: piecelistDetail.value.pieceId },
     });
+    store.setPieceDetailViewId(piecelistDetail.value.pieceId);
 };
 
 const handleLink = () => {

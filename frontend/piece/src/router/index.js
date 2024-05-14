@@ -155,7 +155,7 @@ const router = createRouter({
             component: PieceDetailView,
         },
         {
-            path: "/piecelist/record/:pieceId",
+            path: "/piecelist/record",
             name: "recordDetail",
             component: RecordDetailView,
         },
