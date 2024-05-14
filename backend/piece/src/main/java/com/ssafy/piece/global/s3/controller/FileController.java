@@ -16,29 +16,18 @@ public class FileController {
 
     private final FileService fileService;
 
+
     /**
      * 이미지 업로드
-     * @param image
-     * @return
+     *
+     * @param userId userPk
+     * @param image  file name
+     * @return code, message, data: presigned url
      */
     @GetMapping("/upload/{image}")
-    public ResponseEntity<Object> uploadImage(@AuthenticatedUser Long userId, @PathVariable(name = "image") String image) {
+    public ResponseEntity<Object> uploadImage(@AuthenticatedUser Long userId,
+        @PathVariable(name = "image") String image) {
         String url = fileService.getPreSignedUrl(userId.toString(), image);
-        log.info("upload image is {} and url is {}", image, url);
         return SuccessResponse.createSuccess(SuccessCode.GET_PRESIGNEDURL_SUCCESS, url);
     }
-
-
-
-    /**
-     * 이미지 삭제
-     * @param prefix 이미지가 저장된 디렉토리
-     * @param image 삭제할 이미지 파일명
-     * @return
-     */
-//    @DeleteMapping("/delete/{prefix}/{image}")
-//    public ResponseEntity<String> deleteImage(@PathVariable String prefix, @PathVariable String image) {
-//        fileService.deleteImage(prefix, image);
-//        return ResponseEntity.ok("Image successfully deleted.");
-//    }
 }
