@@ -94,11 +94,6 @@ public class FileService {
         String AWSFilePath = String.format("%s/%s%s", bucketFileName, fileId, fileName);
         log.info("AWSS3S3Path is {}", AWSFilePath);
 
-
-
-//        return String.format("%s/%s", prefix, fileId + fileName);
-//        return saveAWSFilePath(AWSFilePath);
-//        return saveAWSFilePath(bucketFileName, S3filePath);
         return AWSFilePath;
     }
 
