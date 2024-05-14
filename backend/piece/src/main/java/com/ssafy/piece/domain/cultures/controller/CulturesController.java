@@ -1,7 +1,7 @@
 package com.ssafy.piece.domain.cultures.controller;
 
+import com.ssafy.piece.domain.cultures.dto.response.CultureDetailResponse;
 import com.ssafy.piece.domain.cultures.dto.response.CulturesResponse;
-import com.ssafy.piece.domain.cultures.dto.response.TmdbDetailResponse;
 import com.ssafy.piece.domain.cultures.entity.CultureType;
 import com.ssafy.piece.domain.cultures.repository.CulturesQueryDsl;
 import com.ssafy.piece.domain.cultures.service.CultureApiService;
@@ -56,8 +56,16 @@ public class CulturesController {
 
     @GetMapping("/tmdb/{movieId}")
     public ResponseEntity<Object> getTmdbMovie(@PathVariable("movieId") String movieId) {
-        TmdbDetailResponse response = cultureApiService.findMovie(movieId);
+        CultureDetailResponse response = cultureApiService.findMovie(movieId);
         return SuccessResponse.createSuccess(SuccessCode.FIND_TMDB_CULTURE_SUCCESS, response);
+    }
+
+    @GetMapping("/kopis/{concertId}")
+    public ResponseEntity<Object> getKopisMovie(
+        @PathVariable(name = "concertId") String concertId
+    ) {
+        CultureDetailResponse response = cultureApiService.findConcert(concertId);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_KOPIS_CULTURE_SUCCESS, response);
     }
 
     @PostMapping("/heart/{cultureId}")
@@ -100,11 +108,12 @@ public class CulturesController {
     public ResponseEntity<Object> getCultureList(
         @RequestParam(required = false, name = "cultureType") CultureType cultureType,
         @RequestParam(required = false, name = "startPageId") Long startPageId,
+        @RequestParam(required=false,name="title") String title,
         @RequestParam(name = "pageSize") int pageSize
     ) {
         log.info("startPageId : {}, pageSize : {}", startPageId, pageSize);
         PageResponse<CulturesResponse> res = culturesQueryDsl.findCultureList(cultureType,
-            startPageId,
+            startPageId,title,
             pageSize);
         return SuccessResponse.createSuccess(SuccessCode.FIND_CULTURE_SUCCESS, res);
     }
@@ -115,6 +124,23 @@ public class CulturesController {
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_CULTURE_SUCCESS,
             culturesService.findCulture(cultureId));
+    }
+
+    @GetMapping("/tmdb/search")
+    public ResponseEntity<Object> searchTMDBMovie(
+        @RequestParam(name = "movieName") String movieName
+    ) {
+        log.info("searchTMDBMovie : {}", movieName);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_TMDB_CULTURE_SUCCESS,
+            cultureApiService.searchMovie(movieName));
+    }
+
+    @GetMapping("/image")
+    public ResponseEntity<Object> fetchImage(
+        @RequestParam(name = "imageUrl") String imageUrl
+    ) {
+        return SuccessResponse.createSuccess(SuccessCode.FETCH_IMAGE_SUCCESS,
+            culturesService.fetchImage(imageUrl));
     }
 
 }

@@ -37,7 +37,7 @@ public class CulturesQueryDsl {
      */
     @Transactional(readOnly = true)
     public PageResponse<CulturesResponse> findCultureList(CultureType cultureType,
-        Long startPageId,
+        Long startPageId,String title,
         int pageSize) {
         List<Cultures> list = queryFactory
             .select(cultures)
@@ -45,7 +45,8 @@ public class CulturesQueryDsl {
             .where(
                 ltCultureId(startPageId),
 //                equalGenreId(genreId),
-                equalCultureType(cultureType))
+                equalCultureType(cultureType),
+                containTitle(title))
             .orderBy(cultures.id.desc())
             .limit(pageSize + 1)  // 다음페이지 존재하는지 확인하기 위해 +1
             .fetch();
@@ -57,12 +58,10 @@ public class CulturesQueryDsl {
         list.stream()
             .map(Cultures::getCultureGenre)
             .forEach(Hibernate::initialize);
-
         List<CulturesResponse> responseList = list
             .stream()
             .map(CulturesResponseMapper::cultureEntityToDto)
             .collect(Collectors.toList());
-
         Map<String, String> queryParams = new HashMap<>();
         if (cultureType != null) {
             queryParams.put("cultureType", cultureType.toString());
@@ -81,5 +80,11 @@ public class CulturesQueryDsl {
         log.info("equalCultureType : {}", cultureType);
         return cultureType != null ? cultures.cultureType.eq(cultureType) : null;
     }
+
+    private BooleanExpression containTitle(String title) {
+        log.info("containTitle : {}", title);
+        return title != null ? cultures.title.contains(title) : null;
+    }
+
 
 }
