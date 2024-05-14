@@ -1,16 +1,19 @@
 package com.ssafy.piece.domain.cultures.service;
 
+import com.ssafy.piece.domain.cultures.dto.response.CultureDetailResponse;
 import com.ssafy.piece.domain.cultures.dto.response.CulturesResponseMapper;
 import com.ssafy.piece.domain.cultures.dto.response.MovieResult;
 import com.ssafy.piece.domain.cultures.dto.response.SimpleMovieResponse;
 import com.ssafy.piece.domain.cultures.dto.response.TmdbDetailResponse;
 import com.ssafy.piece.domain.cultures.dto.response.TmdbResponse;
+import com.ssafy.piece.domain.cultures.dto.xml.KopisResponse;
 import com.ssafy.piece.domain.cultures.entity.CultureGenre;
 import com.ssafy.piece.domain.cultures.entity.Cultures;
 import com.ssafy.piece.domain.cultures.entity.Genres;
 import com.ssafy.piece.domain.cultures.repository.CultureGenreRepository;
 import com.ssafy.piece.domain.cultures.repository.CulturesRepository;
 import com.ssafy.piece.domain.cultures.repository.GenresRepository;
+import com.ssafy.piece.global.client.KopisClient;
 import com.ssafy.piece.global.client.TmdbClient;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +32,13 @@ public class CultureApiService {
     private final CulturesRepository culturesRepository;
     private final GenresRepository genresRepository;
     private final CultureGenreRepository cultureGenreRepository;
+    private final KopisClient kopisClient;
 
     @Value("${secret.tmdb.api-key}")
     private String TMDB_API_KEY;
+
+    @Value("${secret.kopis.api-key}")
+    private String KOPIS_API_KEY;
 
     @Transactional
     public void collectMovieData() {
@@ -70,8 +77,10 @@ public class CultureApiService {
             cultureGenreBatch);
     }
 
-    public TmdbDetailResponse findMovie(String movieId) {
-        return tmdbClient.getTmdbMovie(movieId, "Bearer " + TMDB_API_KEY);
+    public CultureDetailResponse findMovie(String movieId) {
+        TmdbDetailResponse movie = tmdbClient.getTmdbMovie(movieId, "Bearer " + TMDB_API_KEY);
+
+        return CulturesResponseMapper.tmdbResponseToCultureDetailResponse(movie);
     }
 
     public List<SimpleMovieResponse> searchMovie(String name) {
@@ -82,5 +91,10 @@ public class CultureApiService {
             list.subList(5, list.size()).clear();
         }
         return CulturesResponseMapper.movieResultToSimpleMovieResponseList(list);
+    }
+
+    public CultureDetailResponse findConcert(String concertId) {
+        KopisResponse data = kopisClient.getKopisData(concertId, KOPIS_API_KEY);
+        return CulturesResponseMapper.kopisResponseToCultureDetailResponse(data);
     }
 }

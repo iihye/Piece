@@ -1,7 +1,7 @@
 package com.ssafy.piece.domain.cultures.controller;
 
+import com.ssafy.piece.domain.cultures.dto.response.CultureDetailResponse;
 import com.ssafy.piece.domain.cultures.dto.response.CulturesResponse;
-import com.ssafy.piece.domain.cultures.dto.response.TmdbDetailResponse;
 import com.ssafy.piece.domain.cultures.entity.CultureType;
 import com.ssafy.piece.domain.cultures.repository.CulturesQueryDsl;
 import com.ssafy.piece.domain.cultures.service.CultureApiService;
@@ -56,8 +56,16 @@ public class CulturesController {
 
     @GetMapping("/tmdb/{movieId}")
     public ResponseEntity<Object> getTmdbMovie(@PathVariable("movieId") String movieId) {
-        TmdbDetailResponse response = cultureApiService.findMovie(movieId);
+        CultureDetailResponse response = cultureApiService.findMovie(movieId);
         return SuccessResponse.createSuccess(SuccessCode.FIND_TMDB_CULTURE_SUCCESS, response);
+    }
+
+    @GetMapping("/kopis/{concertId}")
+    public ResponseEntity<Object> getKopisMovie(
+        @PathVariable(name = "concertId") String concertId
+    ) {
+        CultureDetailResponse response = cultureApiService.findConcert(concertId);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_KOPIS_CULTURE_SUCCESS, response);
     }
 
     @PostMapping("/heart/{cultureId}")

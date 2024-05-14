@@ -64,6 +64,7 @@ public enum SuccessCode implements ResponseCode {
 
     // cultures(cake)
     FIND_TMDB_CULTURE_SUCCESS(HttpStatus.OK, "TMDB 케이크 조회에 성공했습니다."),
+    FIND_KOPIS_CULTURE_SUCCESS(HttpStatus.OK, "KOPIS 케이크 조회에 성공했습니다."),
     ADD_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 좋아요에 성공했습니다."),
     REMOVE_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 삭제에 성공했습니다."),
     FIND_CULTURE_SUCCESS(HttpStatus.OK, "케이크 조회에 성공했습니다."),

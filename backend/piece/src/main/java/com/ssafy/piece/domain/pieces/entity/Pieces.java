@@ -93,6 +93,9 @@ public class Pieces {
     @Column(nullable = true)
     private GenreType genre;
 
+    @Column(name = "is_private", nullable = false)
+    private boolean isPrivate;
+
     @OneToMany(mappedBy = "piece", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Piecesheart> hearts;
 

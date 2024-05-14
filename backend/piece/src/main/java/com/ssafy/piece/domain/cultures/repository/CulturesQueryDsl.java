@@ -58,12 +58,10 @@ public class CulturesQueryDsl {
         list.stream()
             .map(Cultures::getCultureGenre)
             .forEach(Hibernate::initialize);
-
         List<CulturesResponse> responseList = list
             .stream()
             .map(CulturesResponseMapper::cultureEntityToDto)
             .collect(Collectors.toList());
-
         Map<String, String> queryParams = new HashMap<>();
         if (cultureType != null) {
             queryParams.put("cultureType", cultureType.toString());
