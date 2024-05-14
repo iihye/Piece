@@ -10,9 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ParticipantsRepository extends JpaRepository<Participants, ParticipantsId> {
-
-    Participants findByParticipantsId(ParticipantsId participantsId);
-
     @Query("SELECT c FROM Participants p " +
         "INNER JOIN ChatRooms c ON p.participantsId.chatroomId = c.chatRoomId " +
         "WHERE p.participantsId.userId = :userId AND c.isPersonal = :isPersonal")
@@ -25,4 +22,7 @@ public interface ParticipantsRepository extends JpaRepository<Participants, Part
 
     @Transactional
     void deleteByParticipantsId_ChatroomId(Long chatroomId);
+
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Participants p WHERE p.participantsId.userId = :userId AND p.participantsId.chatroomId = :chatroomId")
+    Boolean existsByUserIdAndChatroomId(@Param("userId") Long userId, @Param("chatroomId") Long chatroomId);
 }

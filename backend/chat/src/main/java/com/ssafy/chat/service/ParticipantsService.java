@@ -3,7 +3,10 @@ package com.ssafy.chat.service;
 import com.ssafy.chat.dto.request.ChatRoomsLeaveRequestDto;
 import com.ssafy.chat.dto.request.IsParticipateRequestDto;
 import com.ssafy.chat.dto.request.ParticipantsRequestDto;
+import com.ssafy.chat.dto.response.CultureFeignResponseDto;
+import com.ssafy.chat.dto.response.CultureResponseDto;
 import com.ssafy.chat.dto.response.IsParticipateResponseDto;
+import com.ssafy.chat.dto.response.LabelResponseDto;
 import com.ssafy.chat.dto.response.ParticipantsResponseDto;
 import com.ssafy.chat.dto.response.ProcessedUserResponseDto;
 import com.ssafy.chat.dto.response.UserResponseDto;
@@ -19,11 +22,13 @@ import com.ssafy.chat.repository.MongoDBChatRoomsRepository;
 import com.ssafy.chat.repository.MongoDBChatsRepository;
 import com.ssafy.chat.repository.ParticipantsRepository;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -45,8 +50,21 @@ public class ParticipantsService {
             participantRequestDto.getUserId()
         );
 
-        // 중복 체크
-        selectParticipants(participantRequestDto, participantRequestDto.getUserId());
+        // 1:1 채팅방인지 open 채팅방인지 체크
+        Boolean isPersonal=chatRoomsRepository.findIsPersonalByChatRoomId(participantRequestDto.getChatRoomId());
+
+        // 이미 참여한 채팅방인지 체크
+
+        if(isPersonal){ // 1:1
+            if(countParticipants(participantRequestDto.getChatRoomId())==2){
+                throw new AlreadyParticipatedException();
+            }
+        }else{ // open
+            if(participantsRepository.existsByUserIdAndChatroomId(participantRequestDto.getUserId(),
+                participantRequestDto.getChatRoomId())){
+                throw new AlreadyParticipatedException();
+            }
+        }
 
         Participants participants = participantsRepository.save(Participants.builder()
             .participantsId(participantsId)
@@ -76,18 +94,30 @@ public class ParticipantsService {
                 List<ProcessedUserResponseDto> processedUserResponseDtos = new ArrayList<>();
 
                 for(Long participantId:participantIds){
-                    UserResponseDto userResponseDto=userClient.getUser(participantId);
+                    UserResponseDto userResponseDto=userClient.getUser(participantId).getData();
 
-                    log.info("🍳ResponseEntity<Object> test: "+pieceClient.getLabel(userResponseDto.getLabelId()).getBody());
-
-                    ProcessedUserResponseDto processedUserResponseDto=
-                        ProcessedUserResponseDto.builder()
+                    // 현재 착용한 칭호 보유 여부에 따라 분기
+                    if(userResponseDto.getLabelId()!=null){
+                        ProcessedUserResponseDto processedUserResponseDto=
+                            ProcessedUserResponseDto.builder()
                                 .userId(userResponseDto.getUserId())
-                                    .title("")
-                                    .nickname(userResponseDto.getNickname())
-                                    .profileImage(userResponseDto.getProfileImage())
-                                    .build();
-                    processedUserResponseDtos.add(processedUserResponseDto);
+                                .title(pieceClient.getLabel(userResponseDto.getLabelId()).getData().getTitle())
+                                .nickname(userResponseDto.getNickname())
+                                .profileImage(userResponseDto.getProfileImage())
+                                .build();
+
+                        processedUserResponseDtos.add(processedUserResponseDto);
+                    }else{
+                        ProcessedUserResponseDto processedUserResponseDto=
+                            ProcessedUserResponseDto.builder()
+                                .userId(userResponseDto.getUserId())
+                                .title("")
+                                .nickname(userResponseDto.getNickname())
+                                .profileImage(userResponseDto.getProfileImage())
+                                .build();
+
+                        processedUserResponseDtos.add(processedUserResponseDto);
+                    }
                 }
 
                 if(!lastMessage.isEmpty()) { // 메시지 1개라도 보유
@@ -97,7 +127,7 @@ public class ParticipantsService {
                             .chatRoomId(c.getChatRoomId())
                             .isPersonal(c.getIsPersonal())
                             .isOpened(c.getIsOpened())
-//                            .participants() // ProcessedResponseDto
+                            .participants(processedUserResponseDtos)
                             .lastMessage(lastMessage.get(0).getContent())
                             .build()
                     );
@@ -108,7 +138,7 @@ public class ParticipantsService {
                             .chatRoomId(c.getChatRoomId())
                             .isPersonal(c.getIsPersonal())
                             .isOpened(c.getIsOpened())
-//                            .participants(participantsRepository.findUserIdsByChatroomId(c.getChatRoomId()))
+                            .participants(processedUserResponseDtos)
                             .build()
                     );
                 }
@@ -121,7 +151,7 @@ public class ParticipantsService {
                             .chatRoomId(c.getChatRoomId())
                             .isPersonal(c.getIsPersonal())
                             .isOpened(c.getIsOpened())
-                            .culture(pieceClient.getCulture(c.getCultureId()))// .culture() // feignclient로 얻어야함
+                            .culture(pieceClient.getCulture(c.getCultureId()).getData())
                             .participantCount(countParticipants(c.getChatRoomId()))
                             .lastMessage(lastMessage.get(0).getContent())
                             .build()
@@ -133,7 +163,7 @@ public class ParticipantsService {
                             .chatRoomId(c.getChatRoomId())
                             .isPersonal(c.getIsPersonal())
                             .isOpened(c.getIsOpened())
-                            .culture(pieceClient.getCulture(c.getCultureId())) // feignclient로 얻어야함
+                            .culture(pieceClient.getCulture(c.getCultureId()).getData()) // feignclient로 얻어야함
                             .participantCount(countParticipants(c.getChatRoomId()))
                             .build()
                     );
@@ -184,19 +214,6 @@ public class ParticipantsService {
 
     public Long countParticipants(Long chatRoomId) {
         return participantsRepository.countByParticipantsId_ChatroomId(chatRoomId);
-    }
-
-    public void selectParticipants(ParticipantsRequestDto participantsRequestDto, Long userId) {
-        Optional<Participants> participants = participantsRepository.findById(
-            ParticipantsId.builder().chatroomId(participantsRequestDto.getChatRoomId())
-                .userId(userId)
-                .build());
-
-        System.out.println(participants);
-
-        if (participants.isPresent()) {
-            throw new AlreadyParticipatedException();
-        }
     }
 
     public void leaveChatRoomAll(Long chatroomId) {
