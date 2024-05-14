@@ -206,6 +206,9 @@ onMounted(async () => {
     commonStore.headerType = "header2";
 
     const pieceId = store.getPieceDetailViewId;
+    if (pieceId == null || pieceId == 0) {
+        router.go(-1);
+    }
     await store.findPieceDetailRecord(pieceId);
 
     // slider

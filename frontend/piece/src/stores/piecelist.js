@@ -429,6 +429,7 @@ export const usePiecelistStore = defineStore(
         };
 
         const findPieceDetailRecord = function (pieceId) {
+            if (pieceId == null || pieceId == 0) return;
             axios({
                 url: `${
                     import.meta.env.VITE_REST_PIECE_API
