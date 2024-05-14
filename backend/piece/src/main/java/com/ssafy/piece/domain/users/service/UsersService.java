@@ -2,6 +2,8 @@ package com.ssafy.piece.domain.users.service;
 
 import com.ssafy.piece.domain.users.entity.Users;
 import com.ssafy.piece.domain.users.repository.UsersRepository;
+import com.ssafy.piece.global.response.code.ErrorCode;
+import com.ssafy.piece.global.response.exception.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +46,7 @@ public class UsersService {
     public void updateUserProfileImage(String prefix, String S3Path) {
         Long userId = Long.parseLong(prefix);
         Users user = usersRepository.findByUserId(userId)
-            .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+            .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND));
         user.setProfileImage(S3Path);
         usersRepository.save(user);
     }
