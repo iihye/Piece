@@ -11,15 +11,15 @@ export const useChatStore = defineStore(
         // =========== ACTION ===============
         async function getChatMessageList(chatRoomId) {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_REST_URL}/chats/list/${chatRoomId}`);
+                const response = await axios.get(`${import.meta.env.VITE_CHAT_API}/chats/list/${chatRoomId}`);
 
                 console.log("getChatMessageList()");
 
-                response.data.forEach(m=>{
+                response.data.data.forEach(m=>{
                     console.log(m.chatRoomId, m.senderId, m.content, m.createdAt);
                 })
                 
-                return response.data;
+                return response.data.data;
 
             } catch (error) {
                 console.error('Error fetching chat room list:', error);
