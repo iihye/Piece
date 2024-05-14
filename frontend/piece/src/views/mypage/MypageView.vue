@@ -3,13 +3,16 @@
         <div class="mypage-preview-container">
             <div class="mypage-preview-image-container">
                 <img
+                    v-if='loginUserInfo.profileImage === null'
                     class="mypage-preview-img"
-                    :src="
-                        loginUserInfo.profileImage ||
-                        'https://i.ibb.co/grMvZS9/your-image.jpg'
-                    "
-                    alt="image"
+                    src="@/assets/defaultprofile.png"
                 />
+                <img
+                    v-else
+                    class="mypage-preview-img"
+                    :src="loginUserInfo.profileImage"
+                />
+                
             </div>
             <div class="mypage-preview-sub-container">
                 <div class="mypage-preview-label">{{ loginUserLabel }}</div>
@@ -183,6 +186,7 @@ onMounted(async () => {
     border: 1px solid var(--gray-color);
     border-radius: 50%;
     object-fit: cover;
+    background-color: var(--white-color);
 }
 
 .mypage-preview-label {
@@ -206,7 +210,8 @@ onMounted(async () => {
 }
 
 .mypage-preview-button-container button {
-    width: 4.4rem;
+    width: 100%;
+    min-width: 5rem;
     height: 2rem;
     font-size: 0.8rem;
     font-family: "Regular";
