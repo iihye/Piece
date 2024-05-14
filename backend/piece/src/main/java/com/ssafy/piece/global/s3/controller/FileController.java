@@ -4,6 +4,7 @@ import com.ssafy.piece.global.annotation.AuthenticatedUser;
 import com.ssafy.piece.global.response.code.SuccessCode;
 import com.ssafy.piece.global.response.structure.SuccessResponse;
 import com.ssafy.piece.global.s3.service.FileService;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,13 @@ public class FileController {
      * 이미지 업로드
      *
      * @param userId userPk
-     * @param image  file name
+     * @param fileName  file name
      * @return code, message, data: presigned url
      */
-    @GetMapping("/fileupload/{image}")
-    public ResponseEntity<Object> uploadImage(@AuthenticatedUser Long userId,
-        @PathVariable(name = "image") String image) {
-        String url = fileService.getPreSignedUrl(userId.toString(), image);
+    @GetMapping("/fileupload/{fileName}")
+    public ResponseEntity<Object> uploadImage(@AuthenticatedUser Long userId, @PathVariable(name = "fileName") String fileName) {
+        ArrayList<String> url = fileService.getPreSignedUrl(userId.toString(), fileName);
         return SuccessResponse.createSuccess(SuccessCode.GET_PRESIGNEDURL_SUCCESS, url);
     }
+
 }

@@ -62,7 +62,8 @@ public enum ErrorCode implements ResponseCode {
     /**
      * s3
      */
-    UPLOAD_FAIL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
+    UPLOAD_IMAGE_FAIL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다."),
+    DELETE_IMAGE_FAIL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 삭제를 실패했습니다.");
 
     private final HttpStatus httpStatus;
 

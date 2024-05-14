@@ -3,8 +3,8 @@ package com.ssafy.piece.global.s3.service;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 
-import com.ssafy.piece.domain.users.service.UsersService;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,7 +13,6 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +26,6 @@ public class FileService {
 
     private final AmazonS3 amazonS3;
 
-    @Autowired
-    private UsersService usersService;
-
     /**
      * presigned url 발급
      *
@@ -37,14 +33,19 @@ public class FileService {
      * @param fileName 클라이언트가 업
      * @return presigned url
      */
-    public String getPreSignedUrl(String prefix, String fileName) {
+    public ArrayList<String> getPreSignedUrl(String prefix, String fileName) {
         if (!prefix.isEmpty()) {
             fileName = createPath(prefix, fileName);
         }
         log.info("fileName is {}", fileName);
         GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(bucket, fileName);
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
-        return url.toString();
+
+        ArrayList<String> response = new ArrayList<>();
+        response.add(url.toString());
+        response.add(fileName);
+//        return url.toString();
+        return response;
     }
 
 
@@ -101,22 +102,7 @@ public class FileService {
      */
     private String createPath(String prefix, String fileName) {
         String fileId = createFileId();
-        String AWSFilePath = String.format("%s/%s%s", prefix, fileId, fileName);
-//        return String.format("%s/%s", prefix, fileId + fileName);
-//        return saveAWSFilePath(AWSFilePath);
-        saveAWSFilePath(prefix, AWSFilePath);
-        return AWSFilePath;
+        return String.format("%s/%s", prefix, fileId + fileName);
     }
 
-
-    /**
-     * users 테이블에 profileImage 저장
-     * @param prefix  userId
-     * @param AWSFilePath
-     */
-    public void saveAWSFilePath(String prefix, String AWSFilePath) {
-        String S3Path = "https://s3.ap-southeast-2.amazonaws.com/piecemaker.kr/" + AWSFilePath;
-        log.info("S3Path is {}", S3Path);
-        usersService.updateUserProfileImage(prefix, S3Path);
-    }
 }
