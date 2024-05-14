@@ -2,49 +2,33 @@
   <div class="pieceimageview-container">
     <h1>어떤 조각을 만들까요?</h1>
     <div class="pieceimageview-search-area">
-      <TextInput
-        placeholder="포스터를 찾아보세요!"
-        v-model="searchQuery"
-        @focus="handleFocus"
-        @update:modelValue="value => searchQuery = value"
-      />
-      <InputPreview
-        :searchQuery="searchQuery"
-        :searchResults="searchResults"
-        :isFocused="isFocused"
-        @select="handleSelect"
-      />
+      <TextInput placeholder="포스터를 찾아보세요!" v-model="searchQuery" @focus="handleFocus"
+        @update:modelValue="value => searchQuery = value" />
+      <InputPreview :searchQuery="searchQuery" :searchResults="searchResults" :isFocused="isFocused"
+        @select="handleSelect" />
     </div>
 
     <div class="pieceimageview-upload-area" @click="triggerFileInput" :class="{ 'no-click': imageSrc }">
       <input type="file" @change="handleFileUpload" accept="image/*" ref="fileInput" style="display: none;" />
       <div class="pieceimageview-explain" v-if="!imageSrc">
-        <font-awesome-icon :icon="['fas', 'image']" style="color : var(--red-color)"/>
+        <font-awesome-icon :icon="['fas', 'image']" style="color : var(--red-color)" />
         <p class="pieceimageview-explain-strong">조각에 넣을 사진을 선택해주세요</p>
         <p>사진 선택은 필수에요</p>
       </div>
       <div v-if="imageSrc">
-        <VueCropper 
-          class="pieceImageView-crop-area"
-          ref="cropperRef" 
-          :src="uploadedImage" 
-          :zoomOnWheel="false"
-          :viewMode="2"
-          :background="false"
-          :autoCropArea="1"
-          :initial-aspect-ratio="7/10"
-          :aspect-ratio="7/10"
-          @crop="debouncedCropImage"
-        />
+        <VueCropper class="pieceImageView-crop-area" ref="cropperRef" :src="uploadedImage" :zoomOnWheel="false"
+          :viewMode="2" :background="false" :autoCropArea="1" :initial-aspect-ratio="7 / 10" :aspect-ratio="7 / 10"
+          @crop="debouncedCropImage" />
       </div>
     </div>
-    <SmallButton v-if="imageSrc" @click.prevent="resetImage" :smallButtonContent="'이미지초기화'"/>
+    <SmallButton v-if="imageSrc" @click.prevent="resetImage" :smallButtonContent="'이미지초기화'" />
 
     <div class="piecemake-button-container">
       <RouterLink :to="{ name: 'pieceinfo' }">
-        <RoundButton :roundButtonContent="'다음'" :isRoundDisable="isRoundDisable"></RoundButton>
+        <RoundButton :roundButtonContent="'다음'" :isRoundDisable="isRoundDisable" :roundButtonFunction="makeBackImage">
+        </RoundButton>
       </RouterLink>
-    </div> 
+    </div>
   </div>
 </template>
 
@@ -57,12 +41,14 @@ import RoundButton from '@/components/button/RoundButton.vue';
 import SmallButton from '@/components/button/SmallButton.vue';
 import TextInput from '@/components/text/OnlyInput.vue';
 import InputPreview from '@/components/text/InputPreview.vue';
+import { usePieceMakeStore } from '@/stores/piecemake.js';
 
 const pieceStore = usePieceStore();
+const makeStore = usePieceMakeStore();
 
 const imageSrc = ref(null);
 const croppedImage = ref(null);
-const uploadedImage = ref(null); 
+const uploadedImage = ref(null);
 const originalImage = ref(null);
 const cropperRef = ref(null);
 const fileInput = ref(null);
@@ -144,6 +130,7 @@ function handleFileUpload(event) {
 const cropImage = () => {
   if (cropperRef.value && cropperRef.value.cropper) {
     croppedImage.value = cropperRef.value.cropper.getCroppedCanvas().toDataURL();
+    pieceStore.croppedImageValue = croppedImage.value;
     uploadedImage.value = croppedImage.value;
   }
 };
@@ -180,6 +167,16 @@ const handleDocumentClick = (event) => {
 };
 
 document.addEventListener('click', handleDocumentClick);
+
+const makeBackImage = () => {
+
+  const image = {
+    file: croppedImage.value,
+  }
+  makeStore.makeImage(image);
+  console.log("만들어진당 출발요");
+
+}
 </script>
 
 <style scoped>
@@ -196,7 +193,7 @@ document.addEventListener('click', handleDocumentClick);
   text-align: center;
 }
 
-.pieceimageview-explain-strong{
+.pieceimageview-explain-strong {
   font-family: "Semi";
   font-size: 1.4rem;
   color: (--black-color);
@@ -211,7 +208,7 @@ document.addEventListener('click', handleDocumentClick);
   margin-bottom: 1.25rem;
   cursor: pointer;
   position: relative;
-  
+
   display: flex;
   align-items: center;
 }

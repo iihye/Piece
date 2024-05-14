@@ -5,7 +5,7 @@
             <img v-for="layout in layouts" :key="layout" :src="layout" width="36" height="56" class="piecefront-layout"
                 @click="changeLayout(layout)" />
         </div>
-        <canvas id="canvas" class="piecefront-canvas" width="284" height="468"></canvas>
+        <canvas id="canvas" class="piecefront-canvas" width="896" height="1280"></canvas>
         <RoundButton :roundButtonContent="'확인'" :roundButtonFunction="next" :isRoundDisable="isRoundDisable"
             class="piecefront-button">
         </RoundButton>
@@ -15,26 +15,25 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect } from 'vue';
+import { onMounted, ref, watchEffect, computed } from 'vue';
 import testLayout from '@/assets/testlayout.svg';
 import RoundButton from '@/components/button/RoundButton.vue';
 import router from '@/router';
 import { usePieceMakeStore } from "@/stores/piecemake";
 import { useCommonStore } from '@/stores/common';
+import { usePieceStore } from '@/stores/piece';
 
 const commonStore = useCommonStore();
 const makeStore = usePieceMakeStore();
+const pieceStore = usePieceStore();
 
 const layout1 = testLayout;
 const layout2 = testLayout;
 const layout3 = testLayout;
 
-const poster = 'https://search.pstatic.net/common?quality=75&direct=true&src=https%3A%2F%2Fmovie-phinf.pstatic.net%2F20210201_56%2F16121602734716k8oV_JPEG%2Fmovie_image.jpg';
-
 const layouts = [layout1, layout2, layout3];
 const selectedLayout = ref(layout1); // 기본 선택된 레이아웃
-
-
+const poster = pieceStore.croppedImageValue;
 
 function changeLayout(layout) {
     selectedLayout.value = layout; // 선택된 레이아웃 변경
@@ -51,14 +50,14 @@ function drawCanvas() {
     var firstImage = new Image();
     firstImage.src = selectedLayout.value;
     firstImage.onload = function () {
-        context.drawImage(firstImage, 0, 0, 284, 468);
+        context.drawImage(firstImage, 0, 0, 896, 1280);
 
         // 두 번째 이미지 로드 및 그리기
         var secondImage = new Image();
         secondImage.src = poster;
         secondImage.onload = function () {
             context.globalCompositeOperation = 'source-in';
-            context.drawImage(secondImage, 0, 0, 284, 468);
+            context.drawImage(secondImage, 0, 0, 896, 1280);
             context.globalCompositeOperation = 'source-over';
         };
     };
@@ -75,7 +74,10 @@ onMounted(() => {
 const isRoundDisable = ref(true);
 
 const next = () => {
-    router.push('/piece/back');
+    const canvas = document.getElementById("canvas");
+    const imagefile = canvas.toDataURL();
+    pieceStore.imageFront = imagefile;
+    router.push('/piece/background');
 }
 </script>
 
@@ -100,5 +102,10 @@ const next = () => {
 .piecefront-layout {
     background-color: transparent;
     border: 1px solid black;
+}
+
+.piecefront-canvas {
+    width: 14rem;
+    height: 20rem;
 }
 </style>
