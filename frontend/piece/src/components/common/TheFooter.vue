@@ -1,81 +1,72 @@
 <template>
-    <footer>
-        <div class="footer-container">
-            <div class="footer-all">
-                <RouterLink :to="{ name: 'main' }" class="footer-menu">
-                    <div
-                        :class="{
-                            'footer-set': true,
-                            active: pageName === 'main',
-                        }"
-                    >
-                        <font-awesome-icon
-                            :icon="['fas', 'house']"
-                            class="footer-icon"
-                        />
-                        <div class="footer-name">홈</div>
-                    </div>
-                </RouterLink>
-                <RouterLink :to="{ name: 'piecelistmain' }" class="footer-menu">
-                    <div
-                        :class="{
-                            'footer-set': true,
-                            active: arrayRoutes.list.includes(pageName),
-                        }"
-                    >
-                        <font-awesome-icon
-                            :icon="['fas', 'box-open']"
-                            class="footer-icon"
-                        />
-                        <div class="footer-name">모아보기</div>
-                    </div>
-                </RouterLink>
-                <RouterLink :to="{ name: 'piecemake' }" class="footer-menu">
-                    <div
-                        :class="{
-                            'footer-set': true,
-                            active: arrayRoutes.make.includes(pageName),
-                        }"
-                    >
-                        <font-awesome-icon
-                            :icon="['fas', 'cheese']"
-                            class="footer-icon"
-                        />
-                        <div class="footer-name">조각 만들기</div>
-                    </div>
-                </RouterLink>
-                <!-- TODO: 채팅 router 주소 바꾸기 -->
-                <RouterLink :to="{ name: 'main' }" class="footer-menu">
-                    <div
-                        :class="{
-                            'footer-set': true,
-                            active: arrayRoutes.chat.includes(pageName),
-                        }"
-                    >
-                        <font-awesome-icon
-                            :icon="['fas', 'paper-plane']"
-                            class="footer-icon"
-                        />
-                        <div class="footer-name">채팅</div>
-                    </div>
-                </RouterLink>
-                <RouterLink :to="{ name: 'mypage' }" class="footer-menu">
-                    <div
-                        :class="{
-                            'footer-set': true,
-                            active: arrayRoutes.myinfo.includes(pageName),
-                        }"
-                    >
-                        <font-awesome-icon
-                            :icon="['fas', 'user']"
-                            class="footer-icon"
-                        />
-                        <div class="footer-name">내정보</div>
-                    </div>
-                </RouterLink>
-            </div>
-        </div>
-    </footer>
+  <footer>
+    <div class="footer-container">
+      <div class="footer-all">
+        <RouterLink :to="{ name: 'main' }" class="footer-menu">
+          <div
+            :class="{
+              'footer-set': true,
+              active: pageName === 'main',
+            }"
+          >
+            <font-awesome-icon :icon="['fas', 'house']" class="footer-icon" />
+            <div class="footer-name">홈</div>
+          </div>
+        </RouterLink>
+        <RouterLink :to="{ name: 'piecelistmain' }" class="footer-menu">
+          <div
+            :class="{
+              'footer-set': true,
+              active: arrayRoutes.list.includes(pageName),
+            }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'box-open']"
+              class="footer-icon"
+            />
+            <div class="footer-name">모아보기</div>
+          </div>
+        </RouterLink>
+        <RouterLink :to="{ name: 'piecemake' }" class="footer-menu">
+          <div
+            :class="{
+              'footer-set': true,
+              active: arrayRoutes.make.includes(pageName),
+            }"
+          >
+            <font-awesome-icon :icon="['fas', 'cheese']" class="footer-icon" />
+            <div class="footer-name">조각 만들기</div>
+          </div>
+        </RouterLink>
+        <!-- TODO: 채팅 router 주소 바꾸기 -->
+        <RouterLink :to="{ name: 'chatRoom' }" class="footer-menu">
+          <div
+            :class="{
+              'footer-set': true,
+              active: arrayRoutes.chat.includes(pageName),
+            }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'paper-plane']"
+              class="footer-icon"
+            />
+            <div class="footer-name">채팅</div>
+          </div>
+        </RouterLink>
+        <RouterLink :to="{ name: 'mypage' }" class="footer-menu">
+          <div
+            :class="{
+              'footer-set': true,
+              active: arrayRoutes.myinfo.includes(pageName),
+            }"
+          >
+            <font-awesome-icon :icon="['fas', 'user']" class="footer-icon" />
+            <div class="footer-name">내정보</div>
+          </div>
+        </RouterLink>
+      </div>
+    </div>
+  </footer>
 </template>
 
 <script setup>
@@ -85,44 +76,44 @@ import { RouterLink, useRoute } from "vue-router";
 const route = useRoute();
 
 const pageName = computed(() => {
-    return route.name;
+  return route.name;
 });
 
 const arrayRoutes = {
-    home: ["main"],
-    list: [
-        "piecelistmain",
-        "cakelist",
-        "cakeDetail",
-        "pieceList",
-        "pieceCalendar",
-        "pieceListMy",
-        "pieceListHeart",
-        "pieceDetail",
-        "recordDetail",
-    ],
-    make: [
-        "piecemake",
-        "pieceimage",
-        "pieceimagecrop",
-        "pieceinfo",
-        "piececomment",
-        "piecefront",
-        "pieceback",
-        "piecebackground",
-        "piecesave",
-    ],
-    chat: ["chatRoom", "chat"],
-    myinfo: [
-        "mypage",
-        "nickname",
-        "password",
-        "settings",
-        "profileImg",
-        "label",
-        "piece",
-        "consume",
-    ],
+  home: ["main"],
+  list: [
+    "piecelistmain",
+    "cakelist",
+    "cakeDetail",
+    "pieceList",
+    "pieceCalendar",
+    "pieceListMy",
+    "pieceListHeart",
+    "pieceDetail",
+    "recordDetail",
+  ],
+  make: [
+    "piecemake",
+    "pieceimage",
+    "pieceimagecrop",
+    "pieceinfo",
+    "piececomment",
+    "piecefront",
+    "pieceback",
+    "piecebackground",
+    "piecesave",
+  ],
+  chat: ["chatRoom", "chat"],
+  myinfo: [
+    "mypage",
+    "nickname",
+    "password",
+    "settings",
+    "profileImg",
+    "label",
+    "piece",
+    "consume",
+  ],
 };
 </script>
 
@@ -131,45 +122,45 @@ const arrayRoutes = {
 @import "@/components/css/font.css";
 
 .footer-container {
-    position: fixed;
-    bottom: 0rem;
-    left: 0;
-    width: 100%;
-    z-index: 85;
-    display: grid;
-    text-align: center;
-    font-family: "Medium";
-    padding-bottom: 0.75rem;
-    padding-top: 0.5rem;
-    user-select: none;
+  position: fixed;
+  bottom: 0rem;
+  left: 0;
+  width: 100%;
+  z-index: 85;
+  display: grid;
+  text-align: center;
+  font-family: "Medium";
+  padding-bottom: 0.75rem;
+  padding-top: 0.5rem;
+  user-select: none;
 }
 
 .footer-all {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: flex-end;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-end;
 }
 
 .footer-menu {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
 }
 
 .footer-icon {
-    width: 1.6rem;
-    height: 1.6rem;
-    color: var(--gray-color);
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--gray-color);
 }
 
 .footer-name {
-    font-size: 0.75rem;
-    color: var(--gray2-color);
+  font-size: 0.75rem;
+  color: var(--gray2-color);
 }
 
 .footer-set.active .footer-name,
 .footer-set.active .footer-icon {
-    color: var(--main-color);
+  color: var(--main-color);
 }
 </style>
