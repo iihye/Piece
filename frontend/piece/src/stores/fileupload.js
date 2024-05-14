@@ -1,12 +1,19 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = 'http://localhost:8000/api/piece';
+const baseURL = import.meta.env.VITE_REST_API;
 
 export const getPreSignedUrl = async (imageName) => {
+    // =========== ACTION ===============
     try {
-        const response = await axios.get(`${API_BASE_URL}/upload/${imageName}`);
-        return response.data.data;
+        const baseURL = import.meta.env.VITE_REST_URL
+        const presignedURL = await axios.get(`${baseURL}/fileupload/${encodeURIComponent(file.name)}`);
+        
+        console.log('====test====');
+        console.log('presignedURL is ', presignedURL);
+        
+        return baseURL.data.data;
     } catch (error) {
+        console.log('presigned url 받아오기 에러', error);
         throw error;
     }
 };
