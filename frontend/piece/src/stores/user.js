@@ -165,6 +165,57 @@ export const useUserStore = defineStore(
                 .catch((err) => {});
         };
 
+
+        // const updateProfileImage = async (s3path) => {
+        //     const userId = localStorage.getItem('userId');
+        //     const basePath = 'https://s3.ap-southeast-2.amazonaws.com/piecemaker.kr/';
+        //     const imagePath = s3path.replace(basePath, '');
+        //     console.log('Image Path:', imagePath);
+        //     console.log('userID is ', userId);
+    
+        //     console.log(`${import.meta.env.VITE_REST_USER_API}/users/save/${imagePath}`);
+        //     try {
+        //         const response = await axios.put(`${import.meta.env.VITE_REST_USER_API}/users/save/${imagePath}`, {
+        //             imagePath: imagePath
+        //         });
+        //         const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
+        //         // loginUserInfo.value.profileImage = imagePath;
+        //         console.log("프로필 이미지 경로 업데이트 성공:", response.data);
+        //     } catch (error) {
+        //         console.error("프로필 이미지 경로 업데이트 실패:", error);
+        //     }
+        // }
+
+
+        // 추가
+
+        // fileupload.js
+        // async function updateProfileImage(s3path) {
+        //     try {
+        //         console.log('Sending s3path as body:', s3path);
+        //         const response = await axios.put(`${import.meta.env.VITE_REST_USER_API}/save/profileimage`, {
+        //                 s3path: s3path  // 요청의 body로 s3path 전달
+        //         });
+        //         console.log('파일 경로 저장 성공!');
+        //     } catch (error) {
+        //         console.error('파일 경로 저장 실패', error.message);
+        //     }
+        // }
+
+        async function updateProfileImage(s3path) {
+            try {
+                console.log('Sending s3path as body:', s3path);
+                const response = await axios.put(`${import.meta.env.VITE_REST_USER_API}/users/save/profileimage`, {
+                        s3path: s3path
+                });
+                console.log('파일 경로 저장 성공!');
+            } catch (error) {
+                console.error('파일 경로 저장 실패', error.message);
+            }
+        }
+
+
+
         return {
             // state
             mypageLabelList,
@@ -190,6 +241,7 @@ export const useUserStore = defineStore(
             changeMypagePassword,
             checkNickname,
             checkTutorial,
+            updateProfileImage,
         };
     },
     { persist: true }
