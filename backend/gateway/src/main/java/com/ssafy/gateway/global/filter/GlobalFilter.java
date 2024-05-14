@@ -2,14 +2,15 @@ package com.ssafy.gateway.global.filter; // 패키지 선언
 
 import com.ssafy.gateway.global.JwtTokenUtil; // JwtTokenUtil 클래스를 import합니다.
 import lombok.extern.slf4j.Slf4j; // Slf4j 로깅 라이브러리를 사용하기 위한 어노테이션 import
+import org.hibernate.validator.internal.util.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired; // Spring의 Autowired 어노테이션을 import합니다.
 import org.springframework.cloud.gateway.filter.GatewayFilter; // Spring Cloud GatewayFilter를 import합니다.
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory; // GatewayFilterFactory 클래스를 import합니다.
-import org.springframework.http.HttpStatus; // HTTP 상태 코드를 정의하는 클래스를 import합니다.
-import org.springframework.http.server.reactive.ServerHttpRequest; // 비동기 요청을 처리하는 클래스를 import합니다.
-import org.springframework.stereotype.Component; // Spring의 Component 어노테이션을 import합니다.
-import org.springframework.web.server.ServerWebExchange; // 서버 교환 정보를 다루는 클래스를 import합니다.
-import reactor.core.publisher.Mono; // 비동기 처리를 위한 Reactor의 Mono 클래스를 import합니다.
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 @Component // 이 클래스를 Spring 컨테이너가 관리하는 컴포넌트로 선언합니다.
 @Slf4j // 로그를 기록하기 위한 Slf4j 사용하도록 설정합니다.
@@ -27,17 +28,17 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
         return (exchange, chain) -> { // GatewayFilter 인터페이스의 apply 메서드를 람다식으로 구현
             ServerHttpRequest request = exchange.getRequest(); // 현재 요청을 가져옵니다.
             String path = request.getURI().getPath();
+            log.info("path : {} " , path);
             String authorizationHeader = request.getHeaders().getFirst("Authorization"); // Authorization 헤더를 추출합니다.
 
             log.info("게이트웨이에서 요청 받음. Authorization 헤더: {}", authorizationHeader); // 헤더 받는 로그
 
-            // 로그인 경로에 대한 요청은 헤더 검사를 건너뜁니다.
-            if (path.startsWith("/auth/login")) {
-                return chain.filter(exchange);
-            }
 
-            // 닉네임,이메일 중복 검사 요청에 대한 인증 필터 예외 처리
-            if (path.startsWith("/users/check-nickname") || path.startsWith("/users/check-email")) {
+
+            // 로그인, 회원가입, 닉네임-이메일 중복 검사 요청에 대한 인증 필터 예외 처리
+            if (path.startsWith("/user/users/check-nickname") || path.startsWith("/user/users/check-email")
+                || path.startsWith("/user/auth/login") || path.startsWith("/user/users/register")) {
+                log.info("이 로그가 보인다면 로그인,회원가입,중복검사에 대하여 인증을 예외하였음 : {}" , path);
                 return chain.filter(exchange);  // 인증 필터 없이 체인을 계속
             }
 
