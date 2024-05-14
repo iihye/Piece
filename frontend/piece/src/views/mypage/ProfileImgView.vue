@@ -43,8 +43,6 @@
         <!-- 업로드 버튼 -->
         <UploadButton
             roundButtonContent="사진 올리기"
-            @uploadSuccess="handleUpload"
-            @uploadError="handleError"
             @SUCCESS="handleSuccessUpload"
             @ERROR="handleErrorUpload"
             @click="handleUploadClick"
@@ -76,21 +74,8 @@ import router from "@/router";
 const commonStore = useCommonStore();
 const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
 
-const profileImage = ref("");
 const successModal = ref(false);
 const failModal = ref(false);
-
-async function handleUpload(url) {
-    console.log("handleUpload");
-    profileImage.value = url;
-
-    await commonStore.findLoginUserInfo();
-}
-
-function handleError(error) {
-    console.error("업로드 실패:", error);
-    failModal.value = true;
-}
 
 const handleSuccessUpload = () => {
     successModal.value = true;
