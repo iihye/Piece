@@ -108,11 +108,12 @@ public class CulturesController {
     public ResponseEntity<Object> getCultureList(
         @RequestParam(required = false, name = "cultureType") CultureType cultureType,
         @RequestParam(required = false, name = "startPageId") Long startPageId,
+        @RequestParam(required=false,name="title") String title,
         @RequestParam(name = "pageSize") int pageSize
     ) {
         log.info("startPageId : {}, pageSize : {}", startPageId, pageSize);
         PageResponse<CulturesResponse> res = culturesQueryDsl.findCultureList(cultureType,
-            startPageId,
+            startPageId,title,
             pageSize);
         return SuccessResponse.createSuccess(SuccessCode.FIND_CULTURE_SUCCESS, res);
     }
