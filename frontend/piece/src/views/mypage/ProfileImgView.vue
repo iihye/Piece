@@ -8,7 +8,10 @@
         </div>
 
         <div class="profileimgview-sub-container">
-            <div v-if="!profileImage" class="profileimgview-icon-container">
+            <div
+                v-if="!loginUserInfo.profileImage"
+                class="profileimgview-icon-container"
+            >
                 <div class="profileimgview-icon-background"></div>
                 <font-awesome-icon
                     class="profileimgview-icon-icon"
@@ -17,11 +20,14 @@
                 />
             </div>
 
-            <div v-if="profileImage" class="profileimgview-img-container">
+            <div
+                v-if="loginUserInfo.profileImage"
+                class="profileimgview-img-container"
+            >
                 <img
-                    v-if="profileImage"
+                    v-if="loginUserInfo.profileImage"
                     class="profileimgview-img-img"
-                    :src="profileImage"
+                    :src="loginUserInfo.profileImage"
                     alt="프로필 이미지"
                 />
             </div>
@@ -39,6 +45,9 @@
             roundButtonContent="사진 올리기"
             @uploadSuccess="handleUpload"
             @uploadError="handleError"
+            @SUCCESS="handleSuccessUpload"
+            @ERROR="handleErrorUpload"
+            @click="handleUploadClick"
         />
 
         <!-- success modal -->
@@ -58,50 +67,51 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
-import UploadButton from '@/components/button/UploadButton.vue';
+import UploadButton from "@/components/button/UploadButton.vue";
+import router from "@/router";
 
 const commonStore = useCommonStore();
+const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
 
 const profileImage = ref("");
 const successModal = ref(false);
 const failModal = ref(false);
 
-function handleUpload(url) {
+async function handleUpload(url) {
+    console.log("handleUpload");
     profileImage.value = url;
-    successModal.value = true;
+
+    await commonStore.findLoginUserInfo();
 }
 
 function handleError(error) {
-    console.error('업로드 실패:', error);
+    console.error("업로드 실패:", error);
     failModal.value = true;
 }
 
-// const handleUpload = (url) => {
-//     profileImage.value = url;
-//     successModal.value = true;
-// };
-
-// const handleError = (error) => {
-//     console.error("업로드 실패", error);
-//     failModal.value = true;
-// };
+const handleSuccessUpload = () => {
+    successModal.value = true;
+    commonStore.findLoginUserInfo();
+};
 
 const handleSuccessClick = () => {
     successModal.value = false;
+    router.go(-1);
 };
 
 const handleFailClick = () => {
     failModal.value = false;
+    router.go(-1);
 };
 
-onMounted(() => {
+onMounted(async () => {
     commonStore.headerTitle = "프로필 이미지 수정";
     commonStore.headerType = "header2";
 
-    // TODO: suser 정보 불러와서 profileUrl 있으면 불러오기
+    await commonStore.findLoginUserInfo();
 });
 </script>
 

@@ -8,15 +8,20 @@
             style="display: none"
         />
     </div>
+
+    <!-- modal -->
+    <LoadingModal
+        v-if="loadingModal"
+        :modalTitle="'이미지를 등록하고 있어요'"
+        :modalContent="'조금만 기다려주세요'"
+        :handleFailClick="handleFail"
+    ></LoadingModal>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useFileUploadStore } from "@/stores/fileupload";
-
-// defineProps({
-//     roundButtonContent: String,
-// });
+import LoadingModal from "@/components/modal/LoadingModal.vue";
 
 const { roundButtonContent } = defineProps({
     roundButtonContent: String,
@@ -25,12 +30,15 @@ const { roundButtonContent } = defineProps({
 const emit = defineEmits(["uploadSuccess", "uploadError"]);
 const fileInput = ref(null);
 const store = useFileUploadStore();
+const loadingModal = ref(false);
 
 function uploadImage() {
     fileInput.value.click();
 }
 
 async function handleFileSelected(event) {
+    loadingModal.value = true;
+
     const file = event.target.files[0];
     try {
         const url = await store.getPreSignedUrl(file);
@@ -39,6 +47,8 @@ async function handleFileSelected(event) {
     } catch (error) {
         emit("ERROR", error);
     }
+
+    loadingModal.value = false;
 }
 </script>
 
