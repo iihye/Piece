@@ -91,15 +91,15 @@ public class FileService {
      */
     private String createPath(String bucketFileName, String fileName) {
         String fileId = createFileId();
-        String S3filePath = String.format("%s/%s%s", bucketFileName, fileId, fileName);
-        log.info("S3filePath is {}", S3filePath);
+        String AWSFilePath = String.format("%s/%s%s", bucketFileName, fileId, fileName);
+        log.info("AWSS3S3Path is {}", AWSFilePath);
 
 
 
 //        return String.format("%s/%s", prefix, fileId + fileName);
 //        return saveAWSFilePath(AWSFilePath);
 //        return saveAWSFilePath(bucketFileName, S3filePath);
-        return S3filePath;
+        return AWSFilePath;
     }
 
 
@@ -114,12 +114,13 @@ public class FileService {
 
 
     /**
-     * 파일 전체 경로 생성
-     * @param AWSFilePath
-     * @return
+     * 파일의 전체 경로 생성
+     *
+     * @param fileName
+     * @return  파일의 전체 경로
      */
-    public String S3FilePath(String AWSFilePath) {
-        String S3Path = "https://s3.ap-southeast-2.amazonaws.com/piecemaker.kr/" + AWSFilePath;
+    public String S3FilePath(String fileName) {
+        String S3Path = "https://s3.ap-southeast-2.amazonaws.com/piecemaker.kr/" + fileName;
         log.info("S3Path is {}", S3Path);
         return S3Path;
     }
