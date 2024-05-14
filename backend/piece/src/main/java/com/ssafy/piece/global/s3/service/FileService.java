@@ -41,6 +41,7 @@ public class FileService {
         if (!prefix.isEmpty()) {
             fileName = createPath(prefix, fileName);
         }
+        log.info("fileName is {}", fileName);
         GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(bucket, fileName);
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
         return url.toString();

@@ -24,7 +24,7 @@ public class FileController {
      * @param image  file name
      * @return code, message, data: presigned url
      */
-    @GetMapping("/upload/{image}")
+    @GetMapping("/fileupload/{image}")
     public ResponseEntity<Object> uploadImage(@AuthenticatedUser Long userId,
         @PathVariable(name = "image") String image) {
         String url = fileService.getPreSignedUrl(userId.toString(), image);
