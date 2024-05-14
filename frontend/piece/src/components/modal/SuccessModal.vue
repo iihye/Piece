@@ -1,7 +1,7 @@
 <template>
     <div class="successmodal-background-container">
         <div class="successmodal-main-container">
-            <div class="successmodal-modal-title">{{ modalTitle }}</div>
+            <div class="successmodal-modal-title" v-html="modalTitle"></div>
             <div class="successmodal-button-container">
                 <button
                     class="successmodal-button-success"
@@ -45,7 +45,6 @@ defineProps({
 
 .successmodal-main-container {
     width: flex;
-    max-width: 16rem;
     height: flex;
     border-radius: 1rem;
     background-color: var(--white-color);

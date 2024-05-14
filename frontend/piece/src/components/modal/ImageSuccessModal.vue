@@ -1,7 +1,10 @@
 <template>
     <div class="imagesuccessmodal-background-container">
         <div class="imagesuccessmodal-main-container">
-            <div class="imagesuccessmodal-modal-title">{{ modalTitle }}</div>
+            <div
+                class="imagesuccessmodal-modal-title"
+                v-html="modalTitle"
+            ></div>
             <div class="imagesuccessmodal-modal-img">
                 <img
                     src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Birthday%20Cake.png"
@@ -53,7 +56,6 @@ defineProps({
 
 .imagesuccessmodal-main-container {
     width: flex;
-    max-width: 16rem;
     height: flex;
     border-radius: 1rem;
     background-color: var(--white-color);
@@ -63,6 +65,7 @@ defineProps({
 .imagesuccessmodal-modal-title {
     font-family: "Semi";
     font-size: 1.4rem;
+    line-height: 1.8rem;
     color: var(--black-color);
     margin-bottom: 2rem;
     user-select: none;
@@ -77,7 +80,6 @@ defineProps({
 }
 
 .imagesuccessmodal-button-container {
-    width: 16rem;
     display: flex;
     justify-content: end;
     align-items: center;

@@ -90,7 +90,7 @@ const submitForm = async () => {
 };
 
 const handleSuccessClick = () => {
-    router.push({ name: "main" });
+    router.push({ name: "login" });
 };
 
 const handleFailClick = () => {
@@ -148,7 +148,7 @@ onMounted(() => {
     transform: translateX(-50%);
 }
 
-.signinview-input-button:hover{
+.signinview-input-button:hover {
     cursor: pointer;
 }
 

@@ -27,8 +27,6 @@ export const usePieceMakeStore = defineStore("piecemake", () => {
     })
       .then((res) => {
         backImage.value = res.data.data;
-        console.log("이미지 완성 : " + backImage.value);
-        console.log("만들어졌다용");
       })
       .catch((err) => {});
   };

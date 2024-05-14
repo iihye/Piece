@@ -8,7 +8,10 @@
         </div>
 
         <div class="profileimgview-sub-container">
-            <div v-if="!profileImage" class="profileimgview-icon-container">
+            <div
+                v-if="!loginUserInfo.profileImage"
+                class="profileimgview-icon-container"
+            >
                 <div class="profileimgview-icon-background"></div>
                 <font-awesome-icon
                     class="profileimgview-icon-icon"
@@ -17,21 +20,34 @@
                 />
             </div>
 
-            <div v-if="profileImage" class="profileimgview-img-container">
+            <div
+                v-if="loginUserInfo.profileImage"
+                class="profileimgview-img-container"
+            >
                 <img
-                    v-if="profileImage"
+                    v-if="loginUserInfo.profileImage"
                     class="profileimgview-img-img"
-                    :src="profileImage"
+                    :src="loginUserInfo.profileImage"
                     alt="프로필 이미지"
                 />
             </div>
         </div>
 
-        <FileUploader
+        <!-- <UploadButton
             class="profileimgview-file-container"
             @uploaded="handleUpload"
             @error="handleError"
             buttonText="사진 올리기"
+        /> -->
+
+        <!-- 업로드 버튼 -->
+        <UploadButton
+            roundButtonContent="사진 올리기"
+            @uploadSuccess="handleUpload"
+            @uploadError="handleError"
+            @SUCCESS="handleSuccessUpload"
+            @ERROR="handleErrorUpload"
+            @click="handleUploadClick"
         />
 
         <!-- success modal -->
@@ -51,42 +67,51 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
-import FileUploader from "@/components/item/FileUploader.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
+import UploadButton from "@/components/button/UploadButton.vue";
+import router from "@/router";
 
 const commonStore = useCommonStore();
+const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
 
 const profileImage = ref("");
 const successModal = ref(false);
 const failModal = ref(false);
-// const profileImage = ref("https://i.ibb.co/grMvZS9/your-image.jpg");
 
-// TODO: 파일 업로드 localhost -> server 주소로 변경
-function handleUpload(url) {
+async function handleUpload(url) {
+    console.log("handleUpload");
     profileImage.value = url;
-    successModal.value = true;
+
+    await commonStore.findLoginUserInfo();
 }
 
 function handleError(error) {
-    console.error("업로드 실패", error);
+    console.error("업로드 실패:", error);
     failModal.value = true;
 }
 
+const handleSuccessUpload = () => {
+    successModal.value = true;
+    commonStore.findLoginUserInfo();
+};
+
 const handleSuccessClick = () => {
     successModal.value = false;
+    router.go(-1);
 };
 
 const handleFailClick = () => {
     failModal.value = false;
+    router.go(-1);
 };
 
-onMounted(() => {
+onMounted(async () => {
     commonStore.headerTitle = "프로필 이미지 수정";
     commonStore.headerType = "header2";
 
-    // TODO: suser 정보 불러와서 profileUrl 있으면 불러오기
+    await commonStore.findLoginUserInfo();
 });
 </script>
 
@@ -119,8 +144,8 @@ onMounted(() => {
     user-select: none;
 }
 
-.profileimgeview-sub-container {
-}
+/* .profileimgeview-sub-container {
+} */
 
 .profileimgview-img-container {
     display: flex;
@@ -196,5 +221,6 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 </style>

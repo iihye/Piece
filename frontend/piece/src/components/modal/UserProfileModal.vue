@@ -1,5 +1,5 @@
 <template>
-    <div class="userprofilemodal-background-container">
+    <div class="userprofilemodal-background-container" @click="handleClose">
         <div class="userprofilemodal-main-container">
             <div class="userprofilemodal-modal-image">
                 <img
@@ -41,6 +41,7 @@ defineProps({
     },
     handleChatClick: Function,
     handleReportClick: Function,
+    handleClose: Function,
 });
 </script>
 
