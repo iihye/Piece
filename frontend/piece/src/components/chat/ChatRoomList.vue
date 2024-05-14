@@ -5,7 +5,7 @@
         class="chatroomlist-cardItems"
         v-for="chatRoom in chatRoomList"
         :key="chatRoom"
-        @click="goToChatConversation(chatRoom.chatRoomId)"
+        @click="goToChatConversation(chatRoom)"
       >
         <div class="chatroomlist-chatRoomCard">
           <img
@@ -89,9 +89,10 @@ watch(
   }
 );
 
-const goToChatConversation = (chatRoomId) => {
-  // 선택된 채팅방 id 변경
-  chatRoomStore.setChatRoomId(chatRoomId);
+const goToChatConversation = (chatRoom) => {
+  // 선택된 채팅방 정보 변경
+  chatRoomStore.setChatRoomId(chatRoom.chatRoomId);
+  chatRoomStore.setIsPersonal(chatRoom.isPersonal);
 
   router.push("/chat");
   // 채팅 메시지 페이지로 이동

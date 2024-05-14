@@ -9,6 +9,7 @@ export const useChatRoomStore = defineStore("chatroom", () => {
   const chatRoomId = ref(0); // chatConversationView로 보내주기 위한 변수
   const chatRoomListValue = ref([]);
   const chatRoom = ref({});
+  const partnerInfo = ref({});
 
   // =========== GETTER ===============
   const getChatRoomId = computed(() => chatRoomId.value);
@@ -18,6 +19,8 @@ export const useChatRoomStore = defineStore("chatroom", () => {
   const getChatRoomListValue = computed(() => chatRoomListValue.value);
 
   const getChatRoom = computed(() => chatRoom.value);
+
+  const getPartnerInfo = computed(() => partnerInfo.value);
 
   // =========== SETTER ===============
 
@@ -101,29 +104,69 @@ export const useChatRoomStore = defineStore("chatroom", () => {
     }
   }
 
-  function getChatRoomInfo(chatroomId) {
+  function getOpenChatRoomInfo(chatroomId) {
+    // chatRoom 갱신
     // 입장한 채팅방 정보
     // chatRoomListValue에서 해당 chatroomId에 대한 채팅방을 찾습니다.
     chatRoom.value = chatRoomListValue.value.find(
       (room) => room.chatRoomId === chatroomId
     );
 
-    // console.log("현재 채팅방 이름:"+chatRoom.value.chatRoomName);
+    console.log("로그인한 사용자 id:" + localStorage.getItem("userId"));
+
+    // console.log("현재 채팅방:" + JSON.stringify(chatRoom.value));
   }
+
+  function getPersonalChatRoomInfo(chatroomId) {
+    // chatRoom 갱신
+    // 입장한 채팅방 정보
+    // chatRoomListValue에서 해당 chatroomId에 대한 채팅방을 찾습니다.
+    chatRoom.value = chatRoomListValue.value.find(
+      (room) => room.chatRoomId === chatroomId
+    );
+
+    console.log("로그인한 사용자 id:" + localStorage.getItem("userId"));
+
+    console.log(
+      "상대방 정보:" +
+        JSON.stringify(
+          chatRoom.value.participants.find(
+            (participant) =>
+              participant.userId !== localStorage.getItem("userId")
+          )
+        )
+    );
+
+    // 현재 채팅방의 참가자 중 상대방의 정보 받아오기
+    partnerInfo.value = chatRoom.value.participants.find(
+      (participant) => participant.userId !== localStorage.getItem("userId")
+    );
+
+    console.log("참가자 출력 테스트");
+
+    chatRoom.value.participants.forEach((p) => {
+      console.log(p);
+    });
+    // console.log("현재 채팅방:" + JSON.stringify(chatRoom.value));
+  }
+
   return {
     isPersonal,
     chatRoomId,
     chatRoomListValue,
     chatRoom,
+    partnerInfo,
     getChatRoomId,
     getIsPersonal,
     getChatRoomListValue,
     getChatRoom,
+    getPartnerInfo,
     setIsPersonal,
     setChatRoomId,
     createChatRoom,
     joinChatRoom,
     getChatRoomList,
-    getChatRoomInfo,
+    getOpenChatRoomInfo,
+    getPersonalChatRoomInfo,
   };
 });

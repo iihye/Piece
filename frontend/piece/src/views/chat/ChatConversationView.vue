@@ -24,9 +24,9 @@
       <h2>user2</h2>
       <!-- 프론트에서 백으로 userId 기반 호출해야 함 -->
       <img
-        src="https://cdn.britannica.com/25/172925-050-DC7E2298/black-cat-back.jpg
-            "
-        alt="상대방 프로필사진"
+        src=""
+        alt="상대방
+      프로필사진"
         style="width: 2rem; height: 2rem"
       />
     </div>
@@ -49,7 +49,7 @@
             >
               <!-- 프로필 이미지 -->
               <div class="chatconversationview-profileImage">
-                <img :src="item.imageUrl" @click="openModal(item)" />
+                <img :src="item.profileImage" @click="openModal(item)" />
               </div>
 
               <!-- 메시지 관련 부분 시작-->
@@ -198,7 +198,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, computed } from "vue";
 import { useChatRoomStore } from "@/stores/chatroom";
 import { useChatStore } from "@/stores/chat";
 import { useWebSocketStore } from "@/stores/websocket";
@@ -297,6 +297,7 @@ const goToChatConversation = (chatRoomId) => {
 
 const chatStore = useChatStore();
 const webSocketStore = useWebSocketStore();
+
 const stompClient = webSocketStore.getStompClient();
 const givenUserNumber = 1; // userStore로 가져올 예정
 let content = ref(""); //v-model. input message
@@ -308,6 +309,7 @@ console.log("웹소켓 정보:" + webSocketStore.getStompClient());
 const chatMessages = ref([]);
 const storeMessages = ref([]);
 const chatRoomInfo = ref({});
+const partnerInfo = ref({});
 
 chatMessages.value.push({
   chatRoomId: 1, // 테스트 용도
@@ -315,7 +317,7 @@ chatMessages.value.push({
   title: "얼박사 킬러",
   nickname: "user2",
   content: "ㅎㅇ",
-  imageUrl:
+  profileImage:
     "https://cdn.britannica.com/25/172925-050-DC7E2298/black-cat-back.jpg", // img 태그에 userId 기반으로 받아온 프사 적용 필요
   // createdAt: "오전 7:04",
 }); // 테스트 데이터
@@ -407,7 +409,18 @@ onMounted(() => {
   console.log("mounted()" + chatRoomStore.getChatRoomId);
 
   subscribe(chatRoomStore.getChatRoomId);
-  chatRoomStore.getChatRoomInfo(chatRoomStore.getChatRoomId);
+
+  // isPersonal 여부에 따라 가져오는 데이터 형식 다름
+
+  if (chatRoomStore.getIsPersonal === false) {
+    chatRoomStore.getOpenChatRoomInfo(chatRoomStore.getChatRoomId);
+  } else {
+    chatRoomStore.getPersonalChatRoomInfo(chatRoomStore.getChatRoomId);
+
+    partnerInfo.value = chatRoomStore.getPartnerInfo.value;
+
+    console.log("상대방 정보:" + JSON.stringify(partnerInfo));
+  }
 
   console.log("채팅방 정보:" + chatRoomStore.getChatRoom.chatRoomName);
 
