@@ -32,6 +32,7 @@ defineProps({
     color: var(--white-color);
     font-family: "Semi";
     font-size: 1rem;
+    user-select: none;
 }
 
 .roundbutton:disabled {
@@ -41,5 +42,13 @@ defineProps({
     width: 21.25rem;
     height: 4rem;
     color: var(--gray2-color);
+}
+
+.roundbutton:hover {
+    cursor: pointer;
+}
+
+.roundbutton:disabled:hover {
+    cursor: not-allowed;
 }
 </style>

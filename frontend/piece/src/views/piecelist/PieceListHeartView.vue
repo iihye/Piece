@@ -249,6 +249,8 @@ onBeforeUnmount(() => {
 
 .piecelistheartview-list-item {
     width: auto;
+    user-select: none;
+    cursor: pointer;
 }
 
 .piecelistheartview-list-noitem {

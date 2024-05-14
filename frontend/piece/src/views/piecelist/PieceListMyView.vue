@@ -253,6 +253,8 @@ onBeforeUnmount(() => {
 
 .piecelistmyview-list-item {
     width: auto;
+    user-select: none;
+    cursor: pointer;
 }
 
 .piecelistmyview-list-noitem {

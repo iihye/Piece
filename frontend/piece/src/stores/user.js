@@ -14,6 +14,10 @@ export const useUserStore = defineStore(
         const mypageLabelList = ref({});
         const mypageLabelWear = ref({});
         const mypageLabelWearoff = ref();
+        const nicknameMessage = ref(
+            "3자 이상 10자 이내의 한글, 영문만 가능해요"
+        );
+        const isNickname = ref(false);
 
         // =========== GETTER ===============
 
@@ -32,6 +36,18 @@ export const useUserStore = defineStore(
         const setMypagelabelWearoff = (data) => {
             mypageLabelWearoff.value = data;
         };
+
+        const getNicknameMessage = computed(() => {
+            return nicknameMessage.value;
+        });
+
+        const setNicknameMessage = (data) => {
+            nicknameMessage.value = data;
+        };
+
+        const getIsNickname = computed(() => {
+            return isNickname.value;
+        });
 
         // =========== ACTION ===============
 
@@ -60,7 +76,9 @@ export const useUserStore = defineStore(
 
         const addMypageLabelWear = function (labelId) {
             axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/${labelId}`,
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/mylabels/${labelId}`,
                 method: "PUT",
             })
                 .then((res) => {
@@ -84,8 +102,67 @@ export const useUserStore = defineStore(
 
         const checkMypageLabelWear = function () {
             setMypagelabelWearoff(
-                Object.values(mypageLabelList.value).every((item) => !item.wearLabels)
+                Object.values(mypageLabelList.value).every(
+                    (item) => !item.wearLabels
+                )
             );
+        };
+
+        const changeMypageNickname = function (userId, nickname) {
+            axios({
+                url: `${
+                    import.meta.env.VITE_REST_USER_API
+                }/users/${userId}/nickname`,
+                method: "PUT",
+                data: {
+                    newNickname: nickname,
+                },
+            })
+                .then((res) => {})
+                .catch((err) => {});
+        };
+
+        const changeMypagePassword = function (userId, password) {
+            axios({
+                url: `${
+                    import.meta.env.VITE_REST_USER_API
+                }/users/${userId}/password`,
+                method: "PUT",
+                data: {
+                    newPassword: password,
+                },
+            })
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {});
+        };
+
+        const checkNickname = function (nickname) {
+            axios({
+                url: `${
+                    import.meta.env.VITE_REST_USER_API
+                }/users/check-nickname?nickname=${nickname}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    nicknameMessage.value = res.data.message;
+                    if (res.data.code === "CHECK_NICKNAME_GOOD") {
+                        isNickname.value = true;
+                    } else {
+                        isNickname.value = false;
+                    }
+                })
+                .catch((err) => {});
+        };
+
+        const checkTutorial = function () {
+            axios({
+                url: `${import.meta.env.VITE_REST_USER_API}/users/tutorial`,
+                method: "PUT",
+            })
+                .then((res) => {})
+                .catch((err) => {});
         };
 
         return {
@@ -93,17 +170,26 @@ export const useUserStore = defineStore(
             mypageLabelList,
             mypageLabelWear,
             mypageLabelWearoff,
+            nicknameMessage,
+            isNickname,
             // getter
             getMypageLabelList,
             getMypageLabelWear,
             getMypageLabelWearoff,
             setMypagelabelWearoff,
+            getNicknameMessage,
+            setNicknameMessage,
+            getIsNickname,
             // action
             checkMypageLabelList,
             findMypageLabelList,
             addMypageLabelWear,
             deleteMypageLabelWear,
             checkMypageLabelWear,
+            changeMypageNickname,
+            changeMypagePassword,
+            checkNickname,
+            checkTutorial,
         };
     },
     { persist: true }

@@ -33,6 +33,19 @@
             </form>
         </div>
     </div>
+
+    <!-- modal -->
+    <SuccessModal
+        v-if="isSuccessModal"
+        :modalTitle="'회원가입이 완료되었습니다'"
+        :handleSuccessClick="handleSuccessClick"
+    />
+
+    <SuccessModal
+        v-if="isFailModal"
+        :modalTitle="'회원가입에 실패하였습니다'"
+        :handleSuccessClick="handleFailClick"
+    />
 </template>
 
 <script setup>
@@ -41,6 +54,7 @@ import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
 import TextInput from "@/components/text/TextInput.vue";
+import SuccessModal from "@/components/modal/SuccessModal.vue";
 
 const commonStore = useCommonStore();
 
@@ -49,6 +63,8 @@ const password = ref("");
 const nickname = ref("");
 const router = useRouter();
 const isFormValid = ref(false);
+const isSuccessModal = ref(false);
+const isFailModal = ref(false);
 
 watch([email, password, nickname], ([newEmail, newPassword, newNickname]) => {
     isFormValid.value =
@@ -67,25 +83,18 @@ const submitForm = async () => {
                 nickname: nickname.value,
             }
         );
-        console.log(response);
-
-        // --------------------
-        // TODO: alert modal로 바꾸기
-        alert("회원가입이 완료되었습니다!");
-        // --------------------
-
-        router.push({ name: "login" });
+        isSuccessModal.value = true;
     } catch (error) {
-        // --------------------
-        // TODO: alert modal로 바꾸기
-        alert(
-            "회원가입 실패: " +
-                (error.response ? error.response.data.message : "서버 에러,,,")
-        );
-        // --------------------
-
-        router.push({ name: "signin" });
+        isFailModal.value = true;
     }
+};
+
+const handleSuccessClick = () => {
+    router.push({ name: "login" });
+};
+
+const handleFailClick = () => {
+    isFailModal.value = false;
 };
 
 onMounted(() => {
@@ -139,7 +148,7 @@ onMounted(() => {
     transform: translateX(-50%);
 }
 
-.signinview-input-button:hover{
+.signinview-input-button:hover {
     cursor: pointer;
 }
 

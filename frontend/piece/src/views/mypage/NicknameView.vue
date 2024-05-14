@@ -9,6 +9,7 @@
             maxlength="10"
             required
             @input="checkNickname"
+            v-model='nickname'
         />
         <div class="nicknameview-input-message">
             {{ nicknameMessage }}
@@ -32,40 +33,31 @@
 
 <script setup>
 import router from "@/router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useCommonStore } from "@/stores/common";
+import { useUserStore } from "@/stores/user";
 import SquareButton from "@/components/button/SquareButton.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
 
 const commonStore = useCommonStore();
+const store = useUserStore();
 
-const nicknameMessage = ref("3자 이상 10자 이내의 한글, 영문만 가능해요");
-const isNickname = ref(false);
+const nicknameMessage = computed(() => store.getNicknameMessage);
+const isNickname = computed(() => store.getIsNickname);
 const isModal = ref(false);
+const nickname = ref("");
 
 const checkNickname = (e) => {
-    if (e.target.value < 3) {
-        nicknameMessage.value = "3자 이상 10자 이내의 한글, 영문만 가능해요";
+    if (e.target.value.length <= 3) {
+        store.setNicknameMessage("3자 이상 10자 이내의 한글, 영문만 가능해요");
     } else {
-        isNickname.value = true;
-        nicknameMessage.value = "사용 가능한 닉네임이예요";
+        store.checkNickname(e.target.value);
     }
-
-    // ---------------------
-    // TODO: 닉네임 중복체크
-    // if (isNickname.value) {
-    //     nicknameMessage.value = "사용 가능한 닉네임이예요";
-    // } else {
-    //     nicknameMessage.value = "이미 사용 중인 닉네임이에요";
-    // }
-    // ---------------------
 };
 
-const handleNicknameClick = () => {
+const handleNicknameClick = (e) => {
     isModal.value = true;
-    // ---------------------
-    // TODO: 닉네임 변경 api 연결
-    // ---------------------
+    store.changeMypageNickname(localStorage.getItem("userId"), nickname.value);
 };
 
 const handleChangeSuccess = () => {

@@ -207,6 +207,7 @@ onBeforeUnmount(() => {
 
 .piecelistview-search-container {
     margin-bottom: 1rem;
+    user-select: none;
 }
 
 /* filter */
@@ -283,6 +284,8 @@ onBeforeUnmount(() => {
 
 .piecelistview-list-item {
     width: auto;
+    user-select: none;
+    cursor: pointer;
 }
 
 .piecelistview-list-noitem {
