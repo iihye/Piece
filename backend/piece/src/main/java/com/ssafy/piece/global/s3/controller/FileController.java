@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/fileupload")
 public class FileController {
 
     private final FileService fileService;
@@ -23,11 +24,14 @@ public class FileController {
      *
      * @param userId userPk
      * @param fileName  file name
-     * @return code, message, data: presigned url
+     * @return code, message, data: presigned URL, S3FilePath
      */
-    @GetMapping("/fileupload/{fileName}")
-    public ResponseEntity<Object> uploadImage(@AuthenticatedUser Long userId, @PathVariable(name = "fileName") String fileName) {
+    @GetMapping("/{fileName}")
+    public ResponseEntity<Object> uploadImage( @AuthenticatedUser Long userId,
+                                                @PathVariable(name = "fileName") String fileName) {
+        log.info("controller 들어옴");
         ArrayList<String> url = fileService.getPreSignedUrl(userId.toString(), fileName);
+        log.info("presignedURL is {} and s3path is {}", url.get(0), url.get(1) );
         return SuccessResponse.createSuccess(SuccessCode.GET_PRESIGNEDURL_SUCCESS, url);
     }
 

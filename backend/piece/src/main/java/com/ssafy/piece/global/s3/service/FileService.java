@@ -29,21 +29,22 @@ public class FileService {
     /**
      * presigned url 발급
      *
-     * @param prefix   버킷 디렉토리명로드할 파일명
-     * @param fileName 클라이언트가 업
+     * @param bucketFileName   버킷 디렉토리명 = userId
+     * @param fileName 클라이언트가 업로드할 파일명
      * @return presigned url
      */
-    public ArrayList<String> getPreSignedUrl(String prefix, String fileName) {
-        if (!prefix.isEmpty()) {
-            fileName = createPath(prefix, fileName);
+    public ArrayList<String> getPreSignedUrl(String bucketFileName, String fileName) {
+        if (!bucketFileName.isEmpty()) {
+            fileName = createPath(bucketFileName, fileName);
         }
+
         log.info("fileName is {}", fileName);
         GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(bucket, fileName);
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 
         ArrayList<String> response = new ArrayList<>();
         response.add(url.toString());
-        response.add(fileName);
+        response.add(S3FilePath(fileName));
 //        return url.toString();
         return response;
     }
@@ -69,22 +70,41 @@ public class FileService {
 
 
     /**
-     * presigned url 유효 기간 설정
-     *
-     * @return 유효기간
+     * presigned url 유효시간 설정
+     * @return 유효시간 10분
      */
     private Date getPreSignedUrlExpiration() {
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 10 * 6;  // 한시간
+        expTimeMillis += 1000 * 60 * 10;  // 10분
         expiration.setTime(expTimeMillis);
         return expiration;
     }
 
 
     /**
-     * 파일 공유 ID 생성
+     * 파일의 전체 경로 생성
      *
+     * @param bucketFileName   버킷 디렉토리명
+     * @param fileName  파일의 전체 경로
+     * @return 파일의 전체 경로
+     */
+    private String createPath(String bucketFileName, String fileName) {
+        String fileId = createFileId();
+        String S3filePath = String.format("%s/%s%s", bucketFileName, fileId, fileName);
+        log.info("S3filePath is {}", S3filePath);
+
+
+
+//        return String.format("%s/%s", prefix, fileId + fileName);
+//        return saveAWSFilePath(AWSFilePath);
+//        return saveAWSFilePath(bucketFileName, S3filePath);
+        return S3filePath;
+    }
+
+
+    /**
+     * 파일 공유 ID 생성
      * @return UUID
      */
     private String createFileId() {
@@ -94,15 +114,15 @@ public class FileService {
 
 
     /**
-     * 파일의 전체 경로 생성
-     *
-     * @param prefix   디렉토리 경로
-     * @param fileName 파일의 전체 경로
-     * @return 파일의 전체 경로
+     * 파일 전체 경로 생성
+     * @param AWSFilePath
+     * @return
      */
-    private String createPath(String prefix, String fileName) {
-        String fileId = createFileId();
-        return String.format("%s/%s", prefix, fileId + fileName);
+    public String S3FilePath(String AWSFilePath) {
+        String S3Path = "https://s3.ap-southeast-2.amazonaws.com/piecemaker.kr/" + AWSFilePath;
+        log.info("S3Path is {}", S3Path);
+        return S3Path;
     }
+
 
 }
