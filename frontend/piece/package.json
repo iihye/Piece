@@ -18,6 +18,7 @@
     "@vuepic/vue-datepicker": "^8.5.0",
     "aws-sdk": "^2.1611.0",
     "axios": "^1.6.8",
+    "buffer": "^6.0.3",
     "pinia": "^2.1.7",
     "sockjs-client": "^1.6.1",
     "vue": "^3.4.21",
