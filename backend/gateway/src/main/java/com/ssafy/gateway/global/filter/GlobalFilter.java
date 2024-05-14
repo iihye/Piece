@@ -34,11 +34,16 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
             log.info("게이트웨이에서 요청 받음. Authorization 헤더: {}", authorizationHeader); // 헤더 받는 로그
 
 
+            // 로그인, 회원가입, 닉네임-이메일 중복 검사 요청 등에 대한 인증 필터 예외 처리
+            if (path.startsWith("/user/users/check-nickname") ||
+                path.startsWith("/user/users/check-email") ||
+                path.startsWith("/user/auth/login") ||
+                path.startsWith("/user/users/register") ||
+                path.startsWith("/user/users/email-validation") ||
+                path.startsWith(("/user/users/find"))
+            ) {
 
-            // 로그인, 회원가입, 닉네임-이메일 중복 검사 요청에 대한 인증 필터 예외 처리
-            if (path.startsWith("/user/users/check-nickname") || path.startsWith("/user/users/check-email")
-                || path.startsWith("/user/auth/login") || path.startsWith("/user/users/register")) {
-                log.info("이 로그가 보인다면 로그인,회원가입,중복검사에 대하여 인증을 예외하였음 : {}" , path);
+                log.info("이 로그가 보인다면 로그인,회원가입,중복검사 등에 대하여 인증을 예외하였음 : {}", path);
                 return chain.filter(exchange);  // 인증 필터 없이 체인을 계속
             }
 

@@ -44,7 +44,7 @@ spring:
           predicates:
             - Path=/api/user/**
           filters:
-            - StripPrefix=2 # 1에서 2로 수정하였습니다.
+            - StripPrefix=1
         - id: chat
           uri : lb://CHAT
           predicates:
