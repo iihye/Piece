@@ -1,7 +1,7 @@
 package com.ssafy.chat.global.client;
 
 import com.ssafy.chat.dto.response.CultureResponseDto;
-import com.ssafy.chat.dto.response.UserResponseDto;
+import com.ssafy.chat.dto.response.UserFeignResponseDto;
 import com.ssafy.chat.global.config.FeignClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @FeignClient(name = "user", url = "${external.user.host}", configuration = FeignClientConfig.class)
 public interface UserClient {
-    @GetMapping("/users/find/feign/{userId}")
-    UserResponseDto getUser(@PathVariable Long userId);
+    @GetMapping("/users/find/{userId}")
+    UserFeignResponseDto getUser(@PathVariable Long userId);
 }
