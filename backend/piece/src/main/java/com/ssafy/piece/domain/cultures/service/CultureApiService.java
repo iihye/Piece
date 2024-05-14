@@ -77,8 +77,10 @@ public class CultureApiService {
             cultureGenreBatch);
     }
 
-    public TmdbDetailResponse findMovie(String movieId) {
-        return tmdbClient.getTmdbMovie(movieId, "Bearer " + TMDB_API_KEY);
+    public CultureDetailResponse findMovie(String movieId) {
+        TmdbDetailResponse movie = tmdbClient.getTmdbMovie(movieId, "Bearer " + TMDB_API_KEY);
+
+        return CulturesResponseMapper.tmdbResponseToCultureDetailResponse(movie);
     }
 
     public List<SimpleMovieResponse> searchMovie(String name) {

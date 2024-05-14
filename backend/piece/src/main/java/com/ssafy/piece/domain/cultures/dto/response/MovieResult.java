@@ -22,4 +22,18 @@ public class MovieResult {
     private boolean video;
     private double vote_average;
     private int vote_count;
+
+    private Credits credits;
+
+    @Getter
+    public static class Credits {
+
+        List<Cast> cast;
+    }
+
+    @Getter
+    public static class Cast {
+
+        String name;
+    }
 }
