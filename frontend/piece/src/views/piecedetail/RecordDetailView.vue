@@ -201,9 +201,12 @@ const updateRecord = (value) => {
 
 // button
 const handleSuccess = () => {
-    if (recordValue.value === "") recordValue.value = record.value;
-    store.reviseRecordDetail(recordValue.value);
-    isModal.value = true;
+    if (recordValue.value === "") {
+        router.go(-1);
+    } else {
+        store.reviseRecordDetail(recordValue.value);
+        isModal.value = true;
+    }
 };
 
 // modal
