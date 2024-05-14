@@ -45,7 +45,6 @@ defineProps({
 
 .successmodal-main-container {
     width: flex;
-    max-width: 16rem;
     height: flex;
     border-radius: 1rem;
     background-color: var(--white-color);

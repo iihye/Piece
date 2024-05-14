@@ -8,42 +8,19 @@
 
         <!-- search -->
         <div class="pieceimageview-search-area">
-            <TextInput
-                class="pieceimageview-search-input"
-                placeholder="포스터를 찾아보세요!"
-                v-model="searchQuery"
-                @focus="handleFocus"
-                @update:modelValue="(value) => (searchQuery = value)"
-            />
-            <InputPreview
-                class="pieceimageview-search-preview"
-                :searchQuery="searchQuery"
-                :searchResults="searchResults"
-                :isFocused="isFocused"
-                @select="handleSelect"
-            />
+            <TextInput class="pieceimageview-search-input" placeholder="포스터를 찾아보세요!" v-model="searchQuery"
+                @focus="handleFocus" @update:modelValue="(value) => (searchQuery = value)" />
+            <InputPreview class="pieceimageview-search-preview" :searchQuery="searchQuery"
+                :searchResults="searchResults" :isFocused="isFocused" @select="handleSelect" />
         </div>
 
         <!-- upload -->
         <div class="pieceimageview-upload-container">
-            <div
-                class="pieceimageview-upload-area"
-                @click="triggerFileInput"
-                :class="{ 'no-click': imageSrc }"
-            >
-                <input
-                    type="file"
-                    @change="handleFileUpload"
-                    accept="image/*"
-                    ref="fileInput"
-                    style="display: none"
-                />
+            <div class="pieceimageview-upload-area" @click="triggerFileInput" :class="{ 'no-click': imageSrc }">
+                <input type="file" @change="handleFileUpload" accept="image/*" ref="fileInput" style="display: none" />
                 <div class="pieceimageview-explain" v-if="!imageSrc">
-                    <font-awesome-icon
-                        class="pieceimageview-explain-icon"
-                        :icon="['fas', 'image']"
-                        style="color: var(--main-color)"
-                    />
+                    <font-awesome-icon class="pieceimageview-explain-icon" :icon="['fas', 'image']"
+                        style="color: var(--main-color)" />
                     <div class="pieceimageview-explain-strong">
                         조각에 넣을 사진을 선택해주세요
                     </div>
@@ -53,37 +30,22 @@
                 </div>
                 <!-- image -->
                 <div v-if="imageSrc">
-                    <VueCropper
-                        class="pieceImageView-crop-area"
-                        ref="cropperRef"
-                        :src="uploadedImage"
-                        :zoomOnWheel="false"
-                        :viewMode="2"
-                        :background="false"
-                        :autoCropArea="1"
-                        :initial-aspect-ratio="7 / 10"
-                        :aspect-ratio="7 / 10"
-                        @crop="debouncedCropImage"
-                    />
+                    <VueCropper class="pieceImageView-crop-area" ref="cropperRef" :src="uploadedImage"
+                        :zoomOnWheel="false" :viewMode="2" :background="false" :autoCropArea="1"
+                        :initial-aspect-ratio="7 / 10" :aspect-ratio="7 / 10" @crop="debouncedCropImage" />
                 </div>
             </div>
         </div>
 
         <!-- image reset -->
-        <SmallButton
-            class="piecemake-button-reset"
-            v-if="imageSrc"
-            @click.prevent="resetImage"
-            :smallButtonContent="'이미지 초기화'"
-        />
+        <SmallButton class="piecemake-button-reset" v-if="imageSrc" @click.prevent="resetImage"
+            :smallButtonContent="'이미지 초기화'" />
 
         <!-- next -->
         <div class="piecemake-button-container">
             <RouterLink :to="{ name: 'pieceinfo' }">
-                <RoundButton
-                    :roundButtonContent="'다음'"
-                    :isRoundDisable="isRoundDisable"
-                ></RoundButton>
+                <RoundButton :roundButtonContent="'다음'" :isRoundDisable="isRoundDisable"
+                    :roundButtonFunction="makeBackImage"></RoundButton>
             </RouterLink>
         </div>
     </div>
@@ -95,6 +57,7 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import { useCommonStore } from "@/stores/common";
 import { usePieceStore } from "@/stores/piece.js";
+import { usePieceMakeStore } from "@/stores/piecemake";
 import RoundButton from "@/components/button/RoundButton.vue";
 import SmallButton from "@/components/button/SmallButton.vue";
 import TextInput from "@/components/text/OnlyInput.vue";
@@ -102,6 +65,7 @@ import InputPreview from "@/components/text/InputPreview.vue";
 
 const commonStore = useCommonStore();
 const pieceStore = usePieceStore();
+const makeStore = usePieceMakeStore();
 
 const imageSrc = ref(null);
 const croppedImage = ref(null);
@@ -186,9 +150,8 @@ function handleFileUpload(event) {
 
 const cropImage = () => {
     if (cropperRef.value && cropperRef.value.cropper) {
-        croppedImage.value = cropperRef.value.cropper
-            .getCroppedCanvas()
-            .toDataURL();
+        croppedImage.value = cropperRef.value.cropper.getCroppedCanvas().toDataURL();
+        pieceStore.croppedImageValue = croppedImage.value;
         uploadedImage.value = croppedImage.value;
     }
 };
@@ -225,7 +188,13 @@ const handleDocumentClick = (event) => {
 };
 
 document.addEventListener("click", handleDocumentClick);
+const makeBackImage = () => {
 
+    const image = {
+        file: croppedImage.value,
+    }
+    makeStore.makeImage(image);
+}
 onMounted(async () => {
     commonStore.headerTitle = "조각 만들기";
     commonStore.headerType = "header2";
@@ -250,6 +219,9 @@ onMounted(async () => {
     margin: 0 0 0.4rem 0;
     user-select: none;
 }
+
+
+
 
 .pieceimageview-main-content {
     font-family: "Regular";

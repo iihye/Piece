@@ -69,13 +69,14 @@
         <!-- button -->
         <div class="pieceDetailView-button-container">
             <RoundButton
-                class="pieceDetailView-button-button"
+                class="pieceDetailView-button-button-list"
                 :roundButtonContent="'목록으로 돌아가기'"
                 :roundButtonFunction="handleBackListClick"
                 :isRoundDisable="true"
             ></RoundButton>
             <RoundButton
-                class="pieceDetailView-button-button"
+                v-if="isMine"
+                class="pieceDetailView-button-button-record"
                 :roundButtonContent="'자세히 기록하기'"
                 :roundButtonFunction="handleRecordClick"
                 :isRoundDisable="true"
@@ -192,6 +193,8 @@ const pieceUserLabel = computed(() => store.getPieceUserLabel);
 const piecelistDetail = computed(() => store.getPiecelistDetail);
 const pieceDetailHeart = computed(() => store.getPieceDetailHeart);
 
+const isMine = computed(() => store.getIsMine);
+
 const handleImageClick = () => {
     imgFrontBack.value = !imgFrontBack.value;
     if (imgFrontBack.value) {
@@ -248,8 +251,8 @@ const handleBackListClick = () => {
 const handleRecordClick = () => {
     router.push({
         name: "recordDetail",
-        params: { pieceId: piecelistDetail.value.pieceId },
     });
+    store.setPieceDetailViewId(piecelistDetail.value.pieceId);
 };
 
 const handleLink = () => {
@@ -452,21 +455,25 @@ onMounted(async () => {
     display: flex;
     flex: none;
     justify-content: center;
-    margin: 1rem;
-    bottom: 0;
 }
 
-.pieceDetailView-button-button {
+.pieceDetailView-button-button-list {
     flex: 1;
-    margin-left: 0.2rem;
     margin-right: 0.2rem;
 }
 
-.pieceDetailView-button-button button {
+.pieceDetailView-button-button-record {
+    flex: 1;
+    margin-left: 0.2rem;
+}
+
+.pieceDetailView-button-button-list button,
+.pieceDetailView-button-button-record button {
     width: 100%;
 }
 
-.pieceDetailView-button-button button:hover {
+.pieceDetailView-button-button-list button:hover,
+.pieceDetailView-button-button-record button:hover {
     cursor: pointer;
 }
 </style>
