@@ -29,33 +29,16 @@ const { roundButtonContent } = defineProps({
 
 const emit = defineEmits(["uploadSuccess", "uploadError"]);
 const fileInput = ref(null);
-const store = useFileUploadStore();
 const loadingModal = ref(false);
 
 function uploadImage() {
     fileInput.value.click();
 }
 
-// async function handleFileSelected(event) {
-//     loadingModal.value = true;
-//     const file = event.target.files[0];
-//     try {
-//         const url = await store.getPreSignedUrl(file);
-//         // test
-//         console.log('url.presignedURL ', url.presignedURL);
-//         console.log('url.s3path: ', url.s3path);
-//         await store.putFileUpload(url.presignedURL, file);
-//         emit("SUCCESS", url.);
-//     } catch (error) {
-//         emit("ERROR", error);
-//     }
-//     loadingModal.value = false;
-// }
-
 async function handleFileSelected(event) {
     loadingModal.value = true;
     const file = event.target.files[0];
-    console.log('성공');
+    const store = useFileUploadStore();
     try {
         const url = await store.getPreSignedUrl(file);
         await store.putFileUpload(url.presignedURL, file);
@@ -69,47 +52,6 @@ async function handleFileSelected(event) {
 
 </script>
 
-
-<!-- <script setup>
-import { ref } from "vue";
-import { useFileUploadStore } from "@/stores/fileupload";
-import LoadingModal from "@/components/modal/LoadingModal.vue";
-
-const { roundButtonContent } = defineProps({
-    roundButtonContent: String,
-});
-
-const emit = defineEmits(["uploadSuccess", "uploadError", "SUCCESS", "ERROR"]);
-const fileInput = ref(null);
-const store = useFileUploadStore();
-const loadingModal = ref(false);
-
-function uploadImage() {
-    fileInput.value.click();
-}
-
-async function handleFileSelected(event) {
-    loadingModal.value = true;
-    const file = event.target.files[0];
-    try {
-        const url = await store.getPreSignedUrl(file);
-        
-        // 백앤드에게서 받아온 presignedURL, S3Path 확인
-        console.log('url.presignedURL ', url.presignedURL);
-        console.log('s3path: ', url.s3path);
-        
-        // aws s3 파일 업로드
-        await store.putFileUpload(url.presignedURL, file);
-        
-        emit("SUCCESS", url.s3path);
-        emit("uploadSuccess", url.presignedURL);
-    } catch (error) {
-        emit("ERROR", error);
-        emit("uploadError", error);
-    }
-    loadingModal.value = false;
-}
-</script> -->
 
 <style>
 .fileuploader-button {
