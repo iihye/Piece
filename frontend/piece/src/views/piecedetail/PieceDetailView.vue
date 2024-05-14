@@ -69,14 +69,14 @@
         <!-- button -->
         <div class="pieceDetailView-button-container">
             <RoundButton
-                class="pieceDetailView-button-button"
+                class="pieceDetailView-button-button-list"
                 :roundButtonContent="'목록으로 돌아가기'"
                 :roundButtonFunction="handleBackListClick"
                 :isRoundDisable="true"
             ></RoundButton>
             <RoundButton
                 v-if="isMine"
-                class="pieceDetailView-button-button"
+                class="pieceDetailView-button-button-record"
                 :roundButtonContent="'자세히 기록하기'"
                 :roundButtonFunction="handleRecordClick"
                 :isRoundDisable="true"
@@ -345,7 +345,7 @@ onMounted(async () => {
 .pieceDetailView-main-container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 8.25rem);
+    height: calc(100vh - 7.25rem);
 }
 
 .pieceDetailView-user-container {
@@ -457,17 +457,23 @@ onMounted(async () => {
     justify-content: center;
 }
 
-.pieceDetailView-button-button {
+.pieceDetailView-button-button-list {
     flex: 1;
-    margin-left: 0.2rem;
     margin-right: 0.2rem;
 }
 
-.pieceDetailView-button-button button {
+.pieceDetailView-button-button-record {
+    flex: 1;
+    margin-left: 0.2rem;
+}
+
+.pieceDetailView-button-button-list button,
+.pieceDetailView-button-button-record button {
     width: 100%;
 }
 
-.pieceDetailView-button-button button:hover {
+.pieceDetailView-button-button-list button:hover,
+.pieceDetailView-button-button-record button:hover {
     cursor: pointer;
 }
 </style>
