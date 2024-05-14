@@ -19,11 +19,19 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UsersRepository usersRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        Users user = usersRepository.findById(Long.parseLong(id))
-            .orElseThrow(() -> new UsernameNotFoundException("해당하는 유저 id를 찾을 수 없습니다.: " + id));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Long userId;
+        try {
+            userId = Long.parseLong(username);
+        } catch (NumberFormatException e) {
+            throw new UsernameNotFoundException("유효하지 않은 사용자 ID 형식: " + username);
+        }
+
+        Users user = usersRepository.findById(userId)
+            .orElseThrow(() -> new UsernameNotFoundException("해당하는 유저 ID를 찾을 수 없습니다.: " + userId));
 
         return new User(user.getEmail(), user.getPassword(), Collections.emptyList());
     }
+
 
 }

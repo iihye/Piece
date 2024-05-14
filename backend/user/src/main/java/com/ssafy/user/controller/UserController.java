@@ -2,6 +2,8 @@ package com.ssafy.user.controller;
 
 
 import com.ssafy.user.entity.Users;
+import com.ssafy.user.global.response.code.SuccessCode;
+import com.ssafy.user.global.response.structure.SuccessResponse;
 import com.ssafy.user.service.UserService;
 import com.ssafy.user.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +23,12 @@ public class UserController {
 
 
     @GetMapping("/{userId}") // UserId를 통해 회원정보를 조회합니다.
-    public ResponseEntity<Users> getUserById(@PathVariable Long userId) {
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
         Users user = userService.getUserById(userId);
         if (user != null) {
             // 패스워드 필드를 null로 설정하여 비밀번호는 안보이게 했습니다.
             user.setPassword(null);
-            return ResponseEntity.ok(user);
+            return  SuccessResponse.createSuccess(SuccessCode.CHECK_USER_SUCCESS);
         } else {
             return ResponseEntity.notFound().build();
         }

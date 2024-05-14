@@ -20,7 +20,7 @@ public class AuthenticatedUserArgumentResolver implements HandlerMethodArgumentR
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        String userId = request.getHeader("Authenticated-User-Header");
+        String userId = request.getHeader("Authorization");
         log.info("resolveArgument userId : {}", userId);
         return Long.parseLong(userId);
     }
