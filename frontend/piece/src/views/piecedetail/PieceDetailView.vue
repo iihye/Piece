@@ -342,7 +342,7 @@ onMounted(async () => {
 .pieceDetailView-main-container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 7.25rem);
+    height: calc(100vh - 8.25rem);
 }
 
 .pieceDetailView-user-container {
@@ -452,8 +452,6 @@ onMounted(async () => {
     display: flex;
     flex: none;
     justify-content: center;
-    margin: 1rem;
-    bottom: 0;
 }
 
 .pieceDetailView-button-button {
