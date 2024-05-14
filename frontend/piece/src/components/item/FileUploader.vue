@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <input type="file" @change="uploadImage" ref="fileInput" style="display: none">
         <button @click="triggerFileUpload">{{ buttonText }}</button>
@@ -8,7 +8,6 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue';
 import axios from 'axios';
-import { getPreSignedUrl } from '@/stores/fileupload';
 
 const props = defineProps({
     buttonText: {
@@ -60,4 +59,13 @@ async function uploadImage(event) {
         emits('error', error.message);
     }
 }
+</script> -->
+
+<template>
+
+</template>
+
+<script>
 </script>
+
+<style></style>

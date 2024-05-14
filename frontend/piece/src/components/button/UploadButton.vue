@@ -12,48 +12,32 @@
 
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
+import { useFileUploadStore } from "@/stores/fileupload";
 
-defineProps({
+// defineProps({
+//     roundButtonContent: String,
+// });
+
+const { roundButtonContent } = defineProps({
     roundButtonContent: String,
 });
 
 const emit = defineEmits(["uploadSuccess", "uploadError"]);
-
 const fileInput = ref(null);
+const store = useFileUploadStore();
 
 function uploadImage() {
     fileInput.value.click();
 }
 
 async function handleFileSelected(event) {
-    console.log("file selected");
     const file = event.target.files[0];
-    if (!file) {
-        emit("uploadError", "No file selected");
-        return;
-    }
-
     try {
-        console.log("file uploaded");
-
-        const URL = presignedURL.data.data;
-        const uploadFile = await axios.put(URL, file, {
-            headers: {
-                "Content-Type": file.type,
-                Authorization: undefined, // Authorization 헤더 제외
-            },
-        });
-
-        console.log('url is ', URL);
-        console.log('success');
-        if (uploadFile.status === 200 || uploadFile.status === 204) {
-            emit("uploadSuccess", "Image uploaded successfully");
-        } else {
-            emit("uploadError", "Failed to upload image");
-        }
+        const url = await store.getPreSignedUrl(file);
+        await store.putFileUpload(url, file);
+        emit("SUCCESS", url);
     } catch (error) {
-        emit("uploadError", error.message);
+        emit("ERROR", error);
     }
 }
 </script>

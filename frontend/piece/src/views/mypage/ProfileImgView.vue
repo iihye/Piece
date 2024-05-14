@@ -27,11 +27,18 @@
             </div>
         </div>
 
-        <UploadButton
+        <!-- <UploadButton
             class="profileimgview-file-container"
             @uploaded="handleUpload"
             @error="handleError"
             buttonText="사진 올리기"
+        /> -->
+
+        <!-- 업로드 버튼 -->
+        <UploadButton
+            roundButtonContent="사진 올리기"
+            @uploadSuccess="handleUpload"
+            @uploadError="handleError"
         />
 
         <!-- success modal -->
@@ -61,18 +68,26 @@ const commonStore = useCommonStore();
 const profileImage = ref("");
 const successModal = ref(false);
 const failModal = ref(false);
-// const profileImage = ref("https://i.ibb.co/grMvZS9/your-image.jpg");
 
-// TODO: 파일 업로드 localhost -> server 주소로 변경
-const handleUpload = (url) => {
+function handleUpload(url) {
     profileImage.value = url;
     successModal.value = true;
-};
+}
 
-const handleError = (error) => {
-    console.error("업로드 실패", error);
+function handleError(error) {
+    console.error('업로드 실패:', error);
     failModal.value = true;
-};
+}
+
+// const handleUpload = (url) => {
+//     profileImage.value = url;
+//     successModal.value = true;
+// };
+
+// const handleError = (error) => {
+//     console.error("업로드 실패", error);
+//     failModal.value = true;
+// };
 
 const handleSuccessClick = () => {
     successModal.value = false;

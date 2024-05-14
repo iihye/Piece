@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <FileUploader @uploaded="handleUpload" @error="handleError" buttonText="Upload New Image" />
     </div>
@@ -14,4 +14,11 @@ function handleUpload(url) {
 function handleError(error) {
     console.error('Upload Error:', error);
 }
-</script>
+</script> -->
+
+<template>
+    </template>
+
+<script></script>
+
+<style></style>
