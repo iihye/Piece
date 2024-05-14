@@ -77,7 +77,9 @@
     <div class="recorddetailview-content-container">
         <textarea
             class="recorddetailview-main-record"
-            v-model="record"
+            :value="record"
+            @input="updateRecord($event.target.value)"
+            placeholder="여기에 입력해주세요"
         ></textarea>
     </div>
 
@@ -87,39 +89,46 @@
         :squareButtonFunction="handleSuccess"
         :isSquareDisable="true"
     ></SquareButton>
+
     <!-- modal -->
     <ImageDetailModal
-        v-if="isModal"
+        v-if="isImageModal"
         :imgUrl="imgUrl"
         :imgIndex="imgIndex"
         :handleClick="handleModalClick"
         :handleDeleteClick="handleDeleteClick"
     ></ImageDetailModal>
+
+    <SuccessModal
+        v-if="isModal"
+        :modalTitle="'기록이 저장되었어요!'"
+        :handleSuccessClick="handleRecordSuccess"
+    />
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
 import { usePiecelistStore } from "@/stores/piecelist";
 import FileUploader from "@/components/item/FileUploader.vue";
 import SquareButton from "@/components/button/SquareButton.vue";
 import ImageDetailModal from "@/components/modal/ImageDetailModal.vue";
+import SuccessModal from "@/components/modal/SuccessModal.vue";
 
 const commonStore = useCommonStore();
 const store = usePiecelistStore();
 
-const route = useRoute();
 const router = useRouter();
 
 const pieceDetailRecord = computed(() => store.getPieceDetailRecord);
+const isImageModal = ref(false);
 const isModal = ref(false);
 const imgUrl = ref("");
 const imgIndex = ref(0);
 
-// const record = ref(pieceDetailRecord.record);
-const record = ref("안녕하세요");
+const record = computed(() => store.getPieceDetailRecord.record);
+const recordValue = ref("");
 
 // dummy data
 const imageUrls = ref([
@@ -161,7 +170,7 @@ const next = () => {
 const handleImageClick = (imageUrl, index) => {
     imgUrl.value = imageUrl;
     imgIndex.value = index;
-    isModal.value = true;
+    isImageModal.value = true;
 };
 
 const touchStart = (event) => {
@@ -185,20 +194,29 @@ function handleError(error) {
     failModal.value = true;
 }
 
+// record
+const updateRecord = (value) => {
+    recordValue.value = value;
+};
+
 // button
 const handleSuccess = () => {
-    alert("완료 클릭");
-    router.go(-1);
+    store.reviseRecordDetail(recordValue.value);
+    isModal.value = true;
 };
 
 // modal
 const handleModalClick = () => {
-    isModal.value = false;
+    isImageModal.value = false;
 };
 
 const handleDeleteClick = () => {
     alert("삭제 버튼");
-    isModal.value = false;
+    isImageModal.value = false;
+};
+
+const handleRecordSuccess = () => {
+    router.go(-1);
 };
 
 onMounted(async () => {

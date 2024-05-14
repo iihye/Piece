@@ -27,6 +27,7 @@ export const usePiecelistStore = defineStore(
         const pieceUserLabel = ref("");
         const isMine = ref(false);
         const pieceDetaiLViewId = ref(0);
+        const record = ref("");
 
         const today = ref(new Date());
         const year = ref(today.value.getFullYear());
@@ -438,7 +439,7 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     pieceDetailRecord.value = res.data.data;
-
+                    record.value = pieceDetailRecord.value.record;
                     // pieceDetailRecord.value.imgList = [
                     //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
                     //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
@@ -455,6 +456,19 @@ export const usePiecelistStore = defineStore(
             axios({
                 url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/${pieceId}`,
                 method: "DELETE",
+            })
+                .then((res) => {})
+                .catch((err) => {});
+        };
+
+        const reviseRecordDetail = function (record) {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/record`,
+                method: "PUT",
+                data: {
+                    pieceId: pieceDetaiLViewId.value,
+                    record: record,
+                },
             })
                 .then((res) => {})
                 .catch((err) => {});
@@ -528,6 +542,7 @@ export const usePiecelistStore = defineStore(
             deletePieceDetailHeart,
             findPieceDetailRecord,
             deletePieceDetail,
+            reviseRecordDetail,
         };
     },
     { persist: true }
