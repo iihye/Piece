@@ -237,7 +237,6 @@ onMounted(async () => {
 
 label {
     font-family: "Semi";
-    font-size: 1.4rem;
     font-size: 1rem;
     text-align: left;
     margin-top: 0.2rem;
