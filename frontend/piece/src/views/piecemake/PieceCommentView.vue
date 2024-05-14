@@ -1,58 +1,99 @@
 <template>
-    <h1>마지막 조각을 완성해주세요</h1>
     <div class="piececommentview-container">
+        <!-- title -->
+        <div class="piececommentview-main-title">
+            마지막 조각을 완성해주세요
+        </div>
+        <div class="piececommentview-main-content">
+            별점과 한줄평을 남겨보세요
+        </div>
+
+        <!-- star -->
         <div class="piececommentview-starinfo">
-            <div class="pieveimageview-star-label">
-                <label for="pieveimageview-star-rating" class="pieveimageview-required-label">별점</label>
+            <div class="piececommentview-star-label">
+                <label
+                    for="piececommentview-star-rating"
+                    class="piececommentview-required-label"
+                    >별점</label
+                >
             </div>
-            <div class="pieveimageview-star-rating">
+            <div class="piececommentview-star-rating">
                 <div
-                    class="pieveimageview-star"
+                    class="piececommentview-star"
                     v-for="index in 5"
                     :key="index"
                     @click="check(index)"
                     @mouseover="hover(index)"
                     @mouseleave="leave"
                 >
-                    <font-awesome-icon 
-                        :icon="index <= hoverScore ? ['fas', 'star'] : ['far', 'star']" 
-                        :style="{ color: index <= hoverScore ? 'var(--main-color)' : 'var(--gray2-color)' }"
-                        class="pieveimageview-star-icon"
+                    <font-awesome-icon
+                        :icon="
+                            index <= hoverScore
+                                ? ['fas', 'star']
+                                : ['far', 'star']
+                        "
+                        :style="{
+                            color:
+                                index <= hoverScore
+                                    ? 'var(--main-color)'
+                                    : 'var(--gray2-color)',
+                        }"
+                        class="piececommentview-star-icon"
                     />
                 </div>
             </div>
+        </div>
 
-        </div>
-        <div class="pieveimageview-form-group">
-            <div class="pieveimageview-label-and-counter">
-                <label for="comment" class="pieveimageview-required-label">한줄평</label>
-                <div>{{ characterCount }}/50</div>
+        <!-- comment -->
+        <div class="piececommentview-comment-group">
+            <div class="piececommentview-label-and-counter">
+                <label for="comment" class="piececommentview-required-label"
+                    >한줄평</label
+                >
+                <div class="piececommentview-counter">
+                    {{ characterCount }}/50
+                </div>
             </div>
-            <textarea class="pieveimageview-textarea"id="comment" placeholder="한줄평을 남겨주세요"
-            :value="commentInput"
-            @input="handleInput"
-            maxlength="50"></textarea>
+            <textarea
+                class="piececommentview-textarea"
+                id="comment"
+                placeholder="한줄평을 남겨주세요"
+                :value="commentInput"
+                @input="handleInput"
+                maxlength="50"
+            ></textarea>
         </div>
+
+        <!-- private -->
         <div class="piececommentview-private-container">
             <div>
-                <label for="is-public">조각 비공개</label>
+                <label>조각 비공개</label>
             </div>
             <div>
-                <input type="checkbox" id="is-public" name="scales" checked v-model="pieceValue.isPrivate"/>
+                <input
+                    type="checkbox"
+                    class="piececommentview-private-checkbox"
+                    name="scales"
+                    checked
+                    v-model="pieceValue.isPrivate"
+                />
             </div>
         </div>
     </div>
     <div class="piecemake-button-container">
         <RouterLink :to="{ name: 'piecefront' }">
-            <RoundButton :roundButtonContent="'다음'" :isRoundDisable="isRoundDisable"></RoundButton>
+            <RoundButton
+                :roundButtonContent="'다음'"
+                :isRoundDisable="isRoundDisable"
+            ></RoundButton>
         </RouterLink>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
-import {usePieceStore} from '@/stores/piece.js'
-import RoundButton from '@/components/button/RoundButton.vue';
+import { ref, computed, watch } from "vue";
+import { usePieceStore } from "@/stores/piece.js";
+import RoundButton from "@/components/button/RoundButton.vue";
 
 const isRoundDisable = computed(() => {
     return !(!pieceValue.score || !pieceValue.comment);
@@ -60,22 +101,21 @@ const isRoundDisable = computed(() => {
 
 const pieceStore = usePieceStore();
 const pieceValue = pieceStore.pieceValue;
-const commentInput = ref(pieceValue.comment || '');
+const commentInput = ref(pieceValue.comment || "");
 
 function updateSelected(optionId) {
-    pieceStore.setPieceValue('score', optionId);
+    pieceStore.setPieceValue("score", optionId);
 }
 
 function handleInput(event) {
-  const input = event.target.value;
-  if (input.length <= 50) {
-    commentInput.value = input; // 입력 값을 업데이트
-    pieceStore.setPieceValue('comment', input); // 스토어에 저장
-  }
+    const input = event.target.value;
+    if (input.length <= 50) {
+        commentInput.value = input; // 입력 값을 업데이트
+        pieceStore.setPieceValue("comment", input); // 스토어에 저장
+    }
 }
 
 const characterCount = computed(() => commentInput.value.length);
-
 
 const score = ref(0);
 const hoverScore = ref(0);
@@ -95,29 +135,55 @@ function leave() {
 }
 </script>
 
-<style>
-.pieveimageview-label-and-counter {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
+<style scoped>
 .piececommentview-container {
-    font-family: "Regular";
-    font-size: 1.4rem;
-    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 9.25rem);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin: 0 1rem 0 1rem;
 }
 
+/* title */
+.piececommentview-main-title {
+    font-family: "Bold";
+    font-size: 1.6rem;
+    color: var(--black-color);
+    margin: 0 0 0.4rem 0;
+    user-select: none;
+}
+
+.piececommentview-main-content {
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--gray2-color);
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    user-select: none;
+}
+
+/* star */
 .piececommentview-starinfo {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
-.piececommentview-private-container {
-    display: flex;
-    margin-top: 0.625rem;
+.piececommentview-star-label {
+    flex-grow: 1;
 }
 
-.pieveimageview-star-rating {
+.piececommentview-required-label::after {
+    content: "*";
+    color: var(--red-color);
+    vertical-align: 0.2rem;
+}
+
+.piececommentview-star-rating {
     display: flex;
     justify-content: center;
     gap: 0.25rem; /* Adjust or remove the gap */
@@ -125,46 +191,66 @@ function leave() {
     flex-grow: 4;
 }
 
-.pieveimageview-star-label {
-    flex-grow: 1;
+label {
+    font-family: "Semi";
+    font-size: 1rem;
+    text-align: left;
 }
 
-.pieveimageview-star-icon {
+.piececommentview-star-icon {
     cursor: pointer;
     margin-right: -0.25rem; /* Slight overlap to prevent gap detection */
 }
 
-.pieveimageview-form-group {
-    margin-top: 20px;
+/* comment */
+.piececommentview-comment-group {
+    margin-bottom: 1rem;
 }
 
-.pieveimageview-textarea {
-    width: 100%;
-    height: 100px;
+.piececommentview-label-and-counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.piececommentview-counter {
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--gray2-color);
+}
+
+.piececommentview-textarea {
+    width: calc(100% - 2rem);
+    height: 5rem;
     border-radius: 5px;
     margin-top: 0.625rem;
+    padding: 1rem;
     resize: none;
     border-radius: 0.625rem;
     border: 1px solid var(--gray-color);
     outline-color: var(--main-color);
+    font-family: "Regular";
+    font-size: 1rem;
+    line-height: 1.4rem;
 }
 
-.pieveimageview-required-label::after {
-    content: '*';
-    color: var(--red-color);
-    vertical-align: 0.2rem;
+/* private */
+.piececommentview-private-container {
+    display: flex;
+    margin-top: 0.625rem;
 }
 
+.piececommentview-private-checkbox {
+    accent-color: var(--main-color);
+    margin-left: 1rem;
+}
+
+/* button */
 .piecemake-button-container {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 4rem;
-  text-align: center;
-}
-
-#is-public {
-    accent-color: var(--red-color);
-    margin-left: 0.625rem;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 4rem;
+    text-align: center;
 }
 </style>
