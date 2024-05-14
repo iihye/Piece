@@ -4,6 +4,7 @@ import com.ssafy.piece.global.annotation.AuthenticatedUser;
 import com.ssafy.piece.global.response.code.SuccessCode;
 import com.ssafy.piece.global.response.structure.SuccessResponse;
 import com.ssafy.piece.global.s3.service.FileService;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/fileupload")
 public class FileController {
 
     private final FileService fileService;
@@ -21,13 +23,16 @@ public class FileController {
      * 이미지 업로드
      *
      * @param userId userPk
-     * @param image  file name
-     * @return code, message, data: presigned url
+     * @param fileName  file name
+     * @return code, message, data: presigned URL, S3FilePath
      */
-    @GetMapping("/fileupload/{image}")
-    public ResponseEntity<Object> uploadImage(@AuthenticatedUser Long userId,
-        @PathVariable(name = "image") String image) {
-        String url = fileService.getPreSignedUrl(userId.toString(), image);
+    @GetMapping("/{fileName}")
+    public ResponseEntity<Object> uploadImage( @AuthenticatedUser Long userId,
+                                                @PathVariable(name = "fileName") String fileName) {
+        log.info("controller 들어옴");
+        ArrayList<String> url = fileService.getPreSignedUrl(userId.toString(), fileName);
+        log.info("presignedURL is {} and s3path is {}", url.get(0), url.get(1) );
         return SuccessResponse.createSuccess(SuccessCode.GET_PRESIGNEDURL_SUCCESS, url);
     }
+
 }

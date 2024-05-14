@@ -83,6 +83,7 @@ public enum SuccessCode implements ResponseCode {
      */
     GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다."),
     DOWNLOAD_IMAGE_SUCCESS(HttpStatus.OK, "이미지 다운로드에 성공했습니다."),
+    DELETE_IMAGE_SUCCESS(HttpStatus.OK, "이미지 삭제에 성공했습니다."),
 
     // 통계
     FIND_VIEW_STATISTICS_SUCCESS(HttpStatus.OK, "관람수 통계 조회에 성공했습니다."),
@@ -90,7 +91,6 @@ public enum SuccessCode implements ResponseCode {
 
     // 뒷면 이미지 생성
     CREATE_IMAGE_SUCCESS(HttpStatus.OK, "뒷면 이미지 생성에 성공했습니다.");
-
 
     private final HttpStatus httpStatus;
 
