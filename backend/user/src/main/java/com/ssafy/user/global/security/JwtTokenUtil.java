@@ -13,7 +13,7 @@ public class JwtTokenUtil {
 
 //    @Value("${jwt.secret}")
 //    private String secretKey;
-    public String secretKey = "ssafy1234"; // 환경 변수로 관리하는 것이 좋습니다.
+    public String secretKey = "VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa"; // 환경 변수로 관리하는 것이 좋습니다.
 
 //    public Long getUserIdFromToken(String token) {
 //        Claims claims = Jwts.parser()
