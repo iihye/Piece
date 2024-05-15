@@ -29,6 +29,15 @@ public enum SuccessCode implements ResponseCode {
     CHECK_NICKNAME_GOOD(HttpStatus.OK, "사용 가능한 닉네임입니다."),
     CHECK_NICKNAME_BAD(HttpStatus.OK, "이미 사용 중인 닉네임입니다."),
     TUTORIAL_SUCCESS(HttpStatus.OK, "튜토리얼을 다시 보지 않습니다."),
+
+    SAVE_IMAGE_SUCCESS(HttpStatus.OK, "이미지 경로 저장 성공했습니다."),
+
+    /**
+     * s3
+     */
+    GET_PRESIGNEDURL_SUCCESS(HttpStatus.OK, "presigned url을 받았습니다."),
+    DOWNLOAD_IMAGE_SUCCESS(HttpStatus.OK, "이미지 다운로드에 성공했습니다."),
+    DELETE_IMAGE_SUCCESS(HttpStatus.OK, "이미지 삭제에 성공했습니다."),
     ;
 
     private final HttpStatus httpStatus;

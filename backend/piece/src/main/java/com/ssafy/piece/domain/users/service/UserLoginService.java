@@ -20,20 +20,20 @@ public class UserLoginService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public Long login(UserLoginRequestDto loginRequest) {
+    public boolean login(UserLoginRequestDto loginRequest) {
         // 사용자 정보 조회
         Users user = userRepository.findByEmail(loginRequest.getEmail());
         if (user == null) {
-            // 사용자를 찾을 수 없으면 null 반환
-            return null;
+            // 사용자를 찾을 수 없으면 false 반환
+            return false;
         }
         // 비밀번호 검증
         if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            // 비밀번호가 일치하면 사용자의 ID 반환
-            return user.getUserId();
+            // 비밀번호가 일치하면 true 반환
+            return true;
         }
-        // 비밀번호가 일치하지 않으면 null 반환
-        return null;
+        // 비밀번호가 일치하지 않으면 false 반환
+        return false;
     }
 }
 

@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,13 +15,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 
 
 @Component
-@Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -41,10 +38,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
-            log.info("JWT 토큰: {}", jwtToken);
             try {
-                username = jwtTokenUtil.getUserIdFromToken(jwtToken);
-                log.info("사용자 ID: {}", username);
+                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
                 logger.error("JWT 토큰을 가져올 수 없습니다.", e);
             } catch (ExpiredJwtException e) {
@@ -56,9 +51,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             logger.warn("JWT 토큰은 Bearer 문자열로 시작해야 합니다");
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() != null) {
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            log.info("사용자 정보: {}", userDetails.getUsername());
 
             if (jwtTokenUtil.validateToken(jwtToken, username)) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
