@@ -98,11 +98,6 @@ const router = createRouter({
       component: PieceFrontView,
     },
     {
-      path: "/piece/back",
-      name: "pieceback",
-      component: PieceBackView,
-    },
-    {
       path: "/piece/background",
       name: "piecebackground",
       component: PieceBackgroundView,
