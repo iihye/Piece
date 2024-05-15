@@ -51,7 +51,7 @@ export const useFileUploadStore = defineStore ('fileupload', () => {
     // =========== USER ===============
     async function deleteProfileImage() {
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_REST_USER_API}/users/delete/profileimage`);
+            const response = await axios.delete(`${import.meta.env.VITE_REST_USER_API}/users/delete/profileImage`);
             return response.data;
         } catch (error) {
             console.error('이미지 삭제 실패:', error.response.data);
