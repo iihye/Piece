@@ -12,6 +12,7 @@ import com.ssafy.piece.domain.pieces.entity.Pieces;
 import com.ssafy.piece.domain.pieces.entity.Piecesimage;
 import com.ssafy.piece.domain.pieces.exception.PiecesNotFoundException;
 import com.ssafy.piece.domain.pieces.exception.PiecesRecentNotFoundException;
+import com.ssafy.piece.domain.pieces.repository.HeartRepository;
 import com.ssafy.piece.domain.pieces.repository.PiecesRepository;
 import com.ssafy.piece.domain.pieces.repository.PiecesimageRepository;
 import jakarta.persistence.Tuple;
@@ -33,6 +34,7 @@ public class PiecesService {
 
     private final PiecesRepository piecesRepository;
     private final PiecesimageRepository piecesimageRepository;
+    private final HeartRepository heartRepository;
 
     // 조각 등록
     public Pieces addPieces(Long userId, PiecesAddRequestDto piecesAddRequestDto) {
@@ -82,6 +84,8 @@ public class PiecesService {
     public void deletePiece(Long userId, Long pieceId) {
         // 조각 생성자인지 확인
 
+        piecesimageRepository.deleteByPieceId(pieceId);
+        heartRepository.deleteByPieceId(pieceId);
         piecesRepository.deleteById(pieceId);
     }
 
@@ -90,9 +94,7 @@ public class PiecesService {
         // 조각 생성자인지 확인
 
         Pieces pieces = findById(recordUpdateRequestDto.getPieceId());
-
         pieces.setRecord(recordUpdateRequestDto.getRecord());
-        // 사진 수정
     }
 
     // 기록 조회
@@ -101,12 +103,13 @@ public class PiecesService {
         Pieces pieces = findById(pieceId);
 
         // 사진 조회
+        List<String> imgList = piecesimageRepository.findByPieceId(pieceId);
 
         return RecordDetailResponseDto.builder()
             .recordId(pieces.getPieceId())
             .pieceId(pieces.getPieceId())
             .record(pieces.getRecord())
-            .imgList(null)
+            .imgList(imgList)
             .build();
     }
 
