@@ -49,6 +49,6 @@ public class Users extends BaseTime {
     private Long labelId;
 
     @Column(nullable = false, length = 255)
-    private String password;
+    private String  password;
 }
 

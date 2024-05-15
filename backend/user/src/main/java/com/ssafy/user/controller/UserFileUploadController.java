@@ -22,6 +22,14 @@ public class UserFileUploadController {
 
     private final UserFileUploadService userFileUploadService;
 
+
+    /**
+     * db 테이블에 imageURL 저장
+     *
+     * @param userId
+     * @param body
+     * @return
+     */
     @PutMapping("/save/profileimage")
     public ResponseEntity<Object> saveS3Path(@AuthenticatedUser Long userId, @RequestBody Map<String, String> body) {
         String s3path = body.get("s3path");
@@ -30,6 +38,13 @@ public class UserFileUploadController {
         return SuccessResponse.createSuccess(SuccessCode.SAVE_IMAGE_SUCCESS);
     }
 
+
+    /**
+     * db 테이블에 저장되어 있는 imageURL 삭제
+     *
+     * @param userId
+     * @return
+     */
     @DeleteMapping("/delete/profileimage")
     public ResponseEntity<Object> deleteProfileImage(@AuthenticatedUser Long userId) {
         userFileUploadService.deleteProfileImage(userId);

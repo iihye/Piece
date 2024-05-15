@@ -25,10 +25,11 @@ public class UserFileUploadService {
     private final UsersRepository usersRepository;
 
 
-    /** profileImage 저장
+    /**
+     * user table에 profileIamge 컬럼에 imageURL 저장
      *
-     * @param prefix  userId
-     * @param S3Path  이미지 저장된 s3 경로
+     * @param prefix  userID (PK)
+     * @param S3Path  이미지가 저장되어 있는 s3 주소
      */
     public void saveUserProfileImage(String prefix, String S3Path) {
         Long userId = Long.parseLong(prefix);
@@ -39,7 +40,10 @@ public class UserFileUploadService {
     }
 
 
-
+    /**
+     * user table에 profileIamge 컬럼에 imageURL 삭제
+     * @param userId
+     */
     @Transactional
     public void deleteProfileImage(Long userId) {
         Users user = usersRepository.findByUserId(userId)
