@@ -5,18 +5,25 @@
         class="chatroomlist-cardItems"
         v-for="chatRoom in chatRoomList"
         :key="chatRoom"
-        @click="goToChatConversation(chatRoom.chatRoomId)"
+        @click="goToChatConversation(chatRoom)"
       >
-        <div class="chatroomlist-chatRoomCard">
+        <div v-if="chatRoom.isPersonal===false" class="chatroomlist-chatRoomCard">
           <img
             class="chatroomlist-chatRoomThumbnail"
-            :src="
-              chatRoom.culture
-                ? chatRoom.culture.imageUrl
-                : 'https://cdn.britannica.com/25/172925-050-DC7E2298/black-cat-back.jpg'
-            "
+            :src="chatRoom.culture.imageUrl"
             alt="썸네일"
           />
+          <!-- userId로 user 정보 조회 필요 -->
+        </div>
+        <div v-else class="chatroomlist-chatRoomCard">
+          <div v-for="participant in chatRoom.participants" :key="participant.userId">
+            <img
+              class="chatroomlist-chatRoomThumbnail"
+              v-if="participant.userId !== 1"
+              :src="participant.profileImage"
+              alt="Participant's Profile Image"
+            />
+          </div>
           <!-- userId로 user 정보 조회 필요 -->
         </div>
         <div class="chatroomlist-chatRoomCardInfo">
@@ -69,7 +76,6 @@ async function fetchRooms(isPersonal) {
     const chatRooms = await chatRoomStore.getChatRoomList(isPersonal);
     console.log("store에서 채팅방 목록을 받았습니다.");
     chatRooms.forEach((m) => {
-      console.log(m.chatRoomId);
       chatRoomList.value.push(m);
     });
   } catch (error) {
@@ -89,9 +95,10 @@ watch(
   }
 );
 
-const goToChatConversation = (chatRoomId) => {
-  // 선택된 채팅방 id 변경
-  chatRoomStore.setChatRoomId(chatRoomId);
+const goToChatConversation = (chatRoom) => {
+  // 선택된 채팅방 정보 변경
+  chatRoomStore.setChatRoomId(chatRoom.chatRoomId);
+  chatRoomStore.setIsPersonal(chatRoom.isPersonal);
 
   router.push("/chat");
   // 채팅 메시지 페이지로 이동
