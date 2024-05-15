@@ -1,6 +1,6 @@
 <template>
     <div class="fileuploader-button">
-        <button @click="uploadImage">{{ roundButtonContent }} 사진 삭제하기</button>
+        <button @click="uploadImage">{{ roundButtonContent }}</button>
         <input
             type="file"
             ref="fileInput"
@@ -15,10 +15,14 @@
 import { defineProps } from "vue";
 import "@/components/css/color.css";
 
-defineProps({
+// defineProps({
+//     roundButtonContent: String,
+//     roundButtonFunction: Function,
+//     isRoundDisable: Boolean,
+// });
+
+const { roundButtonContent } = defineProps({
     roundButtonContent: String,
-    roundButtonFunction: Function,
-    isRoundDisable: Boolean,
 });
 </script>
 

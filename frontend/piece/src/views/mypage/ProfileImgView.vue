@@ -44,8 +44,10 @@
         />
 
         <delete-image-button
-            v-if="loginUserInfo.profileImage" @click="deleteImage">
-        </delete-image-button>
+            v-if="loginUserInfo.profileImage"
+            roundButtonContetn="사진 삭제하기"
+            @click="deleteImage"
+        />
 
         <!-- success modal -->
         <SuccessModal
