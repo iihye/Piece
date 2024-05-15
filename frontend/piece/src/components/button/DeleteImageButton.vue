@@ -15,12 +15,6 @@
 import { defineProps } from "vue";
 import "@/components/css/color.css";
 
-// defineProps({
-//     roundButtonContent: String,
-//     roundButtonFunction: Function,
-//     isRoundDisable: Boolean,
-// });
-
 const { roundButtonContent } = defineProps({
     roundButtonContent: String,
 });
