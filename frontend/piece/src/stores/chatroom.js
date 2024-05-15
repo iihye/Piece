@@ -43,7 +43,7 @@ export const useChatRoomStore = defineStore("chatroom", () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_CHAT_API}/chatrooms/create`,
+        `${import.meta.env.VITE_REST_CHAT_API}/chatrooms/create`,
         chatRoomsRequestDto
       );
 
@@ -66,7 +66,7 @@ export const useChatRoomStore = defineStore("chatroom", () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_CHAT_API}/participate`,
+        `${import.meta.env.VITE_REST_CHAT_API}/participate`,
         participantsRequestDto
       );
     } catch (error) {
@@ -84,7 +84,7 @@ export const useChatRoomStore = defineStore("chatroom", () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_CHAT_API}/isparticipate`,
+        `${import.meta.env.VITE_REST_CHAT_API}/isparticipate`,
         isParticipateRequestDto
       );
       this.chatRoomListValue = response.data.data; // 받은 데이터로 상태 업데이트
@@ -127,19 +127,28 @@ export const useChatRoomStore = defineStore("chatroom", () => {
 
     console.log("로그인한 사용자 id:" + localStorage.getItem("userId"));
 
+    chatRoom.value.participants.forEach((p) => {
+      if(p.userId!==1){
+        console.log("🫠얘 1이 아니에요!!"+p.userId);
+      }
+      console.log("참가자 userId 출력 테스트:"+p.userId);
+    });
+
     console.log(
       "상대방 정보:" +
         JSON.stringify(
           chatRoom.value.participants.find(
             (participant) =>
-              participant.userId !== localStorage.getItem("userId")
+              // participant.userId !== localStorage.getItem("userId")
+            participant.userId !==1
           )
         )
     );
 
     // 현재 채팅방의 참가자 중 상대방의 정보 받아오기
     partnerInfo.value = chatRoom.value.participants.find(
-      (participant) => participant.userId !== localStorage.getItem("userId")
+      // (participant) => participant.userId !== localStorage.getItem("userId")
+      (participant) => participant.userId != 1 // 임의값
     );
 
     console.log("참가자 출력 테스트");

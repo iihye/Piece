@@ -18,7 +18,7 @@ export const useWebSocketStore = defineStore("websocket", () => {
   // =========== ACTION ===============
   const stompConnect = () => {
     // WebSocket 연결 생성
-    state.socket = new SockJS(`${import.meta.env.VITE_CHAT_API}/ws`); // test로 돌리는중. 바꿔야함
+    state.socket = new SockJS(`${import.meta.env.VITE_REST_CHAT_API}/ws`); // test로 돌리는중. 바꿔야함
 
     // Stomp 클라이언트 생성
     state.stompClient = Stomp.over(state.socket);
