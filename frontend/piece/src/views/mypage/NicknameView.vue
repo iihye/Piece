@@ -48,8 +48,9 @@ const isModal = ref(false);
 const nickname = ref("");
 
 const checkNickname = (e) => {
-    if (e.target.value.length <= 3) {
+    if (e.target.value.length < 3 || e.target.value.length > 10) {
         store.setNicknameMessage("3자 이상 10자 이내의 한글, 영문만 가능해요");
+        store.setIsNickname(false);
     } else {
         store.checkNickname(e.target.value);
     }
