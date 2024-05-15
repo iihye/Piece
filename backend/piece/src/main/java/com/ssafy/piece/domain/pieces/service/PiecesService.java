@@ -2,15 +2,18 @@ package com.ssafy.piece.domain.pieces.service;
 
 import com.ssafy.piece.domain.cultures.entity.CultureType;
 import com.ssafy.piece.domain.pieces.dto.request.PiecesAddRequestDto;
+import com.ssafy.piece.domain.pieces.dto.request.RecordImageAddRequestDto;
 import com.ssafy.piece.domain.pieces.dto.request.RecordUpdateRequestDto;
 import com.ssafy.piece.domain.pieces.dto.response.PieceRecentResponseDto;
 import com.ssafy.piece.domain.pieces.dto.response.PiecesDetailResponseDto;
 import com.ssafy.piece.domain.pieces.dto.response.RecordDetailResponseDto;
 import com.ssafy.piece.domain.pieces.entity.GenreType;
 import com.ssafy.piece.domain.pieces.entity.Pieces;
+import com.ssafy.piece.domain.pieces.entity.Piecesimage;
 import com.ssafy.piece.domain.pieces.exception.PiecesNotFoundException;
 import com.ssafy.piece.domain.pieces.exception.PiecesRecentNotFoundException;
 import com.ssafy.piece.domain.pieces.repository.PiecesRepository;
+import com.ssafy.piece.domain.pieces.repository.PiecesimageRepository;
 import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
@@ -29,6 +32,7 @@ import org.springframework.stereotype.Service;
 public class PiecesService {
 
     private final PiecesRepository piecesRepository;
+    private final PiecesimageRepository piecesimageRepository;
 
     // 조각 등록
     public Pieces addPieces(Long userId, PiecesAddRequestDto piecesAddRequestDto) {
@@ -129,6 +133,23 @@ public class PiecesService {
         return piecesRepository.findById(pieceId)
             .orElseThrow(PiecesNotFoundException::new);
     }
+
+    // 기록 이미지 저장
+    public void savePieceRecordImage(Long userId, RecordImageAddRequestDto recordImageAddRequestDto) {
+        Pieces piece = findById(recordImageAddRequestDto.getPieceId());
+        Piecesimage piecesimage = Piecesimage.builder()
+                .piece(piece)
+                .imageUrl(recordImageAddRequestDto.getS3path())
+                .build();
+
+        piecesimageRepository.save(piecesimage);
+    }
+
+    // 기록 이미지 삭제
+    public void deletePieceRecordImage(Long userId, Long piecesimageId){
+        piecesimageRepository.deleteById(piecesimageId);
+    }
+
 
     // 칭호 관련
     // 장르 3개 이상
