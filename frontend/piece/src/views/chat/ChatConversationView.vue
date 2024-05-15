@@ -21,12 +21,10 @@
     </div>
     <!-- 1:1채팅 헤더 정보. 헤더에 들어갈 예정 -->
     <div v-else>
-      <h2>user2</h2>
+      <h2>{{partnerInfo.nickname}}</h2>
       <!-- 프론트에서 백으로 userId 기반 호출해야 함 -->
       <img
-        src=""
-        alt="상대방
-      프로필사진"
+        :src="partnerInfo.profileImage"
         style="width: 2rem; height: 2rem"
       />
     </div>
@@ -114,7 +112,7 @@
             >
               <!-- 프로필 이미지 -->
               <div class="chatconversationview-profileImage">
-                <img :src="item.imageUrl" />
+                <img :src="item.profileImage" />
               </div>
 
               <!-- 메시지 관련 부분 시작-->
@@ -311,9 +309,9 @@ const storeMessages = ref([]);
 const chatRoomInfo = ref({});
 const partnerInfo = ref({});
 
-chatMessages.value.push({
-  chatRoomId: 1, // 테스트 용도
-  senderId: 2, // 테스트 용도
+chatMessages.value.push({ // 테스트 용도
+  chatRoomId: 1,
+  senderId: 2,
   title: "얼박사 킬러",
   nickname: "user2",
   content: "ㅎㅇ",
@@ -355,13 +353,13 @@ const send = () => {
   if (stompClient) {
     console.log("전송");
     const msg = {
-      chatRoomId: 1, // 테스트 용도
+      chatRoomId: chatRoomInfo.value.chatRoomId,
       senderId: 1, // 테스트 용도
       content: content.value,
       createdAt: Date.now(),
     };
 
-    stompClient.send("/pub/chats/" + "1", JSON.stringify(msg), {});
+    stompClient.send("/pub/chats/" + chatRoomInfo.value.chatRoomId, JSON.stringify(msg), {});
 
     content.value = "";
     scrollToBottom();
@@ -406,10 +404,6 @@ const subscribe = (chatRoomId) => {
 onMounted(() => {
   fetchMessages();
 
-  console.log("mounted()" + chatRoomStore.getChatRoomId);
-
-  subscribe(chatRoomStore.getChatRoomId);
-
   // isPersonal 여부에 따라 가져오는 데이터 형식 다름
 
   if (chatRoomStore.getIsPersonal === false) {
@@ -417,19 +411,23 @@ onMounted(() => {
   } else {
     chatRoomStore.getPersonalChatRoomInfo(chatRoomStore.getChatRoomId);
 
-    partnerInfo.value = chatRoomStore.getPartnerInfo.value;
+    partnerInfo.value = chatRoomStore.getPartnerInfo;
 
-    console.log("상대방 정보:" + JSON.stringify(partnerInfo));
+    console.log("상대방 정보:" + JSON.stringify(partnerInfo.value));
   }
-
-  console.log("채팅방 정보:" + chatRoomStore.getChatRoom.chatRoomName);
 
   chatRoomInfo.value = chatRoomStore.getChatRoom;
 
+  console.log("mounted()" + chatRoomInfo.value.chatRoomId);
+
+  subscribe(chatRoomInfo.value.chatRoomId);
+
   console.log(
     "현재 페이지에서 보유한 방 정보:" +
-      JSON.stringify(chatRoomStore.getChatRoom)
+      JSON.stringify(chatRoomInfo.value)
   );
+
+  console.log("채팅방 정보:" + chatRoomStore.getChatRoom.chatRoomName);
 });
 </script>
 
