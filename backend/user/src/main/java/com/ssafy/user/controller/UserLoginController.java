@@ -32,7 +32,7 @@ public class UserLoginController {
         try {
             Long userId = userLoginService.login(loginRequest);
             if (userId != null) {
-                String token = jwtTokenUtil.generateToken(loginRequest.getEmail()); // JWT 생성
+                String token = jwtTokenUtil.generateToken(userId); // JWT 생성
                 log.info("Login successful for user: {}", loginRequest.getEmail());
                 // 로그인 성공 시 JWT 토큰과 사용자 ID 반환
                 Map<String, Object> response = new HashMap<>();
