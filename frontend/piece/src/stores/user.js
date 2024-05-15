@@ -169,9 +169,9 @@ export const useUserStore = defineStore(
                         s3path: s3path,
                     }
                 );
-                console.log("파일 경로 저장 성공!");
+                console.log("파일경로 저장 성공!");
             } catch (error) {
-                console.error("파일 경로 저장 실패", error.message);
+                console.error("파일경로 저장 실패", error.message);
             }
         }
 
