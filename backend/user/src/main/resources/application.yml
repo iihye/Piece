@@ -1,0 +1,19 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ssafypiece202@gmail.com
+    password: pieceofcake2!
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            protocols: TLSv1.2
+
+
+aes256:
+  secret: "여기에_32바이트_비밀키를_입력하세요"
+  iv: "여기에_16바이트_iv를_입력하세요"

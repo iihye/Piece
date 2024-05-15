@@ -23,7 +23,7 @@ public class UserSettingController {
     private final UserSettingService userSettingService;
 
     @PutMapping("/{userId}/nickname") //닉네임 변경
-//    @PreAuthorize("authentication.name == #userId.toString()") // 요청자의 ID가 경로 변수와 일치하는지 확인
+    @PreAuthorize("authentication.name == #userId.toString()") // 요청자의 ID가 경로 변수와 일치하는지 확인
     public ResponseEntity<?> changeNickname(@PathVariable("userId") Long userId,
         @RequestBody UserNicknameChangeRequestDto requestDto) {
         ResponseCode responseCode = userSettingService.changeNickname(userId, requestDto);
@@ -31,7 +31,7 @@ public class UserSettingController {
     }
 
     @PutMapping("/{userId}/password") //비밀번호 변경
-//    @PreAuthorize("authentication.name == #userId.toString()") // 요청자의 ID가 경로 변수와 일치하는지 확인
+    @PreAuthorize("authentication.name == #userId.toString()") // 요청자의 ID가 경로 변수와 일치하는지 확인
     public ResponseEntity<?> changePassword(@PathVariable("userId") Long userId,
         @RequestBody UserPasswordChangeRequestDto requestDto) {
         ResponseCode responseCode = userSettingService.changePassword(userId, requestDto);

@@ -6,6 +6,7 @@ import com.ssafy.user.dto.response.UserRegistrationResponseDto;
 import com.ssafy.user.entity.Users;
 import com.ssafy.user.exception.DuplicatedEmailException;
 import com.ssafy.user.exception.DuplicatedNicknameException;
+//import com.ssafy.user.global.email.EmailSender;
 import com.ssafy.user.repository.UsersRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +22,8 @@ public class    UserRegistrationService {
 
     private final UsersRepository usersRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+//    private final EmailSender emailSender;
+
 
 
 
@@ -69,4 +72,25 @@ public class    UserRegistrationService {
     public boolean checkNicknameAvailable(String nickname) {
         return !usersRepository.existsByNickname(nickname);
     }
+
+//    // 회원가입 요청을 처리하고 이메일 인증 코드를 발송
+//    public String initiateRegistration(UserRegistrationRequestDto registrationDto) {
+//        if (usersRepository.existsByEmail(registrationDto.getEmail())) {
+//            throw new RuntimeException("이미 사용중인 이메일입니다.");
+//        }
+//
+//        // 사용자 정보를 저장하는 로직은 인증 완료 후에 수행
+//        String verificationCode = emailSender.generateCode();
+//        emailSender.sendMail(registrationDto.getEmail(), "이메일 인증 번호",
+//            "인증 번호를 입력해 주세요 : " + verificationCode);
+//
+//        // 인증 코드는 암호화하여 저장하고 클라이언트에 반환하지 않음
+//        return verificationCode;  // 이 부분은 변경될 수 있음, 클라이언트에는 반환하지 않고 서버에서만 관리
+//    }
+//
+//    // 인증 코드 검증
+//    public boolean verifyEmail(String code) {
+//        // 여기에서 코드 검증 로직 구현
+//        return true; // 예시로 항상 true를 반환
+//    }
 }

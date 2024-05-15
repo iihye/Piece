@@ -40,7 +40,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeRequests(authorize -> authorize
                 .requestMatchers("/auth/login", "/users/register", "/users/check-email",
-                    "/users/check-nickname", "/users/find").permitAll() //인증이 필요없는 경로
+                    "/users/check-nickname", "/users/find/**" , "/users/email-validation").permitAll() //인증이 필요없는 경로
                 .requestMatchers("/users/**").authenticated() // 위 경로 이외는 인증 필요
 
                 .anyRequest().authenticated()
