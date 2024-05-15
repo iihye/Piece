@@ -29,9 +29,8 @@ public class FileController {
     @GetMapping("/{fileName}")
     public ResponseEntity<Object> uploadImage( @AuthenticatedUser Long userId,
                                                 @PathVariable(name = "fileName") String fileName) {
-        log.info("controller 들어옴");
         ArrayList<String> url = fileService.getPreSignedUrl(userId.toString(), fileName);
-        log.info("presignedURL is {} and s3path is {}", url.get(0), url.get(1) );
+        log.info("presignedURL is {}", url.get(0));
         return SuccessResponse.createSuccess(SuccessCode.GET_PRESIGNEDURL_SUCCESS, url);
     }
 
