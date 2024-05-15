@@ -48,7 +48,7 @@ export const useFileUploadStore = defineStore ('fileupload', () => {
 
 
 
-    // =========== USER ===============
+    // =========== DELETE USER ===============
     async function deleteProfileImage() {
         try {
             const response = await axios.delete(`${import.meta.env.VITE_REST_USER_API}/users/delete/profileImage`);
@@ -61,7 +61,7 @@ export const useFileUploadStore = defineStore ('fileupload', () => {
 
 
 
-    // =========== PIECE ===============
+    // =========== DELETE PIECE ===============
     async function deletePieceImage() {
         try {
             const response = await axios.delete(`${import.meta.env.VITE_REST_PIECE_API}/delete/profileImage`);
