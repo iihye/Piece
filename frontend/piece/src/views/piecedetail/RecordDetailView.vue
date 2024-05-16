@@ -1,109 +1,145 @@
 <template>
-    <div class="recorddetailview-preview-container">
-        <!-- image -->
-        <div class="recorddetailview-image-container">
-            <!-- prev button -->
-            <font-awesome-icon
-                class="recorddetailview-image-button"
-                :icon="['fas', 'angle-left']"
-                style="color: var(--gray2-color)"
-                @click="prev"
-            />
-            <!-- album -->
-            <div class="recorddetailview-image-album">
-                <div class="images">
-                    <img
-                        class="image"
-                        v-for="(imageUrl, index) in imageUrls"
-                        :key="index"
-                        :src="imageUrl"
-                        @click="handleImageClick(imageUrl, index)"
-                    />
-                </div>
+    <div class="recorddetailview-main-container">
+        <div class="recorddetailview-preview-container">
+            <!-- image -->
+            <div
+                class="recorddetailview-image-container"
+                v-if="imageUrls.length > 0"
+            >
+                <!-- prev button -->
+                <font-awesome-icon
+                    class="recorddetailview-image-button"
+                    :icon="['fas', 'angle-left']"
+                    style="color: var(--gray2-color)"
+                    @click="prev"
+                />
+                <!-- album -->
+                <div class="recorddetailview-image-album">
+                    <div class="images">
+                        <img
+                            class="image"
+                            v-for="(imageUrl, index) in imageUrls"
+                            :key="index"
+                            :src="imageUrl"
+                            @click="handleImageClick(imageUrl, index)"
+                        />
+                    </div>
 
-                <div v-if="imageUrls.length > 1" class="image-circle-wrapper">
                     <div
-                        class="image-circle"
-                        v-for="(imageUrl, index) in imageUrls"
-                        :key="index"
-                        :class="{ activeImg: index === curPos }"
-                    ></div>
+                        v-if="imageUrls.length > 1"
+                        class="image-circle-wrapper"
+                    >
+                        <div
+                            class="image-circle"
+                            v-for="(imageUrl, index) in imageUrls"
+                            :key="index"
+                            :class="{ activeImg: index === curPos }"
+                        ></div>
+                    </div>
                 </div>
+                <!-- next button -->
+                <font-awesome-icon
+                    class="recorddetailview-image-button"
+                    :icon="['fas', 'angle-right']"
+                    style="color: var(--gray2-color)"
+                    @click="next"
+                />
             </div>
-            <!-- next button -->
-            <font-awesome-icon
-                class="recorddetailview-image-button"
-                :icon="['fas', 'angle-right']"
-                style="color: var(--gray2-color)"
-                @click="next"
-            />
-        </div>
 
-        <!-- 사진 있을 때 (수정중)-->
-        <div
-            v-if="
-                pieceDetailRecord.imgList &&
-                pieceDetailRecord.imgList.length > 0
-            "
-        ></div>
+            <div
+                v-if="
+                    pieceDetailRecord.imgList &&
+                    pieceDetailRecord.imgList.length > 0
+                "
+            ></div>
 
-        <!-- 사진 없을 때 -->
-        <div v-else>
-            <div class="recorddetailview-img-message">
-                사진을 선택해주세요<br />최대 5장까지 추가 가능합니다
+            <!-- 사진 올리기 버튼 -->
+            <div
+                class="recorddetailview-file-container"
+                v-if="imageUrls.length <= 4"
+            >
+                <div class="recorddetailview-img-message">
+                    사진을 선택해주세요<br />최대 5장까지 추가 가능합니다
+                </div>
+                <!-- <div
+                class="recorddetailview-file-container"
+                v-if="
+                    pieceDetailRecord.imgList == null ||
+                    (pieceDetailRecord.imgList &&
+                        pieceDetailRecord.imgList.length <= 4)
+                "
+            > -->
+                <UploadButton
+                    roundButtonContent="사진 올리기"
+                    @SUCCESS="handleSuccessUpload"
+                    @uploadSuccess="handleUpload"
+                    @uploadError="handleError"
+                    @ERROR="handleErrorUpload"
+                    @click="handleUploadClick"
+                />
+                <!-- <FileUploader
+                    class="recorddetailview-file-uploader"
+                    @uploaded="handleUpload"
+                    @error="handleError"
+                    buttonText="사진 올리기"
+                /> -->
             </div>
         </div>
 
-        <!-- 사진 올리기 버튼 -->
-        <div
-            class="recorddetailview-file-container"
-            v-if="
-                pieceDetailRecord.imgList == null ||
-                (pieceDetailRecord.imgList &&
-                    pieceDetailRecord.imgList.length <= 4)
-            "
-        >
-            <FileUploader
-                class="recorddetailview-file-uploader"
-                @uploaded="handleUpload"
-                @error="handleError"
-                buttonText="사진 올리기"
-            />
+        <!-- content -->
+        <!-- <input :placeholder="pieceDetailRecord.record" /> -->
+        <div class="recorddetailview-content-container">
+            <textarea
+                class="recorddetailview-main-record"
+                :value="record"
+                @input="updateRecord($event.target.value)"
+                placeholder="여기에 입력해주세요"
+            ></textarea>
         </div>
+
+        <SquareButton
+            class="recorddetailview-main-button"
+            :squareButtonContent="'저장'"
+            :squareButtonFunction="handleSuccess"
+            :isSquareDisable="true"
+        ></SquareButton>
+
+        <!-- modal -->
+        <ImageDetailModal
+            v-if="isImageModal"
+            :imgUrl="imgUrl"
+            :imgIndex="imgIndex"
+            :handleClick="handleModalClick"
+            :handleDeleteClick="handleDeleteClick"
+        ></ImageDetailModal>
+
+        <SuccessModal
+            v-if="isModal"
+            :modalTitle="'기록이 저장되었어요!'"
+            :handleSuccessClick="handleRecordSuccess"
+        />
+
+        <!-- success upload modal -->
+        <SuccessModal
+            v-if="successModal"
+            :modalTitle="'이미지가 등록되었어요!'"
+            :handleSuccessClick="handleSuccessClick"
+        />
+
+        <!-- fail modal -->
+        <SuccessModal
+            v-if="failModal"
+            :modalTitle="'다시 시도해주세요!'"
+            :handleSuccessClick="handleFailClick"
+        />
+
+        <!-- success delete modal -->
+        <SuccessModal
+            v-if="successDeleteModal"
+            :modalTitle="'이미지가 삭제되었어요!'"
+            :handleSuccessClick="handleDeleteSuccessClick"
+        />
     </div>
-
-    <!-- content -->
-    <!-- <input :placeholder="pieceDetailRecord.record" /> -->
-    <div class="recorddetailview-content-container">
-        <textarea
-            class="recorddetailview-main-record"
-            :value="record"
-            @input="updateRecord($event.target.value)"
-            placeholder="여기에 입력해주세요"
-        ></textarea>
-    </div>
-
-    <SquareButton
-        class="recorddetailview-main-button"
-        :squareButtonContent="'저장'"
-        :squareButtonFunction="handleSuccess"
-        :isSquareDisable="true"
-    ></SquareButton>
-
-    <!-- modal -->
-    <ImageDetailModal
-        v-if="isImageModal"
-        :imgUrl="imgUrl"
-        :imgIndex="imgIndex"
-        :handleClick="handleModalClick"
-        :handleDeleteClick="handleDeleteClick"
-    ></ImageDetailModal>
-
-    <SuccessModal
-        v-if="isModal"
-        :modalTitle="'기록이 저장되었어요!'"
-        :handleSuccessClick="handleRecordSuccess"
-    />
 </template>
 
 <script setup>
@@ -111,7 +147,7 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
 import { usePiecelistStore } from "@/stores/piecelist";
-import FileUploader from "@/components/item/FileUploader.vue";
+import UploadButton from "@/components/button/UploadButton.vue";
 import SquareButton from "@/components/button/SquareButton.vue";
 import ImageDetailModal from "@/components/modal/ImageDetailModal.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
@@ -126,13 +162,15 @@ const isImageModal = ref(false);
 const isModal = ref(false);
 const imgUrl = ref("");
 const imgIndex = ref(0);
+const successModal = ref(false);
+const failModal = ref(false);
+const successDeleteModal = ref(false);
 
 const record = computed(() => store.getPieceDetailRecord.record);
 const recordValue = ref("");
 
 // dummy data
 const imageUrls = ref([
-    "https://i.ibb.co/grMvZS9/your-image.jpg",
     "https://i.ibb.co/grMvZS9/your-image.jpg",
     "https://i.ibb.co/grMvZS9/your-image.jpg",
     "https://i.ibb.co/grMvZS9/your-image.jpg",
@@ -194,6 +232,27 @@ function handleError(error) {
     failModal.value = true;
 }
 
+function handleSuccessUpload() {
+    consoles.log("success");
+    try {
+        console.log("사진 업로드");
+        // TODO: s3 path 받아오기
+        successModal.value = true;
+        // TODO: image 등록
+    } catch (error) {
+        console.log("사진 업로드 실패");
+        failModal.value = true;
+    }
+}
+
+function handleErrorUpload() {
+    console.log("error");
+}
+
+function handleUploadClick() {
+    console.log("upload click");
+}
+
 // record
 const updateRecord = (value) => {
     recordValue.value = value;
@@ -215,12 +274,31 @@ const handleModalClick = () => {
 };
 
 const handleDeleteClick = () => {
-    alert("삭제 버튼");
     isImageModal.value = false;
+    try {
+        console.log("사진 삭제 성공");
+        // TODO: s3 pathfh image 삭제
+        successDeleteModal.value = true;
+    } catch (error) {
+        console.log("사진 삭제 실패");
+        failModal.value = true;
+    }
 };
 
 const handleRecordSuccess = () => {
     router.go(-1);
+};
+
+const handleSuccessClick = () => {
+    successModal.value = false;
+};
+
+const handleFailClick = () => {
+    failModal.value = false;
+};
+
+const handleDeleteSuccessClick = () => {
+    successDeleteModal.value = false;
 };
 
 onMounted(async () => {
@@ -242,6 +320,11 @@ onMounted(async () => {
 </script>
 
 <style>
+.recorddetailview-main-container {
+    width: 100%;
+    height: calc(100vh - 7.25rem);
+}
+
 .recorddetailview-preview-container {
     display: flex;
     justify-content: center;
@@ -253,8 +336,9 @@ onMounted(async () => {
 }
 
 .recorddetailview-content-container {
-    min-height: calc(100vh - 7.25rem - 24rem - 4rem);
-    width: 100%;
+    height: calc(100vh - 7.25rem - 24rem - 6rem);
+    padding: 1rem;
+    width: calc(100% - 2rem);
 }
 
 /* image */
@@ -330,7 +414,8 @@ onMounted(async () => {
     justify-content: center;
     align-items: center;
     text-align: cetner;
-    margin-top: 1rem;
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
     user-select: none;
 }
 
@@ -345,14 +430,14 @@ onMounted(async () => {
 
 /* content */
 .recorddetailview-main-record {
-    min-height: calc(100vh - 7.25rem - 24rem);
+    width: 100%;
+    height: calc(100vh - 7.25rem - 24rem - 6rem);
     font-family: "Regular";
     font-size: 1rem;
     line-height: 1.4rem;
     border: 0px;
     outline: 0px;
     resize: none;
-    padding: 1rem 0 1rem 0;
     display: block;
 }
 
