@@ -56,8 +56,8 @@ export const useChatRoomStore = defineStore("chatroom", () => {
   }
 
   async function createPersonalChatRoom(chatRoomName, partnerId) {
-    console.log("채팅방을 생성합니다. 상대방의 id:"+partnerId);
-    
+    console.log("채팅방을 생성합니다. 상대방의 id:" + partnerId);
+
     const personalChatRoomsCreateRequestDto = {
       chatRoomName: chatRoomName,
       partnerId: partnerId,
@@ -79,7 +79,6 @@ export const useChatRoomStore = defineStore("chatroom", () => {
   }
 
   async function joinChatRoom(chatRoomId, userId) {
-    // authenticated user로 수정 필요
     console.log(chatRoomId + "번 방에 " + userId + "번 유저가 참가합니다.");
     const participantsRequestDto = {
       chatRoomId: chatRoomId,
@@ -135,8 +134,6 @@ export const useChatRoomStore = defineStore("chatroom", () => {
     );
 
     console.log("로그인한 사용자 id:" + localStorage.getItem("userId"));
-
-    // console.log("현재 채팅방:" + JSON.stringify(chatRoom.value));
   }
 
   function getPersonalChatRoomInfo(chatroomId) {
@@ -148,31 +145,12 @@ export const useChatRoomStore = defineStore("chatroom", () => {
       (room) => room.chatRoomId === chatroomId
     );
 
-    console.log("찾아낸 채팅방 데이터:"+chatRoom.value);
+    console.log("찾아낸 채팅방 데이터:" + chatRoom.value);
     console.log("로그인한 사용자 id:" + localStorage.getItem("userId"));
-
-    chatRoom.value.participants.forEach((p) => {
-      if(p.userId!==1){
-        console.log("🫠얘 1이 아니에요!!"+p.userId);
-      }
-      console.log("참가자 userId 출력 테스트:"+p.userId);
-    });
-
-    console.log(
-      "상대방 정보:" +
-        JSON.stringify(
-          chatRoom.value.participants.find(
-            (participant) =>
-              // participant.userId !== localStorage.getItem("userId")
-            participant.userId !==1
-          )
-        )
-    );
 
     // 현재 채팅방의 참가자 중 상대방의 정보 받아오기
     partnerInfo.value = chatRoom.value.participants.find(
-      // (participant) => participant.userId !== localStorage.getItem("userId")
-      (participant) => participant.userId != 1 // 임의값
+      (participant) => participant.userId != localStorage.getItem("userId")
     );
 
     console.log("참가자 출력 테스트");
@@ -180,7 +158,6 @@ export const useChatRoomStore = defineStore("chatroom", () => {
     chatRoom.value.participants.forEach((p) => {
       console.log(p);
     });
-    // console.log("현재 채팅방:" + JSON.stringify(chatRoom.value));
   }
 
   return {
