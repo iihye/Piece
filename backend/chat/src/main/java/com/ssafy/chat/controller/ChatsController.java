@@ -13,6 +13,7 @@ import com.ssafy.chat.global.response.code.SuccessCode;
 import com.ssafy.chat.global.response.structure.SuccessResponse;
 import com.ssafy.chat.service.MongoDBChatsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ChatsController {
@@ -39,7 +41,13 @@ public class ChatsController {
 
         UserResponseDto userInfo=userClient.getUser(messageRequestDto.getSenderId()).getData();
 
-        String userTitle=pieceClient.getLabel(userInfo.getLabelId()).getData().getTitle();
+        // 칭호 없을 경우도 처리
+        String userTitle="";
+
+        if(userInfo.getLabelId()!=null){
+            userTitle=pieceClient.getLabel(userInfo.getLabelId()).getData().getTitle();
+        }
+
 
         // mongoDB 저장용
         MongoDBChats mongoDBChat = MongoDBChats.builder()
@@ -64,6 +72,8 @@ public class ChatsController {
                 .build();
 
         template.convertAndSend("/sub/" + messageRequestDto.getChatRoomId(), messageResponseDto);
+
+        log.info("mongoDB에 저장하는 중입니까?"+mongoDBChat);
 
         mongoDBChatsService.saveMongoDBChat(mongoDBChat);
     }
