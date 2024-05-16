@@ -44,11 +44,9 @@ public class ChatsController {
         // 칭호 없을 경우도 처리
         String userTitle="";
 
-        if(userInfo.getLabelId()!=null){
+        if(userInfo.getLabelId()!=0){
             userTitle=pieceClient.getLabel(userInfo.getLabelId()).getData().getTitle();
         }
-
-
         // mongoDB 저장용
         MongoDBChats mongoDBChat = MongoDBChats.builder()
             .chatRoomId(messageRequestDto.getChatRoomId())
