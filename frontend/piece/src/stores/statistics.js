@@ -1,81 +1,48 @@
-// import { defineStore } from 'pinia';
-// import { localAxios } from '@/stores/localaxios';
+import { ref, computed } from "vue";
+import { defineStore } from "pinia";
+import axios from "axios";
 
-// const axiosInstance = localAxios(import.meta.env.VITE_REST_PIECE_API);
+export const useStatisticsStore = defineStore('statistics', () => {
+    const chartData = ref({
+        labels: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+        datasets: [{
+            backgroundColor: "#ffe3e1",
+            data: Array(12).fill(0)
+        }]
+    });
+    const noData = ref(false);
 
-// export const useStatisticsStore = defineStore('statistics', {
-//     state: () => ({
-//         statisticsData: null,
-//         noData: true,
-//     }),
-//     getters: {
-//         getStatisticsData: (state) => state.statisticsData,
-//         hasNoData: (state) => state.noData
-//     },
-//     actions: {
-//         async fetchStatistics(consumptionYear) {
-//             try {
-//                 const response = await axiosInstance.get(`/statistics/consumption/${consumptionYear}`);
-//                 console.log('get response is : ', response.data.data);
-//                 if (response.data.data === "FIND_CONSUMPTIONS_SUCCESS" && response.data.data.length > 0) {
-//                     this.statisticsData = response.data.data;
-//                     this.noData = false;
-//                 } else {
-//                     this.statisticsData = null;
-//                     this.noData = true;
-//                 }
-//             } catch (error) {
-//                 console.error('Error fetching statistics data:', error);
-//                 this.noData = true;
-//                 this.statisticsData = null;
-//             }
-//         }
-//     }
-// });
+    const updateData = async (consumptionYear) => {
+        try {
+            console.log('enter useStatisticStore');
+            const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/statistics/consumption/${consumptionYear}`);
+            const responseData = response.data;
+            console.log('responseData: ', responseData);
 
-// import { defineStore } from 'pinia';
-// import { localAxios } from '@/stores/localaxios';
+            if (responseData.code === "FIND_CONSUMPTIONS_SUCCESS" && responseData.data.length > 0) {
+                noData.value = false;
 
-// const axiosInstance = localAxios(import.meta.env.VITE_REST_PIECE_API);
+                const monthlyData = Array(12).fill(0);
 
-// console.log('statistics is');
-// export const useStatisticsStore = defineStore('statistics', {
-//     state: () => ({
-//         statisticsData: [],
-//         noData: true,
-//     }),
-//     getters: {
-//         getStatisticsData: (state) => state.statisticsData,
-//         hasNoData: (state) => state.noData
-//     },
-//     actions: {
-//         async fetchStatistics(consumptionYear) {
-//             try {
-//                 const response = await axiosInstance.get(`/statistics/consumption/${consumptionYear}`);
-//                 const responseData = response.data;
-//                 console.log('getStatisticsData is : ', state.statisticsData, ' hasNoData', state.noData);
-//                 console.log('responseData is ', response.data);
+                responseData.data.forEach(item => {
+                    monthlyData[item.consumptionMonth - 1] = item.consumptionMoney;
+                });
 
-//                 if (responseData.code === "FIND_CONSUMPTIONS_SUCCESS" && responseData.data.length > 0) {
-//                     noData.value = false;
-        
-//                     const monthlyData = Array(12).fill(0);
-        
-//                     responseData.data.forEach(item => {
-//                         monthlyData[item.consumptionMonth - 1] = item.consumptionMoney;
-//                     });
-        
-//                     chartData.value.datasets[0].data = monthlyData;
-//                 } else {
-//                     // 데이터가 없는 경우
-//                     noData.value = true;
-//                     chartData.value.datasets[0].data.fill(0); // 데이터가 없으면 0
-//                 }
-//             } catch (error) {
-//                 console.error('Error fetching consumption data:', error);
-//                 noData.value = true;
-//                 chartData.value.datasets[0].data.fill(0); // 에러 발생 시 0
-//             }
-//         }
-//     }
-// });
+                chartData.value.datasets[0].data = monthlyData;
+            } else {
+                noData.value = true;
+                chartData.value.datasets[0].data.fill(0);
+            }
+        } catch (error) {
+            console.error('Error fetching consumption data:', error);
+            noData.value = true;
+            chartData.value.datasets[0].data.fill(0);
+        }
+    };
+
+    return {
+        chartData,
+        noData,
+        updateData
+    };
+});
