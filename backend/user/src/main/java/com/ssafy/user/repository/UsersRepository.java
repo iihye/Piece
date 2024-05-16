@@ -3,6 +3,7 @@ package com.ssafy.user.repository;
 import com.ssafy.user.entity.Users;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -20,4 +21,10 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 
 //    @Query("select u from Users u where u.userId = :userId")
 //    Optional<Users> findByUserId(Long userId);
+
+
+    // profileImage 삭제
+    @Modifying
+    @Query("UPDATE Users u SET u.profileImage = NULL WHERE u.userId = :userId")
+    void clearProfileImage(Long userId);
 }
