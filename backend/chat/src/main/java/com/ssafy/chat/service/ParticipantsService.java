@@ -3,13 +3,7 @@ package com.ssafy.chat.service;
 import com.ssafy.chat.dto.request.ChatRoomsLeaveRequestDto;
 import com.ssafy.chat.dto.request.IsParticipateRequestDto;
 import com.ssafy.chat.dto.request.ParticipantsRequestDto;
-import com.ssafy.chat.dto.response.CultureFeignResponseDto;
-import com.ssafy.chat.dto.response.CultureResponseDto;
-import com.ssafy.chat.dto.response.IsParticipateResponseDto;
-import com.ssafy.chat.dto.response.LabelResponseDto;
-import com.ssafy.chat.dto.response.ParticipantsResponseDto;
-import com.ssafy.chat.dto.response.ProcessedUserResponseDto;
-import com.ssafy.chat.dto.response.UserResponseDto;
+import com.ssafy.chat.dto.response.*;
 import com.ssafy.chat.entity.ChatRooms;
 import com.ssafy.chat.entity.MongoDBChats;
 import com.ssafy.chat.entity.Participants;
@@ -80,6 +74,7 @@ public class ParticipantsService {
     }
 
     public List<IsParticipateResponseDto> selectChatRoom(IsParticipateRequestDto isParticipateRequestDto, Long userId) {
+        log.info("selectChatRoom 진입");
         List<ChatRooms> chatRoomList=participantsRepository.findIsPersonalChatRoomsByUserId(
             userId, isParticipateRequestDto.getIsPersonal());
 
@@ -94,7 +89,15 @@ public class ParticipantsService {
                 List<ProcessedUserResponseDto> processedUserResponseDtos = new ArrayList<>();
 
                 for(Long participantId:participantIds){
-                    UserResponseDto userResponseDto=userClient.getUser(participantId).getData();
+                    // userClient에서 user 받아오기
+                    UserFeignResponseDto userFeignResponseDto = userClient.getUser(participantId);
+                    UserResponseDto userResponseDto = UserResponseDto.builder()
+                            .userId(userFeignResponseDto.getUserId())
+                            .profileImage(userFeignResponseDto.getProfileImage())
+                            .nickname(userFeignResponseDto.getNickname())
+                            .labelId(userFeignResponseDto.getLabelId())
+                            .build();
+                    log.info("selectChatRoom userResponse: ", userResponseDto);
 
                     // 현재 착용한 칭호 보유 여부에 따라 분기
                     if(userResponseDto.getLabelId()!=null){
