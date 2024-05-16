@@ -46,7 +46,7 @@
         <!-- 삭제 버튼 -->
         <delete-image-button
             v-if="loginUserInfo.profileImage"
-            roundButtonContetn="사진 삭제하기"
+            roundButtonContent="삭제"
             @click="deleteImage"
         />
 
