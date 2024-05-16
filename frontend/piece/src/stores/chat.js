@@ -11,7 +11,7 @@ export const useChatStore = defineStore(
         // =========== ACTION ===============
         async function getChatMessageList(chatRoomId) {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_CHAT_API}/chats/list/${chatRoomId}`);
+                const response = await axios.get(`${import.meta.env.VITE_REST_CHAT_API}/chats/list/${chatRoomId}`);
 
                 console.log("getChatMessageList()");
 

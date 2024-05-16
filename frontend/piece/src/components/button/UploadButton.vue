@@ -29,7 +29,6 @@ const { roundButtonContent } = defineProps({
 
 const emit = defineEmits(["uploadSuccess", "uploadError"]);
 const fileInput = ref(null);
-const store = useFileUploadStore();
 const loadingModal = ref(false);
 
 function uploadImage() {
@@ -38,19 +37,21 @@ function uploadImage() {
 
 async function handleFileSelected(event) {
     loadingModal.value = true;
-
     const file = event.target.files[0];
+    const store = useFileUploadStore();
     try {
         const url = await store.getPreSignedUrl(file);
-        await store.putFileUpload(url, file);
-        emit("SUCCESS", url);
+        await store.putFileUpload(url.presignedURL, file);
+        emit("uploadSuccess", url.presignedURL, url.s3path);
     } catch (error) {
+        emit("uploadError", error);
         emit("ERROR", error);
     }
-
     loadingModal.value = false;
 }
+
 </script>
+
 
 <style>
 .fileuploader-button {
