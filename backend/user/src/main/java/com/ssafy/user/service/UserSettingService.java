@@ -44,4 +44,21 @@ public class UserSettingService {
         userRepository.save(user);
         return SuccessCode.PASSWORD_UPDATE_SUCCESS;
     }
+
+    public void setTutorial(Long userId) {
+        System.out.println(userId);
+        Users user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        user.setTutorial(false);
+        userRepository.save(user);
+    }
+
+    // 튜토리얼 여부 확인
+    public Boolean readTutorial(Long userId){
+        Users user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return user.isTutorial();
+    }
 }
