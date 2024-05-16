@@ -1,27 +1,54 @@
 <template>
-    <div class="piecefront-container">
-        <div class="piecefront-title"> 모양 레이아웃을 선택해주세요</div>
-        <div class="piecefront-choice">
-            <img v-for="layout in layouts" :key="layout" :src="layout" width="36" height="56" class="piecefront-layout"
-                @click="changeLayout(layout)" />
+    <div class="piecefrontview-main-container">
+        <!-- title -->
+        <div class="piecefrontview-main-title">
+            모양 레이아웃을 선택해주세요
         </div>
-        <canvas id="canvas" class="piecefront-canvas" width="896" height="1280"></canvas>
-        <RoundButton :roundButtonContent="'확인'" :roundButtonFunction="next" :isRoundDisable="isRoundDisable"
-            class="piecefront-button">
-        </RoundButton>
+        <div class="piecefrontview-main-content">
+            조각의 앞면을 완성해주세요
+        </div>
 
+        <!-- choice -->
+        <div class="piecefrontview-sub-container">
+            <div class="piecefrontview-choice">
+                <img
+                    class="piecefrontview-layout"
+                    v-for="layout in layouts"
+                    :key="layout"
+                    :src="layout"
+                    width="36"
+                    height="56"
+                    @click="changeLayout(layout)"
+                />
+            </div>
+            <canvas
+                id="canvas"
+                class="piecefrontview-canvas"
+                width="896"
+                height="1280"
+            ></canvas>
+        </div>
+
+        <!-- button -->
+        <div class="piecemake-button-container">
+            <RoundButton
+                :roundButtonContent="'확인'"
+                :roundButtonFunction="next"
+                :isRoundDisable="isRoundDisable"
+            >
+            </RoundButton>
+        </div>
     </div>
-
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect, computed } from 'vue';
-import testLayout from '@/assets/testlayout.svg';
-import RoundButton from '@/components/button/RoundButton.vue';
-import router from '@/router';
+import { onMounted, ref, watchEffect, computed } from "vue";
+import testLayout from "@/assets/testlayout.svg";
+import RoundButton from "@/components/button/RoundButton.vue";
+import router from "@/router";
 import { usePieceMakeStore } from "@/stores/piecemake";
-import { useCommonStore } from '@/stores/common';
-import { usePieceStore } from '@/stores/piece';
+import { useCommonStore } from "@/stores/common";
+import { usePieceStore } from "@/stores/piece";
 
 const commonStore = useCommonStore();
 const makeStore = usePieceMakeStore();
@@ -56,9 +83,9 @@ function drawCanvas() {
         var secondImage = new Image();
         secondImage.src = poster;
         secondImage.onload = function () {
-            context.globalCompositeOperation = 'source-in';
+            context.globalCompositeOperation = "source-in";
             context.drawImage(secondImage, 0, 0, 896, 1280);
-            context.globalCompositeOperation = 'source-over';
+            context.globalCompositeOperation = "source-over";
         };
     };
 }
@@ -67,8 +94,8 @@ onMounted(() => {
     makeStore.selectedLayout = layout1;
     drawCanvas(); // 컴포넌트가 마운트된 후 최초로 캔버스 그리기
     watchEffect(drawCanvas); // 선택된 레이아웃이 변경될 때마다 캔버스 다시 그리기
-    commonStore.headerTitle = '조각만들기';
-    commonStore.headerType = 'header2';
+    commonStore.headerTitle = "조각 만들기";
+    commonStore.headerType = "header2";
 });
 
 const isRoundDisable = ref(true);
@@ -77,35 +104,74 @@ const next = () => {
     const canvas = document.getElementById("canvas");
     const imagefile = canvas.toDataURL();
     pieceStore.imageFront = imagefile;
-    router.push('/piece/background');
-}
+    router.push("/piece/background");
+};
 </script>
 
-
 <style scoped>
-.piecefront-container {
+.piecefrontview-main-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 9.25rem);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin: 0 1rem 0 1rem;
+}
+
+/* title */
+.piecefrontview-main-title {
+    font-family: "Bold";
+    font-size: 1.6rem;
+    color: var(--black-color);
+    margin: 0 0 0.4rem 0;
+    user-select: none;
+}
+
+.piecefrontview-main-content {
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--gray2-color);
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    user-select: none;
+}
+
+/* choice */
+.piecefrontview-sub-container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.piecefront-title {
-    font-size: 1.6rem;
-    font-family: "Bold";
-}
-
-.piecefront-choice {
+.piecefrontview-choice {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 1px solid var(--main-color);
     width: 20rem;
+    padding: 0.2rem 0 0.2rem 0;
+    margin-bottom: 1rem;
 }
 
-.piecefront-layout {
+.piecefrontview-layout {
     background-color: transparent;
     border: 1px solid black;
+    margin: 0 0.2rem 0 0.2rem;
 }
 
-.piecefront-canvas {
-    width: 14rem;
-    height: 20rem;
+.piecefrontview-canvas {
+    width: 100%;
+    height: 468px;
+}
+
+/* button */
+.piecemake-button-container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 4rem;
+    text-align: center;
 }
 </style>
