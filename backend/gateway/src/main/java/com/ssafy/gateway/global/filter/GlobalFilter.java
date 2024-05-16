@@ -17,6 +17,8 @@ import org.springframework.web.reactive.socket.client.TomcatWebSocketClient;
 import org.springframework.web.reactive.socket.client.WebSocketClient;
 import org.springframework.web.reactive.socket.server.RequestUpgradeStrategy;
 import org.springframework.web.reactive.socket.server.upgrade.TomcatRequestUpgradeStrategy;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 /**
  * 모든 요청의 jwt 정보를 통해 사용자 정보를 서비스들에 전달시켜주는 필터. 사용자 정보는 헤더에 담아서 전달. 추후 jwt인가 로직이 구현 완료되면 세부사항 수정할것
