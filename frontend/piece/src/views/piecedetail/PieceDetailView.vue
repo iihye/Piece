@@ -91,7 +91,7 @@
             :handleFailClick="handleModalFail"
             :handleDeleteClick="handleDelete"
             :handleReportClick="handleReport"
-            :isMine="userId === piecelistDetail.userId ? true : false"
+            :isMine="userId == piecelistDetail.userId ? true : false"
         ></ShareSelectModal>
 
         <!-- 링크 성공 -->
