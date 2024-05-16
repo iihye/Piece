@@ -97,7 +97,57 @@ export default {
   });
   </script> -->
   
-<template>
+
+  <template>
+    <div>
+      <canvas ref="pieChartCanvas"></canvas>
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
+  import Chart from "chart.js/auto";
+  import { defineProps } from 'vue';
+  
+  const props = defineProps({
+      chartData: Object
+  });
+  
+  const pieChartCanvas = ref(null);
+  let pieChartInstance = null;
+  
+  watchEffect(() => {
+      const ctx = pieChartCanvas.value.getContext('2d');
+      if (pieChartInstance) {
+          pieChartInstance.destroy();
+      }
+      pieChartInstance = new Chart(ctx, {
+          type: 'pie',
+          data: props.chartData,
+          options: {
+              responsive: true,
+              plugins: {
+                  legend: { display: true }
+              }
+          }
+      });
+  });
+  
+  onMounted(() => {
+      if (!pieChartInstance) {
+          initOrUpdateChart();
+      }
+  });
+  
+  onUnmounted(() => {
+      if (pieChartInstance) {
+          pieChartInstance.destroy();
+      }
+  });
+  </script>
+
+
+<!-- <template>
     <div>
         <canvas ref="canvas" :style="{ width: '100%', maxWidth: '600px' }"></canvas>
     </div>
@@ -109,39 +159,64 @@ import Chart from "chart.js/auto";
 import { defineProps } from 'vue';
 
 const props = defineProps({
-    data: Object
+    pieChartCanvas: Object
 });
 
-const canvas = ref(null);
+const pieChartCanvas = ref(null);
 let chartInstance = null;
 
-watchEffect(() => {
+const initOrUpdateChart = () => {
+    const ctx = pieChartCanvas.value.getContext('2d');
     if (chartInstance) {
-        chartInstance.data = props.data;
+        chartInstance.data = props.chartData; 
         chartInstance.update();
+    } else {
+        const ctx = canvas.value.getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: props.chartData,
+            options: {
+                scales: {
+                    y: { beginAtZero: true, display: true },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { display: false },
+                    title: { display: false }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: { left: 0, right: 0, top: 0, bottom: 0 }
+                },
+                elements: {
+                    bar: { borderRadius: 10 }
+                }
+            }
+        });
     }
-});
+};
 
 onMounted(() => {
-    const ctx = canvas.value.getContext('2d');
-    chartInstance = new Chart(ctx, {
-        type: 'pie',
-        data: props.data,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            }
-        }
-    });
+    initOrUpdateChart();
 });
+
+watch(() => props.chartData, initOrUpdateChart, { deep: true });
+
+
+// watchEffect(() => {
+//     if (chartInstance) {
+//         chartInstance.data = props.data;
+//         chartInstance.update();
+//     }
+// });
 
 onUnmounted(() => {
     if (chartInstance) {
         chartInstance.destroy();
     }
 });
-</script>
+</script> -->
 
 <style>
 .chart-labels {

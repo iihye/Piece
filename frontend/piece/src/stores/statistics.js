@@ -34,7 +34,7 @@ export const useStatisticsStore = defineStore('statistics', () => {
                 chartData.value.datasets[0].data.fill(0);
             }
         } catch (error) {
-            console.error('Error fetching consumption data:', error);
+            console.error('지출 데이터 받아오기 에러', error);
             noData.value = true;
             chartData.value.datasets[0].data.fill(0);
         }

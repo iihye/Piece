@@ -83,7 +83,31 @@ export default {
   </script>
    -->
 
-<template>
+   <template>
+    <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
+    <year-selector class="piecestatisticsview-year-selector" @year-changed="updateChartData" />
+    <pie-chart :chartData="chartData" />
+    <no-item v-if="noData" content="완성된 조각이 없어요"/>
+  </template>
+  
+  <script setup>
+  import { computed } from 'vue';
+  import { usePieceStatisticsStore } from '@/stores/piecestatistics';
+  import YearSelector from "@/components/chart/YearSelector.vue";
+  import PieChart from "@/components/chart/PieChart.vue";
+  import NoItem from "@/components/item/NoItem.vue";
+  
+  const { chartData, noData, updateData } = usePieceStatisticsStore();
+  
+  const updateChartData = (year) => {
+      updateData(year);
+  };
+  
+  const displayChartData = computed(() => chartData);
+  </script>
+  
+
+<!-- <template>
     <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
     <year-selector class="piecestatisticsview-year-selector" @year-changed="fetchStatistics" />
     <pie-chart :data="chartData" />
@@ -91,42 +115,25 @@ export default {
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import { usePieceStatisticsStore } from '@/stores/piecestatistics.js';
 import YearSelector from "@/components/chart/YearSelector.vue";
 import PieChart from "@/components/chart/PieChart.vue";
-import NoItem from "@/components/item/NoItem.vue";
 
-const { fetchStatistics, statisticsData, noData } = usePieceStatisticsStore();
+const pieceStatisticsStore = usePieceStatisticsStore();
+const { chartData, noData, updateData } = pieceStatisticsStore;
 
-const chartData = computed(() => {
-    console.log("noData.value is ", noData);
-    // if (noData.value) {
-    if(noData) {
-        return {
-            labels: ["영화", "뮤지컬", "콘서트", "기타", "연극"],
-            datasets: [{
-                backgroundColor: ["#b094ff", "#efae6d", "#ff9494", "#c4c4c4", "#76aacd"],
-                data: [0, 0, 0, 0, 0]
-            }]
-        };
+const showPieChartData = async (year) => {
+    try {
+        // console.log('selected year : ', year);
+        await updateData(year);
+    } catch (error) {
+        console.error("통계 내역 불러오기 실패", error);
     }
+};
+
     
-    return {
-        labels: ["영화", "뮤지컬", "콘서트", "기타", "연극"],
-        datasets: [{
-            backgroundColor: ["#b094ff", "#efae6d", "#ff9494", "#c4c4c4", "#76aacd"],
-            data: [
-                statisticsData.movieNumber || 0,
-                statisticsData.musicalNumber || 0,
-                statisticsData.concertNumber || 0,
-                statisticsData.etcNumber || 0,
-                statisticsData.theaterNumber || 0
-            ]
-        }]
-    };
-});
-</script>
+    
+</script> -->
 
 
   
@@ -252,4 +259,3 @@ console.log('statisticsData: ', statisticsData);
     user-select: none;
 }
 </style>
-@/stores/pieceStatistics@/stores/piecestatistics.js
