@@ -4,7 +4,7 @@
             <!-- image -->
             <div
                 class="recorddetailview-image-container"
-                v-if="imageUrls.length > 0"
+                v-show="imageUrls.length > 0"
             >
                 <!-- prev button -->
                 <font-awesome-icon
@@ -71,11 +71,8 @@
             > -->
                 <UploadButton
                     roundButtonContent="사진 올리기"
-                    @SUCCESS="handleSuccessUpload"
                     @uploadSuccess="handleUpload"
                     @uploadError="handleError"
-                    @ERROR="handleErrorUpload"
-                    @click="handleUploadClick"
                 />
                 <!-- <FileUploader
                     class="recorddetailview-file-uploader"
@@ -156,33 +153,29 @@ const commonStore = useCommonStore();
 const store = usePiecelistStore();
 
 const router = useRouter();
-
 const pieceDetailRecord = computed(() => store.getPieceDetailRecord);
-const isImageModal = ref(false);
-const isModal = ref(false);
+
+// images
 const imgUrl = ref("");
 const imgIndex = ref(0);
+const selectImgIndex = ref(0);
+const imageUrls = computed(() => store.getImgList);
+const imageIdList = computed(() => store.getImgIdList);
+
+// record
+const record = computed(() => store.getPieceDetailRecord.record);
+const recordValue = ref("");
+
+// modal
+const isImageModal = ref(false);
+const isModal = ref(false);
 const successModal = ref(false);
 const failModal = ref(false);
 const successDeleteModal = ref(false);
-const s3ImagePath = ref("");
-
-const record = computed(() => store.getPieceDetailRecord.record);
-const recordValue = ref("");
-const imageUrls = computed(() => store.getImgList);
-
-// dummy data
-// const imageUrls = ref([
-//     "https://i.ibb.co/grMvZS9/your-image.jpg",
-//     "https://i.ibb.co/grMvZS9/your-image.jpg",
-//     "https://i.ibb.co/grMvZS9/your-image.jpg",
-// ]);
 
 // slider
 const curPos = ref(0);
 const position = ref(0);
-const startX = ref(0);
-const endX = ref(0);
 let IMAGE_WIDTH = ref(240);
 let images = null;
 
@@ -204,52 +197,24 @@ const next = () => {
 
 const handleImageClick = (imageUrl, index) => {
     imgUrl.value = imageUrl;
-    imgIndex.value = index;
+    selectImgIndex.value = imageIdList.value[index];
     isImageModal.value = true;
 };
 
-const touchStart = (event) => {
-    startX.value = event.touches[0].pageX;
-};
-
-const touchEnd = (event) => {
-    endX.value = event.changedTouches[0].pageX;
-    if (startX.value > endX.value) next();
-    else prev();
-};
-
 // upload
-function handleUpload(url) {
-    console.log("HandleUpload", url);
-    console.log("pieceId", store.getPieceDetailViewId);
-    s3ImagePath.value = url;
+async function handleUpload(url, s3path) {
+    store.addRecordImgUrl(store.getPieceDetailViewId, s3path);
     successModal.value = true;
-    store.addRecordImgUrl(store.getPieceDetailViewId, s3ImagePath.value);
+
+    imgUrl.value = "";
+    selectImgIndex.value = 0;
+    position.value = 0;
+    images.style.transform = `translateX(0px)`;
+    curPos.value = 0;
 }
 
 function handleError(error) {
-    console.error("업로드 실패", error);
     failModal.value = true;
-}
-
-const handleSuccessUpload = async (s3path) => {
-    console.log(s3path);
-    try {
-        console.log("사진 업로드");
-        await fileUploadStore.putUserS3FilePath(s3path);
-        successModal.value = true;
-    } catch (error) {
-        console.log("사진 업로드 실패");
-        failModal.value = true;
-    }
-};
-
-function handleErrorUpload() {
-    console.log("error");
-}
-
-function handleUploadClick() {
-    console.log("upload click");
 }
 
 // record
@@ -268,26 +233,33 @@ const handleSuccess = () => {
 };
 
 // modal
+// image detail
 const handleModalClick = () => {
     isImageModal.value = false;
 };
 
-const handleDeleteClick = () => {
+async function handleDeleteClick() {
     isImageModal.value = false;
-    try {
-        console.log("사진 삭제 성공");
-        // TODO: s3 pathfh image 삭제
-        successDeleteModal.value = true;
-    } catch (error) {
-        console.log("사진 삭제 실패");
-        failModal.value = true;
-    }
-};
+    await store.deleteRecordImgUrl(
+        store.getPieceDetailViewId,
+        selectImgIndex.value
+    );
 
+    successDeleteModal.value = true;
+
+    imgUrl.value = "";
+    selectImgIndex.value = 0;
+    position.value = 0;
+    images.style.transform = `translateX(0px)`;
+    curPos.value = 0;
+}
+
+// record
 const handleRecordSuccess = () => {
     router.go(-1);
 };
 
+// upload
 const handleSuccessClick = () => {
     successModal.value = false;
 };
@@ -296,6 +268,7 @@ const handleFailClick = () => {
     failModal.value = false;
 };
 
+// image detail
 const handleDeleteSuccessClick = () => {
     successDeleteModal.value = false;
 };
@@ -312,8 +285,6 @@ onMounted(async () => {
     // slider
     if (imageUrls.value.length > 0) {
         images = document.querySelector(".images");
-        images.addEventListener("touchstart", touchStart);
-        images.addEventListener("touchend", touchEnd);
     }
 });
 </script>

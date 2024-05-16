@@ -29,6 +29,7 @@ export const usePiecelistStore = defineStore(
         const pieceDetaiLViewId = ref(0);
         const record = ref("");
         const imgList = ref([]);
+        const imgIdList = ref([]);
         const recordImgUrl = ref("");
 
         const today = ref(new Date());
@@ -126,6 +127,10 @@ export const usePiecelistStore = defineStore(
 
         const getImgList = computed(() => {
             return imgList.value;
+        });
+
+        const getImgIdList = computed(() => {
+            return imgIdList.value;
         });
 
         const setRecordImgUrl = function (url) {
@@ -452,6 +457,7 @@ export const usePiecelistStore = defineStore(
                     pieceDetailRecord.value = res.data.data;
                     record.value = pieceDetailRecord.value.record;
                     imgList.value = pieceDetailRecord.value.imgList;
+                    imgIdList.value = pieceDetailRecord.value.imgIdList;
                 })
                 .catch((err) => {});
         };
@@ -479,7 +485,6 @@ export const usePiecelistStore = defineStore(
         };
 
         const addRecordImgUrl = function (pieceId, url) {
-            console.log(url);
             axios({
                 url: `${
                     import.meta.env.VITE_REST_PIECE_API
@@ -491,14 +496,12 @@ export const usePiecelistStore = defineStore(
                 },
             })
                 .then((res) => {
-                    console.log(res);
+                    findPieceDetailRecord(pieceId);
                 })
-                .catch((err) => {
-                    console.log(err);
-                });
+                .catch((err) => {});
         };
 
-        const deleteRecordImgUrl = function (pieceimageid) {
+        const deleteRecordImgUrl = function (pieceId, pieceimageid) {
             axios({
                 url: `${
                     import.meta.env.VITE_REST_PIECE_API
@@ -506,7 +509,7 @@ export const usePiecelistStore = defineStore(
                 method: "DELETE",
             })
                 .then((res) => {
-                    console.log(res.data);
+                    findPieceDetailRecord(pieceId);
                 })
                 .catch((err) => {});
         };
@@ -531,6 +534,7 @@ export const usePiecelistStore = defineStore(
             isMine,
             pieceDetaiLViewId,
             imgList,
+            imgIdList,
             recordImgUrl,
             today,
             year,
@@ -559,6 +563,7 @@ export const usePiecelistStore = defineStore(
             getPieceDetailViewId,
             setPieceDetailViewId,
             getImgList,
+            getImgIdList,
             setRecordImgUrl,
             getToday,
             getYear,
