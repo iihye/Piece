@@ -206,6 +206,7 @@ async function handleUpload(url, s3path) {
     store.addRecordImgUrl(store.getPieceDetailViewId, s3path);
     successModal.value = true;
 
+    images = document.querySelector(".images");
     imgUrl.value = "";
     selectImgIndex.value = 0;
     position.value = 0;
