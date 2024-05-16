@@ -18,10 +18,10 @@ import java.util.Properties;
 public class EmailSender {
     private String type = "text/html; charset=utf-8";
 
-    @Value("${email.address}")
+    @Value("${spring.mail.username}")
     private String emailAddress;
 
-    @Value("${email.password}")
+    @Value("${spring.mail.password}")
     private String password;
 
     public void sendMail(String email, String title, String content) {
@@ -39,7 +39,7 @@ public class EmailSender {
         Session session = Session.getInstance(properties, auth);
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(emailAddress, "Stella"));
+            message.setFrom(new InternetAddress(emailAddress, "Piece"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject(title);
             message.setContent(content, type);
