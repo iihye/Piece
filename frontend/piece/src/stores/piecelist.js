@@ -28,6 +28,7 @@ export const usePiecelistStore = defineStore(
         const isMine = ref(false);
         const pieceDetaiLViewId = ref(0);
         const record = ref("");
+        const imgList = ref([]);
 
         const today = ref(new Date());
         const year = ref(today.value.getFullYear());
@@ -121,6 +122,10 @@ export const usePiecelistStore = defineStore(
         const setPieceDetailViewId = function (id) {
             pieceDetaiLViewId.value = id;
         };
+
+        const getImgList = computed(() => {
+            return imgList.value;
+        });
 
         const getToday = computed(() => {
             return today.value;
@@ -389,6 +394,7 @@ export const usePiecelistStore = defineStore(
                         piecelistDetail.value.userId
                     ) {
                         isMine.value = true;
+                        findPieceDetailRecord(pieceId);
                     } else {
                         isMine.value = false;
                     }
@@ -440,14 +446,7 @@ export const usePiecelistStore = defineStore(
                 .then((res) => {
                     pieceDetailRecord.value = res.data.data;
                     record.value = pieceDetailRecord.value.record;
-                    // pieceDetailRecord.value.imgList = [
-                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-                    // ];
-
-                    // console.log(pieceDetailRecord.value);
-                    // console.log(pieceDetailRecord.value.imgList.length);
+                    imgList.value = pieceDetailRecord.value.imgList;
                 })
                 .catch((err) => {});
         };
@@ -493,6 +492,7 @@ export const usePiecelistStore = defineStore(
             pieceUserLabel,
             isMine,
             pieceDetaiLViewId,
+            imgList,
             today,
             year,
             month,
@@ -519,6 +519,7 @@ export const usePiecelistStore = defineStore(
             getIsMine,
             getPieceDetailViewId,
             setPieceDetailViewId,
+            getImgList,
             getToday,
             getYear,
             getMonth,

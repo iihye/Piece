@@ -168,30 +168,26 @@ const successDeleteModal = ref(false);
 
 const record = computed(() => store.getPieceDetailRecord.record);
 const recordValue = ref("");
+const imageUrls = computed(() => store.getImgList);
 
 // dummy data
-const imageUrls = ref([
-    "https://i.ibb.co/grMvZS9/your-image.jpg",
-    "https://i.ibb.co/grMvZS9/your-image.jpg",
-    "https://i.ibb.co/grMvZS9/your-image.jpg",
-]);
+// const imageUrls = ref([
+//     "https://i.ibb.co/grMvZS9/your-image.jpg",
+//     "https://i.ibb.co/grMvZS9/your-image.jpg",
+//     "https://i.ibb.co/grMvZS9/your-image.jpg",
+// ]);
 
 // slider
 const curPos = ref(0);
 const position = ref(0);
 const startX = ref(0);
 const endX = ref(0);
-let IMAGE_WIDTH = 0;
+let IMAGE_WIDTH = ref(240);
 let images = null;
-
-const getImageWidth = computed(() => {
-    const imgWidth = document.querySelector(".images").offsetWidth;
-    return imgWidth;
-});
 
 const prev = () => {
     if (curPos.value > 0) {
-        position.value += IMAGE_WIDTH;
+        position.value += IMAGE_WIDTH.value;
         images.style.transform = `translateX(${position.value}px)`;
         curPos.value--;
     }
@@ -199,7 +195,7 @@ const prev = () => {
 
 const next = () => {
     if (curPos.value < imageUrls.value.length - 1) {
-        position.value -= IMAGE_WIDTH;
+        position.value -= IMAGE_WIDTH.value;
         images.style.transform = `translateX(${position.value}px)`;
         curPos.value++;
     }
@@ -309,13 +305,13 @@ onMounted(async () => {
     if (pieceId == null || pieceId == 0) {
         router.go(-1);
     }
-    await store.findPieceDetailRecord(pieceId);
 
     // slider
-    IMAGE_WIDTH = getImageWidth.value;
-    images = document.querySelector(".images");
-    images.addEventListener("touchstart", touchStart);
-    images.addEventListener("touchend", touchEnd);
+    if (imageUrls.value.length > 0) {
+        images = document.querySelector(".images");
+        images.addEventListener("touchstart", touchStart);
+        images.addEventListener("touchend", touchEnd);
+    }
 });
 </script>
 
