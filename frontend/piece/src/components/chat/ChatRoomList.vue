@@ -7,7 +7,10 @@
         :key="chatRoom"
         @click="goToChatConversation(chatRoom)"
       >
-        <div v-if="chatRoom.isPersonal===false" class="chatroomlist-chatRoomCard">
+        <div
+          v-if="chatRoom.isPersonal === false"
+          class="chatroomlist-chatRoomCard"
+        >
           <img
             class="chatroomlist-chatRoomThumbnail"
             :src="chatRoom.culture.imageUrl"
@@ -16,10 +19,13 @@
           <!-- userId로 user 정보 조회 필요 -->
         </div>
         <div v-else class="chatroomlist-chatRoomCard">
-          <div v-for="participant in chatRoom.participants" :key="participant.userId">
+          <div
+            v-for="participant in chatRoom.participants"
+            :key="participant.userId"
+          >
             <img
               class="chatroomlist-chatRoomThumbnail"
-              v-if="participant.userId !== 1"
+              v-if="participant.userId != loginUserId"
               :src="participant.profileImage"
               alt="Participant's Profile Image"
             />
@@ -57,6 +63,7 @@ import { useChatRoomStore } from "@/stores/chatroom";
 
 const router = useRouter();
 const chatRoomStore = useChatRoomStore();
+const loginUserId = ref();
 
 const chatRoomList = ref([
   // {
@@ -69,6 +76,11 @@ const chatRoomList = ref([
   //     "isOpened": true,
   // }
 ]); // chatroomList를 reactive하게 만들기 위해 ref 사용
+
+async function fetchLoginUserId() {
+  loginUserId.value = await localStorage.getItem("userId");
+  console.log("로그인되어 있는 userId:", loginUserId.value);
+}
 
 // 채팅방 목록 받기
 async function fetchRooms(isPersonal) {
@@ -91,6 +103,10 @@ watch(
     // 채팅방 정보 갱신
     chatRoomList.value = [];
 
+    console.log(
+      "받아올 채팅방 목록 변경. 현재 login user id:" + loginUserId.value
+    );
+
     fetchRooms(newValue);
   }
 );
@@ -105,8 +121,10 @@ const goToChatConversation = (chatRoom) => {
 };
 
 // 페이지가 마운트될 때 chatroomList를 가져오도록 설정
-onMounted(() => {
-  fetchRooms(0); // default: 오픈 채팅방
+onMounted(async () => {
+  await fetchLoginUserId();
+
+  await fetchRooms(0); // default: 오픈 채팅방
 });
 </script>
 

@@ -16,7 +16,7 @@ const webSocketStore = useWebSocketStore();
 // modal test와 관련 없는 코드
 onMounted(() => {
   if (webSocketStore.getStompClient()) {
-    // webSocketStore.unsubscribe();
+    webSocketStore.unsubscribe();
   } else {
     webSocketStore.stompConnect();
   }

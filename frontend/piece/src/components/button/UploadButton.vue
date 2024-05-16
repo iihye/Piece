@@ -45,7 +45,6 @@ async function handleFileSelected(event) {
         emit("uploadSuccess", url.presignedURL, url.s3path);
     } catch (error) {
         emit("uploadError", error);
-        emit("ERROR", error);
     }
     loadingModal.value = false;
 }
