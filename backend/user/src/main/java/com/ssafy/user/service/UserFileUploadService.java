@@ -20,6 +20,9 @@ public class UserFileUploadService {
     @Value("${amazon.aws.bucket}")
     private String bucket;
 
+    @Value("${amazon.aws.prefixAddress}")
+    private String prefixAddress;
+
     private final AmazonS3 amazonS3;
 
     private final UsersRepository usersRepository;
@@ -48,7 +51,8 @@ public class UserFileUploadService {
     public void deleteProfileImage(Long userId) {
         Users user = usersRepository.findByUserId(userId)
             .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-        String fileKey = user.getProfileImage().replace("https://s3.ap-southeast-2.amazonaws.com/piecemaker.kr/", "");
+        String replaceStr = "https://" + prefixAddress;
+        String fileKey = user.getProfileImage().replace(replaceStr, "");
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileKey));  // S3 파일 삭제
         usersRepository.clearProfileImage(userId);  // DB profileImage 삭제
     }
