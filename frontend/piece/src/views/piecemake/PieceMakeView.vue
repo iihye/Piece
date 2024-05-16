@@ -180,6 +180,7 @@ onMounted(async () => {
     justify-content: center;
     align-items: center;
     text-decoration: none;
+    user-select: none;
 }
 
 /* image */
@@ -193,10 +194,6 @@ onMounted(async () => {
 /* 사진 있을 때 */
 .piecemakeview-image-button {
     margin: 1rem;
-}
-
-.piecemakeview-image-button:hover {
-    cursor: pointer;
 }
 
 /* album */
@@ -218,6 +215,11 @@ onMounted(async () => {
 .image {
     width: 18rem;
     height: 25rem;
+    user-select: none;
+}
+
+.image:hover {
+    cursor: default;
 }
 
 .image-circle-wrapper {
