@@ -165,6 +165,7 @@ const imgIndex = ref(0);
 const successModal = ref(false);
 const failModal = ref(false);
 const successDeleteModal = ref(false);
+const s3ImagePath = ref("");
 
 const record = computed(() => store.getPieceDetailRecord.record);
 const recordValue = ref("");
@@ -219,8 +220,11 @@ const touchEnd = (event) => {
 
 // upload
 function handleUpload(url) {
-    profileImage.value = url;
+    console.log("HandleUpload", url);
+    console.log("pieceId", store.getPieceDetailViewId);
+    s3ImagePath.value = url;
     successModal.value = true;
+    store.addRecordImgUrl(store.getPieceDetailViewId, s3ImagePath.value);
 }
 
 function handleError(error) {
@@ -228,18 +232,17 @@ function handleError(error) {
     failModal.value = true;
 }
 
-function handleSuccessUpload() {
-    consoles.log("success");
+const handleSuccessUpload = async (s3path) => {
+    console.log(s3path);
     try {
         console.log("사진 업로드");
-        // TODO: s3 path 받아오기
+        await fileUploadStore.putUserS3FilePath(s3path);
         successModal.value = true;
-        // TODO: image 등록
     } catch (error) {
         console.log("사진 업로드 실패");
         failModal.value = true;
     }
-}
+};
 
 function handleErrorUpload() {
     console.log("error");

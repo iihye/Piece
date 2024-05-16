@@ -29,6 +29,7 @@ export const usePiecelistStore = defineStore(
         const pieceDetaiLViewId = ref(0);
         const record = ref("");
         const imgList = ref([]);
+        const recordImgUrl = ref("");
 
         const today = ref(new Date());
         const year = ref(today.value.getFullYear());
@@ -126,6 +127,10 @@ export const usePiecelistStore = defineStore(
         const getImgList = computed(() => {
             return imgList.value;
         });
+
+        const setRecordImgUrl = function (url) {
+            recordImgUrl.value = url;
+        };
 
         const getToday = computed(() => {
             return today.value;
@@ -473,6 +478,39 @@ export const usePiecelistStore = defineStore(
                 .catch((err) => {});
         };
 
+        const addRecordImgUrl = function (pieceId, url) {
+            console.log(url);
+            axios({
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/pieces/record/image`,
+                method: "POST",
+                data: {
+                    pieceId: pieceId,
+                    s3path: url,
+                },
+            })
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        };
+
+        const deleteRecordImgUrl = function (pieceimageid) {
+            axios({
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/pieces/record/image/${pieceimageid}`,
+                method: "DELETE",
+            })
+                .then((res) => {
+                    console.log(res.data);
+                })
+                .catch((err) => {});
+        };
+
         return {
             // state
             selectedOption,
@@ -493,6 +531,7 @@ export const usePiecelistStore = defineStore(
             isMine,
             pieceDetaiLViewId,
             imgList,
+            recordImgUrl,
             today,
             year,
             month,
@@ -520,6 +559,7 @@ export const usePiecelistStore = defineStore(
             getPieceDetailViewId,
             setPieceDetailViewId,
             getImgList,
+            setRecordImgUrl,
             getToday,
             getYear,
             getMonth,
@@ -544,6 +584,8 @@ export const usePiecelistStore = defineStore(
             findPieceDetailRecord,
             deletePieceDetail,
             reviseRecordDetail,
+            addRecordImgUrl,
+            deleteRecordImgUrl,
         };
     },
     { persist: true }
