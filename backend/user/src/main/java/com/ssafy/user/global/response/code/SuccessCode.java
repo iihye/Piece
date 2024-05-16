@@ -32,6 +32,8 @@ public enum SuccessCode implements ResponseCode {
 
     SAVE_IMAGE_SUCCESS(HttpStatus.OK, "이미지 경로 저장 성공했습니다."),
 
+    READ_TUTORIAL_SUCCESS(HttpStatus.OK,"튜토리얼 보기 여부를 확인했습니다."),
+
     /**
      * s3
      */

@@ -53,4 +53,12 @@ public class UserSettingService {
         user.setTutorial(false);
         userRepository.save(user);
     }
+
+    // 튜토리얼 여부 확인
+    public Boolean readTutorial(Long userId){
+        Users user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return user.isTutorial();
+    }
 }
