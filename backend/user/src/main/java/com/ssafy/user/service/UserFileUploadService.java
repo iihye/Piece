@@ -20,6 +20,9 @@ public class UserFileUploadService {
     @Value("${amazon.aws.bucket}")
     private String bucket;
 
+    @Value("${amazon.aws.prefixAddress}")
+    private String prefixAddress;
+
     private final AmazonS3 amazonS3;
 
     private final UsersRepository usersRepository;
@@ -31,27 +34,28 @@ public class UserFileUploadService {
      * @param prefix  userID (PK)
      * @param S3Path  이미지가 저장되어 있는 s3 주소
      */
-//    public void saveUserProfileImage(String prefix, String S3Path) {
-//        Long userId = Long.parseLong(prefix);
-//        Users user = usersRepository.findByUserId(userId)
-//            .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-//        user.setProfileImage(S3Path);
-//        usersRepository.save(user);
-//    }
+    public void saveUserProfileImage(String prefix, String S3Path) {
+        Long userId = Long.parseLong(prefix);
+        Users user = usersRepository.findByUserId(userId)
+            .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        user.setProfileImage(S3Path);
+        usersRepository.save(user);
+    }
 
 
     /**
      * user table에 profileIamge 컬럼에 imageURL 삭제
      * @param userId
      */
-//    @Transactional
-//    public void deleteProfileImage(Long userId) {
-//        Users user = usersRepository.findByUserId(userId)
-//            .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-//        String fileKey = user.getProfileImage().replace("https://s3.ap-southeast-2.amazonaws.com/piecemaker.kr/", "");
-//        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileKey));  // S3 파일 삭제
-//        usersRepository.clearProfileImage(userId);  // DB profileImage 삭제
-//    }
+    @Transactional
+    public void deleteProfileImage(Long userId) {
+        Users user = usersRepository.findByUserId(userId)
+            .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        String replaceStr = "https://" + prefixAddress;
+        String fileKey = user.getProfileImage().replace(replaceStr, "");
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileKey));  // S3 파일 삭제
+        usersRepository.clearProfileImage(userId);  // DB profileImage 삭제
+    }
 
 
 }

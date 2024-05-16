@@ -30,13 +30,13 @@ public class UserFileUploadController {
      * @param body
      * @return
      */
-//    @PutMapping("/save/profileimage")
-//    public ResponseEntity<Object> saveS3Path(@AuthenticatedUser Long userId, @RequestBody Map<String, String> body) {
-//        String s3path = body.get("s3path");
-//        log.info("s3path: {}", s3path);
-//        userFileUploadService.saveUserProfileImage(userId.toString(), s3path);
-//        return SuccessResponse.createSuccess(SuccessCode.SAVE_IMAGE_SUCCESS);
-//    }
+    @PutMapping("/save/profileImage")
+    public ResponseEntity<Object> saveS3Path(@AuthenticatedUser Long userId, @RequestBody Map<String, String> body) {
+        String s3path = body.get("s3path");
+        log.info("s3path: {}", s3path);
+        userFileUploadService.saveUserProfileImage(userId.toString(), s3path);
+        return SuccessResponse.createSuccess(SuccessCode.SAVE_IMAGE_SUCCESS);
+    }
 
 
     /**
@@ -45,10 +45,10 @@ public class UserFileUploadController {
      * @param userId
      * @return
      */
-//    @DeleteMapping("/delete/profileimage")
-//    public ResponseEntity<Object> deleteProfileImage(@AuthenticatedUser Long userId) {
-//        userFileUploadService.deleteProfileImage(userId);
-//        return SuccessResponse.createSuccess(SuccessCode.DELETE_IMAGE_SUCCESS);
-//    }
+    @DeleteMapping("/delete/profileImage")
+    public ResponseEntity<Object> deleteProfileImage(@AuthenticatedUser Long userId) {
+        userFileUploadService.deleteProfileImage(userId);
+        return SuccessResponse.createSuccess(SuccessCode.DELETE_IMAGE_SUCCESS);
+    }
 
 }
