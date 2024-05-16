@@ -24,6 +24,9 @@ public class FileService {
     @Value("${amazon.aws.bucket}")
     private String bucket;
 
+    @Value("${amazon.aws.prefixAddress}")
+    private String prefixAddress;
+
     private final AmazonS3 amazonS3;
 
     /**
@@ -91,10 +94,7 @@ public class FileService {
      */
     private String createPath(String bucketFileName, String fileName) {
         String fileId = createFileId();
-        String AWSFilePath = String.format("%s/%s%s", bucketFileName, fileId, fileName);
-        log.info("AWSS3S3Path is {}", AWSFilePath);
-
-        return AWSFilePath;
+        return String.format("%s/%s%s", bucketFileName, fileId, fileName);
     }
 
 
@@ -115,7 +115,7 @@ public class FileService {
      * @return  파일의 전체 경로
      */
     public String S3FilePath(String fileName) {
-        String S3Path = "https://s3.ap-southeast-2.amazonaws.com/piecemaker.kr/" + fileName;
+        String S3Path = "https://" + prefixAddress + fileName;
         log.info("S3Path is {}", S3Path);
         return S3Path;
     }

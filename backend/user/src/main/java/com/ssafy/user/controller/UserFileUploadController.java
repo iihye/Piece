@@ -30,7 +30,7 @@ public class UserFileUploadController {
      * @param body
      * @return
      */
-    @PutMapping("/save/profileimage")
+    @PutMapping("/save/profileImage")
     public ResponseEntity<Object> saveS3Path(@AuthenticatedUser Long userId, @RequestBody Map<String, String> body) {
         String s3path = body.get("s3path");
         log.info("s3path: {}", s3path);
@@ -45,7 +45,7 @@ public class UserFileUploadController {
      * @param userId
      * @return
      */
-    @DeleteMapping("/delete/profileimage")
+    @DeleteMapping("/delete/profileImage")
     public ResponseEntity<Object> deleteProfileImage(@AuthenticatedUser Long userId) {
         userFileUploadService.deleteProfileImage(userId);
         return SuccessResponse.createSuccess(SuccessCode.DELETE_IMAGE_SUCCESS);
