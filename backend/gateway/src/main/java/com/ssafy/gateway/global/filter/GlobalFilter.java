@@ -13,6 +13,10 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import org.springframework.web.reactive.socket.client.TomcatWebSocketClient;
+import org.springframework.web.reactive.socket.client.WebSocketClient;
+import org.springframework.web.reactive.socket.server.RequestUpgradeStrategy;
+import org.springframework.web.reactive.socket.server.upgrade.TomcatRequestUpgradeStrategy;
 
 /**
  * 모든 요청의 jwt 정보를 통해 사용자 정보를 서비스들에 전달시켜주는 필터. 사용자 정보는 헤더에 담아서 전달. 추후 jwt인가 로직이 구현 완료되면 세부사항 수정할것
@@ -108,6 +112,17 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
 //        };
 //    }
 
+    @Bean
+    @Primary
+    WebSocketClient tomcatWebSocketClient() {
+        return new TomcatWebSocketClient();
+    }
+    @Bean
+    @Primary
+    public RequestUpgradeStrategy requestUpgradeStrategy() {
+        return new TomcatRequestUpgradeStrategy();
+    }
+    
     @Getter
     @Setter
     public static class Config {
