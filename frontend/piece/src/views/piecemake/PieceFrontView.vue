@@ -76,7 +76,7 @@ const isRoundDisable = ref(true);
 const next = () => {
     const canvas = document.getElementById("canvas");
     const imagefile = canvas.toDataURL();
-    pieceStore.imageFront = imagefile;
+    pieceStore.setBase64FrontImage(imagefile);
     router.push('/piece/background');
 }
 </script>
