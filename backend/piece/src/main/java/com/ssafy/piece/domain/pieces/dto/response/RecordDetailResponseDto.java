@@ -16,4 +16,5 @@ public class RecordDetailResponseDto {
     private Long pieceId;
     private String record;
     private List<String> imgList;
+    private List<Long> imgIdList;
 }

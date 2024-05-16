@@ -103,13 +103,20 @@ public class PiecesService {
         Pieces pieces = findById(pieceId);
 
         // 사진 조회
-        List<String> imgList = piecesimageRepository.findByPieceId(pieceId);
+        List<Piecesimage> piecesimages = piecesimageRepository.findByPieceId(pieceId);
+        List<String> imgList = piecesimages.stream()
+            .map(Piecesimage::getImageUrl)
+            .toList();
+        List<Long> imgIdList = piecesimages.stream()
+            .map(Piecesimage::getPiecesImageId)
+            .toList();
 
         return RecordDetailResponseDto.builder()
             .recordId(pieces.getPieceId())
             .pieceId(pieces.getPieceId())
             .record(pieces.getRecord())
             .imgList(imgList)
+            .imgIdList(imgIdList)
             .build();
     }
 
@@ -138,18 +145,19 @@ public class PiecesService {
     }
 
     // 기록 이미지 저장
-    public void savePieceRecordImage(Long userId, RecordImageAddRequestDto recordImageAddRequestDto) {
+    public void savePieceRecordImage(Long userId,
+        RecordImageAddRequestDto recordImageAddRequestDto) {
         Pieces piece = findById(recordImageAddRequestDto.getPieceId());
         Piecesimage piecesimage = Piecesimage.builder()
-                .piece(piece)
-                .imageUrl(recordImageAddRequestDto.getS3path())
-                .build();
+            .piece(piece)
+            .imageUrl(recordImageAddRequestDto.getS3path())
+            .build();
 
         piecesimageRepository.save(piecesimage);
     }
 
     // 기록 이미지 삭제
-    public void deletePieceRecordImage(Long userId, Long piecesimageId){
+    public void deletePieceRecordImage(Long userId, Long piecesimageId) {
         piecesimageRepository.deleteById(piecesimageId);
     }
 
