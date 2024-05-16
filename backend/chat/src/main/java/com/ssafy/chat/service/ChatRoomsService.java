@@ -24,7 +24,7 @@ public class ChatRoomsService {
 
         log.info("이미 생성되어 있는 1:1?:"+AlreadyCreatedPersonalChatRoomId);
 
-        if(AlreadyCreatedPersonalChatRoomId>0){
+        if(AlreadyCreatedPersonalChatRoomId!=null){
             throw new AlreadyCreatedPersonalChatRoomException(AlreadyCreatedPersonalChatRoomId);
         }
 
