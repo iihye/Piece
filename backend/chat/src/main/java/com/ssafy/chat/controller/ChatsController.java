@@ -39,7 +39,14 @@ public class ChatsController {
         ) {
         // senderId는 vue.js에서 처리
 
-        UserResponseDto userInfo=userClient.getUser(messageRequestDto.getSenderId()).getData();
+//        UserResponseDto userInfo=userClient.getUser(messageRequestDto.getSenderId()).getData();
+        UserFeignResponseDto userFeignResponseDto = userClient.getUser(messageRequestDto.getSenderId());
+        UserResponseDto userInfo = UserResponseDto.builder()
+                .userId(userFeignResponseDto.getUserId())
+                .profileImage(userFeignResponseDto.getProfileImage())
+                .nickname(userFeignResponseDto.getNickname())
+                .labelId(userFeignResponseDto.getLabelId())
+                .build();
 
         // 칭호 없을 경우도 처리
         String userTitle="";
