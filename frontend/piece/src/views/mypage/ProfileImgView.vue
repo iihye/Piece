@@ -7,43 +7,40 @@
             나를 표현하는 프로필 이미지를 등록해주세요
         </div>
 
-        <div class="profileimgview-sub-container">
-            <div
-                v-if="!loginUserInfo.profileImage"
-                class="profileimgview-icon-container"
-            >
-                <div class="profileimgview-icon-background"></div>
-                <font-awesome-icon
-                    class="profileimgview-icon-icon"
-                    :icon="['fas', 'user']"
-                    style="color: var(--gray2-color); width: 4rem; height: 4rem"
-                />
-            </div>
-
-            <div
-                v-if="loginUserInfo.profileImage"
-                class="profileimgview-img-container"
-            >
+        <!-- image -->
+        <div class="profileimgview-preview-container">
+            <div class="profileimgview-preview-image-container">
                 <img
-                    v-if="loginUserInfo.profileImage"
-                    class="profileimgview-img-img"
+                    v-if="
+                        loginUserInfo.profileImage === null ||
+                        loginUserInfo.profileImage === ''
+                    "
+                    class="profileimgview-preview-img"
+                    src="@/assets/defaultprofile.png"
+                />
+                <img
+                    v-else
+                    class="profileimgview-preview-img"
                     :src="loginUserInfo.profileImage"
-                    alt="프로필 이미지"
                 />
             </div>
         </div>
 
         <!-- 업로드 버튼 -->
-        <UploadButton
-            roundButtonContent="사진 올리기"
-            @uploadSuccess="handleUpload"
-            @uploadError="handleError"
-        />
+        <div class="profileimgview-upload-container">
+            <UploadButton
+                class="profileimgview-upload-button"
+                roundButtonContent="사진 올리기"
+                @uploadSuccess="handleUpload"
+                @uploadError="handleError"
+            />
+        </div>
 
         <!-- 삭제 버튼 -->
         <delete-image-button
+            class="profileimgview-delete-button"
             v-if="loginUserInfo.profileImage"
-            roundButtonContent="삭제"
+            roundButtonContent="사진 삭제하기"
             @click="deleteImage"
         />
 
@@ -80,7 +77,6 @@ const failModal = ref(false);
 
 const fileUploadStore = useFileUploadStore();
 const userStore = useUserStore();
-const profileImage = ref("");
 
 // upload image
 async function handleUpload(url, s3path) {
@@ -90,7 +86,7 @@ async function handleUpload(url, s3path) {
 }
 
 function handleError(error) {
-    console.error("업로드 실패:", error);
+    // console.error("업로드 실패:", error);
     failModal.value = true;
 }
 
@@ -102,7 +98,7 @@ const deleteImage = async () => {
         await commonStore.findLoginUserInfo(); // 사용자 정보 다시 로드
         successModal.value = true;
     } catch (error) {
-        console.error("이미지 삭제 과정에서 오류 발생:", error);
+        // console.error("이미지 삭제 과정에서 오류 발생:", error);
         failModal.value = true;
     }
 };
@@ -197,40 +193,36 @@ onMounted(async () => {
     margin-top: 1rem;
 }
 
-/* icon */
-.profileimgview-icon-container {
-    position: relative;
-    width: 10rem;
-    height: 10rem;
+/* preview */
+.profileimgview-preview-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 0.4rem;
+    width: 100%;
+    height: 10rem;
+    margin-bottom: 2rem;
+    user-select: none;
 }
 
-.profileimgview-icon-background {
-    position: absolute;
-    top: 0;
-    left: 0;
+.profileimgview-preview-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 10rem;
     height: 10rem;
+}
+
+.profileimgview-preview-img {
+    width: 10rem;
+    height: 10rem;
+    border: 1px solid var(--gray-color);
     border-radius: 50%;
-    background-color: var(--gray-color);
+    object-fit: cover;
+    background-color: var(--white-color);
 }
 
-.profileimgview-icon-container
-    > .profileimgview-icon-background
-    + .profileimgview-icon-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.profileimgview-sub-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+/* button */
+.profileimgview-upload-container {
+    margin-bottom: 0.6rem;
 }
 </style>
