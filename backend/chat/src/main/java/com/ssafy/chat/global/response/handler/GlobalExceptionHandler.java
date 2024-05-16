@@ -1,5 +1,6 @@
 package com.ssafy.chat.global.response.handler;
 
+import com.ssafy.chat.exception.AlreadyCreatedPersonalChatRoomException;
 import com.ssafy.chat.global.response.code.ErrorCode;
 import com.ssafy.chat.global.response.code.ResponseCode;
 import com.ssafy.chat.global.response.exception.BusinessException;
@@ -9,6 +10,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -93,6 +95,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         final ResponseCode responseCode = ErrorCode.INTERNAL_SERVER_ERROR;
 
         return handleExceptionInternal(responseCode);
+    }
+
+    @ExceptionHandler(AlreadyCreatedPersonalChatRoomException.class)
+    public ResponseEntity<String> handleAlreadyCreatedPersonalChatRoomException(AlreadyCreatedPersonalChatRoomException ex) {
+        // 예외 메시지와 함께 chatRoomId를 포함한 JSON 응답을 반환
+        String errorMessage = "Personal chat room already exists.";
+        Long chatRoomId = ex.getAlreadyCreatedChatRoomId(); // chatRoomId 값
+        String jsonResponse = "{\"error\": \"" + errorMessage + "\", \"chatRoomId\": " + chatRoomId + "}";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonResponse);
     }
 
     private ResponseEntity<Object> handleExceptionInternal(final ResponseCode responseCode) {
