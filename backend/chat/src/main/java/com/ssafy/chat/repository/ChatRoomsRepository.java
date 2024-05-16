@@ -23,12 +23,12 @@ public interface ChatRoomsRepository extends JpaRepository<ChatRooms, Long> {
     @Query("SELECT c.isPersonal FROM ChatRooms c WHERE c.chatRoomId = :chatRoomId")
     Boolean findIsPersonalByChatRoomId(Long chatRoomId);
 
-    @Query("SELECT COUNT(cr) > 0 FROM ChatRooms cr WHERE cr.isPersonal = true " +
+    @Query("SELECT cr.chatRoomId FROM ChatRooms cr WHERE cr.isPersonal = true " +
         "AND cr.chatRoomId IN " +
         "(SELECT p1.participantsId.chatroomId FROM Participants p1 WHERE p1.participantsId.userId = :userId) " +
         "AND cr.chatRoomId IN " +
         "(SELECT p2.participantsId.chatroomId FROM Participants p2 WHERE p2.participantsId.userId = :partnerId)")
-    Boolean existsPersonalChatRoomByParticipants(@Param("userId") Long userId, @Param("partnerId") Long partnerId);
+    Long existsPersonalChatRoomByParticipants(@Param("userId") Long userId, @Param("partnerId") Long partnerId);
 
     Boolean existsByCultureId(Long cultureId);
 }
