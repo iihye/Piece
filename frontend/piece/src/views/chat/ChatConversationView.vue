@@ -6,7 +6,7 @@
     :userImageUrl="userProfileModalProps.userImageUrl"
     :userLabel="userProfileModalProps.userLabel"
     :userName="userProfileModalProps.userName"
-    :handleChatClick="handleChat"
+    @handleChatClick="handleChat(userProfileModalProps.userId)"
     :handleReportClick="handleReport"
     :handleClose="handleClose"
   ></UserProfileModal>
@@ -21,10 +21,16 @@
     </div>
     <!-- 1:1채팅 헤더 정보. 헤더에 들어갈 예정 -->
     <div v-else>
-      <h2>{{partnerInfo.nickname}}</h2>
+      <h2>{{ partnerInfo.nickname }}</h2>
       <!-- 프론트에서 백으로 userId 기반 호출해야 함 -->
       <img
+        v-if="partnerInfo.profileImage != null"
         :src="partnerInfo.profileImage"
+        style="width: 2rem; height: 2rem"
+      />
+      <img
+        v-else
+        :src="defaultProfileImage"
         style="width: 2rem; height: 2rem"
       />
     </div>
@@ -35,7 +41,7 @@
           <div
             class="chatconversationview-messageCard"
             :class="
-              item.senderId != givenUserNumber
+              item.senderId != loginUserId
                 ? 'chatconversationview-fromCard'
                 : 'chatconversationview-toCard'
             "
@@ -43,11 +49,20 @@
             <!-- 상대가 보낸 메시지 -->
             <div
               class="chatconversationview-fromHeader"
-              v-if="item.senderId != givenUserNumber"
+              v-if="item.senderId != loginUserId"
             >
               <!-- 프로필 이미지 -->
               <div class="chatconversationview-profileImage">
-                <img :src="item.profileImage" @click="openModal(item)" />
+                <img
+                  v-if="item.profileImage != null"
+                  :src="item.profileImage"
+                  @click="openModal(item)"
+                />
+                <img
+                  v-else
+                  :src="defaultProfileImage"
+                  @click="openModal(item)"
+                />
               </div>
 
               <!-- 메시지 관련 부분 시작-->
@@ -100,7 +115,7 @@
           <div
             class="chatconversationview-messageCard"
             :class="
-              item.senderId != givenUserNumber
+              item.senderId != loginUserId
                 ? 'chatconversationview-fromCard'
                 : 'chatconversationview-toCard'
             "
@@ -108,11 +123,20 @@
             <!-- 상대가 보낸 메시지 -->
             <div
               class="chatconversationview-fromHeader"
-              v-if="item.senderId != givenUserNumber"
+              v-if="item.senderId != loginUserId"
             >
               <!-- 프로필 이미지 -->
               <div class="chatconversationview-profileImage">
-                <img :src="item.profileImage" />
+                <img
+                  v-if="item.profileImage != null"
+                  :src="item.profileImage"
+                  @click="openModal(item)"
+                />
+                <img
+                  v-else
+                  :src="defaultProfileImage"
+                  @click="openModal(item)"
+                />
               </div>
 
               <!-- 메시지 관련 부분 시작-->
@@ -196,7 +220,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, computed } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { useChatRoomStore } from "@/stores/chatroom";
 import { useChatStore } from "@/stores/chat";
 import { useWebSocketStore } from "@/stores/websocket";
@@ -204,6 +228,8 @@ import { useWebSocketStore } from "@/stores/websocket";
 // modal test import
 import { useRouter } from "vue-router";
 import UserProfileModal from "@/components/modal/UserProfileModal.vue";
+
+const defaultProfileImage = ref("src/assets/defaultprofile.png");
 
 // modal test const
 const router = useRouter();
@@ -217,25 +243,27 @@ const userProfileModalProps = ref({
   userImageUrl: "", // 사용자 프로필 이미지 URL
   userLabel: "", // 사용자 레이블
   userName: "", // 사용자 이름
+  userId: null,
 });
 
 // 정보 전해주기
 const openModal = (item) => {
   showUserProfileModalInChatConversation.value = true;
 
-  userProfileModalProps.value.userImageUrl = item.imageUrl;
+  userProfileModalProps.value.userImageUrl = item.profileImage;
   userProfileModalProps.value.userLabel = item.title;
   userProfileModalProps.value.userName = item.nickname;
+  userProfileModalProps.value.userId = item.senderId;
 };
 
 // modal에서 chat 클릭했을 때 실행되는 함수
-const handleChat = async () => {
+const handleChat = async (userId) => {
+  alert("1:1 채팅하기 클릭, 현재 창 user Id: " + userId);
+
   try {
-    alert("1:1 채팅하기 클릭");
-    const createdChatRoomId = await chatRoomStore.createChatRoom(
-      null,
+    const createdChatRoomId = await chatRoomStore.createPersonalChatRoom(
       "개인채팅방 생성 테스트",
-      1
+      userId
     );
 
     // 1:1채팅방 생성중복 처리 필요
@@ -246,7 +274,7 @@ const handleChat = async () => {
     console.log(createdChatRoomId + "번 방에 참가를 시도합니다.");
     await chatRoomStore.joinChatRoom(createdChatRoomId, 1); // authenticateduser로 수정 필요
     // receiver 채팅방 참가 처리
-    await chatRoomStore.joinChatRoom(createdChatRoomId, 2);
+    await chatRoomStore.joinChatRoom(createdChatRoomId, userId);
 
     // 참가한 채팅방 목록 갱신
     await chatRoomStore.getChatRoomList(1, true);
@@ -254,7 +282,7 @@ const handleChat = async () => {
     // 현재 방 번호 갱신
     chatRoomStore.setChatRoomId(createdChatRoomId);
     // 현재 방 정보 갱신
-    chatRoomStore.getChatRoomInfo(createdChatRoomId);
+    chatRoomStore.getPersonalChatRoomInfo(createdChatRoomId);
     chatRoomInfo.value = chatRoomStore.getChatRoom;
 
     // 구독정보 갱신 필요
@@ -267,7 +295,37 @@ const handleChat = async () => {
     // 중복이라면 바로 로딩
   } catch (error) {
     console.error("Error handling chat:", error);
+    console.log("이미 있는 채팅방의 번호는? " + error.response.data.chatRoomId);
+
+    const alreadyExistsChatRoomId = error.response.data.chatRoomId;
     // 에러 처리
+
+    // 개인방 찾기 필요한데?
+
+    // 현재 방 번호 갱신
+    chatRoomStore.setChatRoomId(alreadyExistsChatRoomId);
+    // 개인방 리스트 받아오기
+    await chatRoomStore.getChatRoomList(1);
+    chatRoomStore.getPersonalChatRoomInfo(alreadyExistsChatRoomId);
+    // 저장되어 있는 방 리스트(1:1 or open)를 1:1로 갱신. 1:1방 데이터 조회를 위함
+
+    await chatRoomStore.getChatRoomList(1); // 채팅방 리스트를 개인 채팅방으로 변경
+    chatRoomInfo.value = chatRoomStore.getChatRoom;
+
+    console.log(
+      "중복이라서 갱신한 채팅방 정보:" + JSON.stringify(chatRoomInfo.value)
+    );
+
+    // 상대방 정보 갱신
+    partnerInfo.value = chatRoomStore.getPartnerInfo;
+
+    // 구독정보 갱신 필요
+    subscription.unsubscribe();
+    subscribe(alreadyExistsChatRoomId);
+
+    // 메시지 클리어하고 로딩
+    chatMessages.value = [];
+    fetchMessages();
   }
 };
 
@@ -295,9 +353,10 @@ const goToChatConversation = (chatRoomId) => {
 
 const chatStore = useChatStore();
 const webSocketStore = useWebSocketStore();
+const loginUserId = ref();
 
 const stompClient = webSocketStore.getStompClient();
-const givenUserNumber = 1; // userStore로 가져올 예정
+
 let content = ref(""); //v-model. input message
 let subscription;
 
@@ -309,16 +368,21 @@ const storeMessages = ref([]);
 const chatRoomInfo = ref({});
 const partnerInfo = ref({});
 
-chatMessages.value.push({ // 테스트 용도
+chatMessages.value.push({
+  // 테스트 용도
   chatRoomId: 1,
   senderId: 2,
   title: "얼박사 킬러",
   nickname: "user2",
   content: "ㅎㅇ",
-  profileImage:
-    "https://cdn.britannica.com/25/172925-050-DC7E2298/black-cat-back.jpg", // img 태그에 userId 기반으로 받아온 프사 적용 필요
+  profileImage: defaultProfileImage, // img 태그에 userId 기반으로 받아온 프사 적용 필요
   // createdAt: "오전 7:04",
 }); // 테스트 데이터
+
+async function fetchLoginUserId() {
+  loginUserId.value = await localStorage.getItem("userId");
+  console.log("로그인되어 있는 userId:", loginUserId.value);
+}
 
 // 채팅 메세지 받기
 async function fetchMessages() {
@@ -354,12 +418,16 @@ const send = () => {
     console.log("전송");
     const msg = {
       chatRoomId: chatRoomInfo.value.chatRoomId,
-      senderId: 1, // 테스트 용도
+      senderId: loginUserId.value,
       content: content.value,
       createdAt: Date.now(),
     };
 
-    stompClient.send("/pub/chats/" + chatRoomInfo.value.chatRoomId, JSON.stringify(msg), {});
+    stompClient.send(
+      "/pub/chats/" + chatRoomInfo.value.chatRoomId,
+      JSON.stringify(msg),
+      {}
+    );
 
     content.value = "";
     scrollToBottom();
@@ -402,6 +470,8 @@ const subscribe = (chatRoomId) => {
 };
 
 onMounted(() => {
+  fetchLoginUserId();
+
   fetchMessages();
 
   // isPersonal 여부에 따라 가져오는 데이터 형식 다름
@@ -423,8 +493,7 @@ onMounted(() => {
   subscribe(chatRoomInfo.value.chatRoomId);
 
   console.log(
-    "현재 페이지에서 보유한 방 정보:" +
-      JSON.stringify(chatRoomInfo.value)
+    "현재 페이지에서 보유한 방 정보:" + JSON.stringify(chatRoomInfo.value)
   );
 
   console.log("채팅방 정보:" + chatRoomStore.getChatRoom.chatRoomName);
@@ -452,7 +521,7 @@ onMounted(() => {
   height: 33rem;
 }
 #chatconversationview-messages::-webkit-scrollbar {
-  /* display: none; */
+  display: none;
 }
 
 #chatconversationview-inputWindow {
@@ -532,7 +601,7 @@ onMounted(() => {
 
 /* 메세지 카드 */
 .chatconversationview-messageCard {
-  width: 23.125rem;
+  width: 22.2rem;
   display: flex;
   border: 0.063rem solid blue;
 }
@@ -638,6 +707,8 @@ p.chatconversationview-fromThem::after {
   padding-top: 0.313rem;
   margin-left: 0.625rem;
   width: 3.125rem;
+  height: 3.125rem;
+  border-radius: 50%;
 }
 
 /* 상대 메시지 헤더 */
