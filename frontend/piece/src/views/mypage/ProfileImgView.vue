@@ -43,9 +43,12 @@
             @click="handleUploadClick"
         />
 
+        <!-- 삭제 버튼 -->
         <delete-image-button
-            v-if="loginUserInfo.profileImage" @click="deleteImage">
-        </delete-image-button>
+            v-if="loginUserInfo.profileImage"
+            roundButtonContent="삭제"
+            @click="deleteImage"
+        />
 
         <!-- success modal -->
         <SuccessModal
