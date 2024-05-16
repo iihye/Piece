@@ -76,7 +76,6 @@ import { defineStore } from "pinia";
 import axios from "axios";
 
 const baseURL = import.meta.env.VITE_REST_PIECE_API;
-console.log('baseURL is ', baseURL);
 
 export const usePieceStatisticsStore = defineStore('piecestatistics', {
     // =========== STATE ===============
