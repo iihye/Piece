@@ -6,7 +6,7 @@
     :userImageUrl="userProfileModalProps.userImageUrl"
     :userLabel="userProfileModalProps.userLabel"
     :userName="userProfileModalProps.userName"
-    :handleChatClick="handleChat"
+    @handleChatClick="handleChat(userProfileModalProps.userId)"
     :handleReportClick="handleReport"
     :handleClose="handleClose"
   ></UserProfileModal>
@@ -112,7 +112,7 @@
             >
               <!-- 프로필 이미지 -->
               <div class="chatconversationview-profileImage">
-                <img :src="item.profileImage" />
+                <img :src="item.profileImage" @click="openModal(item)"/>
               </div>
 
               <!-- 메시지 관련 부분 시작-->
@@ -217,25 +217,27 @@ const userProfileModalProps = ref({
   userImageUrl: "", // 사용자 프로필 이미지 URL
   userLabel: "", // 사용자 레이블
   userName: "", // 사용자 이름
+  userId: null,
 });
 
 // 정보 전해주기
 const openModal = (item) => {
   showUserProfileModalInChatConversation.value = true;
 
-  userProfileModalProps.value.userImageUrl = item.imageUrl;
+  userProfileModalProps.value.userImageUrl = item.profileImage;
   userProfileModalProps.value.userLabel = item.title;
   userProfileModalProps.value.userName = item.nickname;
+  userProfileModalProps.value.userId = item.senderId;
 };
 
 // modal에서 chat 클릭했을 때 실행되는 함수
-const handleChat = async () => {
+const handleChat = async (userId) => {
+  alert("1:1 채팅하기 클릭, 현재 창 user Id: "+userId);
+
   try {
-    alert("1:1 채팅하기 클릭");
-    const createdChatRoomId = await chatRoomStore.createChatRoom(
-      null,
+    const createdChatRoomId = await chatRoomStore.createPersonalChatRoom(
       "개인채팅방 생성 테스트",
-      1
+      userId
     );
 
     // 1:1채팅방 생성중복 처리 필요
@@ -246,7 +248,7 @@ const handleChat = async () => {
     console.log(createdChatRoomId + "번 방에 참가를 시도합니다.");
     await chatRoomStore.joinChatRoom(createdChatRoomId, 1); // authenticateduser로 수정 필요
     // receiver 채팅방 참가 처리
-    await chatRoomStore.joinChatRoom(createdChatRoomId, 2);
+    await chatRoomStore.joinChatRoom(createdChatRoomId, userId);
 
     // 참가한 채팅방 목록 갱신
     await chatRoomStore.getChatRoomList(1, true);
@@ -254,7 +256,7 @@ const handleChat = async () => {
     // 현재 방 번호 갱신
     chatRoomStore.setChatRoomId(createdChatRoomId);
     // 현재 방 정보 갱신
-    chatRoomStore.getChatRoomInfo(createdChatRoomId);
+    chatRoomStore.getPersonalChatRoomInfo(createdChatRoomId);
     chatRoomInfo.value = chatRoomStore.getChatRoom;
 
     // 구독정보 갱신 필요
@@ -267,7 +269,35 @@ const handleChat = async () => {
     // 중복이라면 바로 로딩
   } catch (error) {
     console.error("Error handling chat:", error);
+    console.log("이미 있는 채팅방의 번호는? "+error.response.data.chatRoomId);
+
+    const alreadyExistsChatRoomId=error.response.data.chatRoomId;
     // 에러 처리
+
+    // 개인방 찾기 필요한데?
+
+    // 현재 방 번호 갱신
+    chatRoomStore.setChatRoomId(alreadyExistsChatRoomId);
+    // 개인방 리스트 받아오기
+    await chatRoomStore.getChatRoomList(1);
+    chatRoomStore.getPersonalChatRoomInfo(alreadyExistsChatRoomId);
+    // 저장되어 있는 방 리스트(1:1 or open)를 1:1로 갱신. 1:1방 데이터 조회를 위함
+
+    await chatRoomStore.getChatRoomList(1); // 채팅방 리스트를 개인 채팅방으로 변경
+    chatRoomInfo.value = chatRoomStore.getChatRoom;
+
+    console.log("중복이라서 갱신한 채팅방 정보:"+JSON.stringify(chatRoomInfo.value));
+
+    // 상대방 정보 갱신
+    partnerInfo.value = chatRoomStore.getPartnerInfo;
+    
+    // 구독정보 갱신 필요
+    subscription.unsubscribe();
+    subscribe(alreadyExistsChatRoomId);
+
+    // 메시지 클리어하고 로딩
+    chatMessages.value = [];
+    fetchMessages();
   }
 };
 
@@ -354,7 +384,7 @@ const send = () => {
     console.log("전송");
     const msg = {
       chatRoomId: chatRoomInfo.value.chatRoomId,
-      senderId: 1, // 테스트 용도
+      senderId: 3, // 테스트 용도
       content: content.value,
       createdAt: Date.now(),
     };
