@@ -15,6 +15,7 @@ import com.ssafy.piece.domain.pieces.exception.PiecesRecentNotFoundException;
 import com.ssafy.piece.domain.pieces.repository.HeartRepository;
 import com.ssafy.piece.domain.pieces.repository.PiecesRepository;
 import com.ssafy.piece.domain.pieces.repository.PiecesimageRepository;
+import com.ssafy.piece.domain.statistics.service.StatisticsService;
 import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class PiecesService {
     private final PiecesRepository piecesRepository;
     private final PiecesimageRepository piecesimageRepository;
     private final HeartRepository heartRepository;
+    private final StatisticsService statisticsService;
 
     // 조각 등록
     public Pieces addPieces(Long userId, PiecesAddRequestDto piecesAddRequestDto) {
@@ -59,6 +61,10 @@ public class PiecesService {
             .genre(genreType)
             .isPrivate(piecesAddRequestDto.getIsPrivate())
             .build();
+//        modifyViews(Long userId, CultureType type, LocalDate date)
+//        modifyConsumption(Long userId, LocalDate date, int price)
+        statisticsService.modifyViews(userId,pieces.getPerformanceType(),pieces.getDate());
+        statisticsService.modifyConsumption(userId,pieces.getDate(),pieces.getPrice());
 
         return piecesRepository.save(pieces);
     }
