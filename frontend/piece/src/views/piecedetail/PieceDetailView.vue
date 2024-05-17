@@ -6,12 +6,17 @@
                 <!-- user -->
                 <div class="pieceDetailView-user-container">
                     <img
-                        class="pieceDetailView-user-img"
-                        :src="
-                            pieceUser.profileImage ||
-                            'https://i.ibb.co/grMvZS9/your-image.jpg'
+                        v-if="
+                            pieceUser.profileImage === null ||
+                            pieceUser.profileImage === ''
                         "
-                        alt="image"
+                        class="pieceDetailView-user-img"
+                        src="@/assets/defaultprofile.png"
+                    />
+                    <img
+                        v-else
+                        class="pieceDetailView-user-img"
+                        :src="pieceUser.profileImage"
                     />
                     <div class="pieceDetailView-name-container">
                         <div class="pieceDetailView-user-label">
