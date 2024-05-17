@@ -33,11 +33,11 @@ public class LabelsController {
     @GetMapping("/{labelId}")
     public ResponseEntity<Object> labelsFind(@PathVariable Long labelId) {
         // labelId가 0인 경우 처리
+        String title = "";
         if (labelId == 0) {
-            return SuccessResponse.createSuccess(SuccessCode.FIND_LABEL_SUCCESS, "");
+            return SuccessResponse.createSuccess(SuccessCode.FIND_LABEL_SUCCESS, title);
         }
-        String title = labelsService.findLabelsTitle(labelId);
-
+        title = labelsService.findLabelsTitle(labelId);
         return SuccessResponse.createSuccess(SuccessCode.FIND_LABEL_SUCCESS, title);
     }
 }
