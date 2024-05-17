@@ -100,11 +100,11 @@ public class ParticipantsService {
                     log.info("selectChatRoom userResponse: ", userResponseDto);
 
                     // 현재 착용한 칭호 보유 여부에 따라 분기
-                    if(userResponseDto.getLabelId()!=null || userResponseDto.getLabelId() != 0){
+                    if(userResponseDto.getLabelId()!=null && userResponseDto.getLabelId() != 0){
                         ProcessedUserResponseDto processedUserResponseDto=
                             ProcessedUserResponseDto.builder()
                                 .userId(userResponseDto.getUserId())
-                                .title(pieceClient.getLabel(userResponseDto.getLabelId()).getData().getTitle())
+                                .title(pieceClient.getLabel(userResponseDto.getLabelId()).getData())
                                 .nickname(userResponseDto.getNickname())
                                 .profileImage(userResponseDto.getProfileImage())
                                 .build();

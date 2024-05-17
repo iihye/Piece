@@ -15,5 +15,5 @@ import lombok.ToString;
 public class LabelFeignResponseDto {
     private String code;
     private String message;
-    private LabelResponseDto data;
+    private String data;
 }
