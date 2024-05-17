@@ -254,9 +254,9 @@ onMounted(() => {
 // 다음단계버튼
 const next = () => {
     const imagefile = canvas.toDataURL();
-    pieceStore.imageBack = imagefile;
-    router.push("/piece/save");
-};
+    pieceStore.setBase64BackImage(imagefile);
+    router.push('/piece/save');
+}
 
 const isRoundDisable = ref(true);
 </script>

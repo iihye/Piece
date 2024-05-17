@@ -91,7 +91,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { usePieceStore } from "@/stores/piece.js";
 import RoundButton from "@/components/button/RoundButton.vue";
 
@@ -133,6 +133,10 @@ function hover(index) {
 function leave() {
     hoverScore.value = score.value;
 }
+
+onMounted(() => {
+    score.value = pieceValue.score;
+});
 </script>
 
 <style scoped>
