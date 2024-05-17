@@ -1,25 +1,32 @@
 <template>
-    <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
-    <YearSelector class="piecestatisticsview-year-selector" @year-changed="showPieChartData" />
-    <PieChart :chartData="chartData" />
-    <hr />
-    <div>
-        <div v-for="(amount, index) in chartData.datasets[0].data" :key="index" class="monthly-consumption">
-            <div v-if="amount != 0" class="consumption-row">
-                <div class="color-box" :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"></div>
-                <span class="label">{{ chartData.labels[index] }}</span>
-                <span class="amount">{{ amount.toLocaleString() }}회</span>
+    <div class="piecestatisticsview-main-container">
+        <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
+        <YearSelector class="piecestatisticsview-year-selector" @year-changed="showPieChartData" />
+        <!-- no data -->
+        <div v-if="noData" class="piecestatisticsview-main-content-container">
+            <NoItem 
+                class="piecestatisticsview-notiem-container" 
+                content = "작성한 조각이 없어요">
+            </NoItem>
+            <div class="button-container">
+                <RouterLink :to="{ name: 'piecemake' }">
+                    <SmallButton smallButtonContent="조각 만들기" />
+                </RouterLink>
             </div>
         </div>
-    </div>
-    <div v-if="noData" class="piecestatisticsview-main-content-container">
-        <div class="piecestatisticsview-main-content">
-            소비한 내용이 없어요 ㅜㅜ
-        </div>
-        <div class="button-container">
-            <RouterLink :to="{ name: 'piecemake' }">
-                <SmallButton smallButtonContent="조각 만들기" />
-            </RouterLink>
+        <!-- chart -->
+        <div v-else>
+            <PieChart :chartData="chartData" />
+            <hr />
+            <div>
+                <div v-for="(amount, index) in chartData.datasets[0].data" :key="index" class="monthly-consumption">
+                    <div v-if="amount != 0" class="consumption-row">
+                        <div class="color-box" :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"></div>
+                        <span class="label">{{ chartData.labels[index] }}</span>
+                        <span class="amount">{{ amount.toLocaleString() }}회</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -31,6 +38,7 @@ import YearSelector from "@/components/chart/YearSelector.vue";
 import PieChart from "@/components/chart/PieChart.vue";
 import { useCommonStore } from "@/stores/common";
 import SmallButton from "@/components/button/SmallButton.vue";
+import NoItem from "@/components/item/NoItem.vue";
 
 const pieceStatisticsStore = usePieceStatisticsStore();
 const commonStore = useCommonStore();
@@ -57,11 +65,19 @@ onMounted(async () => {
 </script>
 
 <style>
+.piecestatisticsview-main-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 8.25rem);
+    padding-top: 1rem;
+    margin: 0 1rem 0 1rem;
+}
+
 .piecestatisticsview-main-title {
     font-family: "Bold";
     font-size: 1.6rem;
     color: var(--black-color);
-    margin: 0 0 0.4rem 0;
+    margin: 0 0 1rem 0;
     user-select: none;
 }
 
@@ -80,6 +96,11 @@ onMounted(async () => {
     justify-content: center;
     height: 100%;
     text-align: center;
+}
+
+.piecestatisticsview-notiem-container{
+    display: flex;
+    height: 50%;
 }
 
 .piecestatisticsview-main-content {
