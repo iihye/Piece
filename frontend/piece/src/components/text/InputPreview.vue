@@ -46,8 +46,11 @@ function handleItemMouseDown(event) {
 
 <style>
 .inputpreview-container {
+    width: 100%;
+    padding: 0.5rem 0;
+    box-sizing: border-box;
     max-width: 50rem;
-    padding: 1rem;
+    padding: 0.25rem;
     position: absolute;
     z-index: 2;
     background-color: var(--white-color);
@@ -58,5 +61,8 @@ function handleItemMouseDown(event) {
 .inputpreview-container-result {
     font-family: "Regular";
     font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>
