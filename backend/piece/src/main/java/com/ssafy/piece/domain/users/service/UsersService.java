@@ -1,10 +1,15 @@
 package com.ssafy.piece.domain.users.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.ssafy.piece.domain.users.entity.Users;
 import com.ssafy.piece.domain.users.repository.UsersRepository;
+import com.ssafy.piece.global.response.code.ErrorCode;
+import com.ssafy.piece.global.response.exception.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -14,6 +19,11 @@ import org.springframework.stereotype.Service;
 public class UsersService {
 
     private final UsersRepository usersRepository;
+
+    @Value("${amazon.aws.bucket}")
+    private String bucket;
+
+    private final AmazonS3 amazonS3;
 
     public void setLabelId(Long userId, Long labelId) {
         Users users = findByUserId(userId);

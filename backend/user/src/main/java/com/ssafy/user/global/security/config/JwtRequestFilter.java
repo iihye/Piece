@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,15 +34,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         final String requestTokenHeader = request.getHeader("Authorization");
 
-        String jwtToken = null;
         Long userId = null;
+        String jwtToken = null;
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             log.info("JWT 토큰: {}", jwtToken);
-
             try {
-                userId = jwtTokenUtil.getUserIdFromToken(jwtToken); // UserId를 Long 타입으로 추출
+                userId = jwtTokenUtil.getUserIdFromToken(jwtToken);
                 log.info("사용자 ID: {}", userId);
             } catch (IllegalArgumentException e) {
                 log.error("JWT 토큰을 가져올 수 없습니다.", e);
@@ -52,18 +50,22 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (JwtException e) {
                 log.error("JWT 토큰 검증 실패", e);
             }
+        } else {
+            log.warn("JWT 토큰은 Bearer 문자열로 시작해야 합니다");
+        }
 
-            if (userId != null && jwtTokenUtil.validateToken(jwtToken, userId) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userId.toString());
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userId.toString());
+            log.info("사용자 정보: {}", userDetails.getUsername());
+
+            if (jwtTokenUtil.validateToken(jwtToken, userId)) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                log.info("사용자 인증 완료: {}", userDetails.getUsername());
             }
-        } else {
-            log.warn("JWT 토큰은 Bearer 문자열로 시작해야 합니다.");
         }
 
         chain.doFilter(request, response);
-    }}
+    }
+}
