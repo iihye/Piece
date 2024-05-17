@@ -136,9 +136,6 @@ onMounted(async () => {
 </script>
 
 <style>
-@import "@/components/css/color.css";
-@import "@/components/css/font.css";
-
 .chatRoomListHeader-main-container {
     display: flex;
     flex-direction: column;
@@ -192,8 +189,8 @@ onMounted(async () => {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Keeps content vertically centered */
-    align-items: flex-start; /* Aligns items to the left */
+    justify-content: center;
+    align-items: flex-start;
     height: auto;
 }
 
@@ -216,12 +213,5 @@ onMounted(async () => {
     font-size: 1rem;
     color: var(--main-color);
     margin-bottom: 0.1rem;
-}
-
-/*  */
-
-.chatroomlist-chatRoomName {
-    font-family: "Bold";
-    font-size: 1.25rem;
 }
 </style>
