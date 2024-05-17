@@ -63,9 +63,10 @@ onMounted(async () => {
 
 <style>
 .consumestatisticsview-main-title {
+    font-family: "Bold";
     font-size: 1.6rem;
     color: var(--black-color);
-    margin-bottom: 2rem;
+    margin: 0 0 0.4rem 0;
     user-select: none;
 }
 
@@ -87,11 +88,13 @@ onMounted(async () => {
 }
 
 .consumestatisticsview-main-content {
+    font-family: "Regular";
     font-size: 1rem;
     color: var(--gray2-color);
+    margin: 0;
     margin-bottom: 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     user-select: none;
 }

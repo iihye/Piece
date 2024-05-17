@@ -61,7 +61,7 @@ onMounted(async () => {
     font-family: "Bold";
     font-size: 1.6rem;
     color: var(--black-color);
-    margin: 0 0 2rem 0;
+    margin: 0 0 0.4rem 0;
     user-select: none;
 }
 
@@ -83,11 +83,13 @@ onMounted(async () => {
 }
 
 .piecestatisticsview-main-content {
+    font-family: "Regular";
     font-size: 1rem;
     color: var(--gray2-color);
+    margin: 0;
     margin-bottom: 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     user-select: none;
 }
