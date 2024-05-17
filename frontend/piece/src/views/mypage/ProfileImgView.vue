@@ -79,7 +79,9 @@ const fileUploadStore = useFileUploadStore();
 const userStore = useUserStore();
 
 // upload image
-async function handleUpload(url, s3path) {
+async function handleUpload(presignedURL, s3path) {
+    console.log('presignedurl is ', presignedURL);
+    console.log('s3path is ', s3path);
     userStore.updateProfileImage(s3path);
 
     // ==========================================

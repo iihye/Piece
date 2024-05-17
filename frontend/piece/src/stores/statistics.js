@@ -6,24 +6,23 @@ export const useStatisticsStore = defineStore('statistics', () => {
     const chartData = ref({
         labels: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
         datasets: [{
-            backgroundColor: "#ffe3e1",
+            backgroundColor: "#ff9494",
             data: Array(12).fill(0)
         }]
     });
     const noData = ref(false);
+    const getNoData = computed(() => {
+        return noData.value;
+    });
 
     const updateData = async (consumptionYear) => {
         try {
-            console.log('enter useStatisticStore');
             const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/statistics/consumption/${consumptionYear}`);
             const responseData = response.data;
-            console.log('responseData: ', responseData);
 
-            if (responseData.code === "FIND_CONSUMPTIONS_SUCCESS" && responseData.data.length > 0) {
+            if (responseData.code === "FIND_CONSUMPTIONS_SUCCESS" && responseData.data != null) {
                 noData.value = false;
-
                 const monthlyData = Array(12).fill(0);
-
                 responseData.data.forEach(item => {
                     monthlyData[item.consumptionMonth - 1] = item.consumptionMoney;
                 });
@@ -34,15 +33,17 @@ export const useStatisticsStore = defineStore('statistics', () => {
                 chartData.value.datasets[0].data.fill(0);
             }
         } catch (error) {
-            console.error('Error fetching consumption data:', error);
+            // console.error('지출 데이터 받아오기 에러', error);
             noData.value = true;
             chartData.value.datasets[0].data.fill(0);
         }
     };
+    
 
     return {
         chartData,
         noData,
-        updateData
+        updateData,
+        getNoData
     };
 });
