@@ -244,7 +244,7 @@ onBeforeUnmount(() => {
     display: grid;
     grid-template-columns: repeat(2, minmax(8rem, 1fr));
     justify-items: center;
-    grid-gap: 1rem;
+    grid-gap: 0.2rem;
 }
 
 .piecelistheartview-list-item {
