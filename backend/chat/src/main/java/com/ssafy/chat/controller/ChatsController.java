@@ -52,7 +52,7 @@ public class ChatsController {
         String userTitle="";
 
         if(userInfo.getLabelId()!=0){
-            userTitle=pieceClient.getLabel(userInfo.getLabelId()).getData().getTitle();
+            userTitle=pieceClient.getLabel(userInfo.getLabelId()).getData();
         }
         // mongoDB 저장용
         MongoDBChats mongoDBChat = MongoDBChats.builder()
