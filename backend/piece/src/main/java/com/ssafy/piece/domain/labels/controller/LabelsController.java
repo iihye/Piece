@@ -32,6 +32,10 @@ public class LabelsController {
     // 칭호명 찾기
     @GetMapping("/{labelId}")
     public ResponseEntity<Object> labelsFind(@PathVariable Long labelId) {
+        // labelId가 0인 경우 처리
+        if (labelId == 0) {
+            return SuccessResponse.createSuccess(SuccessCode.FIND_LABEL_SUCCESS, "");
+        }
         String title = labelsService.findLabelsTitle(labelId);
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_LABEL_SUCCESS, title);
