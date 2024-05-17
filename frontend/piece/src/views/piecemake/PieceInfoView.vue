@@ -34,6 +34,7 @@
                         id="content-name"
                         placeholder="공연명을 입력하세요"
                         v-model="pieceValue.title"
+                        maxlength="20"
                     />
                 </div>
                 <div class="pieceinfoview-form-group">
