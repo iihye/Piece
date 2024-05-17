@@ -48,7 +48,7 @@ export const useFileUploadStore = defineStore("fileupload", () => {
             console.error("파일 업로드 실패", error.message);
 
             // ==========================================
-            msg.value = error.message;
+            msg.value = error;
             // ==========================================
         }
     }
