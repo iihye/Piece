@@ -1,16 +1,5 @@
 <template>
     <div class="chatconversationview-main-container">
-        <!-- <ChatItem
-            v-for="(item, index) in cakeChatList"
-            :key="index"
-            :chatRoomId="item.chatRoomId"
-            :senderLabel="item.senderLabel"
-            :senderNickname="item.senderNickname"
-            :senderImg="item.senderImg"
-            :content="item.content"
-            :createdAt="item.createdAt"
-        ></ChatItem> -->
-
         <div id="chatconversationview-chatBox">
             <div id="chatconversationview-messages">
                 <ul style="list-style: none; padding-inline-start: 0rem; margin: 0px">
@@ -31,58 +20,36 @@
                             >
                                 <!-- 프로필 이미지 -->
                                 <div class="chatconversationview-profileImage">
+                                    <!-- <img
+                                        src="@/assets/defaultprofile.png"
+                                        @click="openModal(item)"
+                                    /> -->
                                     <img
-                                        v-if="item.profileImage != null"
+                                        v-if="item.profileImage != null || item.profileImage == ''"
                                         :src="item.profileImage"
                                         @click="openModal(item)"
                                     />
                                     <img
                                         v-else
-                                        :src="defaultProfileImage"
+                                        src="@/assets/defaultprofile.png"
                                         @click="openModal(item)"
                                     />
                                 </div>
 
                                 <!-- 메시지 관련 부분 시작-->
-                                <!-- 헤더 + 메시지 -->
-                                <div>
-                                    <!-- 칭호 + 이름 -->
-                                    <div
-                                        class="chatconversationview-userHeader"
-                                    >
-                                        <div
-                                            class="chatconversationview-userTitle"
-                                        >
+                                <div class="chatconversationv-senderview-container">
+                                    <div class="chatconversationview-userHeader">
+                                        <div class="chatconversationview-userTitle">
                                             {{ item.title }}
                                         </div>
-                                        <div
-                                            class="chatconversationview-userName"
-                                        >
+                                        <div class="chatconversationview-userName">
                                             {{ item.nickname }}
                                         </div>
                                     </div>
-                                    <div
-                                        class="chatconversationview-messageAndTimeFrom"
-                                    >
-                                        <div
-                                            class="chatconversationview-bubble"
-                                        >
-                                            <div
-                                                class="chatconversationview-fromThem"
-                                            >
-                                                {{ item.content }}
-                                            </div>
-                                        </div>
-                                        <!-- 보낸 시간 -->
-                                        <div
-                                            class="chatconversationview-sendDate"
-                                        >
-                                            <div>
-                                                {{ item.createdAt }}
-                                            </div>
-                                        </div>
-                                        <!-- <p class="testTime">테스트 시간 27:98</p> -->
-                                    </div>
+                                    <div class="chatconversationview-sender-container">
+                                        <div class="chatconversationview-sender-content">{{ item.content }}</div>
+                                        <div class="chatconversationview-sender-time">{{ item.createdAt }}</div>
+                                    </div> 
                                 </div>
                             </div>
 
@@ -91,7 +58,6 @@
                                 v-else
                                 class="chatconversationview-messageAndTimeTo"
                             >
-                                <!-- 보낸 시간 -->
                                 <div class="chatconversationview-sendDate">
                                     {{ item.createdAt }}
                                 </div>
@@ -134,51 +100,27 @@
                                 </div>
 
                                 <!-- 메시지 관련 부분 시작-->
-                                <!-- 헤더 + 메시지 -->
-                                <div>
-                                    <!-- 칭호 + 이름 -->
-                                    <div
-                                        class="chatconversationview-userHeader"
-                                    >
-                                        <span
-                                            class="chatconversationview-userTitle"
-                                        >
+                                <div class="chatconversationv-senderview-container">
+                                    <div class="chatconversationview-userHeader">
+                                        <div class="chatconversationview-userTitle">
                                             {{ item.title }}
-                                        </span>
-                                        <span
-                                            class="chatconversationview-userName"
-                                        >
+                                        </div>
+                                        <div class="chatconversationview-userName">
                                             {{ item.nickname }}
-                                        </span>
-                                    </div>
-                                    <div
-                                        class="chatconversationview-messageAndTimeFrom"
-                                    >
-                                        <!-- 메세지 버블 -->
-                                        <div
-                                            class="chatconversationview-bubble"
-                                        >
-                                            <p
-                                                class="chatconversationview-fromThem"
-                                            >
-                                                {{ item.content }}
-                                            </p>
-                                        </div>
-                                        <!-- 보낸 시간 -->
-                                        <div
-                                            class="chatconversationview-sendDate"
-                                        >
-                                            {{ item.createdAt }}
                                         </div>
                                     </div>
+                                    <div class="chatconversationview-sender-container">
+                                        <div class="chatconversationview-sender-content">{{ item.content }}</div>
+                                        <div class="chatconversationview-sender-time">{{ item.createdAt }}</div>
+                                    </div> 
                                 </div>
                             </div>
+
                             <!-- 내가 보낸 메시지라면 -->
                             <div
                                 v-else
                                 class="chatconversationview-messageAndTimeTo"
                             >
-                                <!-- 보낸 시간 -->
                                 <div class="chatconversationview-sendDate">
                                     {{ item.createdAt }}
                                 </div>
@@ -237,7 +179,7 @@ import { useWebSocketStore } from "@/stores/websocket";
 import { useRouter } from "vue-router";
 import UserProfileModal from "@/components/modal/UserProfileModal.vue";
 
-const defaultProfileImage = ref("src/assets/defaultprofile.png");
+// const defaultProfileImage = ref("src/assets/defaultprofile.png");
 
 // modal test const
 const router = useRouter();
@@ -531,15 +473,6 @@ onMounted(() => {
 </script>
 
 <style>
-.chatconversationview-test{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    bottom: 4rem;
-}
-
-
 .chatconversationview-main-container {
     display: flex;
     flex-direction: column;
@@ -547,6 +480,11 @@ onMounted(() => {
     overflow-x: hidden;
     overflow-y: scroll;
     transition: scroll-behavior 0.5s ease-in-out;
+    padding-top: 1rem;
+}
+
+.chatconversationview-main-container::-webkit-scrollbar {
+    display: none;
 }
 
 /* input messsage form */
@@ -628,15 +566,17 @@ onMounted(() => {
 .chatconversationview-messageCard {
     width: 22.2rem;
     display: flex;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.8rem;
 }
 
 .chatconversationview-fromCard {
     justify-content: flex-start;
+    max-width: 15rem;
 }
 
 .chatconversationview-toCard {
     justify-content: flex-end;
+    max-width: 15rem;
 }
 
 /* 메시지 버블 */
@@ -658,110 +598,95 @@ onMounted(() => {
     font-size: 1rem;
 }
 
-.chatconversationview-bubble p::before,
-.chatconversationview-bubble p::after {
-    bottom: -0.1rem;
-    content: "";
-    height: 1rem;
-    position: absolute;
-}
-
-/* 메시지 */
+/* 내가 보내는 메시지 부분*/
 p.chatconversationview-fromMe {
     align-self: flex-end;
     background-color: var(--main-color);
     color: var(--white-color);
 }
 
-p.chatconversationview-fromMe::before {
-    border-bottom-left-radius: 0.8rem 0.7rem;
-    border-right: 1rem solid var(--main-color);
-    right: -0.35rem;
-    transform: translate(0, -0.1rem);
-}
-
-p.chatconversationview-fromMe::after {
-    background-color: var(--white-color);
-    border-bottom-left-radius: 0.5rem;
-    right: -2.5rem;
-    transform: translate(-1.875rem, -0.125rem);
-    width: 0.625rem;
-}
-
-p[class^="chatconversationview-from"] {
-    margin: 0.5rem 0;
-    width: fit-content;
-}
-
-p.chatconversationview-fromMe ~ p.chatconversationview-fromMe {
-    margin: 0.25rem 0 0;
-}
-
-p.chatconversationview-fromMe ~ p.chatconversationview-fromMe:not(:last-child) {
-    margin: 0.25rem 0 0;
-}
-
-p.chatconversationview-fromMe ~ p.chatconversationview-froMme:last-child {
-    margin-bottom: 0.5rem;
-}
-
+/* 상대가 보내는 메시지 부분 */
 p.chatconversationview-fromThem {
     align-items: flex-start;
     background-color: var(--sub-color);
     color: var(--black-color);
-    z-index: 1;
 }
 
-p.chatconversationview-fromThem:before {
-    border-bottom-right-radius: 0.8rem 0.7rem;
-    border-left: 1rem solid var(--sub-color);
-    left: -0.35rem;
-    transform: translate(0, -0.1rem);
-}
 
-p.chatconversationview-fromThem::after {
-    background-color: var(--white-color);
-    border-bottom-right-radius: 0.5rem;
-    left: 1.25rem;
-    transform: translate(-1.875rem, -0.125rem);
-    width: 0.625rem;
-}
-
-/* 프로필 사진 */
-.chatconversationview-profileImage img {
-    padding-top: 0.313rem;
-    margin-left: 0.625rem;
-    width: 3.125rem;
-    height: 3.125rem;
-    border-radius: 50%;
-}
-
-/* 상대 메시지 헤더 */
+/* 상대가 보낸 메시지 */
+/* 헤더 */
 .chatconversationview-fromHeader {
     display: flex;
     justify-content: flex-start;
 }
 
-/* 상대 칭호+이름 */
+/* 프로필 사진 */
+.chatconversationview-profileImage img {
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 1px solid var(--gray-color);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.chatconversationv-senderview-container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.6rem;
+}
+
+/* 칭호+이름 */
 .chatconversationview-userHeader {
-    padding-top: 0.313rem;
-    padding-left: 0.625rem;
+    display: flex;
+    justify-self: row;
+    margin-bottom: 0.4rem;
 }
 
-/* 상대 칭호 */
+/* 칭호 */
 .chatconversationview-userTitle {
-    padding-left: 0rem;
-    font-family: "Semi";
-    font-size: 1.1rem;
+    font-family: "bold";
+    font-size: 0.8rem;
     color: var(--main-color);
+    margin-right: 0.4rem;
 }
 
-/* 상대 이름 */
+/* 이름 */
 .chatconversationview-userName {
-    padding-left: 0.375rem;
-    font-family: "Medium";
-    font-size: 1.1rem;
+    font-family: "Semi";
+    font-size: 0.8rem;
     color: var(--gray2-color);
+}
+
+/* 메시지+시간 */
+.chatconversationview-sender-container{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* 메시지 */
+.chatconversationview-sender-content{
+    max-width: 14rem;
+    overflow-wrap: break-word;
+    padding: 0.4rem;
+    background-color: var(--sub-color);
+    border-radius: 0.4rem;
+    padding: 0.8rem 0.8rem 0.8rem 0.8rem;
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--black-color);
+    line-height: 1.2rem;
+}
+
+/* 시간 */
+.chatconversationview-sender-time{
+    font-family: "Regular";
+    font-size: 0.8rem;
+    color: var(--gray2-color);
+    margin-left: 0.2rem;
+    display: flex;
+    align-self: flex-end;
 }
 
 /* 시간 정보 */
@@ -771,7 +696,7 @@ p.chatconversationview-fromThem::after {
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    margin: 0 0.4rem 0.4rem 0;
+    padding: 0 0.2rem 0.4rem 0.2rem;
 }
 .chatconversationview-sendDate p {
     margin-bottom: 0;
@@ -786,6 +711,5 @@ p.chatconversationview-fromThem::after {
 }
 .chatconversationview-messageAndTimeFrom {
     display: flex;
-    flex-direction: row;
 }
 </style>
