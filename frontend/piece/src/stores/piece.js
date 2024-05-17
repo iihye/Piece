@@ -21,23 +21,35 @@ export const usePieceStore = defineStore('piece', () => {
         comment: null,
         isPrivate: false,
         openYn: 'Y',
-        imageFront: 'if',
-        imageBack: 'ib',
+        imageFront: '',
+        imageBack: '',
         genre: 'FEAR'
     });
 
     const croppedImageValue = ref('');
+    const base64FrontImage = ref('');
+    const base64BackImage = ref('');
 
     // Getters
     const getPieceValue = computed(() => pieceValue.value);
+    const getBase64FrontImage = computed(() => base64FrontImage.value);
+    const getBase64BackImage = computed(() => base64BackImage.value);
 
     // Actions
     function setPieceValue(key, value) {
-        pieceValue.value[key] = value;
+      pieceValue.value[key] = value;
     }
 
     function setCroppedImageValue(value) {
-        croppedImageValue.value = value;
+      croppedImageValue.value = value;
+    }
+
+    function setBase64FrontImage(value) {
+      base64FrontImage.value = value;
+    }
+
+    function setBase64BackImage(value) {
+      base64BackImage.value = value;
     }
 
     async function savePiece() {
@@ -75,11 +87,15 @@ export const usePieceStore = defineStore('piece', () => {
         pieceValue,
         croppedImageValue,
         getPieceValue,
+        getBase64FrontImage,
+        getBase64BackImage,
         setPieceValue,
         setCroppedImageValue,
         savePiece,
         getSearchMovieList,
         fetchImage,
+        setBase64FrontImage,
+        setBase64BackImage,
     };
 },
 {

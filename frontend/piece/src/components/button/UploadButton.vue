@@ -9,6 +9,10 @@
         />
     </div>
 
+    <!-- ========================================== -->
+    <div>{{ msg }}</div>
+    <!-- ========================================== -->
+
     <!-- modal -->
     <LoadingModal
         v-if="loadingModal"
@@ -19,13 +23,18 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useFileUploadStore } from "@/stores/fileupload";
 import LoadingModal from "@/components/modal/LoadingModal.vue";
 
 const { roundButtonContent } = defineProps({
     roundButtonContent: String,
 });
+
+// ==========================================
+const store = useFileUploadStore();
+const msg = computed(() => store.getMsg);
+// ==========================================
 
 const emit = defineEmits(["uploadSuccess", "uploadError"]);
 const fileInput = ref(null);
@@ -38,20 +47,17 @@ function uploadImage() {
 async function handleFileSelected(event) {
     loadingModal.value = true;
     const file = event.target.files[0];
-    const store = useFileUploadStore();
+    // const store = useFileUploadStore();
     try {
         const url = await store.getPreSignedUrl(file);
         await store.putFileUpload(url.presignedURL, file);
         emit("uploadSuccess", url.presignedURL, url.s3path);
     } catch (error) {
         emit("uploadError", error);
-        emit("ERROR", error);
     }
     loadingModal.value = false;
 }
-
 </script>
-
 
 <style>
 .fileuploader-button {

@@ -6,12 +6,17 @@
                 <!-- user -->
                 <div class="pieceDetailView-user-container">
                     <img
-                        class="pieceDetailView-user-img"
-                        :src="
-                            pieceUser.profileImage ||
-                            'https://i.ibb.co/grMvZS9/your-image.jpg'
+                        v-if="
+                            pieceUser.profileImage === null ||
+                            pieceUser.profileImage === ''
                         "
-                        alt="image"
+                        class="pieceDetailView-user-img"
+                        src="@/assets/defaultprofile.png"
+                    />
+                    <img
+                        v-else
+                        class="pieceDetailView-user-img"
+                        :src="pieceUser.profileImage"
                     />
                     <div class="pieceDetailView-name-container">
                         <div class="pieceDetailView-user-label">
@@ -34,7 +39,7 @@
                 </div>
             </div>
             <!-- image -->
-            <div class="pieceDetailView-image-container">
+            <!-- <div class="pieceDetailView-image-container">
                 <img
                     class="pieceDetailView-image-item"
                     :src="
@@ -51,6 +56,13 @@
                 <div v-else class="pieceDetailView-image-message">
                     조각을 클릭하여 앞면을 확인해보세요
                 </div>
+            </div> -->
+            <div class="pieceDetailView-image-container">
+                <PieceDetailView
+                    :frontImg="piecelistDetail.frontImg"
+                    :backImg="piecelistDetail.backImg"
+                    :title="piecelistDetail.title"
+                />
             </div>
 
             <!-- icon -->
@@ -166,6 +178,7 @@ import { ref, computed, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
 import { useRoute } from "vue-router";
 import { usePiecelistStore } from "@/stores/piecelist";
+import PieceDetailView from "@/components/item/PieceDetailItem.vue";
 import RoundButton from "@/components/button/RoundButton.vue";
 import ShareSelectModal from "@/components/modal/ShareSelectModal.vue";
 import ReportSelectModal from "@/components/modal/ReportSelectModal.vue";

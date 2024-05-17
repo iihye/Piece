@@ -3,7 +3,10 @@
         <div class="mypage-preview-container">
             <div class="mypage-preview-image-container">
                 <img
-                    v-if='loginUserInfo.profileImage === null'
+                    v-if="
+                        loginUserInfo.profileImage === null ||
+                        loginUserInfo.profileImage === ''
+                    "
                     class="mypage-preview-img"
                     src="@/assets/defaultprofile.png"
                 />
@@ -12,7 +15,6 @@
                     class="mypage-preview-img"
                     :src="loginUserInfo.profileImage"
                 />
-                
             </div>
             <div class="mypage-preview-sub-container">
                 <div class="mypage-preview-label">{{ loginUserLabel }}</div>
@@ -101,7 +103,6 @@ const commonStore = useCommonStore();
 
 const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
 const loginUserLabel = computed(() => commonStore.getLoginUserLabel);
-
 function handleMypiece() {
     router.push({ name: "pieceListMy" });
 }

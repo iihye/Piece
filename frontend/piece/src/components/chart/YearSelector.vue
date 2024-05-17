@@ -23,14 +23,6 @@ const currentYear = new Date().getFullYear();
 const year = ref(currentYear);
 const emit = defineEmits(['year-changed']);
 
-// const changeYear = (change) => {
-//     if ((year.value === currentYear && change > 0) || (year.value > currentYear)) {
-//         return;
-//     }
-//     year.value += change;
-//     emit('year-changed', year.value);
-// };
-
 const changeYear = (change) => {
     const newYear = year.value + change;
     if (newYear <= currentYear) {

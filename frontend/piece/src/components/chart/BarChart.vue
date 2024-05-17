@@ -19,7 +19,7 @@ let chartInstance = null;
 const initOrUpdateChart = () => {
     const ctx = barChartCanvas.value.getContext('2d');
     if (chartInstance) {
-        chartInstance.data = props.chartData; 
+        chartInstance.data = props.chartData;
         chartInstance.update();
     } else {
         chartInstance = new Chart(ctx, {
@@ -27,8 +27,18 @@ const initOrUpdateChart = () => {
             data: props.chartData,
             options: {
                 scales: {
-                    y: { beginAtZero: true, display: true },
-                    x: { grid: { display: false } }
+                    y: {
+                        beginAtZero: true,
+                        display: true,
+                        grid: {
+                            display: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
                 },
                 plugins: {
                     legend: { display: false },
@@ -46,6 +56,7 @@ const initOrUpdateChart = () => {
         });
     }
 };
+
 
 onMounted(() => {
     initOrUpdateChart();
