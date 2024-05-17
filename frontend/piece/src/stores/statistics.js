@@ -11,11 +11,6 @@ export const useStatisticsStore = defineStore('statistics', () => {
         }]
     });
     const noData = ref(false);
-
-    //      const getMypageLabelList = computed(() => {
-    //     return mypageLabelList.value;
-    // });
-
     const getNoData = computed(() => {
         return noData.value;
     });
@@ -27,19 +22,19 @@ export const useStatisticsStore = defineStore('statistics', () => {
 
             if (responseData.code === "FIND_CONSUMPTIONS_SUCCESS" && responseData.data != null) {
                 noData.value = false;
-                console.log('if문 안 nodata: ', noData.value);
+                // console.log('if문 안 nodata: ', noData.value);
 
                 const monthlyData = Array(12).fill(0);
 
                 responseData.data.forEach(item => {
                     monthlyData[item.consumptionMonth - 1] = item.consumptionMoney;
-                    console.log(monthlyData[item.consumptionMonth - 1], item.consumptionMoney);
+                    // console.log(monthlyData[item.consumptionMonth - 1], item.consumptionMoney);
                 });
 
                 chartData.value.datasets[0].data = monthlyData;
             } else {
                 noData.value = true;
-                console.log('nodata: ', noData.value);
+                // console.log('nodata: ', noData.value);
                 chartData.value.datasets[0].data.fill(0);
             }
         } catch (error) {

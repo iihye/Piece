@@ -18,7 +18,10 @@ let pieChartInstance = null;
 
 const initOrUpdateChart = () => {
     const ctx = pieChartCanvas.value.getContext('2d');
-    if (!pieChartInstance) {
+    if (pieChartInstance) {
+        pieChartInstance.data = props.chartData;
+        pieChartInstance.update();
+    } else {
         pieChartInstance = new Chart(ctx, {
             type: 'pie',
             data: props.chartData,
@@ -43,18 +46,11 @@ const initOrUpdateChart = () => {
     }
 };
 
-
 onMounted(() => {
     initOrUpdateChart();
 });
 
-
-watch(() => props.chartData, (newData) => {
-    if (pieChartInstance) {
-        pieChartInstance.data = newData;
-        pieChartInstance.update();
-    }
-}, { deep: true });
+watch(() => props.chartData, initOrUpdateChart, { deep: true });
 
 onUnmounted(() => {
     if (pieChartInstance) {

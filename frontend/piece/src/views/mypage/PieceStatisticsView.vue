@@ -1,43 +1,62 @@
 <template>
     <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
-    <year-selector class="piecestatisticsview-year-selector"
-    @year-changed="updateChartData" />
-    <pie-chart :chartData="chartData" />
+    <YearSelector class="piecestatisticsview-year-selector" @year-changed="showPieChartData" />
+    <PieChart :chartData="chartData" />
     <hr />
     <div>
-        <div v-for="(amount, index) in chartData.datasets[0].data" :key="index">
-            <div v-if="amount != 0">
-                <div class="monthly-consumption">
-                    <div class="color-box" :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"></div>
-                    <span class="label">{{ chartData.labels[index] }}</span>
-                    <span class="amount">{{ amount.toLocaleString() }}회</span>
-                </div>
+        <div v-for="(amount, index) in chartData.datasets[0].data" :key="index" class="monthly-consumption">
+            <div v-if="amount != 0" class="consumption-row">
+                <div class="color-box" :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"></div>
+                <span class="label">{{ chartData.labels[index] }}</span>
+                <span class="amount">{{ amount.toLocaleString() }}회</span>
             </div>
         </div>
     </div>
-    <div v-if="noData" class="no-data-content">완성된 조각이 없어요
-        <RouterLink :to="{ name: 'piecemake' }">조각 만들러 가기</RouterLink>
-    </div>
-    <div v-else class="statistics-details">
+    <div v-if="noData" class="piecestatisticsview-main-content-container">
+        <div class="piecestatisticsview-main-content">
+            소비한 내용이 없어요 ㅜㅜ
+        </div>
+        <div class="button-container">
+            <RouterLink :to="{ name: 'piecemake' }">
+                <SmallButton smallButtonContent="조각 만들기" />
+            </RouterLink>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { usePieceStatisticsStore } from '@/stores/piecestatistics';
 import YearSelector from "@/components/chart/YearSelector.vue";
 import PieChart from "@/components/chart/PieChart.vue";
+import { useCommonStore } from "@/stores/common";
+import SmallButton from "@/components/button/SmallButton.vue";
 
-const { chartData, noData, updateData } = usePieceStatisticsStore();
+const pieceStatisticsStore = usePieceStatisticsStore();
+const commonStore = useCommonStore();
+const { chartData, updateData } = pieceStatisticsStore;
 
-const updateChartData = (year) => {
-    updateData(year);
+const noData = computed(() => pieceStatisticsStore.getNoData);
+const currentYear = new Date().getFullYear();
+const year = ref(currentYear);
+
+const showPieChartData = async (selectedYear) => {
+    try {
+        await updateData(selectedYear);
+    } catch (error) {
+        console.error("조각 내역 불러오기 실패", error);
+    }
 };
 
-const displayChartData = computed(() => chartData);
+onMounted(async () => {
+    commonStore.headerTitle = "조각 통계";
+    commonStore.headerType = "header2";
+
+    await updateData(year.value);
+});
 </script>
 
-<style scoped>
+<style>
 .piecestatisticsview-main-title {
     font-family: "Bold";
     font-size: 1.6rem;
@@ -50,34 +69,41 @@ const displayChartData = computed(() => chartData);
     margin-bottom: 1rem;
 }
 
-.no-data-content {
-    color: var(--main-color);
-    text-align: center;
-    font-size: 18px;
-    margin-top: 20px;
-}
-
-.color-box {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.label-text {
-    flex-grow: 1;
-    text-align: left;
-    font-family: "Medium";
-    font-size: 1rem;
-}
-
-.label-count {
+.amount {
     white-space: nowrap;
-    font-family: "Regular";
-    font-size: 1rem;
 }
 
-.monthly-consumption {
+.piecestatisticsview-main-content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+}
+
+.piecestatisticsview-main-content {
+    font-size: 1rem;
+    color: var(--gray2-color);
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.button-container button:hover {
+    cursor: pointer;
+}
+
+.monthly-consumption .consumption-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -94,9 +120,5 @@ const displayChartData = computed(() => chartData);
 
 .label {
     flex-grow: 1;
-}
-
-.amount {
-    white-space: nowrap;
 }
 </style>

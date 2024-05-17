@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import Chart from 'chart.js/auto';
 import { defineProps } from 'vue';
 
@@ -14,15 +14,15 @@ const props = defineProps({
 });
 
 const barChartCanvas = ref(null);
-let chartInstance = null;
+let barChartInstance = null;
 
 const initOrUpdateChart = () => {
     const ctx = barChartCanvas.value.getContext('2d');
-    if (chartInstance) {
-        chartInstance.data = props.chartData;
-        chartInstance.update();
+    if (barChartInstance) {
+        barChartInstance.data = props.chartData;
+        barChartInstance.update();
     } else {
-        chartInstance = new Chart(ctx, {
+        barChartInstance = new Chart(ctx, {
             type: 'bar',
             data: props.chartData,
             options: {
@@ -30,14 +30,10 @@ const initOrUpdateChart = () => {
                     y: {
                         beginAtZero: true,
                         display: true,
-                        grid: {
-                            display: false
-                        }
+                        grid: { display: false }
                     },
                     x: {
-                        grid: {
-                            display: false
-                        }
+                        grid: { display: false }
                     }
                 },
                 plugins: {
@@ -65,8 +61,8 @@ onMounted(() => {
 watch(() => props.chartData, initOrUpdateChart, { deep: true });
 
 onUnmounted(() => {
-    if (chartInstance) {
-        chartInstance.destroy();
+    if (barChartInstance) {
+        barChartInstance.destroy();
     }
 });
 </script>
