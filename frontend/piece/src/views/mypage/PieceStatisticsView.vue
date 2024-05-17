@@ -113,6 +113,18 @@ onMounted(async () => {
     margin-bottom: 10px;
 }
 
+.monthly-consumption .label {
+    flex-grow: 0;
+    flex-shrink: 0;
+    color: var(--main-color)
+}
+
+.monthly-consumption .amount {
+    flex-grow: 0;
+    flex-shrink: 0;
+    text-align: right;
+}
+
 .color-box {
     width: 24px;
     height: 24px;

@@ -17,9 +17,7 @@
         </div>
         <div class="button-container">
             <RouterLink :to="{ name: 'piecemake' }">
-                <SmallButton
-                    smallButtonContent="조각 만들기"
-                />
+                <SmallButton smallButtonContent="조각 만들기"/>
             </RouterLink>
         </div>
     </div>
@@ -44,9 +42,10 @@ const currentYear = new Date().getFullYear();
 const year = ref(currentYear);
 
 
-const showBarChartData = async (year) => {
+const showBarChartData = async (getYear) => {
     try {
-        await updateData(year);
+        console.log('year is ', getYear);
+        await updateData(getYear);
     } catch (error) {
         // console.error("지출 내역 불러오기 실패", error);
     }
@@ -56,7 +55,7 @@ onMounted(async () => {
     commonStore.headerTitle = "소비 통계";
     commonStore.headerType = "header2";
 
-    await updateData(year);
+    await updateData(year.value);
 });
 
 </script>
