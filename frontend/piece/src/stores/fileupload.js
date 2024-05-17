@@ -32,7 +32,9 @@ export const useFileUploadStore = defineStore("fileupload", () => {
     // =========== AWS ===============
     async function putFileUpload(presignedURL, file) {
         try {
-            // console.log('presignedURL: ', presignedURL);
+            console.log('file: ', file)
+            console.log('presignedURL: ', presignedURL);
+            console.log('fileType: ',file.type)
             const response = await axios.put(presignedURL, file, {
                 headers: {
                     "Content-Type": file.type,
