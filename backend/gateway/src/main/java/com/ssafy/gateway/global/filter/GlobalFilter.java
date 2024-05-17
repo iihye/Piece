@@ -1,5 +1,9 @@
 package com.ssafy.gateway.global.filter; // 패키지 선언
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 975cbdb334dae598122d1e2f46ad9fce34f50000
 import com.ssafy.gateway.global.JwtTokenUtil; // JwtTokenUtil 클래스를 import합니다.
 import lombok.extern.slf4j.Slf4j; // Slf4j 로깅 라이브러리를 사용하기 위한 어노테이션 import
 import org.hibernate.validator.internal.util.logging.Log;
@@ -7,6 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired; // Spring의 Auto
 import org.springframework.cloud.gateway.filter.GatewayFilter; // Spring Cloud GatewayFilter를 import합니다.
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory; // GatewayFilterFactory 클래스를 import합니다.
 import org.springframework.http.HttpStatus;
+<<<<<<< HEAD
+=======
+=======
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+>>>>>>> feature-BE/usersghkim
+>>>>>>> 975cbdb334dae598122d1e2f46ad9fce34f50000
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -16,6 +30,10 @@ import reactor.core.publisher.Mono;
 @Slf4j // 로그를 기록하기 위한 Slf4j 사용하도록 설정합니다.
 public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Config> { // GatewayFilter의 설정을 확장하는 클래스 정의
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 975cbdb334dae598122d1e2f46ad9fce34f50000
     @Autowired // 자동으로 의존성을 주입받기 위해 Autowired 어노테이션 사용
     private JwtTokenUtil jwtTokenUtil; // JwtTokenUtil의 인스턴스를 주입받습니다.
 
@@ -82,6 +100,39 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
         return exchange.getResponse().setComplete(); // 응답 완료
     }
 
+<<<<<<< HEAD
+=======
+=======
+public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Config> {
+
+    public GlobalFilter() {
+        super(Config.class);
+    }
+
+    @Override
+    public GatewayFilter apply(Config config) {
+        return (exchange, chain) -> {
+            ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
+                .header("Authenticated-User-Header", "1")
+                .build();
+            if (config.isPreLogger()) {
+                log.info("Request ID: {}", modifiedRequest.getId());
+            }
+
+            return chain.filter(exchange.mutate().request(modifiedRequest).build())
+                .then(Mono.fromRunnable(() -> {
+                    if (config.isPostLogger()) {
+                        log.info("Response Status Code: {}",
+                            exchange.getResponse().getStatusCode());
+                    }
+                }));
+        };
+    }
+
+    @Getter
+    @Setter
+>>>>>>> feature-BE/usersghkim
+>>>>>>> 975cbdb334dae598122d1e2f46ad9fce34f50000
     public static class Config {
         // 필요한 설정이 있으면 추가할 수 있습니다.
     }
