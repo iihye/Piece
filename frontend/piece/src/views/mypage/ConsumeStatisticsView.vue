@@ -44,7 +44,6 @@ const year = ref(currentYear);
 
 const showBarChartData = async (getYear) => {
     try {
-        console.log('year is ', getYear);
         await updateData(getYear);
     } catch (error) {
         // console.error("지출 내역 불러오기 실패", error);
