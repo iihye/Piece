@@ -40,11 +40,20 @@
                     :key="participant.userId"
                 >
                     <img
+                        v-if="
+                            (participant.profileImage === null ||
+                                participant.profileImage === '') &&
+                            participant.userId != loginUserId
+                        "
                         class="chatroomlist-item-circleImage"
-                        v-if="participant.userId != loginUserId"
-                        :src="participant.profileImage"
-                        alt="profileImage"
+                        src="@/assets/defaultprofile.png"
                     />
+                    <img
+                        v-else-if="participant.userId != loginUserId"
+                        class="chatroomlist-item-circleImage"
+                        :src="participant.profileImage"
+                    />
+
                     <div
                         class="chatroomlist-info-conatiner"
                         v-if="participant.userId != loginUserId"
@@ -169,16 +178,16 @@ onMounted(async () => {
 }
 
 .chatroomlist-item-squreImage {
-    width: 5rem;
-    height: 5rem;
+    width: 4.4rem;
+    height: 4.4rem;
     border: 1px solid var(--gray-color);
     border-radius: 10%;
     margin-right: 0.6rem;
 }
 
 .chatroomlist-item-circleImage {
-    width: 5rem;
-    height: 5rem;
+    width: 4.4rem;
+    height: 4.4rem;
     border: 1px solid var(--gray-color);
     border-radius: 50%;
     margin-right: 0.6rem;
