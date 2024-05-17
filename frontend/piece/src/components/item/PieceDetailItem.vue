@@ -98,12 +98,9 @@ function handleTouchStart(event) {
 }
 
 function handleTouchMove(event) {
-    event.preventDefault(); // Prevent scrolling on touch move
+    event.preventDefault();
     const touch = event.touches[0];
     const target = event.currentTarget;
-    target.style = `background-position : ${
-        touchStartX / 5 + touchStartY / 5
-    }%; filter : opacity(${touchStartX / 200}) brightness(1.2)`;
     transformCard(touch, touchStartX, touchStartY, target);
 }
 

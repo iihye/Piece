@@ -31,6 +31,7 @@ export const usePieceStore = defineStore('piece', () => {
     const base64BackImage = ref('');
 
     // Getters
+    const getCroppedImageValue = computed(() => croppedImageValue.value);
     const getPieceValue = computed(() => pieceValue.value);
     const getBase64FrontImage = computed(() => base64FrontImage.value);
     const getBase64BackImage = computed(() => base64BackImage.value);
@@ -50,6 +51,30 @@ export const usePieceStore = defineStore('piece', () => {
 
     function setBase64BackImage(value) {
       base64BackImage.value = value;
+    }
+
+    function resetPieceValue() {
+      pieceValue.value = {
+          performanceType: null,
+          title: null,
+          date: null,
+          time: null,
+          cast: null,
+          address: null,
+          supervision: null,
+          seat: null,
+          price: 0,
+          score: 0,
+          comment: null,
+          isPrivate: false,
+          openYn: 'Y',
+          imageFront: '',
+          imageBack: '',
+          genre: 'FEAR'
+      };
+      croppedImageValue.value = '';
+      base64FrontImage.value = '';
+      base64BackImage.value = '';
     }
 
     async function savePiece() {
@@ -89,6 +114,7 @@ export const usePieceStore = defineStore('piece', () => {
         getPieceValue,
         getBase64FrontImage,
         getBase64BackImage,
+        getCroppedImageValue,
         setPieceValue,
         setCroppedImageValue,
         savePiece,
@@ -96,6 +122,7 @@ export const usePieceStore = defineStore('piece', () => {
         fetchImage,
         setBase64FrontImage,
         setBase64BackImage,
+        resetPieceValue,
     };
 },
 {

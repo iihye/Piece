@@ -119,7 +119,7 @@ const searchQuery = ref("");
 const isFocused = ref(false);
 
 watch(searchQuery, (newValue) => {
-    if (newValue.length >= 2) {
+    if (newValue.length >= 1) {
         searchMovieDebouncing(newValue);
     } else {
         searchResults.value = [];
@@ -239,6 +239,12 @@ onMounted(async () => {
     commonStore.headerTitle = "조각 만들기";
     commonStore.headerType = "header2";
 });
+
+onMounted(() => {
+    imageSrc.value = pieceStore.getCroppedImageValue;;
+    uploadedImage.value = pieceStore.getCroppedImageValue;;
+    originalImage.value = pieceStore.getCroppedImageValue;;
+})
 </script>
 
 <style>
@@ -276,6 +282,7 @@ onMounted(async () => {
     width: 15rem;
     margin-bottom: 1rem;
     align-self: end;
+    position: relative;
 }
 
 /* upload */

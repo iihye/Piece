@@ -136,6 +136,7 @@ function leave() {
 
 onMounted(() => {
     score.value = pieceValue.score;
+    hoverScore.value = score.value;
 });
 </script>
 

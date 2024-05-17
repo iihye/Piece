@@ -99,6 +99,9 @@ const savePiece = async () => {
         await pieceStore.savePiece();
         isLoading.value = false; // 로딩 종료
         fileUploadSuccessModal.value = true;
+
+        // 상태초기화
+        pieceStore.resetPieceValue();
     } catch (error) {
         console.error("사진 저장 중 에러 발생 :", error);
         isLoading.value = false; // 로딩 종료
