@@ -81,7 +81,11 @@ const userStore = useUserStore();
 // upload image
 async function handleUpload(url, s3path) {
     userStore.updateProfileImage(s3path);
-    successModal.value = true;
+
+    // ==========================================
+    // successModal.value = true;
+    // ==========================================
+
     commonStore.findLoginUserInfo();
 }
 
