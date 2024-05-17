@@ -1,140 +1,124 @@
 <template>
     <div class="chatconversationview-main-container">
-        <div id="chatconversationview-chatBox">
-            <div id="chatconversationview-messages">
-                <ul style="list-style: none; padding-inline-start: 0rem; margin: 0px">
-                    <!-- 저장되어 있던 메시지 목록 -->
-                    <li v-for="item in chatMessages" :key="item">
-                        <div
-                            class="chatconversationview-messageCard"
-                            :class="
-                                item.senderId != loginUserId
-                                    ? 'chatconversationview-fromCard'
-                                    : 'chatconversationview-toCard'
-                            "
-                        >
-                            <!-- 상대가 보낸 메시지 -->
-                            <div
-                                class="chatconversationview-fromHeader"
-                                v-if="item.senderId != loginUserId"
-                            >
-                                <!-- 프로필 이미지 -->
-                                <div class="chatconversationview-profileImage">
-                                    <!-- <img
-                                        src="@/assets/defaultprofile.png"
-                                        @click="openModal(item)"
-                                    /> -->
-                                    <img
-                                        v-if="item.profileImage != null || item.profileImage == ''"
-                                        :src="item.profileImage"
-                                        @click="openModal(item)"
-                                    />
-                                    <img
-                                        v-else
-                                        src="@/assets/defaultprofile.png"
-                                        @click="openModal(item)"
-                                    />
-                                </div>
-
-                                <!-- 메시지 관련 부분 시작-->
-                                <div class="chatconversationv-senderview-container">
-                                    <div class="chatconversationview-userHeader">
-                                        <div class="chatconversationview-userTitle">
-                                            {{ item.title }}
-                                        </div>
-                                        <div class="chatconversationview-userName">
-                                            {{ item.nickname }}
-                                        </div>
-                                    </div>
-                                    <div class="chatconversationview-sender-container">
-                                        <div class="chatconversationview-sender-content">{{ item.content }}</div>
-                                        <div class="chatconversationview-sender-time">{{ item.createdAt }}</div>
-                                    </div> 
-                                </div>
-                            </div>
-
-                            <!-- 내가 보낸 메시지라면 -->
-                            <div
+        <ul class="chatconversationview-sub-container" style="list-style: none; padding-inline-start: 0rem; margin: 0px">
+            <!-- 저장되어 있던 메시지 목록 -->
+            <li v-for="item in chatMessages" :key="item">
+                <div
+                    class="chatconversationview-messageCard"
+                    :class="
+                        item.senderId != loginUserId
+                            ? 'chatconversationview-fromCard'
+                            : 'chatconversationview-toCard'
+                    "
+                >
+                    <!-- 상대가 보낸 메시지 -->
+                    <div
+                        class="chatconversationview-fromHeader"
+                        v-if="item.senderId != loginUserId"
+                    >
+                        <!-- 프로필 이미지 -->
+                        <div class="chatconversationview-profileImage">
+                            <!-- <img
+                                src="@/assets/defaultprofile.png"
+                                @click="openModal(item)"
+                            /> -->
+                            <img
+                                v-if="item.profileImage != null || item.profileImage == ''"
+                                :src="item.profileImage"
+                                @click="openModal(item)"
+                            />
+                            <img
                                 v-else
-                                class="chatconversationview-messageAndTimeTo"
-                            >
-                                <div class="chatconversationview-sendDate">
-                                    {{ item.createdAt }}
-                                </div>
-                                <div class="chatconversationview-bubble">
-                                    <p class="chatconversationview-fromMe">
-                                        {{ item.content }}
-                                    </p>
-                                </div>
-                            </div>
+                                src="@/assets/defaultprofile.png"
+                                @click="openModal(item)"
+                            />
                         </div>
-                    </li>
 
-                    <!-- 저장할 메시지 목록-->
-                    <li v-for="item in storeMessages" :key="item">
-                        <div
-                            class="chatconversationview-messageCard"
-                            :class="
-                                item.senderId != loginUserId
-                                    ? 'chatconversationview-fromCard'
-                                    : 'chatconversationview-toCard'
-                            "
-                        >
-                            <!-- 상대가 보낸 메시지 -->
-                            <div
-                                class="chatconversationview-fromHeader"
-                                v-if="item.senderId != loginUserId"
-                            >
-                                <!-- 프로필 이미지 -->
-                                <div class="chatconversationview-profileImage">
-                                    <img
-                                        v-if="item.profileImage != null"
-                                        :src="item.profileImage"
-                                        @click="openModal(item)"
-                                    />
-                                    <img
-                                        v-else
-                                        :src="defaultProfileImage"
-                                        @click="openModal(item)"
-                                    />
+                        <!-- 메시지 관련 부분 시작-->
+                        <div class="chatconversationv-senderview-container">
+                            <div class="chatconversationview-userHeader">
+                                <div class="chatconversationview-userTitle">
+                                    {{ item.title }}
                                 </div>
-
-                                <!-- 메시지 관련 부분 시작-->
-                                <div class="chatconversationv-senderview-container">
-                                    <div class="chatconversationview-userHeader">
-                                        <div class="chatconversationview-userTitle">
-                                            {{ item.title }}
-                                        </div>
-                                        <div class="chatconversationview-userName">
-                                            {{ item.nickname }}
-                                        </div>
-                                    </div>
-                                    <div class="chatconversationview-sender-container">
-                                        <div class="chatconversationview-sender-content">{{ item.content }}</div>
-                                        <div class="chatconversationview-sender-time">{{ item.createdAt }}</div>
-                                    </div> 
+                                <div class="chatconversationview-userName">
+                                    {{ item.nickname }}
                                 </div>
                             </div>
+                            <div class="chatconversationview-sender-container">
+                                <div class="chatconversationview-sender-content">{{ item.content }}</div>
+                                <div class="chatconversationview-sender-time">{{ item.createdAt }}</div>
+                            </div> 
+                        </div>
+                    </div>
 
-                            <!-- 내가 보낸 메시지라면 -->
-                            <div
+                    <!-- 내가 보낸 메시지라면 -->
+                    <div
+                        v-else
+                        class="chatconversationview-receiver-container"
+                    >
+                        <div class="chatconversationview-receiver-time">{{ item.createdAt }}</div>
+                        <div class="chatconversationview-receiver-content">{{ item.content }}</div>
+                    </div>
+                </div>
+            </li>
+
+            <!-- 저장할 메시지 목록-->
+            <li v-for="item in storeMessages" :key="item">
+                <div
+                    class="chatconversationview-messageCard"
+                    :class="
+                        item.senderId != loginUserId
+                            ? 'chatconversationview-fromCard'
+                            : 'chatconversationview-toCard'
+                    "
+                >
+                    <!-- 상대가 보낸 메시지 -->
+                    <div
+                        class="chatconversationview-fromHeader"
+                        v-if="item.senderId != loginUserId"
+                    >
+                        <!-- 프로필 이미지 -->
+                        <div class="chatconversationview-profileImage">
+                            <img
+                                v-if="item.profileImage != null"
+                                :src="item.profileImage"
+                                @click="openModal(item)"
+                            />
+                            <img
                                 v-else
-                                class="chatconversationview-messageAndTimeTo"
-                            >
-                                <div class="chatconversationview-sendDate">
-                                    {{ item.createdAt }}
+                                :src="defaultProfileImage"
+                                @click="openModal(item)"
+                            />
+                        </div>
+
+                        <!-- 메시지 관련 부분 시작-->
+                        <div class="chatconversationv-senderview-container">
+                            <div class="chatconversationview-userHeader">
+                                <div class="chatconversationview-userTitle">
+                                    {{ item.title }}
                                 </div>
-                                <div class="chatconversationview-bubble">
-                                    <p class="chatconversationview-fromMe">
-                                        {{ item.content }}
-                                    </p>
+                                <div class="chatconversationview-userName">
+                                    {{ item.nickname }}
                                 </div>
                             </div>
+                            <div class="chatconversationview-sender-container">
+                                <div class="chatconversationview-sender-content">{{ item.content }}</div>
+                                <div class="chatconversationview-sender-time">{{ item.createdAt }}</div>
+                            </div> 
                         </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+                    </div>
+
+                    <!-- 내가 보낸 메시지라면 -->
+                    <div
+                        v-else
+                        class="chatconversationview-receiver-container"
+                    >
+                        <div class="chatconversationview-receiver-time">{{ item.createdAt }}</div>
+                        <div class="chatconversationview-receiver-content">{{ item.content }}</div>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
 
     <!-- input button -->
@@ -487,6 +471,11 @@ onMounted(() => {
     display: none;
 }
 
+.chatconversationview-sub-container {
+    display: flex;
+    flex-direction: column;
+}
+
 /* input messsage form */
 .chatconversationview-inputWindow {
     position: fixed;
@@ -497,6 +486,7 @@ onMounted(() => {
     width: 22.2rem;
     height: 4rem;
     bottom: 4rem;
+    background-color: var(--white-color);
 }
 
 .chatconversationview-inputGroup {
@@ -545,14 +535,12 @@ onMounted(() => {
 
 /*  */
 #chatconversationview-chatBox {
-    /* border: 0.063rem solid var(--black-color);
-  width: 25rem;
-  height: 42.5rem;
-  margin: 0 auto; */
+    width: 22.2rem;
+    margin: 0 auto;
 }
 
 #chatconversationview-messages {
-    width: 100%;
+    width: 22.2rem;
     display: flex;
     /* overflow-x: hidden;
     overflow-y: scroll;
@@ -571,12 +559,14 @@ onMounted(() => {
 
 .chatconversationview-fromCard {
     justify-content: flex-start;
-    max-width: 15rem;
+    max-width: 20.2rem;
+    padding-right: 2rem;
 }
 
 .chatconversationview-toCard {
     justify-content: flex-end;
-    max-width: 15rem;
+    max-width: 20.2rem;
+    padding-left: 2rem;
 }
 
 /* 메시지 버블 */
@@ -685,6 +675,39 @@ p.chatconversationview-fromThem {
     font-size: 0.8rem;
     color: var(--gray2-color);
     margin-left: 0.2rem;
+    display: flex;
+    align-self: flex-end;
+}
+
+/* 내가 보낸 메시지 */
+/* 메시지+시간 */
+.chatconversationview-receiver-container{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 100%;
+}
+
+/* 메시지 */
+.chatconversationview-receiver-content{
+    max-width: 14rem;
+    overflow-wrap: break-word;
+    padding: 0.4rem;
+    background-color: var(--main-color);
+    border-radius: 0.4rem;
+    padding: 0.8rem 0.8rem 0.8rem 0.8rem;
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--white-color);
+    line-height: 1.2rem;
+}
+
+/* 시간 */
+.chatconversationview-receiver-time{
+    font-family: "Regular";
+    font-size: 0.8rem;
+    color: var(--gray2-color);
+    margin-right: 0.2rem;
     display: flex;
     align-self: flex-end;
 }
