@@ -10,7 +10,24 @@
             <div
                 v-if="chatRoom.isPersonal === false"
                 class="chatroomlist-sub-container"
-            ></div>
+            >
+                <div class="chatroomlist-item-container">
+                    <img
+                        class="chatroomlist-item-squreImage"
+                        :src="chatRoom.culture.imageUrl"
+                        alt="profileImage"
+                    />
+                    <div class="chatroomlist-info-conatiner">
+                        <div class="chatroomlist-info-nickname">
+                            {{ chatRoom.culture.title }}
+                        </div>
+                        <div class="chatroomlist-info-message">
+                            {{ chatRoom.participantCount }}명이 대화하고 있어요!
+                        </div>
+                        <div class="chatroomlist-info-time">n분 전</div>
+                    </div>
+                </div>
+            </div>
 
             <!-- 일대일 채팅 -->
             <div
@@ -181,7 +198,7 @@ onMounted(async () => {
 }
 
 .chatroomlist-info-nickname {
-    font-family: "Semi";
+    font-family: "Bold";
     font-size: 1rem;
     color: var(--black-color);
     margin-bottom: 0.1rem;
