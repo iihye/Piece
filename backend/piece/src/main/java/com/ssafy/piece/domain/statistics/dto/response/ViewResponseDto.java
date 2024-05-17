@@ -15,7 +15,7 @@ public class ViewResponseDto {
 
     private int movieNumber;
 
-    private int TheaterNumber;
+    private int theaterNumber;
 
     private int musicalNumber;
 
