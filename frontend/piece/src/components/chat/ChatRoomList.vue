@@ -1,59 +1,49 @@
 <template>
-  <div id="chatRoomList">
-    <ul style="list-style: none; padding-inline-start: 0rem">
-      <li
-        class="chatroomlist-cardItems"
-        v-for="chatRoom in chatRoomList"
-        :key="chatRoom"
-        @click="goToChatConversation(chatRoom)"
-      >
+    <div class="chatRoomListHeader-main-container">
         <div
-          v-if="chatRoom.isPersonal === false"
-          class="chatroomlist-chatRoomCard"
+            class="chatroomlist-cardItems"
+            v-for="chatRoom in chatRoomList"
+            :key="chatRoom"
+            @click="goToChatConversation(chatRoom)"
         >
-          <img
-            class="chatroomlist-chatRoomThumbnail"
-            :src="chatRoom.culture.imageUrl"
-            alt="썸네일"
-          />
-          <!-- userId로 user 정보 조회 필요 -->
-        </div>
-        <div v-else class="chatroomlist-chatRoomCard">
-          <div
-            v-for="participant in chatRoom.participants"
-            :key="participant.userId"
-          >
-            <img
-              class="chatroomlist-chatRoomThumbnail"
-              v-if="participant.userId != loginUserId"
-              :src="participant.profileImage"
-              alt="Participant's Profile Image"
-            />
-          </div>
-          <!-- userId로 user 정보 조회 필요 -->
-        </div>
-        <div class="chatroomlist-chatRoomCardInfo">
-          <span class="chatroomlist-chatRoomName">
-            {{ chatRoom.chatRoomName }}<br />
-            <p
-              v-if="chatRoom.isPersonal === false"
-              class="chatroomList-participantCount"
+            <!-- 오픈채팅 -->
+            <div
+                v-if="chatRoom.isPersonal === false"
+                class="chatroomlist-sub-container"
+            ></div>
+
+            <!-- 일대일 채팅 -->
+            <div
+                v-if="chatRoom.isPersonal === true"
+                class="chatroomlist-sub-container"
             >
-              {{ chatRoom.participantCount }}명이 대화하고 있어요!
-              <!-- culture 불러오기 구현돼야 이미지 불러오기 구현 가능 -->
-            </p>
-            <br />
-            <p
-              v-if="chatRoom.isPersonal === true"
-              class="chatroomList-lastMessage"
-            >
-              마지막 메세지:{{ chatRoom.lastMessage }}
-            </p>
-          </span>
+                <div
+                    class="chatroomlist-item-container"
+                    v-for="participant in chatRoom.participants"
+                    :key="participant.userId"
+                >
+                    <img
+                        class="chatroomlist-item-circleImage"
+                        v-if="participant.userId != loginUserId"
+                        :src="participant.profileImage"
+                        alt="profileImage"
+                    />
+                    <div
+                        class="chatroomlist-info-conatiner"
+                        v-if="participant.userId != loginUserId"
+                    >
+                        <div class="chatroomlist-info-nickname">
+                            {{ participant.nickname }}
+                        </div>
+                        <div class="chatroomlist-info-message">
+                            {{ chatRoom.lastMessage }}
+                        </div>
+                        <div class="chatroomlist-info-time">n분 전</div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </li>
-    </ul>
-  </div>
+    </div>
 </template>
 
 <script setup>
@@ -66,65 +56,65 @@ const chatRoomStore = useChatRoomStore();
 const loginUserId = ref();
 
 const chatRoomList = ref([
-  // {
-  //     "chatRoomId": 1,
-  //     "cultureId": 1,
-  //     "updatedAt": "업데이트시간",
-  //     "imageUrl": "src/assets/logo.png", // 전역으로 받아올 예정
-  //     "chatRoomName": "Vue.js란 과연 무엇인가?",
-  //     "isPersonal": false,
-  //     "isOpened": true,
-  // }
+    // {
+    //     "chatRoomId": 1,
+    //     "cultureId": 1,
+    //     "updatedAt": "업데이트시간",
+    //     "imageUrl": "src/assets/logo.png", // 전역으로 받아올 예정
+    //     "chatRoomName": "Vue.js란 과연 무엇인가?",
+    //     "isPersonal": false,
+    //     "isOpened": true,
+    // }
 ]); // chatroomList를 reactive하게 만들기 위해 ref 사용
 
 async function fetchLoginUserId() {
-  loginUserId.value = await localStorage.getItem("userId");
-  console.log("로그인되어 있는 userId:", loginUserId.value);
+    loginUserId.value = await localStorage.getItem("userId");
+    console.log("로그인되어 있는 userId:", loginUserId.value);
 }
 
 // 채팅방 목록 받기
 async function fetchRooms(isPersonal) {
-  try {
-    const chatRooms = await chatRoomStore.getChatRoomList(isPersonal);
-    console.log("store에서 채팅방 목록을 받았습니다.");
-    chatRooms.forEach((m) => {
-      chatRoomList.value.push(m);
-    });
-  } catch (error) {
-    console.error("Error fetching chat logs:", error);
-  }
+    try {
+        const chatRooms = await chatRoomStore.getChatRoomList(isPersonal);
+        console.log("store에서 채팅방 목록을 받았습니다.");
+        chatRooms.forEach((m) => {
+            chatRoomList.value.push(m);
+        });
+    } catch (error) {
+        console.error("Error fetching chat logs:", error);
+    }
 }
 
 watch(
-  () => chatRoomStore.isPersonal,
-  (newValue, oldValue) => {
-    console.log("isPersonal 값이 변경되었습니다:" + newValue);
-    // 변경된 값에 대한 추가적인 처리를 수행할 수 있습니다.
-    // 채팅방 정보 갱신
-    chatRoomList.value = [];
+    () => chatRoomStore.isPersonal,
+    (newValue, oldValue) => {
+        console.log("isPersonal 값이 변경되었습니다:" + newValue);
+        // 변경된 값에 대한 추가적인 처리를 수행할 수 있습니다.
+        // 채팅방 정보 갱신
+        chatRoomList.value = [];
 
-    console.log(
-      "받아올 채팅방 목록 변경. 현재 login user id:" + loginUserId.value
-    );
+        console.log(
+            "받아올 채팅방 목록 변경. 현재 login user id:" + loginUserId.value
+        );
 
-    fetchRooms(newValue);
-  }
+        fetchRooms(newValue);
+    }
 );
 
 const goToChatConversation = (chatRoom) => {
-  // 선택된 채팅방 정보 변경
-  chatRoomStore.setChatRoomId(chatRoom.chatRoomId);
-  chatRoomStore.setIsPersonal(chatRoom.isPersonal);
+    // 선택된 채팅방 정보 변경
+    chatRoomStore.setChatRoomId(chatRoom.chatRoomId);
+    chatRoomStore.setIsPersonal(chatRoom.isPersonal);
 
-  router.push("/chat");
-  // 채팅 메시지 페이지로 이동
+    router.push("/chat");
+    // 채팅 메시지 페이지로 이동
 };
 
 // 페이지가 마운트될 때 chatroomList를 가져오도록 설정
 onMounted(async () => {
-  await fetchLoginUserId();
+    await fetchLoginUserId();
 
-  await fetchRooms(0); // default: 오픈 채팅방
+    await fetchRooms(0); // default: 오픈 채팅방
 });
 </script>
 
@@ -132,32 +122,89 @@ onMounted(async () => {
 @import "@/components/css/color.css";
 @import "@/components/css/font.css";
 
-#chatRoomList {
-  border: 0.0625rem solid var(--red-color);
+.chatRoomListHeader-main-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 7.25em - 3.2rem);
 }
-.chatroomlist-chatRoomCard {
-  width: 29%;
-}
-.chatroomlist-cardItems:hover {
-  background-color: var(--sub-color);
-}
-.chatroomlist-cardItems:active {
-  background-color: var(--main-color);
-}
-.chatroomlist-chatRoomName {
-  font-family: "Bold";
-  font-size: 1.25rem;
-}
+
 .chatroomlist-cardItems {
-  display: flex;
-  justify-content: flex-start;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0.4rem;
 }
-.chatroomlist-chatRoomThumbnail {
-  width: 100%;
-  margin-left: 0.625rem;
-  margin-right: 0.625rem;
+
+.chatroomlist-cardItems:hover {
+    background-color: var(--sub-color);
 }
-.chatroomlist-chatRoomCardInfo {
-  margin-left: 1.25rem;
+
+.chatroomlist-cardItems:active {
+    background-color: var(--main-color);
+}
+
+/* item */
+.chatroomlist-sub-container {
+    width: 100%;
+}
+
+.chatroomlist-item-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.chatroomlist-item-squreImage {
+    width: 5rem;
+    height: 5rem;
+    border: 1px solid var(--gray-color);
+    border-radius: 10%;
+    margin-right: 0.6rem;
+}
+
+.chatroomlist-item-circleImage {
+    width: 5rem;
+    height: 5rem;
+    border: 1px solid var(--gray-color);
+    border-radius: 50%;
+    margin-right: 0.6rem;
+}
+
+/* info */
+.chatroomlist-info-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Keeps content vertically centered */
+    align-items: flex-start; /* Aligns items to the left */
+    height: auto;
+}
+
+.chatroomlist-info-nickname {
+    font-family: "Semi";
+    font-size: 1rem;
+    color: var(--black-color);
+    margin-bottom: 0.1rem;
+}
+
+.chatroomlist-info-message {
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--gray2-color);
+    margin-bottom: 0.1rem;
+}
+
+.chatroomlist-info-time {
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--main-color);
+    margin-bottom: 0.1rem;
+}
+
+/*  */
+
+.chatroomlist-chatRoomName {
+    font-family: "Bold";
+    font-size: 1.25rem;
 }
 </style>
