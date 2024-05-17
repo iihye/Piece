@@ -16,13 +16,17 @@
                 <!-- album -->
                 <div class="recorddetailview-image-album">
                     <div class="images">
-                        <img
-                            class="image"
+                        <div
+                            class="images-image"
                             v-for="(imageUrl, index) in imageUrls"
-                            :key="index"
-                            :src="imageUrl"
-                            @click="handleImageClick(imageUrl, index)"
-                        />
+                        >
+                            <img
+                                class="image"
+                                :key="index"
+                                :src="imageUrl"
+                                @click="handleImageClick(imageUrl, index)"
+                            />
+                        </div>
                     </div>
 
                     <div
@@ -347,6 +351,12 @@ onMounted(async () => {
 .image {
     width: 15rem;
     height: 15rem;
+    object-fit: contain;
+}
+
+.images-image {
+    width: 100%;
+    height: 100%;
 }
 
 .image:hover {
