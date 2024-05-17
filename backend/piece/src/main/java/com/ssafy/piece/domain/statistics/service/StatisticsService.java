@@ -26,50 +26,54 @@ public class StatisticsService {
     // 관람 수 계산
     public void modifyViews(Long userId, CultureType type, LocalDate date) {
 
-        Views oldViews = viewsRepository.findByUserIdAndViewYear(userId, date.getYear());
+        Views views = viewsRepository.findByUserIdAndViewYear(userId, date.getYear());
 
-        Views views = Views.builder().build();
-
-        if (oldViews != null) {
-            oldViews = views;
-        }else{
-            oldViews = Views.builder().build();
+        if (views == null) {
+            views = Views.builder().build();
         }
+
+        Views updateViews = views;
 
         switch (type) {
             case MOVIE:
-                views = views.builder()
+                updateViews = views.toBuilder()
                     .userId(userId)
                     .viewYear(date.getYear())
-                    .movieNumber(oldViews.getMovieNumber() + 1)
+                    .movieNumber(views.getMovieNumber() + 1)
                     .build();
+                break;
             case THEATER:
-                views = views.builder()
+                updateViews = views.toBuilder()
                     .userId(userId)
                     .viewYear(date.getYear())
-                    .movieNumber(oldViews.getTheaterNumber() + 1)
+                    .TheaterNumber(views.getTheaterNumber() + 1)
                     .build();
+                break;
             case MUSICAL:
-                views = views.builder()
+                updateViews = views.toBuilder()
                     .userId(userId)
                     .viewYear(date.getYear())
-                    .movieNumber(oldViews.getMusicalNumber() + 1)
+                    .musicalNumber(views.getMusicalNumber() + 1)
                     .build();
+                break;
             case CONCERT:
-                views = views.builder()
+                updateViews = views.toBuilder()
                     .userId(userId)
                     .viewYear(date.getYear())
-                    .movieNumber(oldViews.getConcertNumber() + 1)
+                    .concertNumber(views.getConcertNumber() + 1)
                     .build();
+                break;
             case ETC:
-                views = views.builder()
+                updateViews = views.toBuilder()
                     .userId(userId)
                     .viewYear(date.getYear())
-                    .movieNumber(oldViews.getEtcNumber() + 1)
+                    .etcNumber(views.getEtcNumber() + 1)
                     .build();
+                break;
         }
+            viewsRepository.save(updateViews);
 
-        viewsRepository.save(views);
+
 
     }
 
@@ -83,11 +87,11 @@ public class StatisticsService {
             consumption = Consumptions.builder().build();
         }
 
-            Consumptions updateConsumption = consumption.builder()
+            Consumptions updateConsumption = consumption.toBuilder()
                 .userId(userId)
                 .consumptionYear(date.getYear())
                 .consumptionMonth(date.getMonthValue())
-                .consumptionMoney(price)
+                .consumptionMoney(consumption.getConsumptionMoney()+price)
                 .build();
 
         consumptionsRepository.save(updateConsumption);
