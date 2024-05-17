@@ -12,15 +12,26 @@
     <div v-if="noData" class="consumestatisticsview-main-content">소비한 내용이 없어요 ㅜㅜ
         <RouterLink :to="{ name: 'piecemake' }">조각 만들러 가기</RouterLink>
     </div>
+    <div>
+        {{ noData }}
+    </div>
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from "vue";
 import { useStatisticsStore } from '@/stores/statistics';
 import YearSelector from "@/components/chart/YearSelector.vue";
 import BarChart from "@/components/chart/BarChart.vue";
+import { useCommonStore } from "@/stores/common";
+
 
 const statisticsStore = useStatisticsStore();
-const { chartData, noData, updateData } = statisticsStore;
+const commonStore = useCommonStore();
+const { chartData, updateData } = statisticsStore;
+const noData = computed(() => statisticsStore.getNoData);
+const currentYear = new Date().getFullYear();
+const year = ref(currentYear);
+
 
 const showBarChartData = async (year) => {
     try {
@@ -29,6 +40,14 @@ const showBarChartData = async (year) => {
         // console.error("지출 내역 불러오기 실패", error);
     }
 };
+
+onMounted(async () => {
+    commonStore.headerTitle = "소비 통계";
+    commonStore.headerType = "header2";
+
+    await updateData(year);
+});
+
 </script>
 
 

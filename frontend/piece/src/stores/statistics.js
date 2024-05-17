@@ -12,13 +12,22 @@ export const useStatisticsStore = defineStore('statistics', () => {
     });
     const noData = ref(false);
 
+    //      const getMypageLabelList = computed(() => {
+    //     return mypageLabelList.value;
+    // });
+
+    const getNoData = computed(() => {
+        return noData.value;
+    });
+
     const updateData = async (consumptionYear) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/statistics/consumption/${consumptionYear}`);
             const responseData = response.data;
 
-            if (responseData.code === "FIND_CONSUMPTIONS_SUCCESS") {
+            if (responseData.code === "FIND_CONSUMPTIONS_SUCCESS" && responseData.data != null) {
                 noData.value = false;
+                console.log('if문 안 nodata: ', noData.value);
 
                 const monthlyData = Array(12).fill(0);
 
@@ -30,6 +39,7 @@ export const useStatisticsStore = defineStore('statistics', () => {
                 chartData.value.datasets[0].data = monthlyData;
             } else {
                 noData.value = true;
+                console.log('nodata: ', noData.value);
                 chartData.value.datasets[0].data.fill(0);
             }
         } catch (error) {
@@ -43,6 +53,7 @@ export const useStatisticsStore = defineStore('statistics', () => {
     return {
         chartData,
         noData,
-        updateData
+        updateData,
+        getNoData
     };
 });
