@@ -111,7 +111,7 @@ public class StatisticsService {
         ViewResponseDto result = ViewResponseDto.builder()
             .viewYear(view.getViewYear())
             .movieNumber(view.getMovieNumber())
-            .TheaterNumber(view.getTheaterNumber())
+            .theaterNumber(view.getTheaterNumber())
             .musicalNumber(view.getMusicalNumber())
             .concertNumber(view.getConcertNumber())
             .etcNumber(view.getEtcNumber())
