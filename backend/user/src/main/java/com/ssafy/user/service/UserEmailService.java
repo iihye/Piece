@@ -13,7 +13,7 @@ public class UserEmailService {
     private final EmailSender emailSender;
     private final Aes256 aes256;
 
-    public String sendEmail(String email, String order) {
+    public String sendEmail(String email, String order) { //인증이메일
         String result = "";
         String title = "";
         String content = "";
