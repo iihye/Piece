@@ -90,7 +90,7 @@ const profileImage = ref("");
 
 // users profileImage에 이미지경로 저장
 const handleSuccessUpload = async (s3path) => {
-    // console.log("받은 S3 경로:", s3path);
+    console.log("받은 S3 경로:", s3path);
     try {
         await fileUploadStore.putUserS3FilePath(s3path); // s3path를 백엔드로 전송
         successModal.value = true;
