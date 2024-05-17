@@ -46,9 +46,7 @@ export const useChatRoomStore = defineStore("chatroom", () => {
                 openChatRoomsCreateRequestDto
             );
 
-            console.log(
-                "생성된 채팅방 id:" + JSON.stringify(response.data.data)
-            );
+            console.log("생성된 채팅방 id:" + JSON.stringify(response.data.data));
 
             return response.data.data;
         } catch (error) {
@@ -67,15 +65,11 @@ export const useChatRoomStore = defineStore("chatroom", () => {
 
         try {
             const response = await axios.post(
-                `${
-                    import.meta.env.VITE_REST_CHAT_API
-                }/chatrooms/createpersonal`,
+                `${import.meta.env.VITE_REST_CHAT_API}/chatrooms/createpersonal`,
                 personalChatRoomsCreateRequestDto
             );
 
-            console.log(
-                "생성된 채팅방 id:" + JSON.stringify(response.data.data)
-            );
+            console.log("생성된 채팅방 id:" + JSON.stringify(response.data.data));
 
             return response.data.data;
         } catch (error) {
@@ -116,10 +110,6 @@ export const useChatRoomStore = defineStore("chatroom", () => {
             );
             this.chatRoomListValue = response.data.data; // 받은 데이터로 상태 업데이트
 
-            console.log(
-                "채팅방 목록 호출 결과" + JSON.stringify(response.data)
-            );
-
             console.log("------------------------");
             console.log(chatRoomListValue.value);
             console.log("------------------------");
@@ -141,9 +131,7 @@ export const useChatRoomStore = defineStore("chatroom", () => {
         // chatRoom 갱신
         // 입장한 채팅방 정보
         // chatRoomListValue에서 해당 chatroomId에 대한 채팅방을 찾습니다.
-        chatRoom.value = chatRoomListValue.value.find(
-            (room) => room.chatRoomId === chatroomId
-        );
+        chatRoom.value = chatRoomListValue.value.find((room) => room.chatRoomId === chatroomId);
 
         console.log("로그인한 사용자 id:" + localStorage.getItem("userId"));
     }
@@ -153,17 +141,14 @@ export const useChatRoomStore = defineStore("chatroom", () => {
         // 입장한 채팅방 정보
         // chatRoomListValue에서 해당 chatroomId에 대한 채팅방을 찾습니다.
 
-        chatRoom.value = chatRoomListValue.value.find(
-            (room) => room.chatRoomId === chatroomId
-        );
+        chatRoom.value = chatRoomListValue.value.find((room) => room.chatRoomId === chatroomId);
 
         console.log("찾아낸 채팅방 데이터:" + chatRoom.value);
         console.log("로그인한 사용자 id:" + localStorage.getItem("userId"));
 
         // 현재 채팅방의 참가자 중 상대방의 정보 받아오기
         partnerInfo.value = chatRoom.value.participants.find(
-            (participant) =>
-                participant.userId != localStorage.getItem("userId")
+            (participant) => participant.userId != localStorage.getItem("userId")
         );
 
         console.log("참가자 출력 테스트");

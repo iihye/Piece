@@ -103,9 +103,11 @@ async function fetchRooms(isPersonal) {
     try {
         const chatRooms = await chatRoomStore.getChatRoomList(isPersonal);
         console.log("store에서 채팅방 목록을 받았습니다.");
-        chatRooms.forEach((m) => {
-            chatRoomList.value.push(m);
-        });
+        if (chatRooms.length > 0) {
+            chatRooms.forEach((m) => {
+                chatRoomList.value.push(m);
+            });
+        }
     } catch (error) {
         console.error("Error fetching chat logs:", error);
     }

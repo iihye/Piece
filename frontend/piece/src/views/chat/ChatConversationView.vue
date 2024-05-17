@@ -13,7 +13,7 @@
 
         <div id="chatconversationview-chatBox">
             <div id="chatconversationview-messages">
-                <ul style="list-style: none; padding-inline-start: 0rem">
+                <ul style="list-style: none; padding-inline-start: 0rem; margin: 0px">
                     <!-- 저장되어 있던 메시지 목록 -->
                     <li v-for="item in chatMessages" :key="item">
                         <div
@@ -93,9 +93,7 @@
                             >
                                 <!-- 보낸 시간 -->
                                 <div class="chatconversationview-sendDate">
-                                    <p>
-                                        {{ item.createdAt }}
-                                    </p>
+                                    {{ item.createdAt }}
                                 </div>
                                 <div class="chatconversationview-bubble">
                                     <p class="chatconversationview-fromMe">
@@ -170,9 +168,7 @@
                                         <div
                                             class="chatconversationview-sendDate"
                                         >
-                                            <p>
-                                                {{ item.createdAt }}
-                                            </p>
+                                            {{ item.createdAt }}
                                         </div>
                                     </div>
                                 </div>
@@ -184,9 +180,7 @@
                             >
                                 <!-- 보낸 시간 -->
                                 <div class="chatconversationview-sendDate">
-                                    <p>
-                                        {{ item.createdAt }}
-                                    </p>
+                                    {{ item.createdAt }}
                                 </div>
                                 <div class="chatconversationview-bubble">
                                     <p class="chatconversationview-fromMe">
@@ -199,25 +193,25 @@
                 </ul>
             </div>
         </div>
+    </div>
 
-        <!-- input message form -->
-        <div class="chatconversationview-inputWindow">
-            <div class="chatconversationview-inputGroup">
-                <input
-                    @keyup.enter="send"
-                    type="text"
-                    class="chatconversationview-messageForm"
-                    v-model="content"
-                    placeholder="메세지 입력"
-                />
-            </div>
-            <button @click="send" class="chatconversationview-generate">
-                <font-awesome-icon
-                    class="chatconversationview-icon"
-                    :icon="['fas', 'paper-plane']"
-                />
-            </button>
+    <!-- input button -->
+    <div class="chatconversationview-inputWindow">
+        <div class="chatconversationview-inputGroup">
+            <input
+                @keyup.enter="send"
+                type="text"
+                class="chatconversationview-messageForm"
+                v-model="content"
+                placeholder="메세지 입력"
+            />
         </div>
+        <button @click="send" class="chatconversationview-generate">
+            <font-awesome-icon
+                class="chatconversationview-icon"
+                :icon="['fas', 'paper-plane']"
+            />
+        </button>
     </div>
 
     <!-- modal -->
@@ -528,6 +522,8 @@ onMounted(() => {
                 commonStore.headerType = "header5";
                 commonStore.headerChatName = p.nickname;
                 commonStore.headerChatImg = p.profileImage;
+
+                // TODO: commonStore에서 headerGoOut 함수 채팅방 나가기 api 호출
             }
         });
     }
@@ -535,52 +531,60 @@ onMounted(() => {
 </script>
 
 <style>
+.chatconversationview-test{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    bottom: 4rem;
+}
+
+
 .chatconversationview-main-container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 8.25rem);
-    padding-top: 1rem;
-    margin: 0 1rem 0 1rem;
+    height: calc(100vh - 7.25rem - 4rem);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    transition: scroll-behavior 0.5s ease-in-out;
 }
 
 /* input messsage form */
 .chatconversationview-inputWindow {
     position: fixed;
     display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    width: 22.2rem;
     height: 4rem;
     bottom: 4rem;
 }
 
 .chatconversationview-inputGroup {
     display: flex;
-    height: 4rem;
     justify-content: center;
+    height: 3rem;
 }
 
 .chatconversationview-messageForm {
+    width: 16.2rem;
     font-size: 1rem;
-    padding-left: 1rem;
-    width: 70%;
-    border-radius: 3.125rem;
-    margin-right: 0.625rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    border-radius: 2rem;
     font-family: "Regular";
-}
-
-#chatconversationview-messageForm:focus {
-    border-color: var(
-        --sub-color
-    ); /* 선택되었을 때의 테두리 색상을 변경합니다. */
-    box-shadow: 0 0 0 0.2rem rgba(255, 159, 186, 0.25); /* 선택되었을 때의 그림자 효과를 추가합니다. */
-    outline: 0; /* 기본 선택 효과를 제거합니다. */
-    transition: 0.3s;
+    background-color: var(--gray-color);
+    border: none;
+    outline: none;
 }
 
 .chatconversationview-generate {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
     background: var(--main-color);
     color: var(--white-color);
 
@@ -598,6 +602,7 @@ onMounted(() => {
     align-content: center;
     width: 1.4rem;
     height: 1.4rem;
+    padding-right: 0.2rem;
 }
 
 /*  */
@@ -609,26 +614,21 @@ onMounted(() => {
 }
 
 #chatconversationview-messages {
+    width: 100%;
     display: flex;
-    border: 0.063rem solid var(--red-color);
-    overflow-x: hidden;
+    /* overflow-x: hidden;
     overflow-y: scroll;
-    transition: scroll-behavior 0.5s ease-in-out;
-    height: 33rem;
+    transition: scroll-behavior 0.5s ease-in-out; */
 }
 #chatconversationview-messages::-webkit-scrollbar {
     display: none;
 }
 
-/* 전송 버튼 */
-
-/* 텍스트 입력 창 */
-
 /* 메세지 카드 */
 .chatconversationview-messageCard {
     width: 22.2rem;
     display: flex;
-    border: 0.063rem solid blue;
+    margin-bottom: 0.4rem;
 }
 
 .chatconversationview-fromCard {
@@ -641,7 +641,6 @@ onMounted(() => {
 
 /* 메시지 버블 */
 .chatconversationview-bubble {
-    border: 0.063rem solid green;
     border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
@@ -656,6 +655,7 @@ onMounted(() => {
     position: relative;
     word-wrap: break-word;
     font-family: "Regular";
+    font-size: 1rem;
 }
 
 .chatconversationview-bubble p::before,
@@ -766,12 +766,12 @@ p.chatconversationview-fromThem::after {
 
 /* 시간 정보 */
 .chatconversationview-sendDate {
-    width: 4.1rem;
-    height: 100%;
-    border: 0.063rem solid (--red-color);
-    font-size: 0.9rem;
     font-family: "Regular";
-    margin-top: 15%;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin: 0 0.4rem 0.4rem 0;
 }
 .chatconversationview-sendDate p {
     margin-bottom: 0;
@@ -780,7 +780,6 @@ p.chatconversationview-fromThem::after {
 .chatconversationview-messageAndTimeTo {
     display: flex;
     flex-direction: row;
-    border: 0.063rem solid blue;
 }
 .chatconversationview-messageAndTimeTo .sendDate {
     text-align: right;
@@ -788,6 +787,5 @@ p.chatconversationview-fromThem::after {
 .chatconversationview-messageAndTimeFrom {
     display: flex;
     flex-direction: row;
-    border: 0.063rem solid purple;
 }
 </style>
