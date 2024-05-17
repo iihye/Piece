@@ -18,10 +18,7 @@ let pieChartInstance = null;
 
 const initOrUpdateChart = () => {
     const ctx = pieChartCanvas.value.getContext('2d');
-    if (pieChartInstance) {
-        pieChartInstance.data = props.chartData;
-        pieChartInstance.update();
-    } else {
+    if (!pieChartInstance) {
         pieChartInstance = new Chart(ctx, {
             type: 'pie',
             data: props.chartData,
@@ -29,11 +26,23 @@ const initOrUpdateChart = () => {
                 responsive: true,
                 plugins: {
                     legend: { display: false }
+                },
+                hover: {
+                    mode: 'index',
+                    intersect: true,
+                    onHover: function(event, chartElement) {
+                        if (chartElement.length) {
+                            event.native.target.style.cursor = 'pointer';
+                        } else {
+                            event.native.target.style.cursor = 'default';
+                        }
+                    }
                 }
             }
         });
     }
 };
+
 
 onMounted(() => {
     initOrUpdateChart();
@@ -53,40 +62,3 @@ onUnmounted(() => {
     }
 });
 </script>
-
-<style>
-.chart-labels {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.label-item {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.color-box {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.label-text {
-    flex-grow: 1;
-    text-align: left;
-    font-family: "Medium";
-    font-size: 1rem;
-}
-
-.label-count {
-    white-space: nowrap;
-    font-family: "Regular";
-    font-size: 1rem;
-}
-</style>

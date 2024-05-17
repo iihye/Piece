@@ -4,31 +4,30 @@
     @year-changed="updateChartData" />
     <pie-chart :chartData="chartData" />
     <hr />
+  <div>
     <div v-for="(amount, index) in chartData.datasets[0].data" :key="index" class="monthly-consumption">
-        <span>{{ chartData.labels[index] }}</span>
-        <span class="amount">{{ amount.toLocaleString() }}회</span>
+        <div v-if="amount.toLocaleString() != 0" class="monthly-consumption">
+            <div class="color-box" :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"></div>
+            <span class="label">{{ chartData.labels[index] }}</span>
+            <span class="amount">{{ amount.toLocaleString() }}회</span>
+        </div>
     </div>
+  </div>
     <div v-if="noData" class="no-data-content">완성된 조각이 없어요
         <RouterLink :to="{ name: 'piecemake' }">조각 만들러 가기</RouterLink>
     </div>
     <div v-else class="statistics-details">
-      <ul>
-        <li v-for="(amount, index) in chartData.datasets[0].data" :key="index">
-          <span class="color-box" :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"></span>
-          {{ chartData.labels[index] }}: {{ amount }} 회
-        </li>
-      </ul>
     </div>
   </template>
   
   <script setup>
-  import { computed } from 'vue';
+  import { computed, onMounted } from 'vue';
   import { usePieceStatisticsStore } from '@/stores/piecestatistics';
   import YearSelector from "@/components/chart/YearSelector.vue";
   import PieChart from "@/components/chart/PieChart.vue";
   
   const { chartData, noData, updateData } = usePieceStatisticsStore();
-  
+
   const updateChartData = (year) => {
       updateData(year);
   };
@@ -50,25 +49,10 @@
   }
   
   .no-data-content {
-      color: #ff6b6b;
+      color: var(--main-color);
       text-align: center;
       font-size: 18px;
       margin-top: 20px;
-  }
-  
-  .statistics-details ul {
-      list-style-type: none;
-      padding: 0;
-      margin-top: 20px;
-  }
-  
-  .statistics-details li {
-      display: flex;
-      align-items: center;
-      background: #f0f0f0;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 5px;
   }
   
   .color-box {
@@ -90,4 +74,27 @@
       font-family: "Regular";
       font-size: 1rem;
   }
+
+  .monthly-consumption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.color-box {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.label {
+    flex-grow: 1;
+}
+
+.amount {
+    white-space: nowrap;
+}
   </style>
