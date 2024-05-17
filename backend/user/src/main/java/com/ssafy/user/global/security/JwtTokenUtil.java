@@ -28,7 +28,6 @@ public class JwtTokenUtil {
         return Long.parseLong(claims.getSubject()); // 'subject' 클레임에서 사용자 ID를 Long으로 추출
     }
 
-
     public String generateToken(Long userId) {
         return Jwts.builder()
             .setSubject(String.valueOf(userId))

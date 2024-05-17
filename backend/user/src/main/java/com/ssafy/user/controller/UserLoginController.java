@@ -41,12 +41,12 @@ public class UserLoginController {
             } else {
                 log.warn("Unauthorized login attempt for user: {}", loginRequest.getEmail());
                 return ResponseEntity.status(ErrorCode.UNAUTHORIZED_REQUEST.getHttpStatus())
-                    .body(ErrorCode.UNAUTHORIZED_REQUEST.getMessage());
+                        .body(ErrorCode.UNAUTHORIZED_REQUEST.getMessage());
             }
         } catch (Exception e) {
             log.error("Login error for user: {}", loginRequest.getEmail(), e);
             return ResponseEntity.status(ErrorCode.USER_NOT_FOUND.getHttpStatus())
-                .body(ErrorCode.USER_NOT_FOUND.getMessage());
+                    .body(ErrorCode.USER_NOT_FOUND.getMessage());
         }
     }
 

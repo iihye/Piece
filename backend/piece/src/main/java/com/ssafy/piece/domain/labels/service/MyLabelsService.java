@@ -178,7 +178,7 @@ public class MyLabelsService {
         }
 
         // 31 서로 다른 장르 조각 모았는지
-        if (piecesService.isGenreMany()) {
+        if (piecesService.isGenreMany(userId)) {
             addMyLabels(userId, 31L);
         }
     }

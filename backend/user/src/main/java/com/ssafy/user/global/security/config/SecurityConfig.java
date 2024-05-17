@@ -45,6 +45,7 @@ public class SecurityConfig {
 
                 .anyRequest().authenticated()
             )
+            .formLogin(form -> form.disable())
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class); // JWT 필터 추가

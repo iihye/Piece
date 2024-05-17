@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,18 +51,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (JwtException e) {
                 log.error("JWT 토큰 검증 실패", e);
             }
-
-            if (userId != null && jwtTokenUtil.validateToken(jwtToken, userId) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userId.toString());
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                log.info("사용자 인증 완료: {}", userDetails.getUsername());
-            }
         } else {
-            log.warn("JWT 토큰은 Bearer 문자열로 시작해야 합니다.");
+            log.warn("JWT 토큰은 Bearer 문자열로 시작해야 합니다");
+        }
+
+        if (userId != null && jwtTokenUtil.validateToken(jwtToken, userId) && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userId.toString());
+            log.info("사용자 정보: {}", userDetails.getUsername());
+
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            log.info("사용자 인증 완료: {}", userDetails.getUsername());
         }
 
         chain.doFilter(request, response);
-    }}
+    }
+}

@@ -2,6 +2,7 @@ package com.ssafy.user.controller;
 
 import com.ssafy.user.dto.request.UserNicknameChangeRequestDto;
 import com.ssafy.user.dto.request.UserPasswordChangeRequestDto;
+import com.ssafy.user.global.annotation.AuthenticatedUser;
 import com.ssafy.user.global.response.code.ResponseCode;
 import com.ssafy.user.global.response.code.SuccessCode;
 import com.ssafy.user.global.response.structure.SuccessResponse;
@@ -9,6 +10,7 @@ import com.ssafy.user.service.UserSettingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,5 +38,20 @@ public class UserSettingController {
         @RequestBody UserPasswordChangeRequestDto requestDto) {
         ResponseCode responseCode = userSettingService.changePassword(userId, requestDto);
         return SuccessResponse.createSuccess(SuccessCode.PASSWORD_UPDATE_SUCCESS);
+    }
+
+    // 튜토리얼 다시 보지 않기
+    @PutMapping("/tutorial")
+    public ResponseEntity<Object> setTutorial(@AuthenticatedUser Long userId) {
+        userSettingService.setTutorial(userId);
+
+        return SuccessResponse.createSuccess(SuccessCode.TUTORIAL_SUCCESS);
+    }
+
+    // 튜토리얼 여부 조회
+    @GetMapping("/istutorial")
+    public ResponseEntity<Object> tutorialRead(@AuthenticatedUser Long userId){
+        Boolean isTutorial = userSettingService.readTutorial(userId);
+        return SuccessResponse.createSuccess(SuccessCode.READ_TUTORIAL_SUCCESS,isTutorial);
     }
 }

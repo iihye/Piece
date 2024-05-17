@@ -9,6 +9,6 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class UserRegistrationResponseDto {
 
-    private final Long userId;
+    private final String username;
 
 }
