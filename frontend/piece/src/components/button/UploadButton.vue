@@ -9,10 +9,6 @@
         />
     </div>
 
-    <!-- ========================================== -->
-    <div>{{ msg }}</div>
-    <!-- ========================================== -->
-
     <!-- modal -->
     <LoadingModal
         v-if="loadingModal"
@@ -31,11 +27,6 @@ const { roundButtonContent } = defineProps({
     roundButtonContent: String,
 });
 
-// ==========================================
-const store = useFileUploadStore();
-const msg = computed(() => store.getMsg);
-// ==========================================
-
 const emit = defineEmits(["uploadSuccess", "uploadError"]);
 const fileInput = ref(null);
 const loadingModal = ref(false);
@@ -47,7 +38,7 @@ function uploadImage() {
 async function handleFileSelected(event) {
     loadingModal.value = true;
     const file = event.target.files[0];
-    // const store = useFileUploadStore();
+    const store = useFileUploadStore();
     try {
         const url = await store.getPreSignedUrl(file);
         await store.putFileUpload(url.presignedURL, file);
