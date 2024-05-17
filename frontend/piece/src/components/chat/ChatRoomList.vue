@@ -217,6 +217,11 @@ onMounted(async () => {
     font-size: 1rem;
     color: var(--gray2-color);
     margin-bottom: 0.1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .chatroomlist-info-time {
