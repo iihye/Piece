@@ -31,8 +31,6 @@ onMounted(async () => {
     if (localStorage.getItem("accessToken")) {
         isLogin.value = true;
     }
-
-    await userStore.readTutorial();
 });
 
 </script>
