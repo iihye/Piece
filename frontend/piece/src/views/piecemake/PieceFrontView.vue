@@ -26,6 +26,7 @@
 </template>
 
 <script setup>
+import { onMounted, ref, watchEffect } from 'vue';
 import Layout1 from '@/assets/Layout1.png';
 import Layout2 from '@/assets/Layout2.png';
 import Layout3 from '@/assets/Layout3.png';
