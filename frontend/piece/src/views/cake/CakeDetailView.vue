@@ -109,8 +109,7 @@ const data = ref({
 
 const cakeHeartState = ref(false);
 const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
-const cakeChatUser = computed(() => cakeDetailStore.getCakeChatUser);
-const cakeChatUserLabel = computed(() => cakeDetailStore.getCakeChatUserLabel);
+const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount);
 
 const handleHeartClick = () => {
     alert("하트 클릭");
@@ -128,18 +127,23 @@ onMounted(async () => {
     commonStore.headerTitle = "케이크 상세보기";
     commonStore.headerType = "header2";
 
-    const concertId = route.params.concertId; // 올바른 concertId 가져오기
+    const concertId = route.params.concertId;
     await cakeDetailStore.fetchCakeDetail(concertId);
 
+    const cakeDetail = cakeDetailStore.getCakeDetail;
+
     data.value = {
-        posterImageUrl: cakeDetailStore.cakeDetail.posterImageUrl,
-        heartCnt: cakeDetailStore.cakeDetail.heartCnt,
-        cultureType: cakeDetailStore.cakeDetail.cultureType,
-        title: cakeDetailStore.cakeDetail.title,
-        overview: cakeDetailStore.cakeDetail.overview,
-        runtime: cakeDetailStore.cakeDetail.runtime,
-        castList: cakeDetailStore.cakeDetail.castList || [], // Ensure castList is an array
+        posterImageUrl: cakeDetail.posterImageUrl,
+        heartCnt: cakeHeartCount.value,
+        cultureType: cakeDetail.cultureType,
+        title: cakeDetail.title,
+        overview: cakeDetail.overview,
+        runtime: cakeDetail.runtime,
+        castList: cakeDetail.castList || [],
     };
+
+    await cakeDetailStore.fetchHeartCount(concertId);
+    data.value.heartCnt = cakeHeartCount.value;
 
     await cakeDetailStore.findCakeChatList(concertId);
 });
@@ -234,7 +238,7 @@ onMounted(async () => {
 .cakedetailview-content-runtime {
     font-family: "Regular";
     font-size: 1rem;
-    color: var(--black-color);
+    color: var (--black-color);
     margin-top: 0.5rem;
 }
 

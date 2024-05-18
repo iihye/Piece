@@ -1,54 +1,55 @@
-import { ref, computed } from 'vue';
-import { defineStore } from 'pinia';
-import axios from 'axios';
+import { ref, computed } from "vue";
+import { defineStore } from "pinia";
+import axios from "axios";
 
 export const useCakeDetailStore = defineStore('cakeDetail', () => {
     const cakeDetail = ref({});
     const cakeChatList = ref([]);
-    const cakeChatUser = ref({});
-    const cakeChatUserLabel = ref("");
+    const cakeHeartCount = ref(0);
 
     const getCakeDetail = computed(() => cakeDetail.value);
     const getCakeChatList = computed(() => cakeChatList.value);
-    const getCakeChatUser = computed(() => cakeChatUser.value);
-    const getCakeChatUserLabel = computed(() => cakeChatUserLabel.value);
+    const getCakeHeartCount = computed(() => cakeHeartCount.value);
 
     const fetchCakeDetail = async (concertId) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/cultures/kopis/${concertId}`);
             if (response.data.code === "FIND_KOPIS_CULTURE_SUCCESS") {
                 cakeDetail.value = response.data.data;
-            } else {
-                console.error('Failed to fetch cake detail');
             }
         } catch (error) {
-            console.error('Error fetching cake detail:', error);
+            console.error("Failed to fetch cake detail", error);
+        }
+    };
+
+    const fetchHeartCount = async (cultureId) => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/heart/count/${cultureId}`);
+            if (response.data.code === "COUNT_CULTURE_HEART_SUCCESS") {
+                cakeHeartCount.value = response.data.data;
+            }
+        } catch (error) {
+            console.error("Failed to fetch heart count", error);
         }
     };
 
     const findCakeChatList = async (concertId) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/chat/${concertId}`);
-            if (response.data.code === "FIND_CHAT_SUCCESS") {
+            const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/chats/${concertId}`);
+            if (response.data.code === "FIND_CHAT_LIST_SUCCESS") {
                 cakeChatList.value = response.data.data;
-            } else {
-                console.error('Failed to fetch chat list');
             }
         } catch (error) {
-            console.error('Error fetching chat list:', error);
+            console.error("Failed to fetch chat list", error);
         }
     };
 
     return {
-        cakeDetail,
-        cakeChatList,
-        cakeChatUser,
-        cakeChatUserLabel,
         getCakeDetail,
         getCakeChatList,
-        getCakeChatUser,
-        getCakeChatUserLabel,
+        getCakeHeartCount,
         fetchCakeDetail,
-        findCakeChatList
+        fetchHeartCount,
+        findCakeChatList,
     };
 });
