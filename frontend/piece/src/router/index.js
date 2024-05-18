@@ -213,10 +213,10 @@ const router = createRouter({
     },
     {
     //   path: "/views/:id",
-    path: '/cake-detail/:concertId/:cultureId',
+    path: '/detail/:concertId/:cultureId',
     name: "CakeDetail",
     component: CakeDetailView,
-      rops: true,
+    rops: true,
     },
   ],
 });

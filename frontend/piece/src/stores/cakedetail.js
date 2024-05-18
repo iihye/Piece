@@ -9,15 +9,13 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
     const cakeHeartState = ref(false);
     const cakeCultureType = ref("");
 
-    const setCakeCultureType = function (cultureType) {
+    const setCakeCultureType = (cultureType) => {
         cakeCultureType.value = cultureType;
     };
 
-    const getCakeCultureType = computed(() => {
-        return cakeCultureType.value;
-    });
+    const getCakeCultureType = computed(() => cakeCultureType.value);
 
-    const fetchCakeDetail = async (concertId) => {
+    const fetchConcertCakeDetail = async (concertId) => {
         try {
             const response = await axios.get(
                 `${import.meta.env.VITE_REST_PIECE_API}/cultures/kopis/${concertId}`
@@ -109,9 +107,7 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
         cakeCultureType,
 
         setCakeCultureType,
-        getCakeCultureType,
-
-        fetchCakeDetail,
+        fetchConcertCakeDetail,
         fetchHeartCount,
         findCakeChatList,
         toggleHeart,
@@ -122,5 +118,6 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
         getCakeChatList: () => cakeChatList.value,
         getCakeHeartCount: () => cakeHeartCount.value,
         getCakeHeartState: () => cakeHeartState.value,
+        getCakeCultureType,
     };
 });

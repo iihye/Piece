@@ -1,56 +1,57 @@
 <template>
-    <div class="cakelistview-scroll-container">
-        <div class="cakelistview-tab-navigation">
-            <div class="cakelistview-tab-menu" ref="tabMenu">
-                <!-- search -->
-                <div class="cakelistview-search-area">
-                    <TextInput
-                        class="cakelistview-search-input"
-                        placeholder="검색어를 입력하세요"
-                        v-model="searchQuery"
-                        @focus="handleFocus"
-                        @update:modelValue="(value) => (searchQuery = value)"
-                    />
-                    <InputPreview
-                        class="cakelistview-search-preview"
-                        :searchQuery="searchQuery"
-                        :searchResults="searchResults"
-                        :isFocused="isFocused"
-                        @select="handleSelect"
-                    />
-                </div>
-                <!-- filter -->
-                <FilterItem
-                    v-for="(item, index) in filterItems"
-                    class="cakelistview-tab-btn"
-                    :key="index"
-                    :labelType="item.labelType"
-                    :title="item.title"
-                    :isSelect="item.isSelect"
-                    @click="handleItemSelectClick(index)"
-                ></FilterItem>
-            </div>
+    <!-- search -->
+    <div class="cakelistview-search-area">
+        <TextInput
+            class="cakelistview-search-input"
+            placeholder="검색어를 입력하세요"
+            v-model="searchQuery"
+            @focus="handleFocus"
+            @update:modelValue="(value) => (searchQuery = value)"
+        />
+        <InputPreview
+            class="cakelistview-search-preview"
+            :searchQuery="searchQuery"
+            :searchResults="searchResults"
+            :isFocused="isFocused"
+            @select="handleSelect"
+        />
+    </div>
+
+    <!-- navbar -->
+    <div class="cakelistview-tab-navigation">
+        <div class="cakelistview-tab-menu" ref="tabMenu">
+            <FilterItem
+                v-for="(item, index) in filterItems"
+                class="cakelistview-tab-btn"
+                :key="index"
+                :labelType="item.labelType"
+                :title="item.title"
+                :isSelect="item.isSelect"
+                @click="handleItemSelectClick(index)"
+            ></FilterItem>
         </div>
     </div>
 
     <!-- list -->
-    <div class="cakelistview-list-container" ref="listContainer">
-        <div class="cakelistview-list-grid">
-            <div
-                v-for="(item, index) in displayedCakeList"
-                :key="index"
-                class="cakelistview-list-item"
-            >
-                <ListCakeItem
-                    :cultureId="item.cultureId"
-                    :cultureType="item.cultureType"
-                    :code="item.code"
-                    :title="item.title"
-                    :imageUrl="item.imageUrl"
-                    :frontImg="item.frontImg"
-                    @click="handleItemClick(item)"
+    <div class="cakelistview-scroll-container">
+        <div class="cakelistview-list-container" ref="listContainer">
+            <div class="cakelistview-list-grid">
+                <div
+                    v-for="(item, index) in displayedCakeList"
+                    :key="index"
+                    class="cakelistview-list-item"
                 >
-                </ListCakeItem>
+                    <ListCakeItem
+                        :cultureId="item.cultureId"
+                        :cultureType="item.cultureType"
+                        :code="item.code"
+                        :title="item.title"
+                        :imageUrl="item.imageUrl"
+                        :frontImg="item.frontImg"
+                        @click="handleItemClick(item)"
+                    >
+                    </ListCakeItem>
+                </div>
             </div>
         </div>
     </div>
@@ -64,7 +65,7 @@ import { useCakeStore } from "@/stores/cake";
 import { useCakeDetailStore } from "@/stores/cakedetail";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListCakeItem from "@/components/item/ListCakeItem.vue";
-import TextInput from "@/components/text/OnlyInput.vue";
+import TextInput from "@/components/text/TextInput.vue";
 import InputPreview from "@/components/text/InputPreview.vue";
 
 const commonStore = useCommonStore();
@@ -73,7 +74,6 @@ const detailStore = useCakeDetailStore();
 
 const filteredCakeList = computed(() => store.getCakeListFiltered);
 const selectedOptionCakeList = computed(() => store.getSelectOptionCakeList);
-const selectedMovie = computed(() => store.getSelectedMovie);
 
 const searchResults = ref([]);
 const searchQuery = ref("");
@@ -112,29 +112,44 @@ function handleSelect(item) {
 }
 
 const handleItemClick = async (item) => {
-    if (selectedOptionCakeList.value === "MOVIE") {
-        console.log('code is ', item.code);
-        await store.fetchMovieDetails(item.code);
-        const movieData = selectedMovie.value;
-        router.push({
-            name: "CakeDetail",
-            params: {
-                concertId: movieData.code,
-                cultureId: movieData.cultureId
+    try {
+        if (item.cultureType === "MOVIE") {
+            await store.fetchTmdbDetails(item.code);
+            const movieData = store.getSelectedMovie;
+            if (movieData && movieData.code && movieData.cultureId) {
+                router.push({
+                    name: "CakeDetail",
+                    params: {
+                        concertId: movieData.code,
+                        cultureId: movieData.cultureId
+                    }
+                });
+                detailStore.setCakeCultureType("MOVIE");
+            } else {
+                console.error('Invalid movie data:', movieData);
             }
-        });
-        detailStore.setCakeCultureType("MOVIE");
-    } else {
-        router.push({
-            name: "CakeDetail",
-            params: {
-                concertId: item.code,
-                cultureId: item.cultureId
+        } else {
+            await store.fetchKopisDetails(item.code);
+            const cultureData = store.getSelectedConcert;
+            if (cultureData && cultureData.code && cultureData.cultureId) {
+                router.push({
+                    name: "CakeDetail",
+                    params: {
+                        concertId: cultureData.code,
+                        cultureId: cultureData.cultureId
+                    }
+                });
+                detailStore.setCakeCultureType(item.cultureType);
+            } else {
+                console.error('Invalid concert data:', cultureData);
             }
-        });
-        detailStore.setCakeCultureType(item.cultureType);
+        }
+    } catch (error) {
+        console.error('Error handling item click:', error);
     }
 };
+
+
 
 const handleFocus = () => {
     isFocused.value = true;
@@ -209,37 +224,43 @@ const handleScroll = async () => {
 };
 
 onMounted(async () => {
-    commonStore.headerTitle = "케이크 모아보기";
-    commonStore.headerType = "header2";
+  commonStore.headerTitle = "케이크 모아보기";
+  commonStore.headerType = "header2";
 
-    await store.findCakeList(selectedOptionCakeList.value, 10);
+  await store.findCakeList(selectedOptionCakeList.value, 10);
 
-    const index = filterItems.value.findIndex(
-        (item) => item.labelType === selectedOptionCakeList.value
-    );
+  const index = filterItems.value.findIndex(
+    (item) => item.labelType === selectedOptionCakeList.value
+  );
 
-    if (index !== -1) {
-        filterItems.value[0].isSelect = false;
-        filterItems.value[index].isSelect = true;
-    }
+  if (index !== -1) {
+    filterItems.value[0].isSelect = false;
+    filterItems.value[index].isSelect = true;
+  }
 
-    if (index === 5) {
-        tabMenu.value.scrollLeft = 1000;
-    }
+  if (index === 5) {
+    tabMenu.value.scrollLeft = 1000;
+  }
 
+  if (tabMenu.value) {
     tabMenu.value.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("mouseup", handleMouseUp);
     tabMenu.value.addEventListener("mousemove", handleMouseMove);
-    listContainer.value.addEventListener("scroll", handleScroll);
+  }
+  document.addEventListener("mouseup", handleMouseUp);
+  listContainer.value.addEventListener("scroll", handleScroll);
 });
 
+
 onBeforeUnmount(() => {
-    tabMenu.value.removeEventListener("mousedown", handleMouseDown);
+    if (tabMenu.value) {
+        tabMenu.value.removeEventListener("mousedown", handleMouseDown);
+        tabMenu.value.removeEventListener("mousemove", handleMouseMove);
+    }
     document.removeEventListener("mouseup", handleMouseUp);
-    tabMenu.value.removeEventListener("mousemove", handleMouseMove);
     listContainer.value.removeEventListener("scroll", handleScroll);
 });
 </script>
+
 
 <style>
     .cakelistview-scroll-container {

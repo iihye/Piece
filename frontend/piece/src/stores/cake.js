@@ -6,19 +6,22 @@ export const useCakeStore = defineStore('cake', () => {
     const selectedOptionCakeList = ref("ALL");
     const cakeList = ref([]);
     const cakeListFiltered = ref([]);
+    const selectedMovie = ref({});
+    const selectedConcert = ref({});
     const isLoading = ref(false);
     const nextPageUrl = ref(null);
-    const selectedMovie = ref(null);
 
     const getCakeList = computed(() => cakeList.value);
     const getCakeListFiltered = computed(() => cakeListFiltered.value);
     const getSelectOptionCakeList = computed(() => selectedOptionCakeList.value);
     const getSelectedMovie = computed(() => selectedMovie.value);
+    const getSelectedConcert = computed(() => selectedConcert.value);
 
     const setSelectOptionCakeList = (option) => {
         selectedOptionCakeList.value = option;
     };
 
+    // 랜덤으로 보여주기
     const shuffleArray = (array) => {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -31,21 +34,16 @@ export const useCakeStore = defineStore('cake', () => {
         if (cultureType === "ALL") {
             cultureType = null;
         }
-
-        let url = `${import.meta.env.VITE_REST_PIECE_API}/cultures?pageSize=${pageSize}&cultureType`;
-
+    
+        let url = `${import.meta.env.VITE_REST_PIECE_API}/cultures?pageSize=${pageSize}`;
         if (cultureType) {
-            url += `=${cultureType}`;
+            url += `&cultureType=${cultureType}`;
         }
-
+    
         isLoading.value = true;
         try {
             const res = await axios.get(url);
-            if (shuffle) {
-                cakeList.value = shuffleArray(res.data.data.dataList);
-            } else {
-                cakeList.value = res.data.data.dataList;
-            }
+            cakeList.value = shuffle ? shuffleArray(res.data.data.dataList) : res.data.data.dataList;
             nextPageUrl.value = res.data.data.nextPage;
             cakeListFiltered.value = computedFilteredCakeList();
         } catch (err) {
@@ -54,10 +52,10 @@ export const useCakeStore = defineStore('cake', () => {
             isLoading.value = false;
         }
     };
-
+    
     const loadMoreCakes = async () => {
         if (!nextPageUrl.value || isLoading.value) return;
-
+        
         isLoading.value = true;
         try {
             const res = await axios.get(nextPageUrl.value);
@@ -71,16 +69,40 @@ export const useCakeStore = defineStore('cake', () => {
         }
     };
 
-    const fetchMovieDetails = async (movieId) => {
+    const fetchTmdbDetails = async (code) => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/cultures/tmdb/${movieId}`);
-            if (res.data.code === "FIND_TMDB_CULTURE_SUCCESS") {
-                selectedMovie.value = res.data.data;
+            const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/cultures/tmdb/${code}`);
+            if (response.data.code === "FIND_TMDB_CULTURE_SUCCESS") {
+                selectedMovie.value = response.data.data;
+            } else {
+                console.error('Failed to fetch TMDB details:', response.data);
+                selectedMovie.value = null;
             }
-        } catch (err) {
-            console.error("Failed to fetch movie details", err);
+        } catch (error) {
+            console.error("TMDB 상세정보 가져오기 실패", error);
+            selectedMovie.value = null;
+            throw error;
         }
     };
+    
+    const fetchKopisDetails = async (code) => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/cultures/kopis/${code}`);
+            if (response.data.code === "FIND_KOPIS_CULTURE_SUCCESS") {
+                selectedConcert.value = response.data.data;
+            } else {
+                console.error('Failed to fetch KOPIS details:', response.data);
+                selectedConcert.value = null;
+            }
+        } catch (error) {
+            console.error("KOPIS 상세정보 가져오기 실패", error);
+            selectedConcert.value = null;
+            throw error;
+        }
+    };
+    
+    
+    
 
     function computedFilteredCakeList() {
         if (selectedOptionCakeList.value === "ALL") {
@@ -94,16 +116,18 @@ export const useCakeStore = defineStore('cake', () => {
         selectedOptionCakeList,
         cakeList,
         cakeListFiltered,
-        isLoading,
-        nextPageUrl,
         selectedMovie,
+        selectedConcert,
+        isLoading,
         getCakeList,
         getCakeListFiltered,
         getSelectOptionCakeList,
         getSelectedMovie,
+        getSelectedConcert,
         setSelectOptionCakeList,
         findCakeList,
         loadMoreCakes,
-        fetchMovieDetails,
+        fetchTmdbDetails,
+        fetchKopisDetails,
     };
 });

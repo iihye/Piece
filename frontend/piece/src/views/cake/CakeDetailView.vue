@@ -96,8 +96,11 @@ import RoundButton from "@/components/button/RoundButton.vue";
 
 const commonStore = useCommonStore();
 const cakeDetailStore = useCakeDetailStore();
-const userStore = useUserStore(); // user store 추가
+const userStore = useUserStore();
 const route = useRoute();
+
+const concertId = route.params.concertId;
+const cultureId = route.params.cultureId;
 
 const data = ref({
     posterImageUrl: "",
@@ -123,10 +126,8 @@ const handleHeartClick = async () => {
 
     try {
         if (newHeartState) {
-        // 하트 추가
             await cakeDetailStore.toggleHeart(data.value.cultureId);
         } else {
-            // 하트 취소
             await cakeDetailStore.removeHeart(data.value.cultureId);
         }
         cakeHeartState.value = newHeartState;
@@ -140,10 +141,9 @@ const handleHeartClick = async () => {
 const handleChatParticipate = async () => {
     alert("채팅 참여하기 클릭");
 
-    // 채팅 참여하기 연결
     try {
         await cakeDetailStore.joinChatRoom(data.value.cultureId);
-      // 채팅방으로 이동하는 로직을 추가하세요.
+        // TODO : 채팅방 이동
     } catch (error) {
         console.error("Failed to join chat room", error);
     }
@@ -153,25 +153,25 @@ onMounted(async () => {
     commonStore.headerTitle = "케이크 상세보기";
     commonStore.headerType = "header2";
 
-    const concertId = route.params.concertId;
-    const cultureId = route.params.cultureId;
-
     if (!concertId || !cultureId) {
         console.error("Missing required parameters");
         return;
     }
 
-    await cakeDetailStore.fetchCakeDetail(concertId);
+    await cakeDetailStore.fetchConcertCakeDetail(concertId);
     await cakeDetailStore.fetchHeartCount(cultureId);
     await cakeDetailStore.findCakeChatList(concertId);
 
     data.value = {
         ...cakeDetailStore.cakeDetail,
     };
-    // 페이지 로드 시 하트 상태 설정
     cakeHeartState.value = userStore.getHeartState(cultureId) || cakeDetailStore.cakeDetail.isHearted;
 });
 </script>
+
+
+
+
 
 <style>
 /* image */
@@ -290,5 +290,3 @@ onMounted(async () => {
     margin: 2rem 0 2rem 0;
 }
 </style>
-
-
