@@ -11,41 +11,27 @@
         <!-- choice -->
         <div class="piecefrontview-sub-container">
             <div class="piecefrontview-choice">
-                <img
-                    class="piecefrontview-layout"
-                    v-for="layout in layouts"
-                    :key="layout"
-                    :src="layout"
-                    width="36"
-                    height="56"
-                    @click="changeLayout(layout)"
-                />
+                <img class="piecefrontview-layout" v-for="layout in layouts" :key="layout" :src="layout" width="36"
+                    height="56" @click="changeLayout(layout)" />
             </div>
-            <canvas
-                id="canvas"
-                class="piecefrontview-canvas"
-                width="896"
-                height="1280"
-            ></canvas>
+            <canvas id="canvas" class="piecefrontview-canvas" width="896" height="1280"></canvas>
         </div>
 
         <!-- button -->
         <div class="piecemake-button-container">
-            <RoundButton
-                :roundButtonContent="'확인'"
-                :roundButtonFunction="next"
-                :isRoundDisable="isRoundDisable"
-            >
+            <RoundButton :roundButtonContent="'확인'" :roundButtonFunction="next" :isRoundDisable="isRoundDisable">
             </RoundButton>
         </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect, computed } from "vue";
-import testLayout from "@/assets/testlayout.svg";
-import RoundButton from "@/components/button/RoundButton.vue";
-import router from "@/router";
+import { onMounted, ref, watchEffect } from 'vue';
+import Layout1 from '@/assets/Layout1.png';
+import Layout2 from '@/assets/Layout2.png';
+import Layout3 from '@/assets/Layout3.png';
+import RoundButton from '@/components/button/RoundButton.vue';
+import router from '@/router';
 import { usePieceMakeStore } from "@/stores/piecemake";
 import { useCommonStore } from "@/stores/common";
 import { usePieceStore } from "@/stores/piece";
@@ -54,9 +40,9 @@ const commonStore = useCommonStore();
 const makeStore = usePieceMakeStore();
 const pieceStore = usePieceStore();
 
-const layout1 = testLayout;
-const layout2 = testLayout;
-const layout3 = testLayout;
+const layout1 = Layout1;
+const layout2 = Layout2;
+const layout3 = Layout3;
 
 const layouts = [layout1, layout2, layout3];
 const selectedLayout = ref(layout1); // 기본 선택된 레이아웃
