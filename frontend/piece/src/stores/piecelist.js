@@ -2,10 +2,13 @@ import { ref, reactive, computed } from "vue";
 import { defineStore } from "pinia";
 import router from "@/router";
 import axios from "axios";
+import { useCommonStore } from "@/stores/common";
 
 export const usePiecelistStore = defineStore(
     "piecelist",
     () => {
+        const commonStore = useCommonStore();
+
         // =========== STATE ===============
         const selectedOption = ref("ALL");
         const selectedOptionMyList = ref("ALL");
@@ -22,6 +25,12 @@ export const usePiecelistStore = defineStore(
         const pieceDetailRecord = ref({});
         const pieceUser = ref({});
         const pieceUserLabel = ref("");
+        const isMine = ref(false);
+        const pieceDetaiLViewId = ref(0);
+        const record = ref("");
+        const imgList = ref([]);
+        const imgIdList = ref([]);
+        const recordImgUrl = ref("");
 
         const today = ref(new Date());
         const year = ref(today.value.getFullYear());
@@ -77,7 +86,7 @@ export const usePiecelistStore = defineStore(
         });
 
         const getPiecelistHeartList = computed(() => {
-            return piecelistMyList.value;
+            return piecelistHeartList.value;
         });
 
         const getPiecelistHeartListFiltered = computed(() => {
@@ -103,6 +112,30 @@ export const usePiecelistStore = defineStore(
         const getPieceUserLabel = computed(() => {
             return pieceUserLabel.value;
         });
+
+        const getIsMine = computed(() => {
+            return isMine.value;
+        });
+
+        const getPieceDetailViewId = computed(() => {
+            return pieceDetaiLViewId.value;
+        });
+
+        const setPieceDetailViewId = function (id) {
+            pieceDetaiLViewId.value = id;
+        };
+
+        const getImgList = computed(() => {
+            return imgList.value;
+        });
+
+        const getImgIdList = computed(() => {
+            return imgIdList.value;
+        });
+
+        const setRecordImgUrl = function (url) {
+            recordImgUrl.value = url;
+        };
 
         const getToday = computed(() => {
             return today.value;
@@ -137,7 +170,10 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     pieceUser.value = res.data;
-                    if (pieceUser.value.labelId !== 0) {
+                    if (
+                        pieceUser.value.labelId !== 0 &&
+                        pieceUser.value.labelId !== null
+                    ) {
                         findPieceUserLabel(pieceUser.value.labelId);
                     }
                 })
@@ -145,18 +181,14 @@ export const usePiecelistStore = defineStore(
         };
 
         const findPieceUserLabel = function (labelId) {
-            if (loginUserInfo.value.labelId !== null) {
-                axios({
-                    url: `${
-                        import.meta.env.VITE_REST_PIECE_API
-                    }/labels/${labelId}`,
-                    method: "GET",
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/labels/${labelId}`,
+                method: "GET",
+            })
+                .then((res) => {
+                    pieceUserLabel.value = res.data.data;
                 })
-                    .then((res) => {
-                        pieceUserLabel.value = res.data.data;
-                    })
-                    .catch((err) => {});
-            }
+                .catch((err) => {});
         };
 
         const findPiecelistList = function () {
@@ -366,6 +398,16 @@ export const usePiecelistStore = defineStore(
                 .then((res) => {
                     piecelistDetail.value = res.data.data;
                     findPieceUser(piecelistDetail.value.userId);
+
+                    if (
+                        localStorage.getItem("userId") ==
+                        piecelistDetail.value.userId
+                    ) {
+                        isMine.value = true;
+                        findPieceDetailRecord(pieceId);
+                    } else {
+                        isMine.value = false;
+                    }
                 })
                 .catch((err) => {});
         };
@@ -404,6 +446,7 @@ export const usePiecelistStore = defineStore(
         };
 
         const findPieceDetailRecord = function (pieceId) {
+            if (pieceId == null || pieceId == 0) return;
             axios({
                 url: `${
                     import.meta.env.VITE_REST_PIECE_API
@@ -412,15 +455,9 @@ export const usePiecelistStore = defineStore(
             })
                 .then((res) => {
                     pieceDetailRecord.value = res.data.data;
-
-                    // pieceDetailRecord.value.imgList = [
-                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-                    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-                    // ];
-
-                    // console.log(pieceDetailRecord.value);
-                    // console.log(pieceDetailRecord.value.imgList.length);
+                    record.value = pieceDetailRecord.value.record;
+                    imgList.value = pieceDetailRecord.value.imgList;
+                    imgIdList.value = pieceDetailRecord.value.imgIdList;
                 })
                 .catch((err) => {});
         };
@@ -431,6 +468,49 @@ export const usePiecelistStore = defineStore(
                 method: "DELETE",
             })
                 .then((res) => {})
+                .catch((err) => {});
+        };
+
+        const reviseRecordDetail = function (record) {
+            axios({
+                url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/record`,
+                method: "PUT",
+                data: {
+                    pieceId: pieceDetaiLViewId.value,
+                    record: record,
+                },
+            })
+                .then((res) => {})
+                .catch((err) => {});
+        };
+
+        const addRecordImgUrl = function (pieceId, url) {
+            axios({
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/pieces/record/image`,
+                method: "POST",
+                data: {
+                    pieceId: pieceId,
+                    s3path: url,
+                },
+            })
+                .then((res) => {
+                    findPieceDetailRecord(pieceId);
+                })
+                .catch((err) => {});
+        };
+
+        const deleteRecordImgUrl = function (pieceId, pieceimageid) {
+            axios({
+                url: `${
+                    import.meta.env.VITE_REST_PIECE_API
+                }/pieces/record/image/${pieceimageid}`,
+                method: "DELETE",
+            })
+                .then((res) => {
+                    findPieceDetailRecord(pieceId);
+                })
                 .catch((err) => {});
         };
 
@@ -451,6 +531,11 @@ export const usePiecelistStore = defineStore(
             pieceDetailRecord,
             pieceUser,
             pieceUserLabel,
+            isMine,
+            pieceDetaiLViewId,
+            imgList,
+            imgIdList,
+            recordImgUrl,
             today,
             year,
             month,
@@ -474,6 +559,12 @@ export const usePiecelistStore = defineStore(
             getPieceDetailRecord,
             getPieceUser,
             getPieceUserLabel,
+            getIsMine,
+            getPieceDetailViewId,
+            setPieceDetailViewId,
+            getImgList,
+            getImgIdList,
+            setRecordImgUrl,
             getToday,
             getYear,
             getMonth,
@@ -497,6 +588,9 @@ export const usePiecelistStore = defineStore(
             deletePieceDetailHeart,
             findPieceDetailRecord,
             deletePieceDetail,
+            reviseRecordDetail,
+            addRecordImgUrl,
+            deleteRecordImgUrl,
         };
     },
     { persist: true }

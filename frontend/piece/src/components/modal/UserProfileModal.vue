@@ -1,5 +1,5 @@
 <template>
-    <div class="userprofilemodal-background-container">
+    <div class="userprofilemodal-background-container" @click="handleClose">
         <div class="userprofilemodal-main-container">
             <div class="userprofilemodal-modal-image">
                 <img
@@ -12,7 +12,7 @@
             <div class="userprofilemodal-user-name">{{ userName }}</div>
             <button
                 class="userprofilemodal-button-chat"
-                @click="handleChatClick"
+                @click="$emit('handleChatClick', userId)"
             >
                 1:1 채팅하기
             </button>
@@ -39,8 +39,12 @@ defineProps({
     userName: {
         type: String,
     },
+    userId:{
+        type: BigInt,
+    },
     handleChatClick: Function,
     handleReportClick: Function,
+    handleClose: Function,
 });
 </script>
 

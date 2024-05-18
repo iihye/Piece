@@ -4,75 +4,70 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import Chart from 'chart.js/auto';
+import { defineProps } from 'vue';
 
-export default {
-    name: 'BarChart',
-    props: {
-        chartData: {
-            type: Object,
-            required: true
-        }
-    },
-    mounted() {
-        this.createBarChart();
-    },
-    methods: {
-        createBarChart() {
-            const ctx = this.$refs.barChartCanvas.getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: this.chartData,
-                options: {
-                    scales: {
-                        y: {
-                            display: false
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
+const props = defineProps({
+    chartData: Object
+});
+
+const barChartCanvas = ref(null);
+let barChartInstance = null;
+
+const initOrUpdateChart = () => {
+    const ctx = barChartCanvas.value.getContext('2d');
+    if (barChartInstance) {
+        barChartInstance.data = props.chartData;
+        barChartInstance.update();
+    } else {
+        barChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: props.chartData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        display: true,
+                        grid: { display: false }
                     },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        title: {
-                            display: false
-                        }
-                    },
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: {
-                        padding: {
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            bottom: 0
-                        }
-                    },
-                    elements: {
-                        bar: {
-                            borderRadius: 10
-                        }
+                    x: {
+                        grid: { display: false }
                     }
+                },
+                plugins: {
+                    legend: { display: false },
+                    title: { display: false }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: { left: 0, right: 0, top: 0, bottom: 0 }
+                },
+                elements: {
+                    bar: { borderRadius: 10 }
                 }
-            });
-        }
+            }
+        });
     }
-}
+};
+
+
+onMounted(() => {
+    initOrUpdateChart();
+});
+
+watch(() => props.chartData, initOrUpdateChart, { deep: true });
+
+onUnmounted(() => {
+    if (barChartInstance) {
+        barChartInstance.destroy();
+    }
+});
 </script>
 
-<style scoped>
-canvas {
-    height: 400px;
-}
-</style>
-
-
-<style scoped>
+<style>
 canvas {
     height: 400px;
 }

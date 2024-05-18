@@ -12,13 +12,14 @@
 </template>
   
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref, defineProps, defineEmits, onMounted } from 'vue';
 import SelectableButton from '@/components/button/SelectableButton.vue';
 
 const props = defineProps({
     groupName: String,
     groupId: String,
-    options: Array
+    options: Array,
+    initialSelected: String
 });
 
 const emits = defineEmits(['selected']);
@@ -28,6 +29,12 @@ function updateSelected(id) {
     selected.value = id;
     emits('selected', id);
 }
+
+onMounted(() => {
+    if (props.initialSelected) {
+        selected.value = props.initialSelected;
+    }
+});
 </script>
   
 <style scoped>

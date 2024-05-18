@@ -207,6 +207,7 @@ onBeforeUnmount(() => {
 
 .piecelistview-search-container {
     margin-bottom: 1rem;
+    user-select: none;
 }
 
 /* filter */
@@ -278,11 +279,13 @@ onBeforeUnmount(() => {
     display: grid;
     grid-template-columns: repeat(2, minmax(8rem, 1fr));
     justify-items: center;
-    grid-gap: 1rem;
+    grid-gap: 0.2rem;
 }
 
 .piecelistview-list-item {
     width: auto;
+    user-select: none;
+    cursor: pointer;
 }
 
 .piecelistview-list-noitem {

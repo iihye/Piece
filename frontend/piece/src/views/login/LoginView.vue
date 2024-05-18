@@ -47,15 +47,31 @@
                 >
             </div>
         </div>
+
+        <!-- 로그인 성공 모달 -->
+        <ImageSuccessModal
+            v-if="loginSuccessModal"
+            :modalTitle="'piece에서 조각을 완성해보세요!'"
+            :handleSuccessClick="handleLoginSuccess"
+        />
+
+        <!-- 로그인 실패 모달 -->
+        <SuccessModal
+            v-if="loginFailModal"
+            :modalTitle="'아이디 또는 비밀번호가 <br>일치하지 않습니다'"
+            :handleSuccessClick="handleLoginFail"
+        />
     </div>
 </template>
 
 <script setup>
 import axios from "axios";
-import TextInput from "@/components/text/TextInput.vue";
-import { ref, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
+import TextInput from "@/components/text/TextInput.vue";
+import ImageSuccessModal from "@/components/modal/ImageSuccessModal.vue";
+import SuccessModal from "@/components/modal/SuccessModal.vue";
 
 const commonStore = useCommonStore();
 
@@ -63,6 +79,10 @@ const email = ref("");
 const password = ref("");
 const router = useRouter();
 const isFormValid = ref(false);
+const loginSuccessModal = ref(false);
+const loginFailModal = ref(false);
+const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
+const nickname = ref("");
 
 watch([email, password], ([newEmail, newPassword]) => {
     isFormValid.value = newEmail.trim() !== "" && newPassword.trim() !== "";
@@ -78,30 +98,35 @@ const submitLogin = async () => {
             }
         );
 
-        // --------------------
-        // TODO: alert modal로 바꾸기
-        alert("로그인 성공!");
         const res = response.data.data;
-        // commonStore.isLogin = "로그인"
-        commonStore.loginUser = res.userId;
-        commonStore.isLogin = true;
-        const accessToken = res.token;
-        axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-        localStorage.setItem('accessToken', `Bearer ${accessToken}`);
-        localStorage.setItem('userId', res.userId);
-        
-        // --------------------
+        if (response.data.code == "LOGIN_SUCCESS") {
+            // token 저장
+            commonStore.loginUser = res.userId;
+            commonStore.isLogin = true;
+            const accessToken = res.token;
+            axios.defaults.headers.common[
+                "Authorization"
+            ] = `Bearer ${accessToken}`;
+            localStorage.setItem("accessToken", `Bearer ${accessToken}`);
+            localStorage.setItem("userId", res.userId);
 
-        router.push({ name: "main" });
+            loginSuccessModal.value = true;
+        } else {
+            // 실패 모달
+            loginFailModal.value = true;
+        }
     } catch (error) {
-        // --------------------
-        // TODO: alert modal로 바꾸기
-        alert(
-            "로그인 실패: " +
-                (error.response ? error.response.data.message : "서버 에러")
-        );
-        // --------------------
+        loginFailModal.value = true;
     }
+};
+
+const handleLoginSuccess = () => {
+    loginSuccessModal.value = false;
+    router.push({ name: "main" });
+};
+
+const handleLoginFail = () => {
+    loginFailModal.value = false;
 };
 
 onMounted(() => {
@@ -161,7 +186,7 @@ onMounted(() => {
     font-size: 1rem;
 }
 
-.loginview-input-button:hover{
+.loginview-input-button:hover {
     cursor: pointer;
 }
 

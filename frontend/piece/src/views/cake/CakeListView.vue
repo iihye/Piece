@@ -63,6 +63,7 @@ const cakeList = computed(() => store.getcakeList);
 const filteredCakeList = computed(() => store.getCakeListFiltered);
 const selectedOptionCakeList = computed(() => store.getSelectOptionCakeList);
 
+
 const handleItemClick = (item) => {
     router.push({
         name: "CakeDetail",
@@ -221,6 +222,7 @@ onBeforeUnmount(() => {
 
 .cakelistview-list-item {
     width: auto;
+    cursor: pointer;
 }
 
 .cakelistview-list-noitem {

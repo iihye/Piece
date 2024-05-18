@@ -1,196 +1,342 @@
 <template>
-    <div id="chatBox"> <!-- v-if 걸어서 채팅방 존재 여부 판독 예정 -->
-        <!-- 오픈채팅 헤더 정보. 헤더에 들어갈 예정 -->
-        <div v-if="chatRoomInfo.isPersonal==false">
-            <h2>오픈채팅 이름:{{ chatRoomInfo.chatRoomName }}</h2>
-            <img :src="chatRoomInfo.culture.imageUrl" alt="해당 채팅방 이미지">
-        </div>
-        <!-- 1:1채팅 헤더 정보. 헤더에 들어갈 예정 -->
-        <div v-else>
-            <h2>상대방 닉네임</h2>
-            <img src="" alt="상대방 프로필사진">
-        </div>
-        <div id="messages">
-            <ul style="list-style:none; padding-inline-start: 0rem;">
-                <!-- 저장되어 있던 메시지 목록 -->
-                <li v-for="item in chatMessages" :key="item">
-                    <div class="chatconversationview-messageCard" :class="item.senderId!=givenUserNumber? 'chatconversationview-fromCard' : 'chatconversationview-toCard'">
-                        <!-- 상대가 보낸 메시지 -->
-                        <div class="chatconversationview-fromHeader" v-if="item.senderId != givenUserNumber">
-                            <!-- 프로필 이미지 -->
-                            <div class="chatconversationview-profileImage">
-                                <img src="@/assets/logo.png" />
-                            </div>
+    <div class="chatconversationview-main-container">
+        <ul class="chatconversationview-sub-container" style="list-style: none; padding-inline-start: 0rem; margin: 0px">
+            <!-- 저장되어 있던 메시지 목록 -->
+            <li v-for="item in chatMessages" :key="item">
+                <div
+                    class="chatconversationview-messageCard"
+                    :class="
+                        item.senderId != loginUserId
+                            ? 'chatconversationview-fromCard'
+                            : 'chatconversationview-toCard'
+                    "
+                >
+                    <!-- 상대가 보낸 메시지 -->
+                    <div
+                        class="chatconversationview-fromHeader"
+                        v-if="item.senderId != loginUserId"
+                    >
+                        <!-- 프로필 이미지 -->
+                        <div class="chatconversationview-profileImage">
+                            <!-- <img
+                                src="@/assets/defaultprofile.png"
+                                @click="openModal(item)"
+                            /> -->
+                            <img
+                                v-if="item.profileImage != null || item.profileImage == ''"
+                                :src="item.profileImage"
+                                @click="openModal(item)"
+                            />
+                            <img
+                                v-else
+                                src="@/assets/defaultprofile.png"
+                                @click="openModal(item)"
+                            />
+                        </div>
 
-                            <!-- 메시지 관련 부분 시작-->
-                            <!-- 헤더 + 메시지 -->
-                            <div>
-                                <!-- 칭호 + 이름 -->
-                                <div class="chatconversationview-userHeader"> 
-                                    <span class="chatconversationview-userTitle">
-                                        {{ item.title }}
-                                    </span>
-                                    <span class="chatconversationview-userName">
-                                        {{ item.nickname }}
-                                    </span>
+                        <!-- 메시지 관련 부분 시작-->
+                        <div class="chatconversationv-senderview-container">
+                            <div class="chatconversationview-userHeader">
+                                <div class="chatconversationview-userTitle">
+                                    {{ item.title }}
                                 </div>
-                                <div class="chatconversationview-messageAndTimeFrom">
-                                    <!-- 메세지 버블 -->
-                                    <div class="chatconversationview-bubble">
-                                        <p class="chatconversationview-fromThem">
-                                            {{item.content}}
-                                        </p>
-                                    </div>
-                                    <!-- 보낸 시간 -->
-                                    <div class="chatconversationview-sendDate">
-                                        <p>
-                                            {{ item.createdAt }}
-                                        </p>
-                                    </div>
-                                    <!-- <p class="testTime">테스트 시간 27:98</p> -->
+                                <div class="chatconversationview-userName">
+                                    {{ item.nickname }}
                                 </div>
                             </div>
-                        </div>
-                        <!-- 내가 보낸 메시지라면 -->
-                        <div v-else class="chatconversationview-messageAndTimeTo">
-                            <!-- 보낸 시간 -->
-                            <div class="chatconversationview-sendDate">
-                                <p>
-                                    {{ item.createdAt }}
-                                </p>
-                            </div>
-                            <div class="chatconversationview-bubble">
-                                <p class="chatconversationview-fromMe">
-                                    {{item.content}}
-                                </p>
-                            </div>
+                            <div class="chatconversationview-sender-container">
+                                <div class="chatconversationview-sender-content">{{ item.content }}</div>
+                                <div class="chatconversationview-sender-time">{{ item.createdAt }}</div>
+                            </div> 
                         </div>
                     </div>
-                </li>
-                <!-- 저장할 메시지 목록-->
-                <li v-for="item in storeMessages" :key="item">
-                    <div class="chatconversationview-messageCard" :class="item.senderId!=givenUserNumber? 'chatconversationview-fromCard' : 'chatconversationview-toCard'">
-                        <!-- 상대가 보낸 메시지 -->
-                        <div class="chatconversationview-fromHeader" v-if="item.senderId != givenUserNumber">
-                            <!-- 프로필 이미지 -->
-                            <div class="chatconversationview-profileImage">
-                                <img src="@/assets/logo.png" />
-                            </div>
 
-                            <!-- 메시지 관련 부분 시작-->
-                            <!-- 헤더 + 메시지 -->
-                            <div>
-                                <!-- 칭호 + 이름 -->
-                                <div class="chatconversationview-userHeader"> 
-                                    <span class="chatconversationview-userTitle">
-                                        {{ item.title }}
-                                    </span>
-                                    <span class="chatconversationview-userName">
-                                        {{ item.nickname }}
-                                    </span>
-                                </div>
-                                <div class="chatconversationview-messageAndTimeFrom">
-                                    <!-- 메세지 버블 -->
-                                    <div class="chatconversationview-bubble">
-                                        <p class="chatconversationview-fromThem">
-                                            {{item.content}}
-                                        </p>
-                                    </div>
-                                    <!-- 보낸 시간 -->
-                                    <div class="chatconversationview-sendDate">
-                                        <p>
-                                            {{ item.createdAt }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- 내가 보낸 메시지라면 -->
+                    <div
+                        v-else
+                        class="chatconversationview-receiver-container"
+                    >
+                        <div class="chatconversationview-receiver-time">{{ item.createdAt }}</div>
+                        <div class="chatconversationview-receiver-content">{{ item.content }}</div>
+                    </div>
+                </div>
+            </li>
+
+            <!-- 저장할 메시지 목록-->
+            <li v-for="item in storeMessages" :key="item">
+                <div
+                    class="chatconversationview-messageCard"
+                    :class="
+                        item.senderId != loginUserId
+                            ? 'chatconversationview-fromCard'
+                            : 'chatconversationview-toCard'
+                    "
+                >
+                    <!-- 상대가 보낸 메시지 -->
+                    <div
+                        class="chatconversationview-fromHeader"
+                        v-if="item.senderId != loginUserId"
+                    >
+                        <!-- 프로필 이미지 -->
+                        <div class="chatconversationview-profileImage">
+                            <img
+                                v-if="item.profileImage != null"
+                                :src="item.profileImage"
+                                @click="openModal(item)"
+                            />
+                            <img
+                                v-else
+                                :src="defaultProfileImage"
+                                @click="openModal(item)"
+                            />
                         </div>
-                        <!-- 내가 보낸 메시지라면 -->
-                        <div v-else class="chatconversationview-messageAndTimeTo">
-                            <!-- 보낸 시간 -->
-                            <div class="chatconversationview-sendDate">
-                                <p>
-                                    {{ item.createdAt }}
-                                </p>
+
+                        <!-- 메시지 관련 부분 시작-->
+                        <div class="chatconversationv-senderview-container">
+                            <div class="chatconversationview-userHeader">
+                                <div class="chatconversationview-userTitle">
+                                    {{ item.title }}
+                                </div>
+                                <div class="chatconversationview-userName">
+                                    {{ item.nickname }}
+                                </div>
                             </div>
-                            <div class="chatconversationview-bubble">
-                                <p class="chatconversationview-fromMe">
-                                    {{item.content}}
-                                </p>
-                            </div>
+                            <div class="chatconversationview-sender-container">
+                                <div class="chatconversationview-sender-content">{{ item.content }}</div>
+                                <div class="chatconversationview-sender-time">{{ item.createdAt }}</div>
+                            </div> 
                         </div>
                     </div>
-                </li>
-            </ul>
-        </div> 
-        <!-- input message form -->
-        <div id="inputWindow">
-            <div id="inputGroup">
-                <input @keyup.enter="send" type="text" id="messageForm" v-model="content" class="chatconversationview-formControl" placeholder="메세지를 입력하세요."/>
-                <button @click="send" class="chatconversationview-generate">
-                    <div class="chatconversationview-svgWrapper-1">
-                        <div class="chatconversationview-svgWrapper">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                width="24"
-                                height="24"
-                            >
-                                <path fill="none" d="M0 0h24v24H0z"></path>
-                                    <path
-                                        fill="currentColor"
-                                        d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"
-                                    >
-                                </path>
-                            </svg>
-                        </div>
+
+                    <!-- 내가 보낸 메시지라면 -->
+                    <div
+                        v-else
+                        class="chatconversationview-receiver-container"
+                    >
+                        <div class="chatconversationview-receiver-time">{{ item.createdAt }}</div>
+                        <div class="chatconversationview-receiver-content">{{ item.content }}</div>
                     </div>
-                </button>
-            </div>
-        </div>
+                </div>
+            </li>
+        </ul>
     </div>
+
+    <!-- input button -->
+    <div class="chatconversationview-inputWindow">
+        <div class="chatconversationview-inputGroup">
+            <input
+                @keyup.enter="send"
+                type="text"
+                class="chatconversationview-messageForm"
+                v-model="content"
+                placeholder="메세지 입력"
+            />
+        </div>
+        <button @click="send" class="chatconversationview-generate">
+            <font-awesome-icon
+                class="chatconversationview-icon"
+                :icon="['fas', 'paper-plane']"
+            />
+        </button>
+    </div>
+
+    <!-- modal -->
+    <UserProfileModal
+        v-if="showUserProfileModalInChatConversation"
+        :userImageUrl="userProfileModalProps.userImageUrl"
+        :userLabel="userProfileModalProps.userLabel"
+        :userName="userProfileModalProps.userName"
+        @handleChatClick="handleChat(userProfileModalProps.userId)"
+        :handleReportClick="handleReport"
+        :handleClose="handleClose"
+    ></UserProfileModal>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick} from 'vue';
-import { useChatRoomStore } from '@/stores/chatroom';
-import { useChatStore } from '@/stores/chat';
-import { useWebSocketStore } from '@/stores/websocket';
+import { ref, onMounted, nextTick } from "vue";
+import { useChatRoomStore } from "@/stores/chatroom";
+import { useChatStore } from "@/stores/chat";
+import { useCommonStore } from "@/stores/common";
+import { useWebSocketStore } from "@/stores/websocket";
 
+// modal test import
+import { useRouter } from "vue-router";
+import UserProfileModal from "@/components/modal/UserProfileModal.vue";
+
+// const defaultProfileImage = ref("src/assets/defaultprofile.png");
+
+// modal test const
+const router = useRouter();
 const chatRoomStore = useChatRoomStore();
-const chatStore=useChatStore();
-const webSocketStore=useWebSocketStore();
-const stompClient=webSocketStore.getStompClient();
-const givenUserNumber=1; // userStore로 가져올 예정
-let content=ref(''); //v-model. input message
+const commonStore = useCommonStore();
+// modal 테스트
+const showUserProfileModalInChatConversation = ref(false);
+
+// modal 정보들
+
+const userProfileModalProps = ref({
+    userImageUrl: "", // 사용자 프로필 이미지 URL
+    userLabel: "", // 사용자 레이블
+    userName: "", // 사용자 이름
+    userId: null,
+});
+
+// 정보 전해주기
+const openModal = (item) => {
+    showUserProfileModalInChatConversation.value = true;
+
+    userProfileModalProps.value.userImageUrl = item.profileImage;
+    userProfileModalProps.value.userLabel = item.title;
+    userProfileModalProps.value.userName = item.nickname;
+    userProfileModalProps.value.userId = item.senderId;
+};
+
+// modal에서 chat 클릭했을 때 실행되는 함수
+const handleChat = async (userId) => {
+    alert("1:1 채팅하기 클릭, 현재 창 user Id: " + userId);
+
+    try {
+        const createdChatRoomId = await chatRoomStore.createPersonalChatRoom(
+            "개인채팅방 생성 테스트",
+            userId
+        );
+
+        // 1:1채팅방 생성중복 처리 필요
+
+        // 만약 중복이 아니라면
+
+        // sender 채팅방 참가 처리
+        console.log(createdChatRoomId + "번 방에 참가를 시도합니다.");
+        await chatRoomStore.joinChatRoom(createdChatRoomId, 1); // authenticateduser로 수정 필요
+        // receiver 채팅방 참가 처리
+        await chatRoomStore.joinChatRoom(createdChatRoomId, userId);
+
+        // 참가한 채팅방 목록 갱신
+        await chatRoomStore.getChatRoomList(1, true);
+
+        // 현재 방 번호 갱신
+        chatRoomStore.setChatRoomId(createdChatRoomId);
+        // 현재 방 정보 갱신
+        chatRoomStore.getPersonalChatRoomInfo(createdChatRoomId);
+        chatRoomInfo.value = chatRoomStore.getChatRoom;
+
+        // 구독정보 갱신 필요
+        subscription.unsubscribe();
+        subscribe(createdChatRoomId);
+        // 메시지 클리어하고 로딩
+        chatMessages.value = [];
+        fetchMessages();
+
+        // 중복이라면 바로 로딩
+    } catch (error) {
+        console.error("Error handling chat:", error);
+        console.log(
+            "이미 있는 채팅방의 번호는? " + error.response.data.chatRoomId
+        );
+
+        const alreadyExistsChatRoomId = error.response.data.chatRoomId;
+        // 에러 처리
+
+        // 개인방 찾기 필요한데?
+
+        // 현재 방 번호 갱신
+        chatRoomStore.setChatRoomId(alreadyExistsChatRoomId);
+        // 개인방 리스트 받아오기
+        await chatRoomStore.getChatRoomList(1);
+        chatRoomStore.getPersonalChatRoomInfo(alreadyExistsChatRoomId);
+        // 저장되어 있는 방 리스트(1:1 or open)를 1:1로 갱신. 1:1방 데이터 조회를 위함
+
+        await chatRoomStore.getChatRoomList(1); // 채팅방 리스트를 개인 채팅방으로 변경
+        chatRoomInfo.value = chatRoomStore.getChatRoom;
+
+        console.log(
+            "중복이라서 갱신한 채팅방 정보:" +
+                JSON.stringify(chatRoomInfo.value)
+        );
+
+        // 상대방 정보 갱신
+        partnerInfo.value = chatRoomStore.getPartnerInfo;
+
+        // 구독정보 갱신 필요
+        subscription.unsubscribe();
+        subscribe(alreadyExistsChatRoomId);
+
+        // 메시지 클리어하고 로딩
+        chatMessages.value = [];
+        fetchMessages();
+    }
+};
+
+// modal에서 report 클릭했을 때 실행되는 함수
+const handleReport = () => {
+    alert("신고 클릭");
+};
+
+// modal에서 close 클릭했을 때 실행되는 함수
+const handleClose = () => {
+    showUserProfileModalInChatConversation.value =
+        !showUserProfileModalInChatConversation.value;
+};
+
+const goToChatConversation = (chatRoomId) => {
+    // 모달 내 이동을 위해 필요
+    // 선택된 채팅방 id 변경
+    chatRoomStore.setChatRoomId(chatRoomId);
+
+    router.push("/chat");
+    // 채팅 메시지 페이지로 이동
+};
+
+// 하위는 모달과 관련없는 코드들
+
+const chatStore = useChatStore();
+const webSocketStore = useWebSocketStore();
+const loginUserId = ref();
+
+const stompClient = webSocketStore.getStompClient();
+
+let content = ref(""); //v-model. input message
 let subscription;
 
-console.log("채팅방 번호:"+chatRoomStore.getChatRoomId);
-console.log("웹소켓 정보:"+webSocketStore.getStompClient());
+console.log("채팅방 번호:" + chatRoomStore.getChatRoomId);
+console.log("웹소켓 정보:" + webSocketStore.getStompClient());
 
-const chatMessages=ref([]);
+const chatMessages = ref([]);
 const storeMessages = ref([]);
-const chatRoomInfo=ref({});
+const chatRoomInfo = ref({});
+const partnerInfo = ref({});
 
-chatMessages.value.push({
-    // chatRoomId: 1, // 테스트 용도
-    // senderId: 2, // 테스트 용도
-    // title: "얼박사 킬러",
-    // nickname: "김싸피",
-    // content: "ㅎㅇ",
-    // createdAt: "오전 7:04",
-}); // 테스트 데이터
+// chatMessages.value.push({
+//   // 테스트 용도
+//   chatRoomId: 1,
+//   senderId: 2,
+//   title: "얼박사 킬러",
+//   nickname: "user2",
+//   content: "ㅎㅇ",
+//   profileImage: defaultProfileImage, // img 태그에 userId 기반으로 받아온 프사 적용 필요
+//   // createdAt: "오전 7:04",
+// }); // 테스트 데이터
+
+async function fetchLoginUserId() {
+    loginUserId.value = await localStorage.getItem("userId");
+    console.log("로그인되어 있는 userId:", loginUserId.value);
+}
 
 // 채팅 메세지 받기
 async function fetchMessages() {
     try {
-        const chatLogs = await chatStore.getChatMessageList(1); // 1번 채팅방 메시지 목록 불러오기
+        const chatLogs = await chatStore.getChatMessageList(
+            chatRoomStore.getChatRoomId
+        ); // 현재 번호 채팅방 메시지 목록 불러오기
 
-        chatLogs.forEach(m=>{
-            m.createdAt = new Intl.DateTimeFormat('ko-KR', { hour: 'numeric', minute: 'numeric', hour12: true }).format(new Date(m.createdAt));
+        chatLogs.forEach((m) => {
+            m.createdAt = new Intl.DateTimeFormat("ko-KR", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+            }).format(new Date(m.createdAt));
             chatMessages.value.push(m);
         });
-
     } catch (error) {
         console.error("Error fetching chat logs:", error);
     }
@@ -198,27 +344,31 @@ async function fetchMessages() {
 
 const scrollToBottom = () => {
     nextTick(() => {
-        const messageBox = document.getElementById('messages');
+        const messageBox = document.getElementById("messages");
         messageBox.scrollTop = messageBox.scrollHeight;
     });
 };
 
 const send = () => {
-    console.log('send()?');
+    console.log("send()?");
 
     if (stompClient) {
-        console.log('전송');
+        console.log("전송");
         const msg = {
-        chatRoomId: 1, // 테스트 용도
-        senderId: 1, // 테스트 용도
-        content: content.value,
-        createdAt: Date.now()
+            chatRoomId: chatRoomInfo.value.chatRoomId,
+            senderId: loginUserId.value,
+            content: content.value,
+            createdAt: Date.now(),
         };
 
-        stompClient.send('/pub/chats/' + '1', JSON.stringify(msg), {});
+        stompClient.send(
+            "/pub/chats/" + chatRoomInfo.value.chatRoomId,
+            JSON.stringify(msg),
+            {}
+        );
 
-        content.value = '';
-        scrollToBottom();
+        content.value = "";
+        // scrollToBottom();
     }
 };
 
@@ -231,164 +381,200 @@ const disconnect = () => {
 const subscribe = (chatRoomId) => {
     storeMessages.value = []; // 추가되었던 채팅 데이터 초기화
 
-    console.log('subscribing: ' + '/sub/' + chatRoomId);
+    console.log("subscribing: " + "/sub/" + chatRoomId);
 
-    subscription = stompClient.subscribe('/sub/' + chatRoomId, tick => {
-        console.log(chatRoomId + '번 방으로 메시지를 전달합니다.');
-        console.log('tick.body.content:' + JSON.parse(tick.body).content);
+    subscription = stompClient.subscribe(
+        "/sub/" + chatRoomId,
+        (tick) => {
+            console.log(chatRoomId + "번 방으로 메시지를 전달합니다.");
+            console.log("tick.body.content:" + JSON.parse(tick.body).content);
 
-        let message = JSON.parse(tick.body);
-        // TIMESTAMP를 오전 1:30 형태로 변환
-        message.createdAt = new Intl.DateTimeFormat('ko-KR', { hour: 'numeric', minute: 'numeric', hour12: true }).format(new Date(message.createdAt));
-        
-        storeMessages.value.push(message);
-        
-        console.log("🎈storeMessages:");
+            let message = JSON.parse(tick.body);
+            // TIMESTAMP를 오전 1:30 형태로 변환
+            message.createdAt = new Intl.DateTimeFormat("ko-KR", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+            }).format(new Date(message.createdAt));
 
-        console.log(storeMessages.value);
-    },{});
+            storeMessages.value.push(message);
+
+            console.log("🎈storeMessages:");
+
+            console.log(storeMessages.value);
+        },
+        {}
+    );
 };
 
 onMounted(() => {
+    fetchLoginUserId();
+
     fetchMessages();
 
-    console.log('mounted()');
+    // isPersonal 여부에 따라 가져오는 데이터 형식 다름
 
-    subscribe(chatRoomStore.getChatRoomId);
-    chatRoomStore.getChatRoomInfo(chatRoomStore.getChatRoomId);
+    if (chatRoomStore.getIsPersonal === false) {
+        chatRoomStore.getOpenChatRoomInfo(chatRoomStore.getChatRoomId);
+    } else {
+        chatRoomStore.getPersonalChatRoomInfo(chatRoomStore.getChatRoomId);
 
-    console.log("채팅방 정보:"+chatRoomStore.getChatRoom.chatRoomName);
+        partnerInfo.value = chatRoomStore.getPartnerInfo;
 
-    chatRoomInfo.value=chatRoomStore.getChatRoom;
+        console.log("상대방 정보:" + JSON.stringify(partnerInfo.value));
+    }
 
-    console.log("현재 페이지에서 보유한 방 정보:"+JSON.stringify(chatRoomStore.getChatRoom));
+    chatRoomInfo.value = chatRoomStore.getChatRoom;
+
+    console.log("mounted()" + chatRoomInfo.value.chatRoomId);
+
+    subscribe(chatRoomInfo.value.chatRoomId);
+
+    console.log(
+        "현재 페이지에서 보유한 방 정보:" + JSON.stringify(chatRoomInfo.value)
+    );
+
+    console.log("채팅방 정보:" + chatRoomStore.getChatRoom.chatRoomName);
+
+    console.log("############## chatRoomStore ##############");
+    console.log(chatRoomInfo.value);
+    console.log("#############################################");
+
+    // header
+    const userId = localStorage.getItem("userId");
+    if (chatRoomInfo.value.chatRoomName === "개인채팅방") {
+        chatRoomInfo.value.participants.forEach((p) => {
+            if (p.userId != userId) {
+                commonStore.headerType = "header5";
+                commonStore.headerChatName = p.nickname;
+                commonStore.headerChatImg = p.profileImage;
+
+                // TODO: commonStore에서 headerGoOut 함수 채팅방 나가기 api 호출
+            }
+        });
+    }
 });
 </script>
 
 <style>
-@import "@/components/css/color.css";
-@import "@/components/css/font.css";
-
-.testTime{
-    margin-top: 20%;
-    margin-bottom: 0;
-    font-size: 0.9rem ;
-}
-#chatBox{
-  border:0.063rem solid var(--black-color);
-  width: 25rem;
-  height: 42.5rem;
-  margin: 0 auto;
-}
-
-/* 메시지 목록 창 */
-#messages{
-    display:flex;
-    border:0.063rem solid var(--red-color);
+.chatconversationview-main-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 7.25rem - 4rem);
     overflow-x: hidden;
     overflow-y: scroll;
     transition: scroll-behavior 0.5s ease-in-out;
-    height:37.5rem;
-}
-#messages::-webkit-scrollbar {
-    /* display: none; */
+    padding-top: 1rem;
 }
 
-#inputWindow{
-    /* bottom:0; */
-    width:100%;
-    border:0.063rem solid purple;
+.chatconversationview-main-container::-webkit-scrollbar {
+    display: none;
 }
-#inputGroup{
-    border:0.063rem solid blue;
-    display:flex;
+
+.chatconversationview-sub-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* input messsage form */
+.chatconversationview-inputWindow {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    width: 22.2rem;
+    height: 4rem;
+    bottom: 4rem;
+    background-color: var(--white-color);
+}
+
+.chatconversationview-inputGroup {
+    display: flex;
     justify-content: center;
+    height: 3rem;
 }
 
-/* 전송 버튼 */
+.chatconversationview-messageForm {
+    width: 16.2rem;
+    font-size: 1rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    border-radius: 2rem;
+    font-family: "Regular";
+    background-color: var(--gray-color);
+    border: none;
+    outline: none;
+}
+
 .chatconversationview-generate {
-width:3.4rem;
-background: var(--main-color);
-color: var(--white-color);
-padding: 1rem 1rem;
-padding-left: 0.9rem;
-display: flex;
-align-items: center;
-border: none;
-border-radius: 100%;
-overflow: hidden;
-transition: all 0.2s;
-cursor: pointer;
-z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    background: var(--main-color);
+    color: var(--white-color);
+
+    border: none;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: all 0.2s;
+    cursor: pointer;
+    z-index: 3;
 }
 
-.chatconversationview-generate span {
-display: block;
-margin-left: 0.3rem;
-transition: all 0.3s ease-in-out;
+.chatconversationview-icon {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    padding-right: 0.2rem;
 }
 
-.chatconversationview-generate svg {
-display: block;
-transform-origin: center center;
-transition: transform 0.3s ease-in-out;
+/*  */
+#chatconversationview-chatBox {
+    width: 22.2rem;
+    margin: 0 auto;
 }
 
-.chatconversationview-generate:hover .svg-wrapper {
-animation: fly-1 0.6s ease-in-out infinite alternate;
+#chatconversationview-messages {
+    width: 22.2rem;
+    display: flex;
+    /* overflow-x: hidden;
+    overflow-y: scroll;
+    transition: scroll-behavior 0.5s ease-in-out; */
 }
-
-.chatconversationview-generate:hover svg {
-transform: translateX(1.2rem) rotate(45deg) scale(1.1);
-}
-
-.chatconversationview-generate:hover span {
-transform: translateX(5rem);
-}
-
-.chatconversationview-generate:active {
-transform: scale(0.95);
-}
-
-/* 텍스트 입력 창 */
-#messageForm{
-    font-size:1rem;
-    padding-left:1rem;
-    width:70%;
-    border-radius:3.125rem;
-    margin-right:0.625rem;
-    font-family:"Regular";
-}
-
-#messageForm:focus {
-border-color: var(--sub-color); /* 선택되었을 때의 테두리 색상을 변경합니다. */
-box-shadow: 0 0 0 0.2rem rgba(255, 159, 186, 0.25); /* 선택되었을 때의 그림자 효과를 추가합니다. */
-outline: 0; /* 기본 선택 효과를 제거합니다. */
-transition: 0.3s;
+#chatconversationview-messages::-webkit-scrollbar {
+    display: none;
 }
 
 /* 메세지 카드 */
-.chatconversationview-messageCard{
-    width:23.125rem;
-    display:flex;
-    border:0.063rem solid blue;
+.chatconversationview-messageCard {
+    width: 22.2rem;
+    display: flex;
+    margin-bottom: 0.8rem;
 }
 
-.chatconversationview-fromCard{
+.chatconversationview-fromCard {
     justify-content: flex-start;
+    max-width: 20.2rem;
+    padding-right: 2rem;
 }
 
-.chatconversationview-toCard{
+.chatconversationview-toCard {
     justify-content: flex-end;
+    max-width: 20.2rem;
+    padding-left: 2rem;
 }
 
 /* 메시지 버블 */
 .chatconversationview-bubble {
-    border:0.063rem solid green;
     border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
-    max-width: 15.0rem;
+    max-width: 15rem;
 }
 
 .chatconversationview-bubble p {
@@ -398,137 +584,155 @@ transition: 0.3s;
     padding: 0.5rem 0.875rem;
     position: relative;
     word-wrap: break-word;
-    font-family:"Regular";
+    font-family: "Regular";
+    font-size: 1rem;
 }
 
-.chatconversationview-bubble p::before,
-.chatconversationview-bubble p::after {
-    bottom: -0.1rem;
-    content: "";
-    height: 1rem;
-    position: absolute;
-}
-
-/* 메시지 */
+/* 내가 보내는 메시지 부분*/
 p.chatconversationview-fromMe {
     align-self: flex-end;
     background-color: var(--main-color);
     color: var(--white-color);
 }
 
-p.chatconversationview-fromMe::before {
-    border-bottom-left-radius: 0.8rem 0.7rem;
-    border-right: 1rem solid var(--main-color);
-    right: -0.35rem;
-    transform: translate(0, -0.1rem);
-}
-
-p.chatconversationview-fromMe::after {
-    background-color: var(--white-color);
-    border-bottom-left-radius: 0.5rem;
-    right: -2.5rem;
-    transform: translate(-1.875rem, -0.125rem);
-    width: 0.625rem;
-}
-
-p[class^="chatconversationview-from"] {
-    margin: 0.5rem 0;
-    width: fit-content;
-}
-
-p.chatconversationview-fromMe ~ p.chatconversationview-fromMe {
-    margin: 0.25rem 0 0;
-}
-
-p.chatconversationview-fromMe ~ p.chatconversationview-fromMe:not(:last-child) {
-    margin: 0.25rem 0 0;
-}
-
-p.chatconversationview-fromMe ~ p.chatconversationview-froMme:last-child {
-    margin-bottom: 0.5rem;
-}
-
+/* 상대가 보내는 메시지 부분 */
 p.chatconversationview-fromThem {
     align-items: flex-start;
     background-color: var(--sub-color);
     color: var(--black-color);
-    z-index: 1;
 }
 
-p.chatconversationview-fromThem:before {
-    border-bottom-right-radius: 0.8rem 0.7rem;
-    border-left: 1rem solid var(--sub-color);
-    left: -0.35rem;
-    transform: translate(0, -0.1rem);
-}
 
-p.chatconversationview-fromThem::after {
-    background-color: var(--white-color);
-    border-bottom-right-radius: 0.5rem;
-    left: 1.25rem;
-    transform: translate(-1.875rem, -0.125rem);
-    width: 0.625rem;
-}
-
-/* 프로필 사진 */
-.chatconversationview-profileImage img{
-    padding-top:0.313rem;
-    margin-left:0.625rem;
-    width:3.125rem;
-}
-
-/* 상대 메시지 헤더 */
-.chatconversationview-fromHeader{
-    display:flex;
+/* 상대가 보낸 메시지 */
+/* 헤더 */
+.chatconversationview-fromHeader {
+    display: flex;
     justify-content: flex-start;
 }
 
-/* 상대 칭호+이름 */
-.chatconversationview-userHeader{
-    padding-top:0.313rem;
-    padding-left:0.625rem;
+/* 프로필 사진 */
+.chatconversationview-profileImage img {
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 1px solid var(--gray-color);
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-/* 상대 칭호 */
-.chatconversationview-userTitle{
-    padding-left:0rem;
-    font-family:"Semi";
-    font-size:1.1rem;
-    color:var(--main-color);
+.chatconversationv-senderview-container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.6rem;
 }
 
-/* 상대 이름 */
-.chatconversationview-userName{
-    padding-left:0.375rem;
-    font-family:"Medium";
-    font-size:1.1rem;
-    color:var(--gray2-color);
+/* 칭호+이름 */
+.chatconversationview-userHeader {
+    display: flex;
+    justify-self: row;
+    margin-bottom: 0.4rem;
+}
+
+/* 칭호 */
+.chatconversationview-userTitle {
+    font-family: "bold";
+    font-size: 0.8rem;
+    color: var(--main-color);
+    margin-right: 0.4rem;
+}
+
+/* 이름 */
+.chatconversationview-userName {
+    font-family: "Semi";
+    font-size: 0.8rem;
+    color: var(--gray2-color);
+}
+
+/* 메시지+시간 */
+.chatconversationview-sender-container{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* 메시지 */
+.chatconversationview-sender-content{
+    max-width: 14rem;
+    overflow-wrap: break-word;
+    padding: 0.4rem;
+    background-color: var(--sub-color);
+    border-radius: 0.4rem;
+    padding: 0.8rem 0.8rem 0.8rem 0.8rem;
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--black-color);
+    line-height: 1.2rem;
+}
+
+/* 시간 */
+.chatconversationview-sender-time{
+    font-family: "Regular";
+    font-size: 0.8rem;
+    color: var(--gray2-color);
+    margin-left: 0.2rem;
+    display: flex;
+    align-self: flex-end;
+}
+
+/* 내가 보낸 메시지 */
+/* 메시지+시간 */
+.chatconversationview-receiver-container{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 100%;
+}
+
+/* 메시지 */
+.chatconversationview-receiver-content{
+    max-width: 14rem;
+    overflow-wrap: break-word;
+    padding: 0.4rem;
+    background-color: var(--main-color);
+    border-radius: 0.4rem;
+    padding: 0.8rem 0.8rem 0.8rem 0.8rem;
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--white-color);
+    line-height: 1.2rem;
+}
+
+/* 시간 */
+.chatconversationview-receiver-time{
+    font-family: "Regular";
+    font-size: 0.8rem;
+    color: var(--gray2-color);
+    margin-right: 0.2rem;
+    display: flex;
+    align-self: flex-end;
 }
 
 /* 시간 정보 */
-.chatconversationview-sendDate{
-    width:4.0rem;
-    height:100%;
-    border:0.063rem solid (--red-color);
-    font-size:0.9rem;
+.chatconversationview-sendDate {
     font-family: "Regular";
-    margin-top:15%;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 0 0.2rem 0.4rem 0.2rem;
 }
-.chatconversationview-sendDate p{
-    margin-bottom:0;
+.chatconversationview-sendDate p {
+    margin-bottom: 0;
     text-align: bottom;
 }
-.chatconversationview-messageAndTimeTo{
-    display:flex;
+.chatconversationview-messageAndTimeTo {
+    display: flex;
     flex-direction: row;
-    border:0.063rem solid blue;
 }
-.chatconversationview-messageAndTimeTo .sendDate{
+.chatconversationview-messageAndTimeTo .sendDate {
     text-align: right;
 }
-.chatconversationview-messageAndTimeFrom{
-    display:flex;
-    flex-direction: row;
-    border:0.063rem solid purple;
+.chatconversationview-messageAndTimeFrom {
+    display: flex;
 }
 </style>

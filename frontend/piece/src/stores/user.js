@@ -14,9 +14,7 @@ export const useUserStore = defineStore(
         const mypageLabelList = ref({});
         const mypageLabelWear = ref({});
         const mypageLabelWearoff = ref();
-        const nicknameMessage = ref(
-            "3자 이상 10자 이내의 한글, 영문만 가능해요"
-        );
+        const nicknameMessage = ref("3자 이상 10자 이내의 한글, 영문만 가능해요");
         const isNickname = ref(false);
 
         // =========== GETTER ===============
@@ -49,6 +47,10 @@ export const useUserStore = defineStore(
             return isNickname.value;
         });
 
+        const setIsNickname = (data) => {
+            isNickname.value = data;
+        };
+
         // =========== ACTION ===============
 
         const checkMypageLabelList = function () {
@@ -76,9 +78,7 @@ export const useUserStore = defineStore(
 
         const addMypageLabelWear = function (labelId) {
             axios({
-                url: `${
-                    import.meta.env.VITE_REST_PIECE_API
-                }/mylabels/${labelId}`,
+                url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/${labelId}`,
                 method: "PUT",
             })
                 .then((res) => {
@@ -102,17 +102,13 @@ export const useUserStore = defineStore(
 
         const checkMypageLabelWear = function () {
             setMypagelabelWearoff(
-                Object.values(mypageLabelList.value).every(
-                    (item) => !item.wearLabels
-                )
+                Object.values(mypageLabelList.value).every((item) => !item.wearLabels)
             );
         };
 
         const changeMypageNickname = function (userId, nickname) {
             axios({
-                url: `${
-                    import.meta.env.VITE_REST_USER_API
-                }/users/${userId}/nickname`,
+                url: `${import.meta.env.VITE_REST_USER_API}/users/${userId}/nickname`,
                 method: "PUT",
                 data: {
                     newNickname: nickname,
@@ -124,9 +120,7 @@ export const useUserStore = defineStore(
 
         const changeMypagePassword = function (userId, password) {
             axios({
-                url: `${
-                    import.meta.env.VITE_REST_USER_API
-                }/users/${userId}/password`,
+                url: `${import.meta.env.VITE_REST_USER_API}/users/${userId}/password`,
                 method: "PUT",
                 data: {
                     newPassword: password,
@@ -165,6 +159,22 @@ export const useUserStore = defineStore(
                 .catch((err) => {});
         };
 
+
+        async function updateProfileImage(s3path) {
+            try {
+                console.log("Sending s3path as body:", s3path);
+                const response = await axios.put(
+                    `${import.meta.env.VITE_REST_USER_API}/users/save/profileImage`,
+                    {
+                        s3path: s3path,
+                    }
+                );
+                console.log("파일경로 저장 성공!");
+            } catch (error) {
+                console.error("파일경로 저장 실패", error.message);
+            }
+        }
+
         return {
             // state
             mypageLabelList,
@@ -180,6 +190,7 @@ export const useUserStore = defineStore(
             getNicknameMessage,
             setNicknameMessage,
             getIsNickname,
+            setIsNickname,
             // action
             checkMypageLabelList,
             findMypageLabelList,
@@ -190,6 +201,7 @@ export const useUserStore = defineStore(
             changeMypagePassword,
             checkNickname,
             checkTutorial,
+            updateProfileImage,
         };
     },
     { persist: true }

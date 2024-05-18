@@ -8,7 +8,9 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import axios from 'axios';
+import axios from "axios";
+
+import "./registerServiceWorker";
 
 library.add(fas);
 library.add(far);
@@ -22,7 +24,7 @@ app.use(router);
 app.mount("#app");
 
 function initializeAuth() {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
         axios.defaults.headers.common["Authorization"] = accessToken;
     }
