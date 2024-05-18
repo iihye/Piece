@@ -21,26 +21,27 @@ export const useSearchStore = defineStore("search", () => {
   // =========== ACTION ===============
 
   const searchPiece = function (keyword) {
+    console.log(keyword);
     axios({
-      url: `${import.meta.env.VITE_REST_PIECE_API}/${keyword}`,
+      url: `${import.meta.env.VITE_REST_PIECE_API}/search/${keyword}`,
       method: "GET",
     })
       .then((res) => {
-        searchList.value = res.data;
+        searchList.value = res.data.data;
       })
       .catch((err) => {});
   };
 
-  const searchMyPiece = function(keyword) {
+  const searchMyPiece = function (keyword) {
     axios({
-        url: `${import.meta.env.VITE_REST_PIECE_API}/${keyword}`,
-        method: 'GET',
+      url: `${import.meta.env.VITE_REST_PIECE_API}/search/my/${keyword}`,
+      method: "GET",
     })
-        .then((res) => {
-            mySearchList.value = res.data;
-        })
-        .catch((err) => {});   
-    }
+      .then((res) => {
+        mySearchList.value = res.data.data;
+      })
+      .catch((err) => {});
+  };
 
   return {
     // state
@@ -51,6 +52,6 @@ export const useSearchStore = defineStore("search", () => {
     getMySearchList,
     // action
     searchPiece,
-    searchMyPiece
+    searchMyPiece,
   };
 });
