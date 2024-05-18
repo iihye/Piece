@@ -252,7 +252,6 @@ const tutorialConfirm = () => {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    margin-left: 0.6rem;
 }
 
 .tutorial-check {
