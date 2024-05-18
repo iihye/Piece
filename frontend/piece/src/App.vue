@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <TheHeader class="TheHeader" />
-        <PieceProgressBar v-if="headerTitle" class="pieceProgressBar"></PieceProgressBar>
+        <PieceProgressBar v-if="isProgressBar" class="pieceProgressBar"></PieceProgressBar>
         <div class="app-content">
             <RouterView />
         </div>
@@ -18,7 +18,9 @@ import { useCommonStore } from "./stores/common";
 import PieceProgressBar from "./components/item/PieceProgressBar.vue"; 
 
 const commonStore = useCommonStore();
-const headerTitle = computed(() => commonStore.getProgress > 0);
+const headerTitle = computed(() => commonStore.getHeaderTitle);
+const progress = computed(() => commonStore.getProgress);
+const isProgressBar = computed(() => (headerTitle.value === "조각 만들기" && progress.value > 0) ? true : false);
 </script>
 
 <style>
