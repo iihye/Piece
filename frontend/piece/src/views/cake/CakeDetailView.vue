@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- image -->
-        <img class="cakedetailview-image-image" :src="data.imageUrl" />
+        <img class="cakedetailview-image-image" :src="data.posterImageUrl" />
 
         <!-- heart -->
         <div class="cakedetailview-icon-container">
@@ -48,7 +48,11 @@
 
         <!-- content -->
         <div class="cakedetailview-content-container">
-            <div class="cakedetailview-content-content">{{ data.content }}</div>
+            <div class="cakedetailview-content-content">{{ data.overview }}</div>
+            <div class="cakedetailview-content-runtime">상영 시간: {{ data.runtime }}</div>
+            <div v-if="data.castList && data.castList.length > 0" class="cakedetailview-content-cast">
+                출연진: {{ data.castList.join(', ') }}
+            </div>
         </div>
 
         <hr />
@@ -82,29 +86,31 @@
 </template>
 
 <script setup>
-import router from "@/router";
 import { ref, computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { useCommonStore } from "@/stores/common";
-import { useCakeStore } from "@/stores/cake";
+import { useCakeDetailStore } from "@/stores/cakedetail";
 import ChatItem from "@/components/chat/ChatItem.vue";
 import RoundButton from "@/components/button/RoundButton.vue";
 
 const commonStore = useCommonStore();
-const store = useCakeStore();
+const cakeDetailStore = useCakeDetailStore();
+const route = useRoute();
 
 const data = ref({
-    imageUrl:
-        "https://i.namu.wiki/i/IyVsoRT2tRo75y6uqUPLIeN03DgD1RkDKDyWeIafvUKSOnNdZvb9-Le-AhcKQ9OlCkuaI--jqGIy9ffzyrMHZMlUvUlzD-YCDSu-RC5JIFGcjzgt3cOrBwc-cG9Ryjh2BBP4PIqfyEFm3KJqzH81nw.webp",
-    heartCnt: 25,
-    cultureType: "ETC",
-    title: "SHOW WHAT I WANT",
-    content: "정보들 ",
+    posterImageUrl: "",
+    heartCnt: 0,
+    cultureType: "",
+    title: "",
+    overview: "",
+    runtime: "",
+    castList: [],
 });
 
 const cakeHeartState = ref(false);
-const cakeChatList = computed(() => store.getCakeChatList);
-const cakeChatUser = computed(() => store.getCakeChatUser);
-const cakeChatUserLabel = computed(() => store.getCakeChatUserLabel);
+const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
+const cakeChatUser = computed(() => cakeDetailStore.getCakeChatUser);
+const cakeChatUserLabel = computed(() => cakeDetailStore.getCakeChatUserLabel);
 
 const handleHeartClick = () => {
     alert("하트 클릭");
@@ -122,13 +128,20 @@ onMounted(async () => {
     commonStore.headerTitle = "케이크 상세보기";
     commonStore.headerType = "header2";
 
-    // const itemId = parseInt(route.params.id);
-    // item.value = fakeDatabase.find(i => i.id === itemId);
+    const concertId = route.params.concertId; // 올바른 concertId 가져오기
+    await cakeDetailStore.fetchCakeDetail(concertId);
 
-    // TODO: 찜 상태 가져오기
-    // TODO: 찜 명수 업데이트
-    // TODO: 채팅방 가져오기
-    await store.findCakeChatList();
+    data.value = {
+        posterImageUrl: cakeDetailStore.cakeDetail.posterImageUrl,
+        heartCnt: cakeDetailStore.cakeDetail.heartCnt,
+        cultureType: cakeDetailStore.cakeDetail.cultureType,
+        title: cakeDetailStore.cakeDetail.title,
+        overview: cakeDetailStore.cakeDetail.overview,
+        runtime: cakeDetailStore.cakeDetail.runtime,
+        castList: cakeDetailStore.cakeDetail.castList || [], // Ensure castList is an array
+    };
+
+    await cakeDetailStore.findCakeChatList(concertId);
 });
 </script>
 
@@ -216,6 +229,20 @@ onMounted(async () => {
     font-family: "Regular";
     font-size: 1rem;
     color: var(--black-color);
+}
+
+.cakedetailview-content-runtime {
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--black-color);
+    margin-top: 0.5rem;
+}
+
+.cakedetailview-content-cast {
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--black-color);
+    margin-top: 0.5rem;
 }
 
 /* chat */

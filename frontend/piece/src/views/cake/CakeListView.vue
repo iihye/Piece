@@ -1,54 +1,49 @@
 <template>
-<div class="cakelistview-scroll-container">
-    <div class="cakelistview-tab-navigation">
-        <div class="cakelistview-tab-menu" ref="tabMenu">
-
-            <!-- search -->
-            <div class="cakelistview-search-area">
-                <TextInput class="pieceimageview-search-input" placeholder="검색어를 입력하세요" v-model="searchQuery"
-                    @focus="handleFocus" @update:modelValue="(value) => (searchQuery = value)" />
-                <InputPreview class="pieceimageview-search-preview" :searchQuery="searchQuery"
-                    :searchResults="searchResults" :isFocused="isFocused" @select="handleSelect" />
+    <div class="cakelistview-scroll-container">
+        <div class="cakelistview-tab-navigation">
+            <div class="cakelistview-tab-menu" ref="tabMenu">
+                <!-- search -->
+                <div class="cakelistview-search-area">
+                    <TextInput class="pieceimageview-search-input" placeholder="검색어를 입력하세요" v-model="searchQuery"
+                        @focus="handleFocus" @update:modelValue="(value) => (searchQuery = value)" />
+                    <InputPreview class="pieceimageview-search-preview" :searchQuery="searchQuery"
+                        :searchResults="searchResults" :isFocused="isFocused" @select="handleSelect" />
+                </div>
+                <!-- filter -->
+                <FilterItem
+                    v-for="(item, index) in filterItems"
+                    class="cakelistview-tab-btn"
+                    :key="index"
+                    :labelType="item.labelType"
+                    :title="item.title"
+                    :isSelect="item.isSelect"
+                    @click="handleItemSelectClick(index)"
+                ></FilterItem>
             </div>
-
-            <!-- filter -->
-            <FilterItem
-                v-for="(item, index) in filterItems"
-                class="cakelistview-tab-btn"
+        </div>
+    </div>
+    <!-- list -->
+    <div class="cakelistview-list-container" ref="listContainer">
+        <div class="cakelistview-list-grid">
+            <div
+                v-for="(item, index) in filteredCakeList"
                 :key="index"
-                :labelType="item.labelType"
-                :title="item.title"
-                :isSelect="item.isSelect"
-                @click="handleItemSelectClick(index)"
-            ></FilterItem>
-        </div>
-    </div>
-</div>
-
-<!-- list -->
-<div class="cakelistview-list-container" ref="listContainer">
-    <div class="cakelistview-list-grid">
-        <div
-            v-for="(item, index) in filteredCakeList"
-            :key="index"
-            class="cakelistview-list-item"
-        >
-            <ListCakeItem
-                :cultureId="item.cultureId"
-                :cultureType="item.cultureType"
-                :code="item.code"
-                :title="item.title"
-                :imageUrl="item.imageUrl"
-                :frontImg="item.frontImg"
-                @click="handleItemClick(item)"
+                class="cakelistview-list-item"
             >
-            </ListCakeItem>
+                <ListCakeItem
+                    :cultureId="item.cultureId"
+                    :cultureType="item.cultureType"
+                    :code="item.code"
+                    :title="item.title"
+                    :imageUrl="item.imageUrl"
+                    :frontImg="item.frontImg"
+                    @click="handleItemClick(item)"
+                >
+                </ListCakeItem>
+            </div>
         </div>
     </div>
-</div>
 </template>
-
-
 
 <script setup>
 import router from "@/router";
@@ -74,7 +69,6 @@ const searchResults = ref([]);
 const searchQuery = ref("");
 const isFocused = ref(false);
 
-
 watch(searchQuery, (newValue) => {
     if (newValue.length >= 2) {
         searchMovieDebouncing(newValue);
@@ -86,18 +80,11 @@ watch(searchQuery, (newValue) => {
 const getFetchImageFromUrl = async (imageUrl) => {
     const data = await pieceStore.fetchImage(imageUrl);
     if (imageUrl) {
-        // searchResults.value = data;
         imageSrc.value = data;
         uploadedImage.value = data;
         originalImage.value = data;
     }
 };
-
-// function getFetchImageFromUrl(imageUrl) {
-//     imageSrc.value = imageUrl;
-//     uploadedImage.value = imageUrl;
-//     originalImage.value = imageUrl;
-// }
 
 const searchMovieDebouncing = debounce(async (query) => {
     const data = await pieceStore.getSearchMovieList(query);
@@ -119,11 +106,10 @@ const handleItemClick = (item) => {
     router.push({
         name: "CakeDetail",
         params: {
-            id: item.cultureId,
+            concertId: item.code, // 변경된 부분
         },
     });
 };
-
 
 const handleFocus = () => {
     isFocused.value = true;
@@ -152,7 +138,6 @@ const handleDocumentClick = (event) => {
 };
 
 document.addEventListener("click", handleDocumentClick);
-
 
 const filterItems = ref([
     { labelType: "ALL", title: "전체", isSelect: true },
@@ -231,8 +216,6 @@ onBeforeUnmount(() => {
 });
 </script>
 
-
-
 <style>
 .cakelistview-scroll-container {
     position: relative;
@@ -257,14 +240,12 @@ onBeforeUnmount(() => {
     scroll-behavior: smooth;
 }
 
-
 /* search */
 .cakelistview-search-area {
     width: 15rem;
     margin-bottom: 1rem;
     align-self: end;
 }
-
 
 .cakelistview-tab-menu.dragging {
     scroll-behavior: unset;

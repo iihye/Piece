@@ -212,7 +212,8 @@ const router = createRouter({
       component: CakeListView,
     },
     {
-      path: "/views/:id",
+    //   path: "/views/:id",
+      path: '/detail/:concertId',
       name: "CakeDetail",
       component: CakeDetailView,
       props: true,
