@@ -20,6 +20,7 @@
                         id="movie-types"
                         groupName="공연 분류"
                         :options="options"
+                        :initialSelected="pieceValue.performanceType"
                         @selected="updateSelected"
                     />
                 </div>
@@ -33,6 +34,7 @@
                         id="content-name"
                         placeholder="공연명을 입력하세요"
                         v-model="pieceValue.title"
+                        maxlength="20"
                     />
                 </div>
                 <div class="pieceinfoview-form-group">
@@ -185,6 +187,8 @@ watch(timeValue, (newValue) => {
 onMounted(async () => {
     commonStore.headerTitle = "조각 만들기";
     commonStore.headerType = "header2";
+    dateValue.value = pieceStore.pieceValue.date;
+    timeValue.value = pieceStore.pieceValue.time;
 });
 </script>
 

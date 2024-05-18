@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useFileUploadStore } from "@/stores/fileupload";
 import LoadingModal from "@/components/modal/LoadingModal.vue";
 
@@ -45,13 +45,10 @@ async function handleFileSelected(event) {
         emit("uploadSuccess", url.presignedURL, url.s3path);
     } catch (error) {
         emit("uploadError", error);
-        emit("ERROR", error);
     }
     loadingModal.value = false;
 }
-
 </script>
-
 
 <style>
 .fileuploader-button {
