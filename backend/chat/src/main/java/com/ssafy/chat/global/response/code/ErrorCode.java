@@ -55,6 +55,8 @@ public enum ErrorCode implements ResponseCode {
 
     REQUEST_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "요청에 실패했습니다."),
 
+    CHATROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "기록을 찾을 수 없습니다"),
+
     /**
      * s3
      */

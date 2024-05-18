@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,5 +61,10 @@ public class ChatRoomsController {
         participantsService.leaveChatRoomAll(chatRoomId);
 
         return SuccessResponse.createSuccess(SuccessCode.CHATROOM_DELETED);
+    }
+
+    @GetMapping("/chatrooms/{cultureId}")
+    public ResponseEntity<Object> findChatRoomId(@PathVariable Long cultureId) {
+        return SuccessResponse.createSuccess(SuccessCode.CHATROOM_READ_SUCCESS, chatRoomService.findChatRoomByCultureId(cultureId));
     }
 }

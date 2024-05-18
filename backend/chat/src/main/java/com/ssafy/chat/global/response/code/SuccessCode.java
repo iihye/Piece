@@ -70,6 +70,7 @@ public enum SuccessCode implements ResponseCode {
     PARTICIPATED_LIST_SUCCESS(HttpStatus.OK, "참여찬 채팅방 목록을 조회했습니다."),
     LEAVE_CHATROOM_SUCCESS(HttpStatus.OK, "채팅방에서 퇴장했습니다."),
     PARTICIPANT_COUNT_SUCCESS(HttpStatus.OK, "채팅방 참여 인원 수를 조회했습니다."),
+    CHATROOM_READ_SUCCESS(HttpStatus.OK, "채팅방 ID 조회에 성공하였습니다."),
 
     /**
      * s3

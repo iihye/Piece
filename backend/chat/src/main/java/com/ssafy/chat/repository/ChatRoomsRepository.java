@@ -31,4 +31,6 @@ public interface ChatRoomsRepository extends JpaRepository<ChatRooms, Long> {
     Long existsPersonalChatRoomByParticipants(@Param("userId") Long userId, @Param("partnerId") Long partnerId);
 
     Boolean existsByCultureId(Long cultureId);
+
+    Optional<ChatRooms> findChatRoomsByCultureId(@Param("cultureId") Long cultureId);
 }

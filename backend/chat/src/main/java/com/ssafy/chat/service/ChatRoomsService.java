@@ -5,6 +5,7 @@ import com.ssafy.chat.dto.request.PersonalChatRoomsCreateRequestDto;
 import com.ssafy.chat.entity.ChatRooms;
 import com.ssafy.chat.exception.AlreadyCreatedChatRoomException;
 import com.ssafy.chat.exception.AlreadyCreatedPersonalChatRoomException;
+import com.ssafy.chat.exception.ChatRoomNotFoundException;
 import com.ssafy.chat.repository.ChatRoomsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,12 @@ public class ChatRoomsService {
 
     public void deleteChatRoom(Long chatRoomId) {
         chatRoomRepository.deleteById(chatRoomId);
+    }
+
+    public Long findChatRoomByCultureId(Long cultureId) {
+        ChatRooms chatRooms = chatRoomRepository.findChatRoomsByCultureId(cultureId)
+            .orElseThrow(ChatRoomNotFoundException::new);
+        return chatRooms.getChatRoomId();
     }
 
 }
