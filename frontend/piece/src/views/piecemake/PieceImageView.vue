@@ -1,5 +1,7 @@
 <template>
+    <!-- <PieceProgressBar/> -->
     <div class="pieceimageview-container">
+        
         <!-- title -->
         <div class="pieceimageview-main-title">어떤 조각을 만들까요?</div>
         <div class="pieceimageview-main-content">
@@ -101,6 +103,7 @@ import RoundButton from "@/components/button/RoundButton.vue";
 import SmallButton from "@/components/button/SmallButton.vue";
 import TextInput from "@/components/text/OnlyInput.vue";
 import InputPreview from "@/components/text/InputPreview.vue";
+import PieceProgressBar from "@/components/item/PieceProgressBar.vue";
 
 const commonStore = useCommonStore();
 const pieceStore = usePieceStore();
@@ -238,6 +241,7 @@ const makeBackImage = () => {
 onMounted(async () => {
     commonStore.headerTitle = "조각 만들기";
     commonStore.headerType = "header2";
+    commonStore.setProgress(1);
 });
 
 onMounted(() => {
