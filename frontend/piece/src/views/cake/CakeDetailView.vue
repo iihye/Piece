@@ -1,103 +1,103 @@
 <template>
-<div>
-    <!-- image -->
-    <img class="cakedetailview-image-image" :src="data.posterImageUrl" />
-
-    <!-- heart -->
-    <div class="cakedetailview-icon-container">
+    <div>
+      <!-- image -->
+      <img class="cakedetailview-image-image" :src="data.posterImageUrl" />
+  
+      <!-- heart -->
+      <div class="cakedetailview-icon-container">
         <div class="cakedetailview-heart-container">
-            <font-awesome-icon
-                class="cakedetailview-heart-icon"
-                :icon="cakeHeartState ? ['fas', 'heart'] : ['far', 'heart']"
-                style="color: var(--main-color)"
-                @click="handleHeartClick"
-            />
+          <font-awesome-icon
+            class="cakedetailview-heart-icon"
+            :icon="cakeHeartState ? ['fas', 'heart'] : ['far', 'heart']"
+            style="color: var(--main-color)"
+            @click="handleHeartClick"
+          />
         </div>
-        
         <div class="cakedetailview-heart-message">
-            {{ data.heartCnt }}명이 찜하고 있어요
+          {{ cakeHeartCount }}명이 찜하고 있어요
         </div>
-    </div>
-
-    <hr />
-
-    <!-- title -->
-    <div class="cakedetailview-item-container">
-        <div class="cakedetailview-item-type"
-            :class="{
-                'movie-background': data.cultureType === 'MOVIE',
-                'theater-background': data.cultureType === 'THEATER',
-                'musical-background': data.cultureType === 'MUSICAL',
-                'concert-background': data.cultureType === 'CONCERT',
-                'other-background':
-                data.cultureType !== 'MOVIE' &&
-                data.cultureType !== 'THEATER' &&
-                data.cultureType !== 'MUSICAL' &&
-                data.cultureType !== 'CONCERT',
-            }"
+      </div>
+  
+      <hr />
+  
+      <!-- title -->
+      <div class="cakedetailview-item-container">
+        <div
+          class="cakedetailview-item-type"
+          :class="{
+            'movie-background': data.cultureType === 'MOVIE',
+            'theater-background': data.cultureType === 'THEATER',
+            'musical-background': data.cultureType === 'MUSICAL',
+            'concert-background': data.cultureType === 'CONCERT',
+            'other-background':
+              data.cultureType !== 'MOVIE' &&
+              data.cultureType !== 'THEATER' &&
+              data.cultureType !== 'MUSICAL' &&
+              data.cultureType !== 'CONCERT',
+          }"
         >
-        <p v-if="data.cultureType === 'MOVIE'">영화</p>
-        <p v-else-if="data.cultureType === 'THEATER'">연극</p>
-        <p v-else-if="data.cultureType === 'MUSICAL'">뮤지컬</p>
-        <p v-else-if="data.cultureType === 'CONCERT'">콘서트</p>
-        <p v-else>기타</p>
+          <p v-if="data.cultureType === 'MOVIE'">영화</p>
+          <p v-else-if="data.cultureType === 'THEATER'">연극</p>
+          <p v-else-if="data.cultureType === 'MUSICAL'">뮤지컬</p>
+          <p v-else-if="data.cultureType === 'CONCERT'">콘서트</p>
+          <p v-else>기타</p>
         </div>
-
+  
         <div class="cakedetailview-item-title">{{ data.title }}</div>
-    </div>
-
-    <!-- content -->
-    <div class="cakedetailview-content-container">
+      </div>
+  
+      <!-- content -->
+      <div class="cakedetailview-content-container">
         <div class="cakedetailview-content-content">{{ data.overview }}</div>
         <div class="cakedetailview-content-runtime">상영 시간: {{ data.runtime }}</div>
         <div v-if="data.castList && data.castList.length > 0" class="cakedetailview-content-cast">
-            출연진: {{ data.castList.join(', ') }}
+          출연진: {{ data.castList.join(', ') }}
         </div>
-    </div>
-
-    <hr />
-
-    <!-- chat -->
-    <div class="cakedetailview-chat-container">
+      </div>
+  
+      <hr />
+  
+      <!-- chat -->
+      <div class="cakedetailview-chat-container">
         <div class="cakedetailview-chat-title">채팅방</div>
         <div class="cakedetailview-chat-container">
-            <ChatItem
-                v-for="(item, index) in cakeChatList"
-                class="cakedetailview-chat-item"
-                :key="index"
-                :chatRoomId="item.chatRoomId"
-                :senderLabel="item.senderLabel"
-                :senderNickname="item.senderNickname"
-                :senderImg="item.senderImg"
-                :content="item.content"
-                :createdAt="item.createdAt"
-            ></ChatItem>
+          <ChatItem
+            v-for="(item, index) in cakeChatList"
+            class="cakedetailview-chat-item"
+            :key="index"
+            :chatRoomId="item.chatRoomId"
+            :senderLabel="item.senderLabel"
+            :senderNickname="item.senderNickname"
+            :senderImg="item.senderImg"
+            :content="item.content"
+            :createdAt="item.createdAt"
+          ></ChatItem>
         </div>
-    </div>
-
-    <!-- button -->
-    <RoundButton
+      </div>
+  
+      <!-- button -->
+      <RoundButton
         class="cakedetailview-button"
         :roundButtonContent="'채팅 참여하기'"
         :roundButtonFunction="handleChatParticipate"
-        :isRoundDisable="true"
-    ></RoundButton>
-</div>
-</template>
-
-<script setup>
-import { ref, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { useCommonStore } from "@/stores/common";
-import { useCakeDetailStore } from "@/stores/cakedetail";
-import ChatItem from "@/components/chat/ChatItem.vue";
-import RoundButton from "@/components/button/RoundButton.vue";
-
-const commonStore = useCommonStore();
-const cakeDetailStore = useCakeDetailStore();
-const route = useRoute();
-
-const data = ref({
+        :isRoundDisable="false"
+      ></RoundButton>
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, onMounted } from "vue";
+  import { useRoute } from "vue-router";
+  import { useCommonStore } from "@/stores/common";
+  import { useCakeDetailStore } from "@/stores/cakedetail";
+  import ChatItem from "@/components/chat/ChatItem.vue";
+  import RoundButton from "@/components/button/RoundButton.vue";
+  
+  const commonStore = useCommonStore();
+  const cakeDetailStore = useCakeDetailStore();
+  const route = useRoute();
+  
+  const data = ref({
     posterImageUrl: "",
     heartCnt: 0,
     cultureType: "",
@@ -105,86 +105,99 @@ const data = ref({
     overview: "",
     runtime: "",
     castList: [],
-});
-
-const cakeHeartState = ref(false);
-const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
-const cakeChatUser = computed(() => cakeDetailStore.getCakeChatUser);
-const cakeChatUserLabel = computed(() => cakeDetailStore.getCakeChatUserLabel);
-
-const handleHeartClick = () => {
+  });
+  
+  const cakeHeartState = ref(false);
+  const cakeChatList = ref([]);
+  const cakeHeartCount = ref(0);
+  
+  const handleHeartClick = async () => {
     alert("하트 클릭");
     cakeHeartState.value = !cakeHeartState.value;
-    // TODO: 찜 api 연결
-    // TODO: 찜 명수 업데이트
-};
-
-const handleChatParticipate = () => {
+  
+    // 찜 api 연결
+    try {
+      const response = await cakeDetailStore.toggleHeart(data.value.cultureId);
+      if (response.code === "TOGGLE_HEART_SUCCESS") {
+        data.value.heartCnt = response.data.heartCnt;
+      }
+    } catch (error) {
+      console.error("Failed to toggle heart", error);
+    }
+  };
+  
+  const handleChatParticipate = async () => {
     alert("채팅 참여하기 클릭");
-    // TODO: 채팅 참여하기 연결
-};
-
-onMounted(async () => {
+  
+    // 채팅 참여하기 연결
+    try {
+      await cakeDetailStore.joinChatRoom(data.value.cultureId);
+      // 채팅방으로 이동하는 로직을 추가하세요.
+    } catch (error) {
+      console.error("Failed to join chat room", error);
+    }
+  };
+  
+  onMounted(async () => {
     commonStore.headerTitle = "케이크 상세보기";
     commonStore.headerType = "header2";
-
-    const concertId = route.params.concertId; // code as concertId
-    const cultureId = route.params.cultureId; // cultureId
-
-    console.log('concertId is ', concertId);
-    console.log('cultureId is ', cultureId);
-
+  
+    const concertId = route.params.concertId;
+    const cultureId = route.params.cultureId;
+  
+    if (!concertId || !cultureId) {
+      console.error("Missing required parameters");
+      return;
+    }
+  
     await cakeDetailStore.fetchCakeDetail(concertId);
     await cakeDetailStore.fetchHeartCount(cultureId);
     await cakeDetailStore.findCakeChatList(concertId);
-
+  
     data.value = {
-        posterImageUrl: cakeDetailStore.cakeDetail.posterImageUrl,
-        heartCnt: cakeDetailStore.cakeHeartCount,
-        cultureType: cakeDetailStore.cakeDetail.cultureType,
-        title: cakeDetailStore.cakeDetail.title,
-        overview: cakeDetailStore.cakeDetail.overview,
-        runtime: cakeDetailStore.cakeDetail.runtime,
-        castList: cakeDetailStore.cakeDetail.castList || [],
+      ...cakeDetailStore.cakeDetail,
     };
-});
-</script>
-
-<style>
-/* image */
-.cakedetailview-image-image {
+  
+    cakeHeartCount.value = cakeDetailStore.cakeHeartCount;
+    cakeChatList.value = cakeDetailStore.cakeChatList;
+  });
+  </script>
+  
+  <style>
+  /* image */
+  .cakedetailview-image-image {
     width: 100%;
     height: 360px;
     object-fit: cover;
     user-select: none;
-}
-
-/* heart */
-.cakedetailview-icon-container {
+  }
+  
+  /* heart */
+  .cakedetailview-icon-container {
     display: flex;
     flex-direction: column;
     margin: 2rem 0 2rem 0;
     user-select: none;
-}
-
-.cakedetailview-heart-container {
+  }
+  
+  .cakedetailview-heart-container {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0.6rem 2rem 0 2rem;
     margin-bottom: 0.6rem;
-}
-
-.cakedetailview-heart-icon {
+  }
+  
+  .cakedetailview-heart-icon {
     width: 1.2rem;
     height: 1.2rem;
-}
-
-.cakedetailview-heart-icon:hover {
+  }
+  
+  .cakedetailview-heart-icon:hover {
     cursor: pointer;
-}
-
-.cakedetailview-heart-message {
+  }
+  
+  .cakedetailview-heart-message {
     display: flex;
     justify-self: center;
     align-self: center;
@@ -193,19 +206,19 @@ onMounted(async () => {
     font-family: "Regular";
     font-size: 1rem;
     color: var(--gray2-color);
-}
-
-/* title */
-.cakedetailview-item-container {
+  }
+  
+  /* title */
+  .cakedetailview-item-container {
     display: flex;
     justify-self: center;
     align-items: center;
     flex-direction: row;
     margin: 2rem 0rem 0.4rem 0rem;
     user-select: none;
-}
-
-.cakedetailview-item-type {
+  }
+  
+  .cakedetailview-item-type {
     font-family: "Semi";
     font-size: 1rem;
     color: var(--white-color);
@@ -215,56 +228,57 @@ onMounted(async () => {
     padding: 0rem 0.4rem;
     border-radius: 0.5rem;
     background-color: var(--main-color);
-}
-
-.cakedetailview-item-title {
+  }
+  
+  .cakedetailview-item-title {
     font-family: "Semi";
     font-size: 1rem;
     color: var(--gray2-color);
     margin-left: 0.4rem;
-}
-
-/* content */
-.cakedetailview-content-container {
+  }
+  
+  /* content */
+  .cakedetailview-content-container {
     margin: 2rem 0 2rem 0;
     user-select: none;
-}
-
-.cakedetailview-content-content {
+  }
+  
+  .cakedetailview-content-content {
     font-family: "Regular";
     font-size: 1rem;
     color: var(--black-color);
-}
-
-.cakedetailview-content-runtime {
+  }
+  
+  .cakedetailview-content-runtime {
     font-family: "Regular";
     font-size: 1rem;
     color: var(--black-color);
     margin-top: 0.5rem;
-}
-
-.cakedetailview-content-cast {
+  }
+  
+  .cakedetailview-content-cast {
     font-family: "Regular";
     font-size: 1rem;
     color: var(--black-color);
     margin-top: 0.5rem;
-}
-
-/* chat */
-.cakedetailview-chat-container {
+  }
+  
+  /* chat */
+  .cakedetailview-chat-container {
     margin: 2rem 0 2rem 0;
     user-select: none;
-}
-
-.cakedetailview-chat-title {
+  }
+  
+  .cakedetailview-chat-title {
     font-family: "Bold";
     font-size: 1.2rem;
     color: var(--gray2-color);
     margin-bottom: 1rem;
-}
-
-/* button */
-.cakedetailview-button {
+  }
+  
+  /* button */
+  .cakedetailview-button {
     margin: 2rem 0 2rem 0;
-}
-</style>
+  }
+  </style>
+  

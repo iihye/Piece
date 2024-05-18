@@ -72,10 +72,6 @@
   const filteredCakeList = computed(() => store.getCakeListFiltered);
   const selectedOptionCakeList = computed(() => store.getSelectOptionCakeList);
   
-  const imageSrc = ref(null);
-  const uploadedImage = ref(null);
-  const originalImage = ref(null);
-  
   const searchResults = ref([]);
   const searchQuery = ref("");
   const isFocused = ref(false);
@@ -88,17 +84,8 @@
     }
   });
   
-  const getFetchImageFromUrl = async (imageUrl) => {
-    const data = await pieceStore.fetchImage(imageUrl);
-    if (imageUrl) {
-      imageSrc.value = data;
-      uploadedImage.value = data;
-      originalImage.value = data;
-    }
-  };
-  
   const searchMovieDebouncing = debounce(async (query) => {
-    const data = await pieceStore.getSearchMovieList(query);
+    const data = await store.getSearchMovieList(query);
     if (data) {
       searchResults.value = data;
     }
@@ -107,18 +94,19 @@
   const emit = defineEmits(["select"]);
   
   function handleSelect(item) {
-    resetImage();
-    getFetchImageFromUrl(item.poster_path);
     handleBlur();
     emit("select", item);
   }
   
   const handleItemClick = (item) => {
+    console.log('item clicked:', item); // Debugging line
+    console.log('item.code : ', item.code);
+    console.log('item.cultureId : ', item.cultureId);
     router.push({
       name: "CakeDetail",
       params: {
-        concertId: item.code, // Pass code as concertId
-        cultureId: item.cultureId, // Pass cultureId as well
+        concertId: item.code,
+        cultureId: item.cultureId,
       },
     });
   };
