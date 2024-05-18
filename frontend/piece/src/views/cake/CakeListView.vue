@@ -1,8 +1,17 @@
 <template>
-<!-- filter -->
 <div class="cakelistview-scroll-container">
     <div class="cakelistview-tab-navigation">
         <div class="cakelistview-tab-menu" ref="tabMenu">
+
+            <!-- search -->
+            <div class="cakelistview-search-area">
+                <TextInput class="pieceimageview-search-input" placeholder="검색어를 입력하세요" v-model="searchQuery"
+                    @focus="handleFocus" @update:modelValue="(value) => (searchQuery = value)" />
+                <InputPreview class="pieceimageview-search-preview" :searchQuery="searchQuery"
+                    :searchResults="searchResults" :isFocused="isFocused" @select="handleSelect" />
+            </div>
+
+            <!-- filter -->
             <FilterItem
                 v-for="(item, index) in filterItems"
                 class="cakelistview-tab-btn"
@@ -43,17 +52,68 @@
 
 <script setup>
 import router from "@/router";
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, watch, computed, onMounted, onBeforeUnmount } from "vue";
 import { useCommonStore } from "@/stores/common";
 import { useCakeStore } from "@/stores/cake";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListCakeItem from "@/components/item/ListCakeItem.vue";
+import TextInput from "@/components/text/TextInput.vue";
+import InputPreview from "@/components/text/InputPreview.vue";
 
 const commonStore = useCommonStore();
 const store = useCakeStore();
 
 const filteredCakeList = computed(() => store.getCakeListFiltered);
 const selectedOptionCakeList = computed(() => store.getSelectOptionCakeList);
+
+const imageSrc = ref(null);
+const uploadedImage = ref(null);
+const originalImage = ref(null);
+
+const searchResults = ref([]);
+const searchQuery = ref("");
+const isFocused = ref(false);
+
+
+watch(searchQuery, (newValue) => {
+    if (newValue.length >= 2) {
+        searchMovieDebouncing(newValue);
+    } else {
+        searchResults.value = [];
+    }
+});
+
+const getFetchImageFromUrl = async (imageUrl) => {
+    const data = await pieceStore.fetchImage(imageUrl);
+    if (imageUrl) {
+        // searchResults.value = data;
+        imageSrc.value = data;
+        uploadedImage.value = data;
+        originalImage.value = data;
+    }
+};
+
+// function getFetchImageFromUrl(imageUrl) {
+//     imageSrc.value = imageUrl;
+//     uploadedImage.value = imageUrl;
+//     originalImage.value = imageUrl;
+// }
+
+const searchMovieDebouncing = debounce(async (query) => {
+    const data = await pieceStore.getSearchMovieList(query);
+    if (data) {
+        searchResults.value = data;
+    }
+}, 250);
+
+const emit = defineEmits(["select"]);
+
+function handleSelect(item) {
+    resetImage();
+    getFetchImageFromUrl(item.poster_path);
+    handleBlur();
+    emit("select", item);
+}
 
 const handleItemClick = (item) => {
     router.push({
@@ -63,6 +123,36 @@ const handleItemClick = (item) => {
         },
     });
 };
+
+
+const handleFocus = () => {
+    isFocused.value = true;
+};
+
+const handleBlur = () => {
+    isFocused.value = false;
+};
+
+// debounce
+function debounce(func, delay) {
+    let timeoutId;
+
+    return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}
+
+const handleDocumentClick = (event) => {
+    if (!event.target.closest(".pieceimageview-container")) {
+        handleBlur();
+    }
+};
+
+document.addEventListener("click", handleDocumentClick);
+
 
 const filterItems = ref([
     { labelType: "ALL", title: "전체", isSelect: true },
@@ -166,6 +256,15 @@ onBeforeUnmount(() => {
     user-select: none;
     scroll-behavior: smooth;
 }
+
+
+/* search */
+.cakelistview-search-area {
+    width: 15rem;
+    margin-bottom: 1rem;
+    align-self: end;
+}
+
 
 .cakelistview-tab-menu.dragging {
     scroll-behavior: unset;
