@@ -1,6 +1,7 @@
 package com.ssafy.piece.domain.pieces.controller;
 
 import com.ssafy.piece.domain.pieces.dto.request.PiecesAddRequestDto;
+import com.ssafy.piece.domain.pieces.dto.request.RecordImageAddRequestDto;
 import com.ssafy.piece.domain.pieces.dto.request.RecordUpdateRequestDto;
 import com.ssafy.piece.domain.pieces.dto.response.PieceRecentResponseDto;
 import com.ssafy.piece.domain.pieces.dto.response.PiecesDetailResponseDto;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -87,4 +90,19 @@ public class PiecesController {
             pieceRecentResponseDto);
     }
 
+    // 기록 이미지 저장
+    @PostMapping("/record/image")
+    public ResponseEntity<Object> recordImageAdd(@AuthenticatedUser Long userId, @RequestBody RecordImageAddRequestDto recordImageAddRequestDto) {
+        String s3path = recordImageAddRequestDto.getS3path();
+        log.info("s3path: {}", s3path);
+        piecesService.savePieceRecordImage(userId, recordImageAddRequestDto);
+        return SuccessResponse.createSuccess(SuccessCode.SAVE_IMAGE_SUCCESS);
+    }
+
+    // 기록 이미지 삭제
+    @DeleteMapping("/record/image/{piecesimageId}")
+    public ResponseEntity<Object> recordImageDelete(@AuthenticatedUser Long userId, @PathVariable Long piecesimageId){
+        piecesService.deletePieceRecordImage(userId, piecesimageId);
+        return SuccessResponse.createSuccess(SuccessCode.DELETE_IMAGE_SUCCESS);
+    }
 }

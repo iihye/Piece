@@ -5,7 +5,7 @@ import com.ssafy.user.global.response.exception.BusinessException;
 
 public class UserNotFoundException extends BusinessException {
 
-    public UserNotFoundException() { //유저정보를 찾을 수 없습니다.
+    public UserNotFoundException(ErrorCode userNotFound) { //유저정보를 찾을 수 없습니다.
         super(ErrorCode.USER_NOT_FOUND);
     }
 }

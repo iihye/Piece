@@ -13,11 +13,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.Getter;
+import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Table(name = "cultures")
 @Getter
+@ToString
 public class Cultures {
 
     @Id
@@ -33,7 +35,6 @@ public class Cultures {
 
     private String title;
 
-    @Column(nullable = true, name = "image_url")
     private String imageUrl;
 
     @BatchSize(size = 30)
