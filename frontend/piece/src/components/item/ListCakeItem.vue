@@ -103,9 +103,12 @@ const props = defineProps({
 }
 
 .listCakeItem-item-title {
-    font-family: "Semi";
-    font-size: 1rem;
-    color: var(--black-color);
-    user-select: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+    line-height: 1.5em; 
+    max-height: 3em;
 }
 </style>
