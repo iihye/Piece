@@ -30,15 +30,57 @@ const initOrUpdateChart = () => {
                     y: {
                         beginAtZero: true,
                         display: true,
-                        grid: { display: false }
+                        grid: { display: false },
+                        ticks: {
+                            font: {
+                                family: 'Regular',  
+                                size: 10,         
+                                weight: 'bold',  
+                                style: 'normal'  
+                            }
+                        }
                     },
                     x: {
-                        grid: { display: false }
+                        grid: { display: false },
+                        ticks: {
+                            font: {
+                                family: 'Regular',  
+                                size: 10,         
+                                weight: 'bold',  
+                                style: 'normal'  
+                            }
+                        }
                     }
                 },
                 plugins: {
                     legend: { display: false },
-                    title: { display: false }
+                    title: { display: false },
+                    tooltip: {
+                        enabled: true,      
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',  
+                        titleFont: {
+                            family: 'Regular', 
+                            size: 14,
+                            weight: 'bold',
+                            style: 'normal'
+                        },
+                        bodyFont: {
+                            family: 'Regular',  
+                            size: 12,
+                            weight: 'normal',
+                            style: 'normal'
+                        },
+                        footerFont: {
+                            family: 'Regular', 
+                            size: 10,
+                            weight: 'normal',
+                            style: 'normal'
+                        },
+                        cornerRadius: 4, 
+                        xPadding: 10,      
+                        yPadding: 10,      
+                        displayColors: true  
+                    }
                 },
                 responsive: true,
                 maintainAspectRatio: false,

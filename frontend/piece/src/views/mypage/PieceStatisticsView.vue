@@ -132,6 +132,7 @@ onMounted(async () => {
     align-items: center;
     width: 100%;
     margin-bottom: 10px;
+    font-family: "Regular";
 }
 
 .monthly-consumption .label {
