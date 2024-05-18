@@ -8,16 +8,17 @@ export const useCakeStore = defineStore('cake', () => {
     const cakeListFiltered = ref([]);
     const isLoading = ref(false);
     const nextPageUrl = ref(null);
+    const selectedMovie = ref(null);
 
     const getCakeList = computed(() => cakeList.value);
     const getCakeListFiltered = computed(() => cakeListFiltered.value);
     const getSelectOptionCakeList = computed(() => selectedOptionCakeList.value);
+    const getSelectedMovie = computed(() => selectedMovie.value);
 
     const setSelectOptionCakeList = (option) => {
         selectedOptionCakeList.value = option;
     };
 
-    // 랜덤으로 보여주기
     const shuffleArray = (array) => {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -31,7 +32,6 @@ export const useCakeStore = defineStore('cake', () => {
             cultureType = null;
         }
 
-        // 무한스크롤
         let url = `${import.meta.env.VITE_REST_PIECE_API}/cultures?pageSize=${pageSize}&cultureType`;
 
         if (cultureType) {
@@ -57,7 +57,7 @@ export const useCakeStore = defineStore('cake', () => {
 
     const loadMoreCakes = async () => {
         if (!nextPageUrl.value || isLoading.value) return;
-        
+
         isLoading.value = true;
         try {
             const res = await axios.get(nextPageUrl.value);
@@ -68,6 +68,17 @@ export const useCakeStore = defineStore('cake', () => {
             console.error(err);
         } finally {
             isLoading.value = false;
+        }
+    };
+
+    const fetchMovieDetails = async (movieId) => {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/cultures/tmdb/${movieId}`);
+            if (res.data.code === "FIND_TMDB_CULTURE_SUCCESS") {
+                selectedMovie.value = res.data.data;
+            }
+        } catch (err) {
+            console.error("Failed to fetch movie details", err);
         }
     };
 
@@ -84,11 +95,15 @@ export const useCakeStore = defineStore('cake', () => {
         cakeList,
         cakeListFiltered,
         isLoading,
+        nextPageUrl,
+        selectedMovie,
         getCakeList,
         getCakeListFiltered,
         getSelectOptionCakeList,
+        getSelectedMovie,
         setSelectOptionCakeList,
         findCakeList,
         loadMoreCakes,
+        fetchMovieDetails,
     };
 });

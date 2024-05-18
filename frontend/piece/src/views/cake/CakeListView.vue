@@ -1,57 +1,56 @@
 <template>
-    <!-- search -->
-    <div class="cakelistview-search-area">
-        <TextInput
-            class="cakelistview-search-input"
-            placeholder="검색어를 입력하세요"
-            v-model="searchQuery"
-            @focus="handleFocus"
-            @update:modelValue="(value) => (searchQuery = value)"
-        />
-        <InputPreview
-            class="cakelistview-search-preview"
-            :searchQuery="searchQuery"
-            :searchResults="searchResults"
-            :isFocused="isFocused"
-            @select="handleSelect"
-        />
-    </div>
-
-    <!-- navbar -->
-    <div class="cakelistview-tab-navigation">
-        <div class="cakelistview-tab-menu" ref="tabMenu">
-            <FilterItem
-                v-for="(item, index) in filterItems"
-                class="cakelistview-tab-btn"
-                :key="index"
-                :labelType="item.labelType"
-                :title="item.title"
-                :isSelect="item.isSelect"
-                @click="handleItemSelectClick(index)"
-            ></FilterItem>
+    <div class="cakelistview-scroll-container">
+        <div class="cakelistview-tab-navigation">
+            <div class="cakelistview-tab-menu" ref="tabMenu">
+                <!-- search -->
+                <div class="cakelistview-search-area">
+                    <TextInput
+                        class="cakelistview-search-input"
+                        placeholder="검색어를 입력하세요"
+                        v-model="searchQuery"
+                        @focus="handleFocus"
+                        @update:modelValue="(value) => (searchQuery = value)"
+                    />
+                    <InputPreview
+                        class="cakelistview-search-preview"
+                        :searchQuery="searchQuery"
+                        :searchResults="searchResults"
+                        :isFocused="isFocused"
+                        @select="handleSelect"
+                    />
+                </div>
+                <!-- filter -->
+                <FilterItem
+                    v-for="(item, index) in filterItems"
+                    class="cakelistview-tab-btn"
+                    :key="index"
+                    :labelType="item.labelType"
+                    :title="item.title"
+                    :isSelect="item.isSelect"
+                    @click="handleItemSelectClick(index)"
+                ></FilterItem>
+            </div>
         </div>
     </div>
 
     <!-- list -->
-    <div class="cakelistview-scroll-container">
-        <div class="cakelistview-list-container" ref="listContainer">
-            <div class="cakelistview-list-grid">
-                <div
-                    v-for="(item, index) in displayedCakeList"
-                    :key="index"
-                    class="cakelistview-list-item"
+    <div class="cakelistview-list-container" ref="listContainer">
+        <div class="cakelistview-list-grid">
+            <div
+                v-for="(item, index) in displayedCakeList"
+                :key="index"
+                class="cakelistview-list-item"
+            >
+                <ListCakeItem
+                    :cultureId="item.cultureId"
+                    :cultureType="item.cultureType"
+                    :code="item.code"
+                    :title="item.title"
+                    :imageUrl="item.imageUrl"
+                    :frontImg="item.frontImg"
+                    @click="handleItemClick(item)"
                 >
-                    <ListCakeItem
-                        :cultureId="item.cultureId"
-                        :cultureType="item.cultureType"
-                        :code="item.code"
-                        :title="item.title"
-                        :imageUrl="item.imageUrl"
-                        :frontImg="item.frontImg"
-                        @click="handleItemClick(item)"
-                    >
-                    </ListCakeItem>
-                </div>
+                </ListCakeItem>
             </div>
         </div>
     </div>
@@ -65,7 +64,7 @@ import { useCakeStore } from "@/stores/cake";
 import { useCakeDetailStore } from "@/stores/cakedetail";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListCakeItem from "@/components/item/ListCakeItem.vue";
-import TextInput from "@/components/text/TextInput.vue";
+import TextInput from "@/components/text/OnlyInput.vue";
 import InputPreview from "@/components/text/InputPreview.vue";
 
 const commonStore = useCommonStore();
@@ -74,6 +73,7 @@ const detailStore = useCakeDetailStore();
 
 const filteredCakeList = computed(() => store.getCakeListFiltered);
 const selectedOptionCakeList = computed(() => store.getSelectOptionCakeList);
+const selectedMovie = computed(() => store.getSelectedMovie);
 
 const searchResults = ref([]);
 const searchQuery = ref("");
@@ -111,16 +111,29 @@ function handleSelect(item) {
     emit("select", item);
 }
 
-const handleItemClick = (item) => {
-    router.push({
-        name: "CakeDetail",
-        params: {
-            concertId: item.code,
-            cultureId: item.cultureId
-        },
-    });
-
-    detailStore.setCakeCultureType(item.cultureType);
+const handleItemClick = async (item) => {
+    if (selectedOptionCakeList.value === "MOVIE") {
+        console.log('code is ', item.code);
+        await store.fetchMovieDetails(item.code);
+        const movieData = selectedMovie.value;
+        router.push({
+            name: "CakeDetail",
+            params: {
+                concertId: movieData.code,
+                cultureId: movieData.cultureId
+            }
+        });
+        detailStore.setCakeCultureType("MOVIE");
+    } else {
+        router.push({
+            name: "CakeDetail",
+            params: {
+                concertId: item.code,
+                cultureId: item.cultureId
+            }
+        });
+        detailStore.setCakeCultureType(item.cultureType);
+    }
 };
 
 const handleFocus = () => {
