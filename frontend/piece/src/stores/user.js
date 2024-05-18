@@ -3,206 +3,230 @@ import { defineStore } from "pinia";
 import router from "@/router";
 import axios from "axios";
 import { useCommonStore } from "@/stores/common";
+import { isTutorialModal } from "@/stores/util";
 
 export const useUserStore = defineStore(
-    "user",
-    () => {
-        const commonStore = useCommonStore();
+  "user",
+  () => {
+    const commonStore = useCommonStore();
 
-        // =========== STATE ===============
+    // =========== STATE ===============
 
-        const mypageLabelList = ref({});
-        const mypageLabelWear = ref({});
-        const mypageLabelWearoff = ref();
-        const nicknameMessage = ref("3자 이상 10자 이내의 한글, 영문만 가능해요");
-        const isNickname = ref(false);
+    const mypageLabelList = ref({});
+    const mypageLabelWear = ref({});
+    const mypageLabelWearoff = ref();
+    const nicknameMessage = ref("3자 이상 10자 이내의 한글, 영문만 가능해요");
+    const isNickname = ref(false);
+    const isTutorial = ref(false);
 
-        // =========== GETTER ===============
+    // =========== GETTER ===============
 
-        const getMypageLabelList = computed(() => {
-            return mypageLabelList.value;
-        });
+    const getMypageLabelList = computed(() => {
+      return mypageLabelList.value;
+    });
 
-        const getMypageLabelWear = computed(() => {
-            return mypageLabelWear.value;
-        });
+    const getMypageLabelWear = computed(() => {
+      return mypageLabelWear.value;
+    });
 
-        const getMypageLabelWearoff = computed(() => {
-            return mypageLabelWearoff.value;
-        });
+    const getMypageLabelWearoff = computed(() => {
+      return mypageLabelWearoff.value;
+    });
 
-        const setMypagelabelWearoff = (data) => {
-            mypageLabelWearoff.value = data;
-        };
+    const setMypagelabelWearoff = (data) => {
+      mypageLabelWearoff.value = data;
+    };
 
-        const getNicknameMessage = computed(() => {
-            return nicknameMessage.value;
-        });
+    const getNicknameMessage = computed(() => {
+      return nicknameMessage.value;
+    });
 
-        const setNicknameMessage = (data) => {
-            nicknameMessage.value = data;
-        };
+    const setNicknameMessage = (data) => {
+      nicknameMessage.value = data;
+    };
 
-        const getIsNickname = computed(() => {
-            return isNickname.value;
-        });
+    const getIsNickname = computed(() => {
+      return isNickname.value;
+    });
 
-        const setIsNickname = (data) => {
-            isNickname.value = data;
-        };
+    const setIsNickname = (data) => {
+      isNickname.value = data;
+    };
 
-        // =========== ACTION ===============
+    const getIsTutorial = computed(() => {
+      return isTutorial.value;
+    });
 
-        const checkMypageLabelList = function () {
-            axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/check`,
-                method: "GET",
-            })
-                .then((res) => {
-                    findMypageLabelList();
-                })
-                .catch((err) => {});
-        };
+    // =========== ACTION ===============
 
-        const findMypageLabelList = function () {
-            axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels`,
-                method: "GET",
-            })
-                .then((res) => {
-                    mypageLabelList.value = res.data.data;
-                    checkMypageLabelWear();
-                })
-                .catch((err) => {});
-        };
+    const checkMypageLabelList = function () {
+      axios({
+        url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/check`,
+        method: "GET",
+      })
+        .then((res) => {
+          findMypageLabelList();
+        })
+        .catch((err) => {});
+    };
 
-        const addMypageLabelWear = function (labelId) {
-            axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/${labelId}`,
-                method: "PUT",
-            })
-                .then((res) => {
-                    findMypageLabelList();
-                    commonStore.findLoginUserInfo();
-                })
-                .catch((err) => {});
-        };
+    const findMypageLabelList = function () {
+      axios({
+        url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels`,
+        method: "GET",
+      })
+        .then((res) => {
+          mypageLabelList.value = res.data.data;
+          checkMypageLabelWear();
+        })
+        .catch((err) => {});
+    };
 
-        const deleteMypageLabelWear = function () {
-            axios({
-                url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/wearoff`,
-                method: "PUT",
-            })
-                .then((res) => {
-                    findMypageLabelList();
-                    commonStore.findLoginUserInfo();
-                })
-                .catch((err) => {});
-        };
+    const addMypageLabelWear = function (labelId) {
+      axios({
+        url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/${labelId}`,
+        method: "PUT",
+      })
+        .then((res) => {
+          findMypageLabelList();
+          commonStore.findLoginUserInfo();
+        })
+        .catch((err) => {});
+    };
 
-        const checkMypageLabelWear = function () {
-            setMypagelabelWearoff(
-                Object.values(mypageLabelList.value).every((item) => !item.wearLabels)
-            );
-        };
+    const deleteMypageLabelWear = function () {
+      axios({
+        url: `${import.meta.env.VITE_REST_PIECE_API}/mylabels/wearoff`,
+        method: "PUT",
+      })
+        .then((res) => {
+          findMypageLabelList();
+          commonStore.findLoginUserInfo();
+        })
+        .catch((err) => {});
+    };
 
-        const changeMypageNickname = function (userId, nickname) {
-            axios({
-                url: `${import.meta.env.VITE_REST_USER_API}/users/${userId}/nickname`,
-                method: "PUT",
-                data: {
-                    newNickname: nickname,
-                },
-            })
-                .then((res) => {})
-                .catch((err) => {});
-        };
+    const checkMypageLabelWear = function () {
+      setMypagelabelWearoff(
+        Object.values(mypageLabelList.value).every((item) => !item.wearLabels)
+      );
+    };
 
-        const changeMypagePassword = function (userId, password) {
-            axios({
-                url: `${import.meta.env.VITE_REST_USER_API}/users/${userId}/password`,
-                method: "PUT",
-                data: {
-                    newPassword: password,
-                },
-            })
-                .then((res) => {
-                    console.log(res);
-                })
-                .catch((err) => {});
-        };
+    const changeMypageNickname = function (userId, nickname) {
+      axios({
+        url: `${import.meta.env.VITE_REST_USER_API}/users/${userId}/nickname`,
+        method: "PUT",
+        data: {
+          newNickname: nickname,
+        },
+      })
+        .then((res) => {})
+        .catch((err) => {});
+    };
 
-        const checkNickname = function (nickname) {
-            axios({
-                url: `${
-                    import.meta.env.VITE_REST_USER_API
-                }/users/check-nickname?nickname=${nickname}`,
-                method: "GET",
-            })
-                .then((res) => {
-                    nicknameMessage.value = res.data.message;
-                    if (res.data.code === "CHECK_NICKNAME_GOOD") {
-                        isNickname.value = true;
-                    } else {
-                        isNickname.value = false;
-                    }
-                })
-                .catch((err) => {});
-        };
+    const changeMypagePassword = function (userId, password) {
+      axios({
+        url: `${import.meta.env.VITE_REST_USER_API}/users/${userId}/password`,
+        method: "PUT",
+        data: {
+          newPassword: password,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {});
+    };
 
-        const checkTutorial = function () {
-            axios({
-                url: `${import.meta.env.VITE_REST_USER_API}/users/tutorial`,
-                method: "PUT",
-            })
-                .then((res) => {})
-                .catch((err) => {});
-        };
+    const checkNickname = function (nickname) {
+      axios({
+        url: `${
+          import.meta.env.VITE_REST_USER_API
+        }/users/check-nickname?nickname=${nickname}`,
+        method: "GET",
+      })
+        .then((res) => {
+          nicknameMessage.value = res.data.message;
+          if (res.data.code === "CHECK_NICKNAME_GOOD") {
+            isNickname.value = true;
+          } else {
+            isNickname.value = false;
+          }
+        })
+        .catch((err) => {});
+    };
 
+    const checkTutorial = function () {
+      axios({
+        url: `${import.meta.env.VITE_REST_USER_API}/users/tutorial`,
+        method: "PUT",
+      })
+        .then((res) => {})
+        .catch((err) => {});
+    };
 
-        async function updateProfileImage(s3path) {
-            try {
-                console.log("Sending s3path as body:", s3path);
-                const response = await axios.put(
-                    `${import.meta.env.VITE_REST_USER_API}/users/save/profileImage`,
-                    {
-                        s3path: s3path,
-                    }
-                );
-                console.log("파일경로 저장 성공!");
-            } catch (error) {
-                console.error("파일경로 저장 실패", error.message);
-            }
-        }
+    async function updateProfileImage(s3path) {
+      try {
+        console.log("Sending s3path as body:", s3path);
+        const response = await axios.put(
+          `${import.meta.env.VITE_REST_USER_API}/users/save/profileImage`,
+          {
+            s3path: s3path,
+          }
+        );
+        console.log("파일경로 저장 성공!");
+      } catch (error) {
+        console.error("파일경로 저장 실패", error.message);
+      }
+    }
 
-        return {
-            // state
-            mypageLabelList,
-            mypageLabelWear,
-            mypageLabelWearoff,
-            nicknameMessage,
-            isNickname,
-            // getter
-            getMypageLabelList,
-            getMypageLabelWear,
-            getMypageLabelWearoff,
-            setMypagelabelWearoff,
-            getNicknameMessage,
-            setNicknameMessage,
-            getIsNickname,
-            setIsNickname,
-            // action
-            checkMypageLabelList,
-            findMypageLabelList,
-            addMypageLabelWear,
-            deleteMypageLabelWear,
-            checkMypageLabelWear,
-            changeMypageNickname,
-            changeMypagePassword,
-            checkNickname,
-            checkTutorial,
-            updateProfileImage,
-        };
-    },
-    { persist: true }
+    const readTutorial = function () {
+      axios({
+        url: `${import.meta.env.VITE_REST_USER_API}/users/istutorial`,
+        method: "GET",
+      })
+        .then((res) => {
+          isTutorial.value = res.data.data;
+          if (isTutorial.value === false) {
+            isTutorialModal.value = false;
+          } else {
+            isTutorialModal.value = true;
+          }
+        })
+        .catch((err) => {});
+    };
+
+    return {
+      // state
+      mypageLabelList,
+      mypageLabelWear,
+      mypageLabelWearoff,
+      nicknameMessage,
+      isNickname,
+      isTutorial,
+      // getter
+      getMypageLabelList,
+      getMypageLabelWear,
+      getMypageLabelWearoff,
+      setMypagelabelWearoff,
+      getNicknameMessage,
+      setNicknameMessage,
+      getIsNickname,
+      setIsNickname,
+      getIsTutorial,
+      // action
+      checkMypageLabelList,
+      findMypageLabelList,
+      addMypageLabelWear,
+      deleteMypageLabelWear,
+      checkMypageLabelWear,
+      changeMypageNickname,
+      changeMypagePassword,
+      checkNickname,
+      checkTutorial,
+      updateProfileImage,
+      readTutorial,
+    };
+  },
+  { persist: true }
 );
