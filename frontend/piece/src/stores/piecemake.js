@@ -1,6 +1,7 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
+import router from "@/router";
 
 export const usePieceMakeStore = defineStore("piecemake", () => {
   // =========== STATE ===============
@@ -28,7 +29,10 @@ export const usePieceMakeStore = defineStore("piecemake", () => {
       .then((res) => {
         backImage.value = res.data.data;
       })
-      .catch((err) => {});
+      .catch((err) => {
+        alert("이미지 생성 중 오류가 발생했습니다. 다시 시작해주세요.");
+        router.push("/piece");
+      });
   };
 
   return {
