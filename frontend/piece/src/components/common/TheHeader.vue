@@ -46,13 +46,27 @@
             </div>
             <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" class="header-out" @click="headerOut" />
         </div>
+
+        <!-- modal -->
+        <CancelWarnModal
+            v-if=isCancelWarnModal
+            :modalTitle="'조각 만들기를 그만할까요?'"
+            :modalContent="'작성한 내용은 저장되지 않아요.<br>그래도 나가시겠어요?'"
+            :buttonCancel="'취소'"
+            :buttonWarn="'나가기'"
+            :handleCancelClick="handleCancel"
+            :handleWarnClick="handleWarn"
+        />
     </div>
+
+
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
+import CancelWarnModal from "@/components/modal/CancelWarnModal.vue";
 
 const commonStore = useCommonStore();
 const router = useRouter();
@@ -62,9 +76,18 @@ const headerTitle = computed(() => commonStore.getHeaderTitle);
 const userName = computed(() => commonStore.getHeaderChatName);
 const userImg = computed(() => commonStore.getHeaderChatImg);
 const userCount = computed(() => commonStore.getHeaderChatCount);
+const getProgress = computed(() => commonStore.getProgress);
+
+const isCancelWarnModal = ref(false);
 
 const headerBack = () => {
-    router.go(-1);
+    if (getProgress.value > 0) {
+        isCancelWarnModal.value = true;
+    } else if(headerTitle === "조각 만들기"){
+        router.push({ name: "main" });
+    } else {
+        router.go(-1);
+    }
 };
 
 const headerList = () => {
@@ -77,6 +100,17 @@ const headerCalendar = () => {
 
 const headerOut = () => {
     router.go(-1);
+};
+
+// modal에서 cancel 클릭했을 때 실행되는 함수
+const handleCancel = () => {
+    isCancelWarnModal.value = false;
+};
+
+// modal에서 warn 클릭했을 때 실행되는 함수
+const handleWarn = () => {
+    isCancelWarnModal.value = false;
+    router.push({ name: "main" });
 };
 </script>
 
