@@ -17,6 +17,7 @@ export const useCakeStore = defineStore('cake', () => {
         selectedOptionCakeList.value = option;
     };
 
+    // 랜덤으로 보여주기
     const shuffleArray = (array) => {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -30,6 +31,7 @@ export const useCakeStore = defineStore('cake', () => {
             cultureType = null;
         }
 
+        // 무한스크롤
         let url = `${import.meta.env.VITE_REST_PIECE_API}/cultures?pageSize=${pageSize}&cultureType`;
 
         if (cultureType) {

@@ -1,88 +1,88 @@
 <template>
-    <div>
-        <!-- image -->
-        <img class="cakedetailview-image-image" :src="data.posterImageUrl" />
+<div>
+    <!-- image -->
+    <img class="cakedetailview-image-image" :src="data.posterImageUrl" />
 
-        <!-- heart -->
-        <div class="cakedetailview-icon-container">
-            <div class="cakedetailview-heart-container">
-                <font-awesome-icon
-                    class="cakedetailview-heart-icon"
-                    :icon="cakeHeartState ? ['fas', 'heart'] : ['far', 'heart']"
-                    style="color: var(--main-color)"
-                    @click="handleHeartClick"
-                />
-            </div>
-            <div class="cakedetailview-heart-message">
-                {{ data.heartCnt }}명이 찜하고 있어요
-            </div>
+    <!-- heart -->
+    <div class="cakedetailview-icon-container">
+        <div class="cakedetailview-heart-container">
+            <font-awesome-icon
+                class="cakedetailview-heart-icon"
+                :icon="cakeHeartState ? ['fas', 'heart'] : ['far', 'heart']"
+                style="color: var(--main-color)"
+                @click="handleHeartClick"
+            />
         </div>
-
-        <hr />
-
-        <!-- title -->
-        <div class="cakedetailview-item-container">
-            <div
-                class="cakedetailview-item-type"
-                :class="{
-                    'movie-background': data.cultureType === 'MOVIE',
-                    'theater-background': data.cultureType === 'THEATER',
-                    'musical-background': data.cultureType === 'MUSICAL',
-                    'concert-background': data.cultureType === 'CONCERT',
-                    'other-background':
-                        data.cultureType !== 'MOVIE' &&
-                        data.cultureType !== 'THEATER' &&
-                        data.cultureType !== 'MUSICAL' &&
-                        data.cultureType !== 'CONCERT',
-                }"
-            >
-                <p v-if="data.cultureType === 'MOVIE'">영화</p>
-                <p v-else-if="data.cultureType === 'THEATER'">연극</p>
-                <p v-else-if="data.cultureType === 'MUSICAL'">뮤지컬</p>
-                <p v-else-if="data.cultureType === 'CONCERT'">콘서트</p>
-                <p v-else>기타</p>
-            </div>
-
-            <div class="cakedetailview-item-title">{{ data.title }}</div>
+        
+        <div class="cakedetailview-heart-message">
+            {{ data.heartCnt }}명이 찜하고 있어요
         </div>
-
-        <!-- content -->
-        <div class="cakedetailview-content-container">
-            <div class="cakedetailview-content-content">{{ data.overview }}</div>
-            <div class="cakedetailview-content-runtime">상영 시간: {{ data.runtime }}</div>
-            <div v-if="data.castList && data.castList.length > 0" class="cakedetailview-content-cast">
-                출연진: {{ data.castList.join(', ') }}
-            </div>
-        </div>
-
-        <hr />
-
-        <!-- chat -->
-        <div class="cakedetailview-chat-container">
-            <div class="cakedetailview-chat-title">채팅방</div>
-            <div class="cakedetailview-chat-container">
-                <ChatItem
-                    v-for="(item, index) in cakeChatList"
-                    class="cakedetailview-chat-item"
-                    :key="index"
-                    :chatRoomId="item.chatRoomId"
-                    :senderLabel="item.senderLabel"
-                    :senderNickname="item.senderNickname"
-                    :senderImg="item.senderImg"
-                    :content="item.content"
-                    :createdAt="item.createdAt"
-                ></ChatItem>
-            </div>
-        </div>
-
-        <!-- button -->
-        <RoundButton
-            class="cakedetailview-button"
-            :roundButtonContent="'채팅 참여하기'"
-            :roundButtonFunction="handleChatParticipate"
-            :isRoundDisable="true"
-        ></RoundButton>
     </div>
+
+    <hr />
+
+    <!-- title -->
+    <div class="cakedetailview-item-container">
+        <div class="cakedetailview-item-type"
+            :class="{
+                'movie-background': data.cultureType === 'MOVIE',
+                'theater-background': data.cultureType === 'THEATER',
+                'musical-background': data.cultureType === 'MUSICAL',
+                'concert-background': data.cultureType === 'CONCERT',
+                'other-background':
+                data.cultureType !== 'MOVIE' &&
+                data.cultureType !== 'THEATER' &&
+                data.cultureType !== 'MUSICAL' &&
+                data.cultureType !== 'CONCERT',
+            }"
+        >
+        <p v-if="data.cultureType === 'MOVIE'">영화</p>
+        <p v-else-if="data.cultureType === 'THEATER'">연극</p>
+        <p v-else-if="data.cultureType === 'MUSICAL'">뮤지컬</p>
+        <p v-else-if="data.cultureType === 'CONCERT'">콘서트</p>
+        <p v-else>기타</p>
+        </div>
+
+        <div class="cakedetailview-item-title">{{ data.title }}</div>
+    </div>
+
+    <!-- content -->
+    <div class="cakedetailview-content-container">
+        <div class="cakedetailview-content-content">{{ data.overview }}</div>
+        <div class="cakedetailview-content-runtime">상영 시간: {{ data.runtime }}</div>
+        <div v-if="data.castList && data.castList.length > 0" class="cakedetailview-content-cast">
+            출연진: {{ data.castList.join(', ') }}
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- chat -->
+    <div class="cakedetailview-chat-container">
+        <div class="cakedetailview-chat-title">채팅방</div>
+        <div class="cakedetailview-chat-container">
+            <ChatItem
+                v-for="(item, index) in cakeChatList"
+                class="cakedetailview-chat-item"
+                :key="index"
+                :chatRoomId="item.chatRoomId"
+                :senderLabel="item.senderLabel"
+                :senderNickname="item.senderNickname"
+                :senderImg="item.senderImg"
+                :content="item.content"
+                :createdAt="item.createdAt"
+            ></ChatItem>
+        </div>
+    </div>
+
+    <!-- button -->
+    <RoundButton
+        class="cakedetailview-button"
+        :roundButtonContent="'채팅 참여하기'"
+        :roundButtonFunction="handleChatParticipate"
+        :isRoundDisable="true"
+    ></RoundButton>
+</div>
 </template>
 
 <script setup>
@@ -109,7 +109,8 @@ const data = ref({
 
 const cakeHeartState = ref(false);
 const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
-const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount);
+const cakeChatUser = computed(() => cakeDetailStore.getCakeChatUser);
+const cakeChatUserLabel = computed(() => cakeDetailStore.getCakeChatUserLabel);
 
 const handleHeartClick = () => {
     alert("하트 클릭");
@@ -127,25 +128,25 @@ onMounted(async () => {
     commonStore.headerTitle = "케이크 상세보기";
     commonStore.headerType = "header2";
 
-    const concertId = route.params.concertId;
-    await cakeDetailStore.fetchCakeDetail(concertId);
+    const concertId = route.params.concertId; // code as concertId
+    const cultureId = route.params.cultureId; // cultureId
 
-    const cakeDetail = cakeDetailStore.getCakeDetail;
+    console.log('concertId is ', concertId);
+    console.log('cultureId is ', cultureId);
+
+    await cakeDetailStore.fetchCakeDetail(concertId);
+    await cakeDetailStore.fetchHeartCount(cultureId);
+    await cakeDetailStore.findCakeChatList(concertId);
 
     data.value = {
-        posterImageUrl: cakeDetail.posterImageUrl,
-        heartCnt: cakeHeartCount.value,
-        cultureType: cakeDetail.cultureType,
-        title: cakeDetail.title,
-        overview: cakeDetail.overview,
-        runtime: cakeDetail.runtime,
-        castList: cakeDetail.castList || [],
+        posterImageUrl: cakeDetailStore.cakeDetail.posterImageUrl,
+        heartCnt: cakeDetailStore.cakeHeartCount,
+        cultureType: cakeDetailStore.cakeDetail.cultureType,
+        title: cakeDetailStore.cakeDetail.title,
+        overview: cakeDetailStore.cakeDetail.overview,
+        runtime: cakeDetailStore.cakeDetail.runtime,
+        castList: cakeDetailStore.cakeDetail.castList || [],
     };
-
-    await cakeDetailStore.fetchHeartCount(concertId);
-    data.value.heartCnt = cakeHeartCount.value;
-
-    await cakeDetailStore.findCakeChatList(concertId);
 });
 </script>
 
@@ -238,7 +239,7 @@ onMounted(async () => {
 .cakedetailview-content-runtime {
     font-family: "Regular";
     font-size: 1rem;
-    color: var (--black-color);
+    color: var(--black-color);
     margin-top: 0.5rem;
 }
 

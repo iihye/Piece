@@ -1,24 +1,20 @@
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 
-export const useCakeDetailStore = defineStore('cakeDetail', () => {
+export const useCakeDetailStore = defineStore("cakedetail", () => {
     const cakeDetail = ref({});
     const cakeChatList = ref([]);
     const cakeHeartCount = ref(0);
 
-    const getCakeDetail = computed(() => cakeDetail.value);
-    const getCakeChatList = computed(() => cakeChatList.value);
-    const getCakeHeartCount = computed(() => cakeHeartCount.value);
-
     const fetchCakeDetail = async (concertId) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/cultures/kopis/${concertId}`);
-            if (response.data.code === "FIND_KOPIS_CULTURE_SUCCESS") {
-                cakeDetail.value = response.data.data;
-            }
+        if (response.data.code === "FIND_KOPIS_CULTURE_SUCCESS") {
+            cakeDetail.value = response.data.data;
+        }
         } catch (error) {
-            console.error("Failed to fetch cake detail", error);
+            console.error("공연 정보 불러오기 실패", error);
         }
     };
 
@@ -29,7 +25,7 @@ export const useCakeDetailStore = defineStore('cakeDetail', () => {
                 cakeHeartCount.value = response.data.data;
             }
         } catch (error) {
-            console.error("Failed to fetch heart count", error);
+            console.error("찜개수 불러오기 실패", error);
         }
     };
 
@@ -40,16 +36,19 @@ export const useCakeDetailStore = defineStore('cakeDetail', () => {
                 cakeChatList.value = response.data.data;
             }
         } catch (error) {
-            console.error("Failed to fetch chat list", error);
+            console.error("채팅 미리보기 불러오기 실패", error);
         }
     };
 
     return {
-        getCakeDetail,
-        getCakeChatList,
-        getCakeHeartCount,
-        fetchCakeDetail,
-        fetchHeartCount,
-        findCakeChatList,
+    cakeDetail,
+    cakeChatList,
+    cakeHeartCount,
+    fetchCakeDetail,
+    fetchHeartCount,
+    findCakeChatList,
+    getCakeDetail: () => cakeDetail.value,
+    getCakeChatList: () => cakeChatList.value,
+    getCakeHeartCount: () => cakeHeartCount.value,
     };
 });
