@@ -73,6 +73,14 @@
         { labelType: "ETC", title: "기타", isSelect: false }
     ]);
     
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+    
     const handleItemSelectClick = async (index) => {
         filterItems.value.forEach((item) => (item.isSelect = false));
         filterItems.value[index].isSelect = true;
@@ -213,3 +221,4 @@
         align-items: center;
     }
     </style>
+    
