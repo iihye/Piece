@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 
@@ -7,10 +7,21 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
     const cakeChatList = ref([]);
     const cakeHeartCount = ref(0);
     const cakeHeartState = ref(false);
+    const cakeCultureType = ref("");
+
+    const setCakeCultureType = function (cultureType) {
+        cakeCultureType.value = cultureType;
+    };
+
+    const getCakeCultureType = computed(() => {
+        return cakeCultureType.value;
+    });
 
     const fetchCakeDetail = async (concertId) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/cultures/kopis/${concertId}`);
+            const response = await axios.get(
+                `${import.meta.env.VITE_REST_PIECE_API}/cultures/kopis/${concertId}`
+            );
             if (response.data.code === "FIND_KOPIS_CULTURE_SUCCESS") {
                 cakeDetail.value = response.data.data;
                 cakeHeartState.value = response.data.data.isHearted;
@@ -22,7 +33,9 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
 
     const fetchHeartCount = async (cultureId) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/cultures/heart/count/${cultureId}`);
+            const response = await axios.get(
+                `${import.meta.env.VITE_REST_PIECE_API}/cultures/heart/count/${cultureId}`
+            );
             if (response.data.code === "COUNT_CULTURE_HEART_SUCCESS") {
                 cakeHeartCount.value = response.data.data;
             }
@@ -33,7 +46,9 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
 
     const toggleHeart = async (cultureId) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_REST_PIECE_API}/cultures/heart/${cultureId}`);
+            const response = await axios.post(
+                `${import.meta.env.VITE_REST_PIECE_API}/cultures/heart/${cultureId}`
+            );
             if (response.data.code === "TOGGLE_HEART_SUCCESS") {
                 await fetchHeartCount(cultureId);
                 cakeHeartState.value = true;
@@ -47,12 +62,14 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
 
     const removeHeart = async (cultureId) => {
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_REST_PIECE_API}/cultures/heart/${cultureId}`);
+            const response = await axios.delete(
+                `${import.meta.env.VITE_REST_PIECE_API}/cultures/heart/${cultureId}`
+            );
             if (response.data.code === "REMOVE_HEART_SUCCESS") {
                 await fetchHeartCount(cultureId);
                 cakeHeartState.value = false;
             }
-        return response.data;
+            return response.data;
         } catch (error) {
             console.error("찜하기 취소 실패", error);
             throw error;
@@ -61,7 +78,9 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
 
     const findCakeChatList = async (concertId) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/chats/${concertId}`);
+            const response = await axios.get(
+                `${import.meta.env.VITE_REST_PIECE_API}/chats/${concertId}`
+            );
             if (response.data.code === "FIND_CHAT_LIST_SUCCESS") {
                 cakeChatList.value = response.data.data;
             }
@@ -72,7 +91,9 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
 
     const joinChatRoom = async (cultureId) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_REST_PIECE_API}/chats/join/${cultureId}`);
+            const response = await axios.post(
+                `${import.meta.env.VITE_REST_PIECE_API}/chats/join/${cultureId}`
+            );
             return response.data;
         } catch (error) {
             console.error("채팅방 가져오기 실패", error);
@@ -85,7 +106,11 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
         cakeChatList,
         cakeHeartCount,
         cakeHeartState,
-    
+        cakeCultureType,
+
+        setCakeCultureType,
+        getCakeCultureType,
+
         fetchCakeDetail,
         fetchHeartCount,
         findCakeChatList,

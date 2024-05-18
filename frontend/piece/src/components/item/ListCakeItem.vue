@@ -71,6 +71,7 @@ const props = defineProps({
     justify-content: left;
     align-items: center;
     width: 100%;
+    height: calc(100% - 7.25rem);
     padding: 0.4rem 1rem 0.4rem 1rem;
 }
 
@@ -86,7 +87,7 @@ const props = defineProps({
 }
 
 .listCakeItem-item-container {
-    margin: 0 0.4rem 0 0.4rem;
+    margin: 0 0 0 0.4rem;
 }
 
 .listCakeItem-item-type {
@@ -110,5 +111,11 @@ const props = defineProps({
     white-space: normal;
     line-height: 1.5em; 
     max-height: 3em;
+
+    font-family: "Semi";
+    font-size: 1rem;
+    color: var(--black-color);
+    user-select: none;
+    width: 15rem;
 }
 </style>

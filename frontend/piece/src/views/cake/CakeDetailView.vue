@@ -25,26 +25,26 @@
             <div
                 class="cakedetailview-item-type"
                 :class="{
-                    'movie-background': data.cultureType === 'MOVIE',
-                    'theater-background': data.cultureType === 'THEATER',
-                    'musical-background': data.cultureType === 'MUSICAL',
-                    'concert-background': data.cultureType === 'CONCERT',
+                    'movie-background': cultureType === 'MOVIE',
+                    'theater-background': cultureType === 'THEATER',
+                    'musical-background': cultureType === 'MUSICAL',
+                    'concert-background': cultureType === 'CONCERT',
                     'other-background':
-                    data.cultureType !== 'MOVIE' &&
-                    data.cultureType !== 'THEATER' &&
-                    data.cultureType !== 'MUSICAL' &&
-                    data.cultureType !== 'CONCERT',
+                    cultureType !== 'MOVIE' &&
+                    cultureType !== 'THEATER' &&
+                    cultureType !== 'MUSICAL' &&
+                    cultureType !== 'CONCERT',
                 }"
             >
-            <p v-if="data.cultureType === 'MOVIE'">영화</p>
-            <p v-else-if="data.cultureType === 'THEATER'">연극</p>
-            <p v-else-if="data.cultureType === 'MUSICAL'">뮤지컬</p>
-            <p v-else-if="data.cultureType === 'CONCERT'">콘서트</p>
+            <p v-if="cultureType === 'MOVIE'">영화</p>
+            <p v-else-if="cultureType === 'THEATER'">연극</p>
+            <p v-else-if="cultureType === 'MUSICAL'">뮤지컬</p>
+            <p v-else-if="cultureType === 'CONCERT'">콘서트</p>
             <p v-else>기타</p>
             </div>
 
-        <div class="cakedetailview-item-title">{{ data.title }}</div>
-    </div>
+        </div>
+    <div class="cakedetailview-item-title">{{ data.title }}</div>
 
     <!-- content -->
     <div class="cakedetailview-content-container">
@@ -102,7 +102,6 @@ const route = useRoute();
 const data = ref({
     posterImageUrl: "",
     heartCnt: 0,
-    cultureType: "",
     title: "",
     overview: "",
     runtime: "",
@@ -112,6 +111,8 @@ const data = ref({
 const cakeHeartState = ref(false);
 const cakeChatList = computed(() => cakeDetailStore.getCakeChatList());
 const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount());
+
+const cultureType = computed(() => cakeDetailStore.getCakeCultureType);
 
 watch(cakeHeartCount, (newCount) => {
     data.value.heartCnt = newCount;
@@ -167,7 +168,6 @@ onMounted(async () => {
     data.value = {
         ...cakeDetailStore.cakeDetail,
     };
-
     // 페이지 로드 시 하트 상태 설정
     cakeHeartState.value = userStore.getHeartState(cultureId) || cakeDetailStore.cakeDetail.isHearted;
 });
@@ -242,9 +242,8 @@ onMounted(async () => {
 
 .cakedetailview-item-title {
     font-family: "Semi";
-    font-size: 1rem;
-    color: var(--gray2-color);
-    margin-left: 0.4rem;
+    font-size: 1.2rem;
+    color: var(--black-color);
 }
 
 /* content */

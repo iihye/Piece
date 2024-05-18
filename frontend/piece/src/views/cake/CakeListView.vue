@@ -61,6 +61,7 @@
     import { ref, watch, computed, onMounted, onBeforeUnmount } from "vue";
     import { useCommonStore } from "@/stores/common";
     import { useCakeStore } from "@/stores/cake";
+    import { useCakeDetailStore } from "@/stores/cakedetail";
     import FilterItem from "@/components/item/FilterItem.vue";
     import ListCakeItem from "@/components/item/ListCakeItem.vue";
     import TextInput from "@/components/text/TextInput.vue";
@@ -68,6 +69,7 @@
 
     const commonStore = useCommonStore();
     const store = useCakeStore();
+    const detailStore = useCakeDetailStore();
 
     const filteredCakeList = computed(() => store.getCakeListFiltered);
     const selectedOptionCakeList = computed(() => store.getSelectOptionCakeList);
@@ -106,9 +108,11 @@
             name: "CakeDetail",
             params: {
                 concertId: item.code,
-                cultureId: item.cultureId,
+                cultureId: item.cultureId
             },
         });
+
+        detailStore.setCakeCultureType(item.cultureType);
     };
 
     const handleFocus = () => {
