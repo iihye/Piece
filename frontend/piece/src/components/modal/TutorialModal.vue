@@ -157,7 +157,7 @@ const tutorialConfirm = () => {
 }
 
 .tutorial-modal {
-    width: 25rem;
+    width: 22rem;
     height: flex;
     border-radius: 1rem;
     background-color: var(--white-color);
@@ -275,8 +275,17 @@ const tutorialConfirm = () => {
     color: var(--main-color);
 }
 
+.tutorial-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .tutorial-button-button {
-    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20rem;
     margin-top: 0.6rem;
 }
 </style>
