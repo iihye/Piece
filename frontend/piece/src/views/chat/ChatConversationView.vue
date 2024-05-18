@@ -1,5 +1,5 @@
 <template>
-    <div class="chatconversationview-main-container">
+    <div class="chatconversationview-main-container" id='chatContainer'>
         <ul class="chatconversationview-sub-container" style="list-style: none; padding-inline-start: 0rem; margin: 0px">
             <!-- 저장되어 있던 메시지 목록 -->
             <li v-for="item in chatMessages" :key="item">
@@ -337,17 +337,27 @@ async function fetchMessages() {
             }).format(new Date(m.createdAt));
             chatMessages.value.push(m);
         });
+
     } catch (error) {
         console.error("Error fetching chat logs:", error);
     }
 }
 
-const scrollToBottom = () => {
-    nextTick(() => {
-        const messageBox = document.getElementById("messages");
-        messageBox.scrollTop = messageBox.scrollHeight;
-    });
-};
+// const scrollToBottom = () => {
+//     nextTick(() => {
+//         const messageBox = document.getElementById("messages");
+//         messageBox.scrollTop = messageBox.scrollHeight;
+//     });
+// };
+
+function scrollToBottom() {
+    const chatContainer = document.getElementById('chatContainer');
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    scrollToBottom();
+});
 
 const send = () => {
     console.log("send()?");
@@ -368,7 +378,7 @@ const send = () => {
         );
 
         content.value = "";
-        // scrollToBottom();
+        scrollToBottom();
     }
 };
 
@@ -450,9 +460,19 @@ onMounted(() => {
                 commonStore.headerChatImg = p.profileImage;
 
                 // TODO: commonStore에서 headerGoOut 함수 채팅방 나가기 api 호출
-            }
+            } 
         });
+    } else {
+        console.log(chatRoomInfo.value);
+        commonStore.headerType = "header6";
+        commonStore.headerChatName = chatRoomInfo.value.culture.title;
+        commonStore.headerChatImg = chatRoomInfo.value.culture.imageUrl;
+        commonStore.headerChatCount = chatRoomInfo.value.participantCount;
+
+        // TODO: commonStore에서 headerGoOut 함수 채팅방 나가기 api 호출
     }
+
+
 });
 </script>
 

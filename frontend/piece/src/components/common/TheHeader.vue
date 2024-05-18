@@ -148,7 +148,8 @@ const headerOut = () => {
 }
 
 .header-count {
-    font-size: 1rem;
+    font-size: 0.8rem;
+    font-family: "Regular";
     color: var(--main-color);
 }
 </style>
