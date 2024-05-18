@@ -460,7 +460,7 @@ onMounted(() => {
 .chatconversationview-main-container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 7.25rem - 4rem);
+    height: calc(100vh - 7.25rem - 5rem);
     overflow-x: hidden;
     overflow-y: scroll;
     transition: scroll-behavior 0.5s ease-in-out;
