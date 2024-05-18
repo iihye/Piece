@@ -1,17 +1,20 @@
 <template>
     <div class="listImageItem-main-container">
         <div class="listImageItem-image-container">
-            <div class="listImageItem-item-type" :class="{
-                'movie-background': performanceType === 'MOVIE',
-                'theater-background': performanceType === 'THEATER',
-                'musical-background': performanceType === 'MUSICAL',
-                'concert-background': performanceType === 'CONCERT',
-                'other-background':
-                    performanceType !== 'MOVIE' &&
-                    performanceType !== 'THEATER' &&
-                    performanceType !== 'MUSICAL' &&
-                    performanceType !== 'CONCERT',
-            }">
+            <div
+                class="listImageItem-item-type"
+                :class="{
+                    'movie-background': performanceType === 'MOVIE',
+                    'theater-background': performanceType === 'THEATER',
+                    'musical-background': performanceType === 'MUSICAL',
+                    'concert-background': performanceType === 'CONCERT',
+                    'other-background':
+                        performanceType !== 'MOVIE' &&
+                        performanceType !== 'THEATER' &&
+                        performanceType !== 'MUSICAL' &&
+                        performanceType !== 'CONCERT',
+                }"
+            >
                 <p v-if="performanceType === 'MOVIE'">영화</p>
                 <p v-else-if="performanceType === 'THEATER'">연극</p>
                 <p v-else-if="performanceType === 'MUSICAL'">뮤지컬</p>
@@ -65,7 +68,7 @@ const props = defineProps({
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 0 0 1rem 0;
+    margin: 0 0 0.6rem 0;
 }
 
 .listImageItem-image-container {
@@ -83,13 +86,13 @@ const props = defineProps({
     border-radius: 0.5rem;
     background-color: var(--main-color);
     position: absolute;
-    top: 0.4rem;
-    left: 0.4rem;
+    top: 1rem;
+    left: 1rem;
 }
 
 .listImageItem-item-img {
-    width: 142px;
-    height: 232px;
+    width: 100%;
+    height: 100%;
 }
 
 .listImageItem-item-title {

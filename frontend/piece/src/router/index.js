@@ -222,21 +222,21 @@ const router = createRouter({
 
 // navigation guard
 router.beforeEach((to, from, next) => {
-  window.scrollTo(0, 0);
-  // token이 없을 때
-  if (
-    localStorage.getItem("accessToken") == "" ||
-    localStorage.getItem("accessToken") == null
-  ) {
-    if (to.name == "main" || to.name == "login" || to.name == "signin") {
-      next();
+    window.scrollTo(0, 0);
+    // token이 없을 때
+    if (
+        localStorage.getItem("accessToken") == "" ||
+        localStorage.getItem("accessToken") == null
+    ) {
+        if (to.name == "main" || to.name == "login" || to.name == "signin") {
+            next();
+        } else {
+            window.alert("로그인이 필요합니다.");
+            next({ name: "login" });
+        }
     } else {
-      window.alert("로그인이 필요합니다.");
-      next({ name: "login" });
+        next();
     }
-  } else {
-    next();
-  }
 });
 
 export default router;

@@ -1,243 +1,106 @@
-<!-- <template>
-    <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
-    <year-selector
-        class="piecestatisticsview-year-selector"
-        @year-changed="updateData"
-    />
-    <pie-chart :data="chartData" />
-
-    <Noitem :content="'완성된 조각이 없어요'"> </Noitem>
-    <div v-if="noData" class="consumestatisticsview-main-content">
-        완성된 조각이 없어요 ㅜㅜ
-        <RouterLink :to="{ name: 'piecemake' }">조각 만들러 가기</RouterLink>
+<template>
+    <div class="piecestatisticsview-main-container">
+        <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
+        <YearSelector class="piecestatisticsview-year-selector" @year-changed="showPieChartData" />
+        <!-- no data -->
+        <div v-if="noData" class="piecestatisticsview-main-content-container">
+            <NoItem 
+                class="piecestatisticsview-notiem-container" 
+                content = "작성한 조각이 없어요">
+            </NoItem>
+            <div class="button-container">
+                <RouterLink :to="{ name: 'piecemake' }">
+                    <SmallButton smallButtonContent="조각 만들기" />
+                </RouterLink>
+            </div>
+        </div>
+        <!-- chart -->
+        <div v-else>
+            <PieChart :chartData="chartData" />
+            <hr />
+            <div>
+                <div v-for="(amount, index) in chartData.datasets[0].data" :key="index" class="monthly-consumption">
+                    <div v-if="amount != 0" class="consumption-row">
+                        <div class="color-box" :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"></div>
+                        <span class="label">{{ chartData.labels[index] }}</span>
+                        <span class="amount">{{ amount.toLocaleString() }}회</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { usePieceStatisticsStore } from '@/stores/piecestatistics';
 import YearSelector from "@/components/chart/YearSelector.vue";
 import PieChart from "@/components/chart/PieChart.vue";
+import { useCommonStore } from "@/stores/common";
 import SmallButton from "@/components/button/SmallButton.vue";
 import NoItem from "@/components/item/NoItem.vue";
 
-export default {
-    components: {
-        YearSelector,
-        PieChart,
-    },
-    data() {
-        return {
-            noData: false,
-            chartData: {
-                labels: ["영화", "뮤지컬", "콘서트", "기타", "연극"],
-                datasets: [
-                    {
-                        backgroundColor: [
-                            "#b094ff",
-                            "#efae6d",
-                            "#ff9494",
-                            "#c4c4c4",
-                            "#76aacd",
-                        ],
-                        data: [4, 5, 3, 5],
-                    },
-                ],
-            },
-        };
-    },
-};
-</script> -->
+const pieceStatisticsStore = usePieceStatisticsStore();
+const commonStore = useCommonStore();
+const { chartData, updateData } = pieceStatisticsStore;
 
+const noData = computed(() => pieceStatisticsStore.getNoData);
+const currentYear = new Date().getFullYear();
+const year = ref(currentYear);
 
-<!-- <template>
-    <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
-    <YearSelector @year-changed="fetchStatistics" />
-    <PieChart :data="chartData" v-if="!noData" />
-    <NoItem v-if="noData" content="완성된 조각이 없어요" />
-  </template>
-  
-  <script setup>
-  import { computed } from 'vue';
-  import { usePieceStatisticsStore } from '@/stores/pieceStatistics.js';
-  import YearSelector from "@/components/chart/YearSelector.vue";
-  import PieChart from "@/components/chart/PieChart.vue";
-  import NoItem from "@/components/item/NoItem.vue";
-  
-  const { fetchStatistics, statisticsData, noData } = usePieceStatisticsStore();
-  const currentYear = new Date().getFullYear();
-  
-  fetchStatistics(currentYear);
-  
-  const chartData = computed(() => ({
-    labels: ["영화", "뮤지컬", "콘서트", "기타", "연극"],
-    datasets: [{
-      backgroundColor: ["#b094ff", "#efae6d", "#ff9494", "#c4c4c4", "#76aacd"],
-      data: [
-        statisticsData.movieNumber || 0,
-        statisticsData.musicalNumber || 0,
-        statisticsData.concertNumber || 0,
-        statisticsData.etcNumber || 0,
-        statisticsData.theaterNumber || 0
-      ]
-    }]
-  }));
-  </script>
-   -->
-
-<template>
-    <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
-    <year-selector class="piecestatisticsview-year-selector" @year-changed="fetchStatistics" />
-    <pie-chart :data="chartData" />
-    <NoItem v-if="noData" content="완성된 조각이 없어요"/>
-</template>
-
-<script setup>
-import { computed } from 'vue';
-import { usePieceStatisticsStore } from '@/stores/piecestatistics.js';
-import YearSelector from "@/components/chart/YearSelector.vue";
-import PieChart from "@/components/chart/PieChart.vue";
-import NoItem from "@/components/item/NoItem.vue";
-
-const { fetchStatistics, statisticsData, noData } = usePieceStatisticsStore();
-
-const chartData = computed(() => {
-    console.log("noData.value is ", noData);
-    // if (noData.value) {
-    if(noData) {
-        return {
-            labels: ["영화", "뮤지컬", "콘서트", "기타", "연극"],
-            datasets: [{
-                backgroundColor: ["#b094ff", "#efae6d", "#ff9494", "#c4c4c4", "#76aacd"],
-                data: [0, 0, 0, 0, 0]
-            }]
-        };
+const showPieChartData = async (selectedYear) => {
+    try {
+        await updateData(selectedYear);
+    } catch (error) {
+        console.error("조각 내역 불러오기 실패", error);
     }
-    
-    return {
-        labels: ["영화", "뮤지컬", "콘서트", "기타", "연극"],
-        datasets: [{
-            backgroundColor: ["#b094ff", "#efae6d", "#ff9494", "#c4c4c4", "#76aacd"],
-            data: [
-                statisticsData.movieNumber || 0,
-                statisticsData.musicalNumber || 0,
-                statisticsData.concertNumber || 0,
-                statisticsData.etcNumber || 0,
-                statisticsData.theaterNumber || 0
-            ]
-        }]
-    };
+};
+
+onMounted(async () => {
+    commonStore.headerTitle = "조각 통계";
+    commonStore.headerType = "header2";
+
+    await updateData(year.value);
 });
 </script>
 
-
-  
-<!-- <template>
-    <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
-    <year-selector class="piecestatisticsview-year-selector" @year-changed="fetchStatistics" />
-    <pie-chart v-if="!noData" :data="chartData" />
-    <NoItem v-if="noData" content="완성된 조각이 없어요"/>
-  </template>
-  
-  <script setup>
-  import { computed } from 'vue';
-  import { usePieceStatisticsStore } from '@/stores/piecestatistics.js';
-  import YearSelector from "@/components/chart/YearSelector.vue";
-  import PieChart from "@/components/chart/PieChart.vue";
-  import NoItem from "@/components/item/NoItem.vue";
-  console.log('script setup');
-
-  const { fetchStatistics, statisticsData, noData } = usePieceStatisticsStore();
-  
-  const chartData = computed(() => {
-      if (noData.value) {
-          return {
-              labels: ["영화", "뮤지컬", "콘서트", "기타", "연극"],
-              datasets: [{
-                  backgroundColor: ["#b094ff", "#efae6d", "#ff9494", "#c4c4c4", "#76aacd"],
-                  data: [0, 0, 0, 0, 0]
-              }]
-          };
-      }
-    console.log('enter computed');
-
-      return {
-          labels: ["영화", "뮤지컬", "콘서트", "기타", "연극"],
-          datasets: [{
-              backgroundColor: ["#b094ff", "#efae6d", "#ff9494", "#c4c4c4", "#76aacd"],
-              data: [
-                  statisticsData.movieNumber || 0,
-                  statisticsData.musicalNumber || 0,
-                  statisticsData.concertNumber || 0,
-                  statisticsData.etcNumber || 0,
-                  statisticsData.theaterNumber || 0
-              ]
-          }]
-      };
-  });
-  </script>
-   -->
-
-  
-
-<!-- <template>
-    <div class="piecestatisticsview-main-title">어떤 조각을 완성했을까요?</div>
-    <YearSelector @year-changed="fetchStatistics" />
-    <PieChart :data="chartData" />
-    <NoItem v-if="noData" content="완성된 조각이 없어요" />
-  </template>
-  
-  <script setup>
-  import { computed } from 'vue';
-  import { usePieceStatisticsStore } from '@/stores/pieceStatisticsStore';
-  import YearSelector from "@/components/chart/YearSelector.vue";
-  import PieChart from "@/components/chart/PieChart.vue";
-  import NoItem from "@/components/item/NoItem.vue";
-  
-  const { fetchStatistics, statisticsData, noData } = usePieceStatisticsStore();
-  const currentYear = new Date().getFullYear();
-  
-  // Fetch data when component is first loaded
-  fetchStatistics(currentYear);
-  
-console.log('statisticsData: ', statisticsData);
-
-  const chartData = computed(() => {
-    // if (!noData.value && statisticsData.value) {
-        if (!noData.value && statisticsData) {
-      return {
-        labels: ["영화", "뮤지컬", "콘서트", "기타", "연극"],
-        datasets: [{
-            backgroundColor: [
-                            "#b094ff",
-                            "#efae6d",
-                            "#ff9494",
-                            "#c4c4c4",
-                            "#76aacd",
-                        ],
-          data: [
-            statisticsData.value.movieNumber,
-            statisticsData.value.musicalNumber,
-            statisticsData.value.concertNumber,
-            statisticsData.value.etcNumber
-          ],
-        }],
-      };
-    }
-    return null;
-  });
-  </script>
-   -->
-
 <style>
+.piecestatisticsview-main-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 8.25rem);
+    padding-top: 1rem;
+    margin: 0 1rem 0 1rem;
+}
+
 .piecestatisticsview-main-title {
     font-family: "Bold";
     font-size: 1.6rem;
     color: var(--black-color);
-    margin: 0 0 2rem 0;
+    margin: 0 0 1rem 0;
     user-select: none;
 }
 
 .piecestatisticsview-year-selector {
     margin-bottom: 1rem;
+}
+
+.amount {
+    white-space: nowrap;
+}
+
+.piecestatisticsview-main-content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+}
+
+.piecestatisticsview-notiem-container{
+    display: flex;
+    height: 50%;
 }
 
 .piecestatisticsview-main-content {
@@ -251,5 +114,47 @@ console.log('statisticsData: ', statisticsData);
     align-items: center;
     user-select: none;
 }
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.button-container button:hover {
+    cursor: pointer;
+}
+
+.monthly-consumption .consumption-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+    font-family: "Regular";
+}
+
+.monthly-consumption .label {
+    flex-grow: 0;
+    flex-shrink: 0;
+    color: var(--main-color)
+}
+
+.monthly-consumption .amount {
+    flex-grow: 0;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.color-box {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.label {
+    flex-grow: 1;
+}
 </style>
-@/stores/pieceStatistics@/stores/piecestatistics.js

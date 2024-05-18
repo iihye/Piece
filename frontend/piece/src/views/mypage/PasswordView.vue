@@ -71,7 +71,7 @@ const isVisible = ref(true);
 const password = ref("");
 
 const checkPassword = (e) => {
-    if (e.target.value < 8) {
+    if (e.target.value.length < 8) {
         isPassword.value = false;
         passwordMessage.value = "8자 이상의 영문, 숫자만 가능해요";
     } else {

@@ -49,6 +49,10 @@ export const useUserStore = defineStore(
       return isNickname.value;
     });
 
+    const setIsNickname = (data) => {
+      isNickname.value = data;
+    };
+
     const getIsTutorial = computed(() => {
       return isTutorial.value;
     });
@@ -161,6 +165,21 @@ export const useUserStore = defineStore(
         .catch((err) => {});
     };
 
+    async function updateProfileImage(s3path) {
+      try {
+        console.log("Sending s3path as body:", s3path);
+        const response = await axios.put(
+          `${import.meta.env.VITE_REST_USER_API}/users/save/profileImage`,
+          {
+            s3path: s3path,
+          }
+        );
+        console.log("파일경로 저장 성공!");
+      } catch (error) {
+        console.error("파일경로 저장 실패", error.message);
+      }
+    }
+
     const readTutorial = function () {
       axios({
         url: `${import.meta.env.VITE_REST_USER_API}/users/istutorial`,
@@ -193,6 +212,7 @@ export const useUserStore = defineStore(
       getNicknameMessage,
       setNicknameMessage,
       getIsNickname,
+      setIsNickname,
       getIsTutorial,
       // action
       checkMypageLabelList,
@@ -204,6 +224,7 @@ export const useUserStore = defineStore(
       changeMypagePassword,
       checkNickname,
       checkTutorial,
+      updateProfileImage,
       readTutorial,
     };
   },
