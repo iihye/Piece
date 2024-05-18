@@ -17,8 +17,8 @@ import { useCommonStore } from "@/stores/common";
 import TutorialModal from "@/components/modal/TutorialModal.vue";
 import { isTutorialModal } from '@/stores/util';
 import { useUserStore } from "@/stores/user";
-import PieceRecentList from '@/components/main/PieceRecentList.vue';
-import NothingPiece from '@/components/main/NothingPiece.vue';
+// import PieceRecentList from '@/components/main/PieceRecentList.vue';
+// import NothingPiece from '@/components/main/NothingPiece.vue';
 
 const userStore = useUserStore();
 const commonStore = useCommonStore();
