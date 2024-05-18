@@ -156,7 +156,7 @@
         filterItems.value.forEach((item) => (item.isSelect = false));
         filterItems.value[index].isSelect = true;
         store.setSelectOptionCakeList(filterItems.value[index].labelType);
-        await store.findCakeList(selectedOptionCakeList.value, 10);
+        await store.findCakeList(selectedOptionCakeList.value, 10, true);
         listContainer.value.scrollTop = 0;
     };
 

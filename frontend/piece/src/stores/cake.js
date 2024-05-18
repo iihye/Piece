@@ -26,7 +26,7 @@ export const useCakeStore = defineStore('cake', () => {
         return array;
     };
 
-    const findCakeList = async (cultureType, pageSize) => {
+    const findCakeList = async (cultureType, pageSize, shuffle = false) => {
         if (cultureType === "ALL") {
             cultureType = null;
         }
@@ -41,7 +41,11 @@ export const useCakeStore = defineStore('cake', () => {
         isLoading.value = true;
         try {
             const res = await axios.get(url);
-            cakeList.value = shuffleArray(res.data.data.dataList);
+            if (shuffle) {
+                cakeList.value = shuffleArray(res.data.data.dataList);
+            } else {
+                cakeList.value = res.data.data.dataList;
+            }
             nextPageUrl.value = res.data.data.nextPage;
             cakeListFiltered.value = computedFilteredCakeList();
         } catch (err) {
@@ -57,7 +61,7 @@ export const useCakeStore = defineStore('cake', () => {
         isLoading.value = true;
         try {
             const res = await axios.get(nextPageUrl.value);
-            cakeList.value = [...cakeList.value, ...shuffleArray(res.data.data.dataList)];
+            cakeList.value = [...cakeList.value, ...res.data.data.dataList];
             nextPageUrl.value = res.data.data.nextPage;
             cakeListFiltered.value = computedFilteredCakeList();
         } catch (err) {
