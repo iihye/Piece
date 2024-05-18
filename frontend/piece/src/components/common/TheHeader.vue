@@ -1,7 +1,10 @@
 <template>
     <div class="header-container">
         <div v-if="headerType === 'header1'" class="header-all">
-            <div class="header-title">{{ headerTitle }}</div>
+            <div class="header-title-container">
+                <img class="header-title-img" src='@/assets/logo-only-black.png'/>
+            </div>
+            <!-- <div class="header-title">{{ headerTitle }}</div> -->
         </div>
         <div v-else-if="headerType === 'header2'" class="header-all">
             <font-awesome-icon :icon="['fas', 'chevron-left']" class="header-back" @click="headerBack" />
@@ -93,6 +96,19 @@ const headerOut = () => {
     margin-left: 1rem;
     margin-right: 1rem;
     justify-content: space-between;
+}
+
+.header-title-container{
+    margin: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-title-img {
+    user-select: none;
+    width: 3rem;
 }
 
 .header-title {
