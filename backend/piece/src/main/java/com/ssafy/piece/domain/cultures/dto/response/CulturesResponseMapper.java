@@ -47,7 +47,7 @@ public class CulturesResponseMapper {
 
 
     public static CultureDetailResponse kopisResponseToCultureDetailResponse(
-        KopisResponse response) {
+        KopisResponse response, Long cultureId) {
         Db db = response.getDb();
         List<String> castList = Arrays.stream(db.getPrfcast().split(","))
             .map(String::trim)
@@ -63,6 +63,7 @@ public class CulturesResponseMapper {
 //            castList.subList(5, castList.size()).clear();
 //        }
         return CultureDetailResponse.builder()
+            .cultureId(cultureId)
             .code(db.getMt20id())
             .title(db.getPrfnm())
             .releaseDate(db.getPrfpdfrom())
@@ -74,7 +75,7 @@ public class CulturesResponseMapper {
     }
 
     public static CultureDetailResponse tmdbResponseToCultureDetailResponse(
-        TmdbDetailResponse response) {
+        TmdbDetailResponse response, Long cultureId) {
         List<String> castList = response.getCredits().getCast().stream()
             .map(CastDTO::getName)
             .toList();
@@ -82,6 +83,7 @@ public class CulturesResponseMapper {
 //            castList.subList(5, castList.size()).clear();
 //        }
         return CultureDetailResponse.builder()
+            .cultureId(cultureId)
             .code(response.getId().toString())
             .title(response.getTitle())
             .releaseDate(response.getRelease_date())
