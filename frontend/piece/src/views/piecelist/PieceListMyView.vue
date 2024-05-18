@@ -1,44 +1,33 @@
 <template>
     <div class="piecelistmyview-main-container">
+
+        <div class="piecelistmyview-search-container">
+            <SearchInput :handlePrevClick="handlePrev" :handleSearchClick="handleSearch"
+                @searchContent="handleSearchContent"></SearchInput>
+        </div>
+
         <!-- filter -->
         <div class="piecelistmyview-scroll-container">
             <div class="piecelistmyview-tab-navigation">
                 <div class="piecelistmyview-tab-menu" ref="tabMenu">
-                    <FilterItem
-                        v-for="(item, index) in filterItems"
-                        class="piecelistmyview-tab-btn"
-                        :key="index"
-                        :labelType="item.labelType"
-                        :title="item.title"
-                        :isSelect="item.isSelect"
-                        @click="handleItemSelectClick(index)"
-                    ></FilterItem>
+                    <FilterItem v-for="(item, index) in filterItems" class="piecelistmyview-tab-btn" :key="index"
+                        :labelType="item.labelType" :title="item.title" :isSelect="item.isSelect"
+                        @click="handleItemSelectClick(index)"></FilterItem>
                 </div>
             </div>
         </div>
 
         <!-- list -->
-        <div
-            v-if="!piecelistMyList || filteredMyList.length === 0"
-            class="piecelistmyview-list-noitem"
-        >
+        <div v-if="!piecelistMyList || filteredMyList.length === 0" class="piecelistmyview-list-noitem">
             <NoItem :content="'내 조각이 없어요'"></NoItem>
         </div>
         <div v-else>
             <div class="piecelistmyview-list-container">
                 <div class="piecelistmyview-list-grid">
-                    <div
-                        v-for="(item, index) in filteredMyList"
-                        :key="index"
-                        class="piecelistmyview-list-item"
-                    >
-                        <ListImageItem
-                            :pieceId="item.pieceId"
-                            :performanceType="item.performanceType"
-                            :frontImg="item.frontImg"
-                            :title="item.title"
-                            @click="handleItemClick(item)"
-                        ></ListImageItem>
+                    <div v-for="(item, index) in filteredMyList" :key="index" class="piecelistmyview-list-item">
+                        <ListImageItem :pieceId="item.pieceId" :performanceType="item.performanceType"
+                            :frontImg="item.frontImg" :title="item.title" @click="handleItemClick(item)">
+                        </ListImageItem>
                     </div>
                 </div>
             </div>
@@ -51,6 +40,7 @@ import router from "@/router";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useCommonStore } from "@/stores/common";
 import { usePiecelistStore } from "@/stores/piecelist";
+import SearchInput from "@/components/modal/SearchInput.vue";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListImageItem from "@/components/item/ListImageItem.vue";
 import NoItem from "@/components/item/NoItem.vue";
@@ -63,6 +53,26 @@ const month = computed(() => store.getMonth);
 const piecelistMyList = computed(() => store.getPiecelistMyList);
 const filteredMyList = computed(() => store.getPiecelistMyListFiltered);
 const selectedOption = computed(() => store.getSelectOptionMyList);
+
+// search
+
+const searchValue = ref("");
+
+// modal에서 prev 클릭했을 때 실행되는 함수
+const handlePrev = () => {
+    router.go(-1);
+};
+
+// modal에서 search 클릭했을 때 실행되는 함수
+const handleSearch = () => {
+    console.log(searchValue.value);
+    router.push({ name: "piecemysearch", params: { keyword: searchValue.value } });
+};
+
+const handleSearchContent = (value) => {
+    // console.log("(부모)자동 완성 받아옴:", value);
+    searchValue.value = value;
+};
 
 const handleItemClick = (item) => {
     router.push({ name: "pieceDetail", params: { pieceId: item.pieceId } });
@@ -171,12 +181,17 @@ onBeforeUnmount(() => {
     min-height: calc(100vh - 7.25rem);
 }
 
-.piecelistmyview-main-container > :first-child {
+.piecelistmyview-main-container> :first-child {
     flex: 0 0 auto;
 }
 
-.piecelistmyview-main-container > :not(:first-child) {
+.piecelistmyview-main-container> :not(:first-child) {
     flex: 1;
+}
+
+.piecelistmyview-search-container {
+    margin-bottom: 1rem;
+    user-select: none;
 }
 
 /* filter */
@@ -228,6 +243,7 @@ onBeforeUnmount(() => {
 /* list */
 .piecelistmyview-list-container {
     overflow-y: scroll;
+    height: 66vh;
 }
 
 .piecelistmyview-list-container::-webkit-scrollbar {
