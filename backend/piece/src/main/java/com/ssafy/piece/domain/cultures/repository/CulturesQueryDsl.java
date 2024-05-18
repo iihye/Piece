@@ -37,7 +37,7 @@ public class CulturesQueryDsl {
      */
     @Transactional(readOnly = true)
     public PageResponse<CulturesResponse> findCultureList(CultureType cultureType,
-        Long startPageId,String title,
+        Long startPageId, String title,
         int pageSize) {
         List<Cultures> list = queryFactory
             .select(cultures)
@@ -65,6 +65,9 @@ public class CulturesQueryDsl {
         Map<String, String> queryParams = new HashMap<>();
         if (cultureType != null) {
             queryParams.put("cultureType", cultureType.toString());
+        }
+        if (title != null) {
+            queryParams.put("title", title);
         }
 
         return PageResponse.create(responseList, hasNextPage, BASE_URL, "cultures", lastId,
