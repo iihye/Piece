@@ -224,10 +224,11 @@ const router = createRouter({
       component: CakeListView,
     },
     {
-      path: "/views/:id",
-      name: "CakeDetail",
-      component: CakeDetailView,
-      props: true,
+    //   path: "/views/:id",
+    path: '/detail/:concertId/:cultureId',
+    name: "CakeDetail",
+    component: CakeDetailView,
+    rops: true,
     },
   ],
 });

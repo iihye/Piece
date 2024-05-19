@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- image -->
-        <img class="cakedetailview-image-image" :src="data.imageUrl" />
+        <img class="cakedetailview-image-image" :src="data.posterImageUrl" />
 
         <!-- heart -->
         <div class="cakedetailview-icon-container">
@@ -14,7 +14,7 @@
                 />
             </div>
             <div class="cakedetailview-heart-message">
-                {{ data.heartCnt }}명이 찜하고 있어요
+                {{ cakeHeartCount }}명이 찜하고 있어요
             </div>
         </div>
 
@@ -25,112 +25,158 @@
             <div
                 class="cakedetailview-item-type"
                 :class="{
-                    'movie-background': data.cultureType === 'MOVIE',
-                    'theater-background': data.cultureType === 'THEATER',
-                    'musical-background': data.cultureType === 'MUSICAL',
-                    'concert-background': data.cultureType === 'CONCERT',
+                    'movie-background': cultureType === 'MOVIE',
+                    'theater-background': cultureType === 'THEATER',
+                    'musical-background': cultureType === 'MUSICAL',
+                    'concert-background': cultureType === 'CONCERT',
                     'other-background':
-                        data.cultureType !== 'MOVIE' &&
-                        data.cultureType !== 'THEATER' &&
-                        data.cultureType !== 'MUSICAL' &&
-                        data.cultureType !== 'CONCERT',
+                    cultureType !== 'MOVIE' &&
+                    cultureType !== 'THEATER' &&
+                    cultureType !== 'MUSICAL' &&
+                    cultureType !== 'CONCERT',
                 }"
             >
-                <p v-if="data.cultureType === 'MOVIE'">영화</p>
-                <p v-else-if="data.cultureType === 'THEATER'">연극</p>
-                <p v-else-if="data.cultureType === 'MUSICAL'">뮤지컬</p>
-                <p v-else-if="data.cultureType === 'CONCERT'">콘서트</p>
-                <p v-else>기타</p>
+            <p v-if="cultureType === 'MOVIE'">영화</p>
+            <p v-else-if="cultureType === 'THEATER'">연극</p>
+            <p v-else-if="cultureType === 'MUSICAL'">뮤지컬</p>
+            <p v-else-if="cultureType === 'CONCERT'">콘서트</p>
+            <p v-else>기타</p>
             </div>
 
-            <div class="cakedetailview-item-title">{{ data.title }}</div>
         </div>
+    <div class="cakedetailview-item-title">{{ data.title }}</div>
 
-        <!-- content -->
-        <div class="cakedetailview-content-container">
-            <div class="cakedetailview-content-content">{{ data.content }}</div>
+    <!-- content -->
+    <div class="cakedetailview-content-container">
+        <div class="cakedetailview-content-content">{{ data.overview }}</div>
+        <div class="cakedetailview-content-runtime">상영 시간: {{ data.runtime }}</div>
+        <div v-if="data.castList && data.castList.length > 0" class="cakedetailview-content-cast">
+            출연진: {{ data.castList.join(', ') }}
         </div>
+    </div>
 
-        <hr />
+    <hr />
 
-        <!-- chat -->
+    <!-- chat -->
+    <div class="cakedetailview-chat-container">
+        <div class="cakedetailview-chat-title">채팅방</div>
         <div class="cakedetailview-chat-container">
-            <div class="cakedetailview-chat-title">채팅방</div>
-            <div class="cakedetailview-chat-container">
-                <ChatItem
-                    v-for="(item, index) in cakeChatList"
-                    class="cakedetailview-chat-item"
-                    :key="index"
-                    :chatRoomId="item.chatRoomId"
-                    :senderLabel="item.senderLabel"
-                    :senderNickname="item.senderNickname"
-                    :senderImg="item.senderImg"
-                    :content="item.content"
-                    :createdAt="item.createdAt"
-                ></ChatItem>
-            </div>
+            <ChatItem
+                v-for="(item, index) in cakeChatList"
+                class="cakedetailview-chat-item"
+                :key="index"
+                :chatRoomId="item.chatRoomId"
+                :senderLabel="item.senderLabel"
+                :senderNickname="item.senderNickname"
+                :senderImg="item.senderImg"
+                :content="item.content"
+                :createdAt="item.createdAt"
+            ></ChatItem>
         </div>
+    </div>
 
-        <!-- button -->
-        <RoundButton
-            class="cakedetailview-button"
-            :roundButtonContent="'채팅 참여하기'"
-            :roundButtonFunction="handleChatParticipate"
-            :isRoundDisable="true"
-        ></RoundButton>
+    <!-- button -->
+    <RoundButton
+        class="cakedetailview-button"
+        :roundButtonContent="'채팅 참여하기'"
+        :roundButtonFunction="handleChatParticipate"
+        :isRoundDisable="false"
+    ></RoundButton>
     </div>
 </template>
 
 <script setup>
-import router from "@/router";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
 import { useCommonStore } from "@/stores/common";
-import { useCakeStore } from "@/stores/cake";
+import { useCakeDetailStore } from "@/stores/cakedetail";
+import { useUserStore } from "@/stores/user";
 import ChatItem from "@/components/chat/ChatItem.vue";
 import RoundButton from "@/components/button/RoundButton.vue";
 
 const commonStore = useCommonStore();
-const store = useCakeStore();
+const cakeDetailStore = useCakeDetailStore();
+const userStore = useUserStore();
+const route = useRoute();
+
+const concertId = route.params.concertId;
+const cultureId = route.params.cultureId;
 
 const data = ref({
-    imageUrl:
-        "https://i.namu.wiki/i/IyVsoRT2tRo75y6uqUPLIeN03DgD1RkDKDyWeIafvUKSOnNdZvb9-Le-AhcKQ9OlCkuaI--jqGIy9ffzyrMHZMlUvUlzD-YCDSu-RC5JIFGcjzgt3cOrBwc-cG9Ryjh2BBP4PIqfyEFm3KJqzH81nw.webp",
-    heartCnt: 25,
-    cultureType: "ETC",
-    title: "SHOW WHAT I WANT",
-    content: "정보들 ",
+    posterImageUrl: "",
+    heartCnt: 0,
+    title: "",
+    overview: "",
+    runtime: "",
+    castList: [],
 });
 
 const cakeHeartState = ref(false);
-const cakeChatList = computed(() => store.getCakeChatList);
-const cakeChatUser = computed(() => store.getCakeChatUser);
-const cakeChatUserLabel = computed(() => store.getCakeChatUserLabel);
+const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
+const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount);
 
-const handleHeartClick = () => {
-    alert("하트 클릭");
-    cakeHeartState.value = !cakeHeartState.value;
-    // TODO: 찜 api 연결
-    // TODO: 찜 명수 업데이트
+const cultureType = computed(() => cakeDetailStore.getCakeCultureType);
+
+watch(cakeHeartCount, (newCount) => {
+    data.value.heartCnt = newCount;
+});
+
+const handleHeartClick = async () => {
+    const newHeartState = !cakeHeartState.value;
+
+    try {
+        if (newHeartState) {
+            await cakeDetailStore.toggleHeart(data.value.cultureId);
+        } else {
+            await cakeDetailStore.removeHeart(data.value.cultureId);
+        }
+        cakeHeartState.value = newHeartState;
+        userStore.setHeartState(data.value.cultureId, newHeartState);
+        await cakeDetailStore.fetchHeartCount(data.value.cultureId);
+    } catch (error) {
+        console.error("Failed to toggle heart", error);
+    }
 };
 
-const handleChatParticipate = () => {
+const handleChatParticipate = async () => {
     alert("채팅 참여하기 클릭");
-    // TODO: 채팅 참여하기 연결
+
+    try {
+        await cakeDetailStore.joinChatRoom(data.value.cultureId);
+        // TODO : 채팅방 이동
+    } catch (error) {
+        console.error("Failed to join chat room", error);
+    }
 };
 
 onMounted(async () => {
     commonStore.headerTitle = "케이크 상세보기";
     commonStore.headerType = "header2";
 
-    // const itemId = parseInt(route.params.id);
-    // item.value = fakeDatabase.find(i => i.id === itemId);
+    if (!concertId || !cultureId) {
+        console.error("Missing required parameters");
+        return;
+    }
+    if(cultureType.value === "MOVIE") {
+        await cakeDetailStore.fetchTmdbDetail(concertId);
+    } else {
+        await cakeDetailStore.fetchConcertCakeDetail(concertId);
 
-    // TODO: 찜 상태 가져오기
-    // TODO: 찜 명수 업데이트
-    // TODO: 채팅방 가져오기
-    await store.findCakeChatList();
+    }
+    
+    await cakeDetailStore.fetchHeartCount(cultureId);
+    await cakeDetailStore.findCakeChatList(concertId);
+
+    data.value = {
+        ...cakeDetailStore.cakeDetail,
+    };
+    cakeHeartState.value = userStore.getHeartState(cultureId) || cakeDetailStore.cakeDetail.isHearted;
 });
 </script>
+
+
+
+
 
 <style>
 /* image */
@@ -201,9 +247,8 @@ onMounted(async () => {
 
 .cakedetailview-item-title {
     font-family: "Semi";
-    font-size: 1rem;
-    color: var(--gray2-color);
-    margin-left: 0.4rem;
+    font-size: 1.2rem;
+    color: var(--black-color);
 }
 
 /* content */
@@ -216,6 +261,20 @@ onMounted(async () => {
     font-family: "Regular";
     font-size: 1rem;
     color: var(--black-color);
+}
+
+.cakedetailview-content-runtime {
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--black-color);
+    margin-top: 0.5rem;
+}
+
+.cakedetailview-content-cast {
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--black-color);
+    margin-top: 0.5rem;
 }
 
 /* chat */
