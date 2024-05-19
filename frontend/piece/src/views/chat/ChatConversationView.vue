@@ -676,7 +676,7 @@ p.chatconversationview-fromThem {
 /* 메시지+시간 */
 .chatconversationview-sender-container {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: flex-start;
   width: 100%;
 }
