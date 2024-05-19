@@ -48,7 +48,7 @@
                         :code="item.code"
                         :title="item.title"
                         :imageUrl="item.imageUrl"
-                        :frontImg="item.frontImg"
+                        :frontImg="convertToHttps(item.imageUrl)"
                         @click="handleItemClick(item)"
                     >
                     </ListCakeItem>
@@ -147,7 +147,13 @@ const handleItemClick = async (item) => {
     }
 };
 
-
+// https
+function convertToHttps(url) {
+    if (url.startsWith('http://')) {
+        return url.replace('http://', 'https://');
+    }
+    return url;
+}
 
 const handleFocus = () => {
     isFocused.value = true;
