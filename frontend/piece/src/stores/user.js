@@ -181,7 +181,10 @@ export const useUserStore = defineStore(
           oneYearPiece.value = res.data.data;
         })
         .catch((err) => {
-          oneYearPiece.value = null;
+          err.status === 400;
+          if (err.status === 404) {
+            oneYearPiece.value = null;
+          }
         });
     };
 
