@@ -72,11 +72,20 @@ const state = computed(() => store.getState);
 function changeMonth(val) {
     const newToday = new Date(today.value);
     newToday.setMonth(newToday.getMonth() + val);
+
+    // 미래 클릭 안댐
+    const currentMonth = new Date().getMonth();
+
+    if (newToday.getFullYear() > new Date().getFullYear() || 
+        (newToday.getFullYear() === new Date().getFullYear() && newToday.getMonth() > currentMonth)) {
+        return;
+    }
+
     store.setToday(newToday);
 
     store.findPiecelistMyCalendar(
-        today.value.getFullYear(),
-        today.value.getMonth() + 1
+        newToday.getFullYear(),
+        newToday.getMonth() + 1
     );
 }
 
