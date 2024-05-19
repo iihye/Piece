@@ -1,28 +1,36 @@
 <template>
     <div class="mainview-main-container">
-        <div class="mainview-service-container">
-            <TutorialModal v-if="isTutorialModal && isLogin" />
-            <!-- <NothingPiece></NothingPiece>
 
-            <PieceRecentList class="mainview-recent"></PieceRecentList> -->
-        </div>
+        <TutorialModal v-if="isTutorialModal && isLogin" />
+
+        <LastYearPiece v-if="isLogin && oneYear"></LastYearPiece>
+        <NothingPiece v-else="(isLogin && !oneYear) || !isLogin" />
+
+        <PieceRecentList class="mainview-recent"></PieceRecentList>
+
+        <SmallButton :smallButtonContent="'보러가기'" :smallButtonFunction="startPiece" class="recentlist-button">
+        </SmallButton>
+
     </div>
-    <RouterLink v-if="!isLogin" class="mainview-login-router" :to="{ name: 'login' }">로그인</RouterLink>
 
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useCommonStore } from "@/stores/common";
 import TutorialModal from "@/components/modal/TutorialModal.vue";
 import { isTutorialModal } from '@/stores/util';
 import { useUserStore } from "@/stores/user";
-// import PieceRecentList from '@/components/main/PieceRecentList.vue';
-// import NothingPiece from '@/components/main/NothingPiece.vue';
+import PieceRecentList from '@/components/main/PieceRecentList.vue';
+import NothingPiece from '@/components/main/NothingPiece.vue';
+import LastYearPiece from '@/components/main/LastYearPiece.vue';
 
 const userStore = useUserStore();
 const commonStore = useCommonStore();
 const isLogin = ref(false);
+
+// 일년 전 조각 조회
+const oneYear = computed(() => userStore.getOneYearPiece);
 
 onMounted(async () => {
     commonStore.headerTitle = "piece";
@@ -31,6 +39,8 @@ onMounted(async () => {
     if (localStorage.getItem("accessToken")) {
         isLogin.value = true;
     }
+    await userStore.readTutorial();
+    await userStore.readOneYearPiece();
 });
 
 </script>
@@ -41,17 +51,7 @@ onMounted(async () => {
     height: calc(100vh - 7.25rem);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.mainview-service-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 4rem;
+    justify-content: space-around;
 }
 
 .mainview-image-container {
