@@ -18,12 +18,7 @@ import java.util.Properties;
 public class EmailSender {
     private String type = "text/html; charset=utf-8";
 
-<<<<<<< HEAD
 
-
-
-=======
->>>>>>> 975cbdb334dae598122d1e2f46ad9fce34f50000
     @Value("${spring.mail.address}")
     private String emailAddress;
 
