@@ -74,6 +74,7 @@ public class CulturesController {
         @PathVariable("cultureId") Long cultureId) {
 
         culturesService.addCultureHeart(userId, cultureId);
+        log.info("culture id is {} ", cultureId);
         return SuccessResponse.createSuccess(SuccessCode.ADD_CULTURE_HEART_SUCCESS);
     }
 
