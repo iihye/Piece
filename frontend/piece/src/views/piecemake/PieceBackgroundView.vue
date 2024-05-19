@@ -115,7 +115,6 @@ function drawCanvas() {
             switch (layoutNumber) {
                 case "1":
                     textBoxStart = 856;
-                    console.log("layoutImage.split2 : " + layoutImage.src.split("/").pop());
                     drawTextBoxForLayout1(context, pieceStore.pieceValue, 0, textBoxStart);
                     break;
                 case "2":
@@ -140,25 +139,13 @@ function drawCanvas() {
 }
 
 function drawTextBoxForLayout1(context, content, x, y) {
-    console.log("여기1");
     if (!context) return;
     // const padding = 0;
     context.fillStyle = selectedColor.value; // 텍스트 박스 배경색
     context.fillRect(x, y, 896, canvas.height - y);
-    console.log("여기2");
-
 
     context.font = "40px Bold";
     context.fillStyle = "black";
-    console.log("content : " + content);
-    console.log("content.value : " + content.value);
-
-    console.log("content.title : " + content.title);
-    console.log("content.score : " + content.score);
-    console.log("content.date : " + content.date);
-    console.log("content.time : " + content.time);
-    console.log("content.comment : " + content.comment);
-
 
     const titleLines = wrapText(context, content.title, 696);
     let titleY = y + 60;
@@ -170,15 +157,13 @@ function drawTextBoxForLayout1(context, content, x, y) {
     const starImage = new Image();
     starImage.src = starImg; // 별 이미지 경로 설정
     starImage.onload = () => {
-        console.log("여기3");
+
         drawStar(context, content.score, 280, y - 80, 40, 40, 896);
     };
-
 
     context.font = "30px Medium";
     context.fillStyle = "black";
     const displayTime = content.time ? content.time : '';
-    console.log("displaytime : " + displayTime);
 
     context.fillText(content.date + " " + displayTime, 100, y + 150);
 
@@ -196,8 +181,6 @@ function drawTextBoxForLayout1(context, content, x, y) {
     logoImage.src = pieceLogo;
     logoImage.onload = () => {
         context.drawImage(logoImage, 398, 1180, 100, 50);
-        console.log("여기4");
-
     };
 }
 
