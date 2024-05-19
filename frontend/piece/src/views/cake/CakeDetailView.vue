@@ -198,9 +198,6 @@ const handleChatParticipate = async () => {
   try {
     console.log("cultureId?:" + cultureId);
 
-    // stompclient 생성
-    await webSocketStore.stompConnect();
-
     // 오픈채팅 생성 or 중복 처리
     await cakeDetailStore.findCultureId(cultureId);
 
@@ -238,6 +235,9 @@ const handleChatParticipate = async () => {
 onMounted(async () => {
   commonStore.headerTitle = "케이크 상세보기";
   commonStore.headerType = "header2";
+
+  // stompclient 생성
+  await webSocketStore.stompConnect();
 
   if (!concertId || !cultureId) {
     console.error("Missing required parameters");
