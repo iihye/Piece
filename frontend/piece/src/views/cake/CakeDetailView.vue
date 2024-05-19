@@ -72,6 +72,12 @@
                 :content="item.content"
                 :createdAt="item.createdAt"
             ></ChatItem>
+
+            <NoItem 
+                class="cakedetailview-chat-noitem"
+                v-if="cakeChatList.value == undefined" 
+                :content="'아직 대화를 나누지 않은 채팅방이예요'">
+            </NoItem>
         </div>
     </div>
 
@@ -96,6 +102,7 @@ import { useChatRoomStore } from "@/stores/chatroom";
 import { useWebSocketStore } from "@/stores/websocket";
 import ChatItem from "@/components/chat/ChatItem.vue";
 import RoundButton from "@/components/button/RoundButton.vue";
+import NoItem from "@/components/item/NoItem.vue";
 
 const commonStore = useCommonStore();
 const cakeDetailStore = useCakeDetailStore();
@@ -120,6 +127,7 @@ const data = ref({
 
 const cakeHeartState = ref(false);
 const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
+console.log("List: ", cakeChatList.value);
 const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount);
 
 const cultureType = computed(() => cakeDetailStore.getCakeCultureType);
@@ -301,5 +309,10 @@ onMounted(async () => {
 /* button */
 .cakedetailview-button {
     margin: 2rem 0 2rem 0;
+}
+
+.cakedetailview-chat-noitem{
+    margin-top: 5rem;
+    margin-bottom: 5rem;
 }
 </style>
