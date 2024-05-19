@@ -113,7 +113,7 @@ public class ImageMakeService {
 
         Map<String, Object> request = new HashMap<>();
         request.put("model", dalleModel);
-        request.put("prompt", prompt + "제공된 이미지 설명 중 주요 색상과 분위기를 기반으로 인상주의 스타일의 부드러운 색조의 전환과 빛을 특징으로 하는 풍경화를 그려주세요. 설명 중 배경을 중점으로 이미지를 생성하세요. 그림 스타일은 유화 느낌의 부드러운 붓터치를 표현해주세요.");
+        request.put("prompt", prompt + "제공된 이미지 설명 중 주요 색상과 분위기를 기반으로 인상주의 스타일의 부드러운 색조의 전환과 빛을 특징으로 하는 풍경화를 그려주세요. 설명 중 배경을 중점으로 이미지를 생성하세요. 인물은 그림에 넣지 마세요. 그림 스타일은 유화 느낌의 부드러운 붓터치를 표현해주세요.");
         request.put("n", 1);
         request.put("response_format", "b64_json");
         request.put("size", "1024x1024");
