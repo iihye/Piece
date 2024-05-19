@@ -183,7 +183,7 @@ onMounted(async () => {
 .cakedetailview-image-image {
     width: 100%;
     height: 360px;
-    object-fit: cover;
+    object-fit: contain;
     user-select: none;
 }
 
