@@ -5,9 +5,9 @@ import { useCommonStore } from "@/stores/common";
 import { isTutorialModal } from "@/stores/util";
 
 export const useUserStore = defineStore(
-    "user",
-    () => {
-        const commonStore = useCommonStore();
+  "user",
+  () => {
+    const commonStore = useCommonStore();
 
         // =========== STATE ===============
         const mypageLabelList = ref({});

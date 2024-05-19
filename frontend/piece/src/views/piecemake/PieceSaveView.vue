@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { usePieceStore } from "@/stores/piece.js";
 import PieceDetailView from "@/components/item/PieceDetailItem.vue";
@@ -52,11 +52,13 @@ import { useCommonStore } from "@/stores/common.js";
 import { useFileUploadStore } from "@/stores/fileupload";
 import RoundButton from "@/components/button/RoundButton.vue";
 import LoadingModal from "@/components/modal/LoadingModal.vue";
+import JSConfetti from 'js-confetti';
 
 const pieceStore = usePieceStore();
 const commonStore = useCommonStore();
 const fileUploadStore = useFileUploadStore();
 const router = useRouter();
+const jsConfetti = new JSConfetti();
 
 const pieceValue = pieceStore.pieceValue;
 
@@ -131,9 +133,26 @@ const handleUploadFail = () => {
     fileUploadFailModal.value = false;
 };
 
+watch(fileUploadSuccessModal, (newValue) => {
+  if (newValue) {
+    triggerConfetti();
+  }
+});
+
+const triggerConfetti = () => {
+  jsConfetti.addConfetti({
+    emojis: ['🎉', '🎊', '😊', '😍', '🎂', '🍰', '🧁'],
+    emojiSize: 50,
+    confettiNumber: 50,
+    confettiRadius: 6,
+    scatterDirection: 'up'
+  });
+};
+
 onMounted(async () => {
     commonStore.headerTitle = "조각 만들기";
     commonStore.headerType = "header2";
+    commonStore.setProgress(6);
 });
 </script>
 

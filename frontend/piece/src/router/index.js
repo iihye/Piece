@@ -22,6 +22,8 @@ import PieceListMyView from "@/views/piecelist/PieceListMyView.vue";
 import PieceListHeartView from "@/views/piecelist/PieceListHeartView.vue";
 import PieceDetailView from "@/views/piecedetail/PieceDetailView.vue";
 import RecordDetailView from "@/views/piecedetail/RecordDetailView.vue";
+import PieceSearchView from "@/views/piecelist/PieceSearchView.vue";
+import PieceMySearchView from "@/views/piecelist/PieceMySearchView.vue";
 // chat
 import ChatRoomView from "@/views/chat/ChatRoomView.vue";
 import ChatConversationView from "@/views/chat/ChatConversationView.vue";
@@ -153,6 +155,16 @@ const router = createRouter({
       name: "recordDetail",
       component: RecordDetailView,
     },
+    {
+      path: "/piecelist/search/:keyword",
+      name: "piecesearch",
+      component: PieceSearchView,
+    },
+    {
+      path: "/piecelist/search/my/:keyword",
+      name: "piecemysearch",
+      component: PieceMySearchView,
+    },
     // chat
     {
       path: "/chatroom",
@@ -223,21 +235,21 @@ const router = createRouter({
 
 // navigation guard
 router.beforeEach((to, from, next) => {
-    window.scrollTo(0, 0);
-    // token이 없을 때
-    if (
-        localStorage.getItem("accessToken") == "" ||
-        localStorage.getItem("accessToken") == null
-    ) {
-        if (to.name == "main" || to.name == "login" || to.name == "signin") {
-            next();
-        } else {
-            window.alert("로그인이 필요합니다.");
-            next({ name: "login" });
-        }
+  window.scrollTo(0, 0);
+  // token이 없을 때
+  if (
+    localStorage.getItem("accessToken") == "" ||
+    localStorage.getItem("accessToken") == null
+  ) {
+    if (to.name == "main" || to.name == "login" || to.name == "signin") {
+      next();
     } else {
-        next();
+      window.alert("로그인이 필요합니다.");
+      next({ name: "login" });
     }
+  } else {
+    next();
+  }
 });
 
 export default router;

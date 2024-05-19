@@ -14,6 +14,7 @@ export const useCommonStore = defineStore("common", () => {
     const loginUser = ref("");
     const loginUserInfo = ref({});
     const loginUserLabel = ref("");
+    const progress = ref(0);
 
     // =========== GETTER ===============
 
@@ -53,6 +54,14 @@ export const useCommonStore = defineStore("common", () => {
         return loginUserLabel.value;
     });
 
+    const getProgress = computed(() => {
+        return progress.value;
+    });
+
+    const setProgress = (value) => {
+        progress.value = value;
+    };
+
     // =========== ACTION ===============
 
     const findLoginUserInfo = function () {
@@ -63,10 +72,7 @@ export const useCommonStore = defineStore("common", () => {
         })
             .then((res) => {
                 loginUserInfo.value = res.data;
-                if (
-                    loginUserInfo.value.labelId !== null &&
-                    loginUserInfo.value.labelId !== 0
-                ) {
+                if (loginUserInfo.value.labelId !== null && loginUserInfo.value.labelId !== 0) {
                     findUserLabel();
                 } else {
                     loginUserLabel.value = "";
@@ -78,9 +84,7 @@ export const useCommonStore = defineStore("common", () => {
     const findUserLabel = function () {
         const userId = localStorage.getItem("userId");
         axios({
-            url: `${import.meta.env.VITE_REST_PIECE_API}/labels/${
-                loginUserInfo.value.labelId
-            }`,
+            url: `${import.meta.env.VITE_REST_PIECE_API}/labels/${loginUserInfo.value.labelId}`,
             method: "GET",
         })
             .then((res) => {
@@ -88,7 +92,6 @@ export const useCommonStore = defineStore("common", () => {
             })
             .catch((err) => {});
     };
-
 
     return {
         // state
@@ -101,6 +104,7 @@ export const useCommonStore = defineStore("common", () => {
         loginUser,
         loginUserInfo,
         loginUserLabel,
+        progress,
         // getter
         getHeaderType,
         getHeaderTitle,
@@ -111,6 +115,8 @@ export const useCommonStore = defineStore("common", () => {
         getLoginUser,
         getLoginUserInfo,
         getLoginUserLabel,
+        getProgress,
+        setProgress,
         // action
         findLoginUserInfo,
         findUserLabel,
