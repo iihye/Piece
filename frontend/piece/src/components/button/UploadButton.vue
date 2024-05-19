@@ -66,5 +66,6 @@ async function handleFileSelected(event) {
     color: var(--white-color);
     font-family: "Semi";
     font-size: 1rem;
+    cursor: pointer;
 }
 </style>
