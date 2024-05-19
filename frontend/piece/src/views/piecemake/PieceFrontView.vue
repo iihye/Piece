@@ -11,8 +11,8 @@
         <!-- choice -->
         <div class="piecefrontview-sub-container">
             <div class="piecefrontview-choice">
-                <img class="piecefrontview-layout" v-for="(layout, index) in layoutssel" :key="index" :src="layout" width="36"
-                    height="56" @click="changeLayout(layouts[index])" />
+                <img class="piecefrontview-layout" v-for="(layout, index) in layoutssel" :key="index" :src="layout"
+                    width="36" height="56" @click="changeLayout(layouts[index])" />
             </div>
             <canvas id="canvas" class="piecefrontview-canvas" width="896" height="1280"></canvas>
         </div>

@@ -12,9 +12,9 @@
           style="color: var(--main-color)"
           @click="handleHeartClick"
         />
-      </div>
-      <div class="cakedetailview-heart-message">
-        {{ cakeHeartCount }}명이 찜하고 있어요
+        <div class="cakedetailview-heart-message">
+          {{ cakeHeartCount }}명이 찜하고 있어요
+        </div>
       </div>
     </div>
 
@@ -49,16 +49,14 @@
     <div class="cakedetailview-content-container">
       <div class="cakedetailview-content-content">{{ data.overview }}</div>
       <div class="cakedetailview-content-runtime">
-        <strong>상영 시간 </strong><br />
-        {{ data.runtime }}
+        <strong>상영 시간</strong> <br />{{ data.runtime }}
       </div>
       <br />
       <div
         v-if="data.castList && data.castList.length > 0"
         class="cakedetailview-content-cast"
       >
-        <strong>출연진</strong><br />
-        {{ data.castList.join(", ") }}
+        <strong>출연진</strong> <br />{{ data.castList.join(", ") }}
       </div>
     </div>
 
@@ -73,15 +71,21 @@
           class="cakedetailview-chat-item"
           :key="index"
           :chatRoomId="item.chatRoomId"
-          :senderLabel="item.senderLabel"
-          :senderNickname="item.senderNickname"
-          :senderImg="item.senderImg"
+          :senderLabel="item.title"
+          :senderNickname="item.nickname"
+          :senderImg="item.profileImage"
           :content="item.content"
           :createdAt="item.createdAt"
         ></ChatItem>
+
+        <NoItem
+          class="cakedetailview-chat-noitem"
+          v-if="isCakeChatList"
+          :content="'아직 대화를 나누지 않은 채팅방이예요'"
+        >
+        </NoItem>
       </div>
     </div>
-
     <!-- button -->
     <RoundButton
       class="cakedetailview-button"
@@ -102,6 +106,7 @@ import { useChatRoomStore } from "@/stores/chatroom";
 import { useWebSocketStore } from "@/stores/websocket";
 import ChatItem from "@/components/chat/ChatItem.vue";
 import RoundButton from "@/components/button/RoundButton.vue";
+import NoItem from "@/components/item/NoItem.vue";
 
 const commonStore = useCommonStore();
 const cakeDetailStore = useCakeDetailStore();
@@ -128,6 +133,7 @@ const chatRoomInfo = ref({});
 
 const cakeHeartState = ref(false);
 const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
+const isCakeChatList = computed(() => cakeChatList.value == undefined);
 const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount);
 
 const cultureType = computed(() => cakeDetailStore.getCakeCultureType);
@@ -142,13 +148,13 @@ const handleHeartClick = async () => {
   try {
     if (newHeartState) {
       await cakeDetailStore.toggleHeart(data.value.cultureId);
-      triggerBounce();
     } else {
       await cakeDetailStore.removeHeart(data.value.cultureId);
     }
     cakeHeartState.value = newHeartState;
     userStore.setHeartState(data.value.cultureId, newHeartState);
     await cakeDetailStore.fetchHeartCount(data.value.cultureId);
+    triggerBounce();
   } catch (error) {
     console.error("Failed to toggle heart", error);
   }
@@ -220,13 +226,15 @@ onMounted(async () => {
   }
 
   await cakeDetailStore.fetchHeartCount(cultureId);
-  await cakeDetailStore.findCakeChatList(concertId);
 
   data.value = {
     ...cakeDetailStore.cakeDetail,
   };
   cakeHeartState.value =
     userStore.getHeartState(cultureId) || cakeDetailStore.cakeDetail.isHearted;
+
+  // 채팅 조회
+  await cakeDetailStore.findCultureId(cultureId);
 });
 </script>
 
@@ -254,9 +262,8 @@ onMounted(async () => {
 /* image */
 .cakedetailview-image-image {
   width: 100%;
-  /* height: 360px;
-    object-fit: cover; */
   height: auto;
+  object-fit: contain;
   user-select: none;
 }
 
@@ -272,6 +279,7 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   padding: 0.6rem 2rem 0 2rem;
   margin-bottom: 0.6rem;
 }
@@ -279,6 +287,7 @@ onMounted(async () => {
 .cakedetailview-heart-icon {
   width: 1.2rem;
   height: 1.2rem;
+  margin-bottom: 0.6rem;
 }
 
 .cakedetailview-heart-icon:hover {
@@ -366,5 +375,10 @@ onMounted(async () => {
 /* button */
 .cakedetailview-button {
   margin: 2rem 0 2rem 0;
+}
+
+.cakedetailview-chat-noitem {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
 }
 </style>

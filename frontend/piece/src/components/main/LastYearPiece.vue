@@ -17,14 +17,17 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { useRouter } from 'vue-router';
 import { useUserStore } from "@/stores/user";
 import SmallButton from '@/components/button/SmallButton.vue';
 
 const userStore = useUserStore();
+const router = useRouter();
 
 const oneYear = computed(() => userStore.getOneYearPiece);
 
 const startPiece = () => {
+    router.push({ name: "pieceDetail", params: { pieceId: oneYear.value.pieceId } });
 }
 
 onMounted(() => {

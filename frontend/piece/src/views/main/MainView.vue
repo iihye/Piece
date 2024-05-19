@@ -4,12 +4,9 @@
         <TutorialModal v-if="isTutorialModal && isLogin" />
 
         <LastYearPiece v-if="isLogin && oneYear"></LastYearPiece>
-        <NothingPiece v-else="(isLogin && !oneYear) || !isLogin" />
+        <NothingPiece v-if="(isLogin && !oneYear) || !isLogin" />
 
         <PieceRecentList class="mainview-recent"></PieceRecentList>
-
-        <SmallButton :smallButtonContent="'보러가기'" :smallButtonFunction="startPiece" class="recentlist-button">
-        </SmallButton>
 
     </div>
 
@@ -47,7 +44,8 @@ onMounted(async () => {
 
 <style>
 .mainview-main-container {
-    width: 100%;
+    /* width: 100%; */
+    width: 360px;
     height: calc(100vh - 7.25rem);
     display: flex;
     flex-direction: column;

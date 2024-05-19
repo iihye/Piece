@@ -109,7 +109,7 @@ onMounted(() => {
 .recentlist-slider {
     width: 7rem;
     height: 10rem;
-    padding: 0.75rem;
+    padding: 0 0.75rem;
 }
 
 .recentlist-image {
