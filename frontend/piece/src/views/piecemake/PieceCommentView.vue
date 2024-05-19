@@ -75,7 +75,7 @@
                     class="piececommentview-private-checkbox"
                     name="scales"
                     checked
-                    v-model="pieceValue.isPrivate"
+                    v-model="openYnComputed"
                 />
             </div>
         </div>
@@ -105,6 +105,15 @@ const isRoundDisable = computed(() => {
 const pieceStore = usePieceStore();
 const pieceValue = pieceStore.pieceValue;
 const commentInput = ref(pieceValue.comment || "");
+
+const openYnComputed = computed({
+    get() {
+        return pieceValue.openYn === 'N';
+    },
+    set(value) {
+        pieceStore.setPieceValue('openYn', value ? 'N' : 'Y');
+    },
+});
 
 function updateSelected(optionId) {
     pieceStore.setPieceValue("score", optionId);
