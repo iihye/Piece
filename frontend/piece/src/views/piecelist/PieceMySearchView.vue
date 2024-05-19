@@ -47,14 +47,12 @@ const handlePrev = () => {
 
 // 검색버튼
 const handleSearch = () => {
-    console.log("키워드 : " + searchValue.value);
     router.push({ name: "piecemysearch", params: { keyword: searchValue.value } });
 }
 
 // 검색어
 const searchValue = ref("");
 const searchKeyword = (value) => {
-    console.log(value);
     searchValue.value = value;
 };
 

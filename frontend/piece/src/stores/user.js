@@ -173,13 +173,11 @@ export const useUserStore = defineStore(
     };
 
     const readOneYearPiece = function () {
-      console.log("여기1");
       axios({
         url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/year`,
         method: "GET",
       })
         .then((res) => {
-          console.log("여기2");
           oneYearPiece.value = res.data.data;
         })
         .catch((err) => {

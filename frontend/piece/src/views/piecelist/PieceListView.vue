@@ -62,12 +62,10 @@ const handlePrev = () => {
 
 // modal에서 search 클릭했을 때 실행되는 함수
 const handleSearch = () => {
-    console.log(searchValue.value);
     router.push({ name: "piecesearch", params: { keyword: searchValue.value } });
 };
 
 const handleSearchContent = (value) => {
-    // console.log("(부모)자동 완성 받아옴:", value);
     searchValue.value = value;
 };
 
