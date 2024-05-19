@@ -53,9 +53,8 @@ public class PieceListController {
 
     // 최근 조각 리스트
     @GetMapping("/recent")
-    public ResponseEntity<Object> findRecentPieces(@AuthenticatedUser Long userId) {
-        List<PieceRecentResponseDto> pieceRecentResponseDtos = pieceListService.listRecentPieces(
-            userId);
+    public ResponseEntity<Object> findRecentPieces() {
+        List<PieceRecentResponseDto> pieceRecentResponseDtos = pieceListService.listRecentPieces();
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_RECENT_PIECE_LIST_SUCCESS,
             pieceRecentResponseDtos);

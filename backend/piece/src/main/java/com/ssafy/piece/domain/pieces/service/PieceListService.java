@@ -44,13 +44,13 @@ public class PieceListService {
     }
 
     // 최근 조각 리스트
-    public List<PieceRecentResponseDto> listRecentPieces(Long userId) {
+    public List<PieceRecentResponseDto> listRecentPieces() {
         Page<Pieces> piecesPage = piecesRepository.findTopPieces(PageRequest.of(0, 10));
 
         List<PieceRecentResponseDto> pieceListResponseDtos = new ArrayList<>();
 
         for (Pieces piece : piecesPage.getContent()) {
-            int cntHeart = HeartRepository.findByPieceIdAndUserId(piece.getPieceId(), userId);
+            int cntHeart = HeartRepository.countByPieceId(piece.getPieceId());
             PieceRecentResponseDto pieceRecentResponseDto = PieceRecentResponseDto.builder()
                 .pieceId(piece.getPieceId())
                 .frontImg(piece.getImageFront())
