@@ -355,6 +355,7 @@ function scrollToBottom() {
         console.log("#################scrollToBottom###############");
         const chatContainer = document.getElementById('chatContainer');
         chatContainer.scrollTop = chatContainer.scrollHeight;
+        console.log("chatContainer.scrollHeight: ", chatContainer.scrollHeight);
         // console.log(chatContainer);
         // console.log(document.getElementById('chatContainer').scrollHeight);
         // document.getElementById('chatContainer').scrollTop = 1000000;
