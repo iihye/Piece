@@ -18,6 +18,7 @@ export const useUserStore = defineStore(
     const nicknameMessage = ref("3자 이상 10자 이내의 한글, 영문만 가능해요");
     const isNickname = ref(false);
     const isTutorial = ref(false);
+    const oneYearPiece = ref({});
 
     // =========== GETTER ===============
 
@@ -51,6 +52,10 @@ export const useUserStore = defineStore(
 
     const getIsTutorial = computed(() => {
       return isTutorial.value;
+    });
+
+    const getOneYearPiece = computed(() => {
+      return oneYearPiece.value;
     });
 
     // =========== ACTION ===============
@@ -177,6 +182,19 @@ export const useUserStore = defineStore(
         .catch((err) => {});
     };
 
+    const readOneYearPiece = function () {
+      axios({
+        url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/year`,
+        method: "GET",
+      })
+        .then((res) => {
+          oneYearPiece.value = res.data.data;
+        })
+        .catch((err) => {
+          oneYearPiece.value = null;
+        });
+    };
+
     return {
       // state
       mypageLabelList,
@@ -185,6 +203,7 @@ export const useUserStore = defineStore(
       nicknameMessage,
       isNickname,
       isTutorial,
+      oneYearPiece,
       // getter
       getMypageLabelList,
       getMypageLabelWear,
@@ -194,6 +213,7 @@ export const useUserStore = defineStore(
       setNicknameMessage,
       getIsNickname,
       getIsTutorial,
+      getOneYearPiece,
       // action
       checkMypageLabelList,
       findMypageLabelList,
@@ -205,6 +225,7 @@ export const useUserStore = defineStore(
       checkNickname,
       checkTutorial,
       readTutorial,
+      readOneYearPiece,
     };
   },
   { persist: true }

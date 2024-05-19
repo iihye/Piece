@@ -1,10 +1,6 @@
 <template>
     <div class="roundbutton-container">
-        <button
-            @click="roundButtonFunction"
-            :disabled="!isRoundDisable"
-            class="roundbutton"
-        >
+        <button @click="roundButtonFunction" :disabled="!isRoundDisable" class="roundbutton">
             {{ roundButtonContent }}
         </button>
     </div>
