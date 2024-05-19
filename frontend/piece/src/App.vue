@@ -45,8 +45,8 @@ const isProgressBar = computed(() => (headerTitle.value === "조각 만들기" &
 .pieceProgressBar {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
+    width: 360px;
+    z-index: 85;
     margin-top: 3.25rem;
 }
 
