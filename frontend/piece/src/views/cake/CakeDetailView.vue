@@ -66,9 +66,9 @@
                 class="cakedetailview-chat-item"
                 :key="index"
                 :chatRoomId="item.chatRoomId"
-                :senderLabel="item.senderLabel"
-                :senderNickname="item.senderNickname"
-                :senderImg="item.senderImg"
+                :senderLabel="item.title"
+                :senderNickname="item.nickname"
+                :senderImg="item.profileImage"
                 :content="item.content"
                 :createdAt="item.createdAt"
             ></ChatItem>
@@ -175,13 +175,12 @@ onMounted(async () => {
     }
     
     await cakeDetailStore.fetchHeartCount(cultureId);
-    // await cakeDetailStore.findCakeChatList(concertId);
-
+    
     data.value = {
         ...cakeDetailStore.cakeDetail,
     };
     cakeHeartState.value = userStore.getHeartState(cultureId) || cakeDetailStore.cakeDetail.isHearted;
-
+    
     // 채팅 조회
     await cakeDetailStore.findCultureId(cultureId);
 });

@@ -106,6 +106,8 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
             );
             if (response.data.code === "FIND_CHAT_LIST_SUCCESS") {
                 cakeChatList.value = response.data.data;
+                console.log("채팅목록 가져오기 성공");
+                console.log(cakeChatList.value);
             }
         } catch (error) {
             console.error("채팅목록 가져오기 실패", error);
@@ -187,7 +189,6 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
                 }
             });
         console.log("채팅방 참여하기 끝");
-
     };
 
     // 채팅 참여 여부 조회
