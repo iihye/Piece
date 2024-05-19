@@ -22,6 +22,7 @@
         "aws-sdk": "^2.1611.0",
         "axios": "^1.6.8",
         "buffer": "^6.0.3",
+        "js-confetti": "^0.12.0",
         "pinia": "^2.1.7",
         "register-service-worker": "^1.7.2",
         "sockjs-client": "^1.6.1",
