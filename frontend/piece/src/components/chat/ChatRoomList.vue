@@ -359,7 +359,7 @@ onMounted(async () => {
   margin-right: 0.6rem;
 }
 
-.chatroomlist-image-conatiner{
+.chatroomlist-image-conatiner {
   width: 4.4rem;
   height: 4.4rem;
   margin-right: 0.6rem;
@@ -379,6 +379,7 @@ onMounted(async () => {
   border: 1px solid var(--gray-color);
   border-radius: 50%;
   margin-right: 0.6rem;
+  object-fit: cover;
 }
 
 /* info */
