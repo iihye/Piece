@@ -7,9 +7,9 @@
         <NothingPiece v-else="(isLogin && !oneYear) || !isLogin" />
 
         <PieceRecentList class="mainview-recent"></PieceRecentList>
+
         <SmallButton :smallButtonContent="'보러가기'" :smallButtonFunction="startPiece" class="recentlist-button">
         </SmallButton>
-        <RouterLink v-if="!isLogin" class="mainview-login-router" :to="{ name: 'login' }">로그인</RouterLink>
 
     </div>
 
