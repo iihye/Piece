@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface PiecesRepository extends JpaRepository<Pieces, Long> {
 
 
-    @Query("select p from Pieces p where p.openYn = 'Y'")
+    @Query("select p from Pieces p where p.openYn = 'Y' order by p.pieceId desc")
     List<Pieces> findByAll();
 
     @Query("select p from Pieces p where p.userId = :userId")
