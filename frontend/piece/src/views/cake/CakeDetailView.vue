@@ -1,6 +1,9 @@
 <template>
     <div>
+        <!-- image -->
         <img class="cakedetailview-image-image" :src="data.posterImageUrl" />
+
+        <!-- heart -->
         <div class="cakedetailview-icon-container">
             <div class="cakedetailview-heart-container">
                 <font-awesome-icon
@@ -14,7 +17,10 @@
                 {{ cakeHeartCount }}명이 찜하고 있어요
             </div>
         </div>
+
         <hr />
+
+        <!-- title -->
         <div class="cakedetailview-item-container">
             <div
                 class="cakedetailview-item-type"
@@ -30,15 +36,16 @@
                     cultureType !== 'CONCERT',
                 }"
             >
-            <p v-if="cultureType === 'MOVIE'">영화</p>
-            <p v-else-if="cultureType === 'THEATER'">연극</p>
-            <p v-else-if="cultureType === 'MUSICAL'">뮤지컬</p>
-            <p v-else-if="cultureType === 'CONCERT'">콘서트</p>
-            <p v-else>기타</p>
+                <p v-if="cultureType === 'MOVIE'">영화</p>
+                <p v-else-if="cultureType === 'THEATER'">연극</p>
+                <p v-else-if="cultureType === 'MUSICAL'">뮤지컬</p>
+                <p v-else-if="cultureType === 'CONCERT'">콘서트</p>
+                <p v-else>기타</p>
             </div>
-
         </div>
         <div class="cakedetailview-item-title">{{ data.title }}</div>
+
+        <!-- content -->
         <div class="cakedetailview-content-container">
             <div class="cakedetailview-content-content">{{ data.overview }}</div>
             <div class="cakedetailview-content-runtime"><strong>상영 시간 </strong><br> {{ data.runtime }}</div><br>
@@ -46,7 +53,10 @@
                 <strong>출연진</strong><br> {{ data.castList.join(', ') }}
             </div>
         </div>
+
         <hr />
+
+        <!-- chat -->
         <div class="cakedetailview-chat-container">
             <div class="cakedetailview-chat-title">채팅방</div>
             <div class="cakedetailview-chat-container">
@@ -63,6 +73,8 @@
                 ></ChatItem>
             </div>
         </div>
+
+        <!-- button -->
         <RoundButton
             class="cakedetailview-button"
             :roundButtonContent="'채팅 참여하기'"
@@ -190,9 +202,9 @@ onMounted(async () => {
 /* image */
 .cakedetailview-image-image {
     width: 100%;
-    height: 360px;
-    /* height: 540px; */
-    object-fit: cover;
+    /* height: 360px;
+    object-fit: cover; */
+    height: auto;
     user-select: none;
 }
 
