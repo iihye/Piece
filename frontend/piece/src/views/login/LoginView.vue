@@ -69,11 +69,13 @@ import axios from "axios";
 import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
+import { useUserStore } from "@/stores/user";
 import TextInput from "@/components/text/TextInput.vue";
 import ImageSuccessModal from "@/components/modal/ImageSuccessModal.vue";
 import SuccessModal from "@/components/modal/SuccessModal.vue";
 
 const commonStore = useCommonStore();
+const userStore = useUserStore();
 
 const email = ref("");
 const password = ref("");
@@ -111,11 +113,14 @@ const submitLogin = async () => {
             localStorage.setItem("userId", res.userId);
 
             loginSuccessModal.value = true;
+
+            userStore.readTutorial();
         } else {
             // 실패 모달
             loginFailModal.value = true;
         }
     } catch (error) {
+        console.log(error);
         loginFailModal.value = true;
     }
 };

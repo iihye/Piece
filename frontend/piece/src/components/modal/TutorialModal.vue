@@ -8,6 +8,9 @@
                         :class="{ activeImg: index === curPos }"></div>
                 </div>
             </div>
+
+            <div class="tutorial-header-content">아이콘을 넘기며 다음 내용을 확인해주세요</div>
+
             <div class="tutorial-content">
                 <div class="tutorial-image-album">
                     <div class="tutorialimages">
@@ -16,17 +19,28 @@
                     </div>
                 </div>
                 <div class="tutorial-content-explain" v-html="curContent"></div>
-                <button v-if="curPos === imageUrls.length - 1" class="tutorial-check" @click="tutorialCheck"
-                    :class="{ 'checked': notTutorial }">
-                    <font-awesome-icon :icon="['fas', 'check']" class="tutorial-check-icon" />
-                    <div class="tutorial-check-content">다시 보지 않기</div>
-                </button>
+            </div>
 
-                <div class="tutorial-button">
-                    <RoundButton :roundButtonContent="'piece와 케이크 완성하기'" :roundButtonFunction="tutorialConfirm"
+            <div class="tutorial-check-container">
+                    <button v-if="curPos === imageUrls.length - 1" class="tutorial-check" @click="tutorialCheck">
+                        <font-awesome-icon 
+                            :icon="['fas', 'check']" 
+                            :style="{
+                                color: notTutorial
+                                    ? 'var(--main-color)'
+                                    : 'var(--gray2-color)',
+                            }"/>
+                        <div class="tutorial-check-content" :class="{ 'checked': notTutorial }">다시 보지 않기</div>
+                    </button>
+                </div>
+
+            <div class="tutorial-button">
+                    <RoundButton 
+                        class="tutorial-button-button" 
+                        :roundButtonContent="'piece와 케이크 완성하기'" 
+                        :roundButtonFunction="tutorialConfirm"
                         :isRoundDisable="isRoundDisable" />
                 </div>
-            </div>
 
 
         </div>
@@ -143,7 +157,7 @@ const tutorialConfirm = () => {
 }
 
 .tutorial-modal {
-    width: 21.25rem;
+    width: 22rem;
     height: flex;
     border-radius: 1rem;
     background-color: var(--white-color);
@@ -160,12 +174,15 @@ const tutorialConfirm = () => {
 }
 
 .tutorial-header-title {
-    font-family: Bold;
-    font-size: 1rem;
+    font-family: "Bold";
+    font-size: 1.4rem;
+    color: var(--black-color);
 }
 
 .tutorial-header-circles {
     display: flex;
+    justify-content: center;
+    align-items: center;
     /* transform: translate(-100%); */
 }
 
@@ -173,8 +190,7 @@ const tutorialConfirm = () => {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--white-color);
-    border: 1px solid var(--gray-color);
+    background-color: var(--gray-color);
     margin-right: 12px;
 }
 
@@ -186,19 +202,26 @@ const tutorialConfirm = () => {
     background-color: var(--main-color);
 }
 
-/* 모달 내용 */
+.tutorial-header-content{
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--gray2-color);
+    margin-top: 0.6rem;
+}
 
+/* 모달 내용 */
 .tutorial-content {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 .tutorial-image-album {
-    width: 6.25rem;
-    height: 6.25rem;
+    width: 8rem;
+    height: 8rem;
     overflow: hidden;
 }
 
@@ -210,32 +233,58 @@ const tutorialConfirm = () => {
 }
 
 .tutorialimage {
-    width: 6.25rem;
-    height: 6.25rem;
+    width: 8rem;
+    height: 8rem;
 }
 
 .tutorial-content-explain {
-    font-family: "Semi";
-    font-size: 1rem;
-    line-height: 1.8rem;
+    font-family: "Medium";
+    font-size: 1.1rem;
+    line-height: 1.4rem;
     color: var(--black-color);
     margin: 1rem;
     user-select: none;
     padding: 0 1rem 0 1rem;
+    text-align: center;
+}
+
+.tutorial-check-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .tutorial-check {
     display: flex;
     align-items: center;
     width: 10.25rem;
-    justify-content: space-evenly;
     cursor: pointer;
     background-color: var(--white-color);
     border: none;
 }
 
-.tutorial-check.checked {
+.tutorial-check-content{
+    font-family: "Semi";
+    font-size: 1rem;
+    color: var(--gray2-color);
+    margin-left: 0.6rem;
+}
+
+.tutorial-check-content.checked {
     color: var(--main-color);
-    /* Change background color when checked */
+}
+
+.tutorial-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tutorial-button-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20rem;
+    margin-top: 0.6rem;
 }
 </style>

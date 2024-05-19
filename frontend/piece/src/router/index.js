@@ -22,6 +22,8 @@ import PieceListMyView from "@/views/piecelist/PieceListMyView.vue";
 import PieceListHeartView from "@/views/piecelist/PieceListHeartView.vue";
 import PieceDetailView from "@/views/piecedetail/PieceDetailView.vue";
 import RecordDetailView from "@/views/piecedetail/RecordDetailView.vue";
+import PieceSearchView from "@/views/piecelist/PieceSearchView.vue";
+import PieceMySearchView from "@/views/piecelist/PieceMySearchView.vue";
 // chat
 import ChatRoomView from "@/views/chat/ChatRoomView.vue";
 import ChatConversationView from "@/views/chat/ChatConversationView.vue";
@@ -153,6 +155,16 @@ const router = createRouter({
       name: "recordDetail",
       component: RecordDetailView,
     },
+    {
+      path: "/piecelist/search/:keyword",
+      name: "piecesearch",
+      component: PieceSearchView,
+    },
+    {
+      path: "/piecelist/search/my/:keyword",
+      name: "piecemysearch",
+      component: PieceMySearchView,
+    },
     // chat
     {
       path: "/chatroom",
@@ -212,10 +224,11 @@ const router = createRouter({
       component: CakeListView,
     },
     {
-      path: "/views/:id",
-      name: "CakeDetail",
-      component: CakeDetailView,
-      props: true,
+    //   path: "/views/:id",
+    path: '/detail/:concertId/:cultureId',
+    name: "CakeDetail",
+    component: CakeDetailView,
+    rops: true,
     },
   ],
 });

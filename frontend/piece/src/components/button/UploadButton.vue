@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useFileUploadStore } from "@/stores/fileupload";
 import LoadingModal from "@/components/modal/LoadingModal.vue";
 
@@ -29,7 +29,6 @@ const { roundButtonContent } = defineProps({
 
 const emit = defineEmits(["uploadSuccess", "uploadError"]);
 const fileInput = ref(null);
-const store = useFileUploadStore();
 const loadingModal = ref(false);
 
 function uploadImage() {
@@ -38,16 +37,15 @@ function uploadImage() {
 
 async function handleFileSelected(event) {
     loadingModal.value = true;
-
     const file = event.target.files[0];
+    const store = useFileUploadStore();
     try {
         const url = await store.getPreSignedUrl(file);
-        await store.putFileUpload(url, file);
-        emit("SUCCESS", url);
+        await store.putFileUpload(url.presignedURL, file);
+        emit("uploadSuccess", url.presignedURL, url.s3path);
     } catch (error) {
-        emit("ERROR", error);
+        emit("uploadError", error);
     }
-
     loadingModal.value = false;
 }
 </script>

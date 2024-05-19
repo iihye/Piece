@@ -6,13 +6,15 @@
         <!-- preview -->
         <div class="labelview-preview-container">
             <img
-                class="labelview-preview-img"
-                :src="
-                    loginUserInfo.profileImage ||
-                    'https://i.ibb.co/grMvZS9/your-image.jpg'
-                "
-                alt="image"
-            />
+                    v-if='loginUserInfo.profileImage === null'
+                    class="labelview-preview-img"
+                    src="@/assets/defaultprofile.png"
+                />
+                <img
+                    v-else
+                    class="labelview-preview-img"
+                    :src="loginUserInfo.profileImage"
+                />
             <div class="labelview-preview-label">{{ loginUserLabel }}</div>
             <div class="labelview-preview-nickname">
                 {{ loginUserInfo.nickname }}

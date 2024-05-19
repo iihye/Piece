@@ -24,11 +24,11 @@ const year = ref(currentYear);
 const emit = defineEmits(['year-changed']);
 
 const changeYear = (change) => {
-    if ((year.value === currentYear && change > 0) || (year.value > currentYear)) {
-        return;
+    const newYear = year.value + change;
+    if (newYear <= currentYear) {
+        year.value = newYear;
+        emit('year-changed', newYear);
     }
-    year.value += change;
-    emit('year-changed', year.value);
 };
 </script>
 

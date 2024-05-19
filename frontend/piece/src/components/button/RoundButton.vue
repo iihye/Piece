@@ -35,7 +35,6 @@ defineProps({
     background-color: var(--gray-color);
     border: 0;
     border-radius: 0.625rem;
-    width: 21.25rem;
     height: 4rem;
     color: var(--gray2-color);
 }

@@ -3,7 +3,7 @@
         :type="inputType"
         :placeholder="textInputPlaceholder"
         class="textinput-input"
-        v-model="textInputValue"
+        :value="textInputValue"
         @input="onInput"
         @focus="onFocus"
         @blur="onBlur"
@@ -11,16 +11,21 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from "vue";
+import { ref, watch, defineProps, defineEmits } from "vue";
 
 const props = defineProps({
-    textInputName: String,
+    modelValue: String,
     textInputPlaceholder: String,
     inputType: { type: String, default: "text" },
 });
 
-const textInputValue = ref("");
+const textInputValue = ref(props.modelValue);  // 초기값을 props.modelValue로 설정
 const emits = defineEmits(["update:modelValue", "focus", "blur"]);
+
+// Props의 modelValue 변경 감지
+watch(() => props.modelValue, (newValue) => {
+    textInputValue.value = newValue;
+});
 
 const onInput = (event) => {
     emits("update:modelValue", event.target.value);

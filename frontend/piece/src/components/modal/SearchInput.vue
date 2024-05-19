@@ -8,19 +8,12 @@
             />
         </div> -->
         <div class="searchinput-input-container">
-            <input
-                class="searchinput-input-content"
-                placeholder="검색어를 입력하세요"
-                v-model="searchContent"
-                @compositionend="handleSearchAuto"
-            />
+            <input class="searchinput-input-content" placeholder="검색어를 입력하세요" v-model="searchContent"
+                @compositionend="handleSearchAuto" />
         </div>
         <div class="searchinput-right-container" @click="handleSearchClick">
-            <font-awesome-icon
-                class="searchinput-icon-icon"
-                :icon="['fas', 'magnifying-glass']"
-                style="color: var(--gray2-color)"
-            />
+            <font-awesome-icon class="searchinput-icon-icon" :icon="['fas', 'magnifying-glass']"
+                style="color: var(--gray2-color)" />
         </div>
     </div>
 </template>
@@ -37,7 +30,7 @@ const emits = defineEmits(["searchContent"]);
 const searchContent = ref("");
 
 const handleSearchAuto = () => {
-    if (searchContent.value.length >= 3) {
+    if (searchContent.value.length >= 1) {
         // console.log("(자식)자동 완성 감지: ", searchContent.value);
         emits("searchContent", searchContent.value);
     }

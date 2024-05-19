@@ -3,12 +3,17 @@
         <div class="mypage-preview-container">
             <div class="mypage-preview-image-container">
                 <img
-                    class="mypage-preview-img"
-                    :src="
-                        loginUserInfo.profileImage ||
-                        'https://i.ibb.co/grMvZS9/your-image.jpg'
+                    v-if="
+                        loginUserInfo.profileImage === null ||
+                        loginUserInfo.profileImage === ''
                     "
-                    alt="image"
+                    class="mypage-preview-img"
+                    src="@/assets/defaultprofile.png"
+                />
+                <img
+                    v-else
+                    class="mypage-preview-img"
+                    :src="loginUserInfo.profileImage"
                 />
             </div>
             <div class="mypage-preview-sub-container">
@@ -85,19 +90,28 @@
             </div> -->
         </div>
     </div>
+
+    <!-- modal -->
+    <ImageSuccessModal
+        v-if="isLogoutModal"
+        :modalTitle="'로그아웃 되었어요<br>오늘도 행복한 시간 보내세요!'"
+        :handleSuccessClick="handleSuccessClick"
+    />
 </template>
 
 <script setup>
 import router from "@/router";
-import { onMounted, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useCommonStore } from "@/stores/common";
 import IconText from "@/components/text/IconText.vue";
 import axios from "axios";
+import ImageSuccessModal from "@/components/modal/ImageSuccessModal.vue";
 
 const commonStore = useCommonStore();
 
 const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
 const loginUserLabel = computed(() => commonStore.getLoginUserLabel);
+const isLogoutModal = ref(false);
 
 function handleMypiece() {
     router.push({ name: "pieceListMy" });
@@ -132,13 +146,17 @@ function handleConsumeClick() {
 }
 
 function handleLogoutClick() {
-    alert("로그아웃 클릭");
+    isLogoutModal.value = true;
 
     // 로그아웃 성공시에 실행
     commonStore.loginUser = "";
     commonStore.isLogin = false;
     localStorage.clear();
     axios.defaults.headers.common["Authorization"] = undefined;
+}
+
+function handleSuccessClick() {
+    isLogoutModal.value = false;
     router.push({ name: "main" });
 }
 
@@ -183,6 +201,7 @@ onMounted(async () => {
     border: 1px solid var(--gray-color);
     border-radius: 50%;
     object-fit: cover;
+    background-color: var(--white-color);
 }
 
 .mypage-preview-label {
@@ -206,7 +225,8 @@ onMounted(async () => {
 }
 
 .mypage-preview-button-container button {
-    width: 4.4rem;
+    width: 100%;
+    min-width: 5rem;
     height: 2rem;
     font-size: 0.8rem;
     font-family: "Regular";

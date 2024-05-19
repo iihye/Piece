@@ -28,6 +28,9 @@ export const usePiecelistStore = defineStore(
     const isMine = ref(false);
     const pieceDetaiLViewId = ref(0);
     const record = ref("");
+    const imgList = ref([]);
+    const imgIdList = ref([]);
+    const recordImgUrl = ref("");
 
     const today = ref(new Date());
     const year = ref(today.value.getFullYear());
@@ -122,6 +125,17 @@ export const usePiecelistStore = defineStore(
 
     const setPieceDetailViewId = function (id) {
       pieceDetaiLViewId.value = id;
+    };
+    const getImgList = computed(() => {
+      return imgList.value;
+    });
+
+    const getImgIdList = computed(() => {
+      return imgIdList.value;
+    });
+
+    const setRecordImgUrl = function (url) {
+      recordImgUrl.value = url;
     };
 
     const getToday = computed(() => {
@@ -306,7 +320,6 @@ export const usePiecelistStore = defineStore(
         })
         .catch((err) => {});
     };
-
     const calendarImplementation = function () {
       state.days = [];
       const year = today.value.getFullYear();
@@ -377,6 +390,7 @@ export const usePiecelistStore = defineStore(
 
           if (localStorage.getItem("userId") == piecelistDetail.value.userId) {
             isMine.value = true;
+            findPieceDetailRecord(pieceId);
           } else {
             isMine.value = false;
           }
@@ -426,14 +440,8 @@ export const usePiecelistStore = defineStore(
         .then((res) => {
           pieceDetailRecord.value = res.data.data;
           record.value = pieceDetailRecord.value.record;
-          // pieceDetailRecord.value.imgList = [
-          //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-          //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-          //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-          // ];
-
-          // console.log(pieceDetailRecord.value);
-          // console.log(pieceDetailRecord.value.imgList.length);
+          imgList.value = pieceDetailRecord.value.imgList;
+          imgIdList.value = pieceDetailRecord.value.imgIdList;
         })
         .catch((err) => {});
     };
@@ -457,6 +465,34 @@ export const usePiecelistStore = defineStore(
         },
       })
         .then((res) => {})
+        .catch((err) => {});
+    };
+
+    const addRecordImgUrl = function (pieceId, url) {
+      axios({
+        url: `${import.meta.env.VITE_REST_PIECE_API}/pieces/record/image`,
+        method: "POST",
+        data: {
+          pieceId: pieceId,
+          s3path: url,
+        },
+      })
+        .then((res) => {
+          findPieceDetailRecord(pieceId);
+        })
+        .catch((err) => {});
+    };
+
+    const deleteRecordImgUrl = function (pieceId, pieceimageid) {
+      axios({
+        url: `${
+          import.meta.env.VITE_REST_PIECE_API
+        }/pieces/record/image/${pieceimageid}`,
+        method: "DELETE",
+      })
+        .then((res) => {
+          findPieceDetailRecord(pieceId);
+        })
         .catch((err) => {});
     };
 
@@ -491,6 +527,9 @@ export const usePiecelistStore = defineStore(
       pieceUserLabel,
       isMine,
       pieceDetaiLViewId,
+      imgList,
+      imgIdList,
+      recordImgUrl,
       today,
       year,
       month,
@@ -518,6 +557,9 @@ export const usePiecelistStore = defineStore(
       getIsMine,
       getPieceDetailViewId,
       setPieceDetailViewId,
+      getImgList,
+      getImgIdList,
+      setRecordImgUrl,
       getToday,
       getYear,
       getMonth,
@@ -543,6 +585,8 @@ export const usePiecelistStore = defineStore(
       findPieceDetailRecord,
       deletePieceDetail,
       reviseRecordDetail,
+      addRecordImgUrl,
+      deleteRecordImgUrl,
       findRecentPieceList,
     };
   },

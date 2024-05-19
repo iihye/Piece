@@ -91,9 +91,12 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { usePieceStore } from "@/stores/piece.js";
+import { useCommonStore } from "@/stores/common.js";
 import RoundButton from "@/components/button/RoundButton.vue";
+
+const commonStore = useCommonStore();
 
 const isRoundDisable = computed(() => {
     return !(!pieceValue.score || !pieceValue.comment);
@@ -133,6 +136,15 @@ function hover(index) {
 function leave() {
     hoverScore.value = score.value;
 }
+
+onMounted(() => {
+    commonStore.headerTitle = "조각 만들기";
+    commonStore.headerType = "header2";
+    commonStore.setProgress(3);
+
+    score.value = pieceValue.score;
+    hoverScore.value = score.value;
+});
 </script>
 
 <style scoped>
