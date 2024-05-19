@@ -26,8 +26,9 @@ import TheFooter from "./components/common/TheFooter.vue";
 .TheHeader {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
+    /* left: 0; */
+    /* width: 22.5rem; */
+    width: 360px;
     height: 3.25rem;
     z-index: 85;
 }
@@ -41,8 +42,9 @@ import TheFooter from "./components/common/TheFooter.vue";
 .TheFooter {
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    /* left: 0; */
+    /* width: 22.5rem; */
+    width: 360px;;
     height: 4rem;
     z-index: 85;
     background-color: var(--white-color);
