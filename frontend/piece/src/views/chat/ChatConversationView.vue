@@ -450,7 +450,7 @@ onMounted(() => {
 
   // header
   const userId = localStorage.getItem("userId");
-  if (chatRoomInfo.value.chatRoomName === "개인채팅방") {
+  if (chatRoomInfo.value.isPersonal === true) {
     chatRoomInfo.value.participants.forEach((p) => {
       if (p.userId != userId) {
         commonStore.headerType = "header5";
