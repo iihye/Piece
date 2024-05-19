@@ -126,13 +126,13 @@ const handleHeartClick = async () => {
     try {
         if (newHeartState) {
             await cakeDetailStore.toggleHeart(data.value.cultureId);
+            triggerBounce();
         } else {
             await cakeDetailStore.removeHeart(data.value.cultureId);
         }
         cakeHeartState.value = newHeartState;
         userStore.setHeartState(data.value.cultureId, newHeartState);
         await cakeDetailStore.fetchHeartCount(data.value.cultureId);
-        triggerBounce();
     } catch (error) {
         console.error("Failed to toggle heart", error);
     }
