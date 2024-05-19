@@ -235,6 +235,7 @@ onMounted(async () => {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     padding: 0.6rem 2rem 0 2rem;
     margin-bottom: 0.6rem;
 }
@@ -242,6 +243,7 @@ onMounted(async () => {
 .cakedetailview-heart-icon {
     width: 1.2rem;
     height: 1.2rem;
+    margin-bottom: 0.6rem;
 }
 
 .cakedetailview-heart-icon:hover {
