@@ -1,6 +1,6 @@
 <template>
-    <div class="chatconversationview-main-container" id='chatContainer'>
-        <ul class="chatconversationview-sub-container" style="list-style: none; padding-inline-start: 0rem; margin: 0px">
+    <div class="chatconversationview-main-container" >
+        <ul class="chatconversationview-sub-container" id='chatContainer' style="list-style: none; padding-inline-start: 0rem; margin: 0px">
             <!-- 저장되어 있던 메시지 목록 -->
             <li v-for="item in chatMessages" :key="item">
                 <div
@@ -351,8 +351,15 @@ async function fetchMessages() {
 // };
 
 function scrollToBottom() {
-    const chatContainer = document.getElementById('chatContainer');
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    nextTick(() => {
+        console.log("#################scrollToBottom###############");
+        const chatContainer = document.getElementById('chatContainer');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        // console.log(chatContainer);
+        // console.log(document.getElementById('chatContainer').scrollHeight);
+        // document.getElementById('chatContainer').scrollTop = 1000000;
+        // console.log(chatContainer.scrollTop);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -446,10 +453,6 @@ onMounted(() => {
 
     console.log("채팅방 정보:" + chatRoomStore.getChatRoom.chatRoomName);
 
-    console.log("############## chatRoomStore ##############");
-    console.log(chatRoomInfo.value);
-    console.log("#############################################");
-
     // header
     const userId = localStorage.getItem("userId");
     if (chatRoomInfo.value.chatRoomName === "개인채팅방") {
@@ -472,7 +475,7 @@ onMounted(() => {
         // TODO: commonStore에서 headerGoOut 함수 채팅방 나가기 api 호출
     }
 
-
+    scrollToBottom();
 });
 </script>
 
@@ -482,7 +485,6 @@ onMounted(() => {
     flex-direction: column;
     height: calc(100vh - 7.25rem - 5rem);
     overflow-x: hidden;
-    overflow-y: scroll;
     transition: scroll-behavior 0.5s ease-in-out;
     padding-top: 1rem;
 }
@@ -494,6 +496,8 @@ onMounted(() => {
 .chatconversationview-sub-container {
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* input messsage form */

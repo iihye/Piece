@@ -110,13 +110,10 @@ export const useChatRoomStore = defineStore("chatroom", () => {
             );
             this.chatRoomListValue = response.data.data; // 받은 데이터로 상태 업데이트
 
-            console.log("------------------------");
-            console.log(chatRoomListValue.value);
-            console.log("------------------------");
-
-            response.data.data.forEach((m) => {
-                console.log(m);
-            });
+            // 채팅방 리스트 불러오기
+            // response.data.data.forEach((m) => {
+            //     console.log(m);
+            // });
 
             console.log("채팅방 value:" + this.chatRoomListValue[0]);
 
