@@ -50,12 +50,12 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
 
                 try {
                     Long userId = jwtTokenUtil.getUserIdFromToken(jwtToken);
-                    log.debug("추출된 사용자 ID: {}", userId);
+                    log.info("추출된 사용자 ID: {}", userId);
 
                     ServerHttpRequest modifiedRequest = request.mutate()
-                        .header("Authenticated-User-ID", userId.toString())
+                        .header("Authenticated-User-Header", userId.toString())
                         .build();
-                    log.debug("새 헤더가 추가된 요청을 전달합니다.");
+                    log.info("새 헤더가 추가된 요청을 전달합니다.");
 
                     return chain.filter(exchange.mutate().request(modifiedRequest).build());
                 } catch (Exception e) {
