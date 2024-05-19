@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CultureDetailResponse {
 
+    private Long cultureId;
     private String code;
     private String title;
     private String overview;

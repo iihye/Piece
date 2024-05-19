@@ -15,6 +15,8 @@ import com.ssafy.piece.domain.cultures.repository.CulturesRepository;
 import com.ssafy.piece.domain.cultures.repository.GenresRepository;
 import com.ssafy.piece.global.client.KopisClient;
 import com.ssafy.piece.global.client.TmdbClient;
+import com.ssafy.piece.global.response.code.ErrorCode;
+import com.ssafy.piece.global.response.exception.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -79,8 +81,9 @@ public class CultureApiService {
 
     public CultureDetailResponse findMovie(String movieId) {
         TmdbDetailResponse movie = tmdbClient.getTmdbMovie(movieId, "Bearer " + TMDB_API_KEY);
-
-        return CulturesResponseMapper.tmdbResponseToCultureDetailResponse(movie);
+        Cultures cultures = culturesRepository.findCulturesByCode(movie.getId().toString())
+            .orElseThrow(() -> new EntityNotFoundException(ErrorCode.CAKE_NOT_FOUND));
+        return CulturesResponseMapper.tmdbResponseToCultureDetailResponse(movie, cultures.getId());
     }
 
     public List<SimpleMovieResponse> searchMovie(String name) {
@@ -95,6 +98,8 @@ public class CultureApiService {
 
     public CultureDetailResponse findConcert(String concertId) {
         KopisResponse data = kopisClient.getKopisData(concertId, KOPIS_API_KEY);
-        return CulturesResponseMapper.kopisResponseToCultureDetailResponse(data);
+        Cultures cultures = culturesRepository.findCulturesByCode(data.getDb().getMt20id())
+            .orElseThrow(() -> new EntityNotFoundException(ErrorCode.CAKE_NOT_FOUND));
+        return CulturesResponseMapper.kopisResponseToCultureDetailResponse(data, cultures.getId());
     }
 }
