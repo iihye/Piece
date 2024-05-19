@@ -1,9 +1,6 @@
 <template>
     <div>
-        <!-- image -->
         <img class="cakedetailview-image-image" :src="data.posterImageUrl" />
-
-        <!-- heart -->
         <div class="cakedetailview-icon-container">
             <div class="cakedetailview-heart-container">
                 <font-awesome-icon
@@ -17,10 +14,7 @@
                 {{ cakeHeartCount }}명이 찜하고 있어요
             </div>
         </div>
-
         <hr />
-
-        <!-- title -->
         <div class="cakedetailview-item-container">
             <div
                 class="cakedetailview-item-type"
@@ -44,74 +38,53 @@
             </div>
 
         </div>
-    <div class="cakedetailview-item-title">{{ data.title }}</div>
-
-    <!-- content -->
-    <div class="cakedetailview-content-container">
-        <div class="cakedetailview-content-content">{{ data.overview }}</div>
-        <div class="cakedetailview-content-runtime"><strong>상영 시간</strong> <br>{{ data.runtime }}</div><br>
-        <div v-if="data.castList && data.castList.length > 0" class="cakedetailview-content-cast">
-            <strong>출연진</strong> <br>{{ data.castList.join(', ') }}
+        <div class="cakedetailview-item-title">{{ data.title }}</div>
+        <div class="cakedetailview-content-container">
+            <div class="cakedetailview-content-content">{{ data.overview }}</div>
+            <div class="cakedetailview-content-runtime">상영 시간: <strong>{{ data.runtime }}</strong></div>
+            <div v-if="data.castList && data.castList.length > 0" class="cakedetailview-content-cast">
+                <strong>출연진:</strong> {{ data.castList.join(', ') }}
+            </div>
         </div>
-    </div>
-
-    <hr />
-
-    <!-- chat -->
-    <div class="cakedetailview-chat-container">
-        <div class="cakedetailview-chat-title">채팅방</div>
+        <hr />
         <div class="cakedetailview-chat-container">
-            <ChatItem
-                v-for="(item, index) in cakeChatList"
-                class="cakedetailview-chat-item"
-                :key="index"
-                :chatRoomId="item.chatRoomId"
-                :senderLabel="item.title"
-                :senderNickname="item.nickname"
-                :senderImg="item.profileImage"
-                :content="item.content"
-                :createdAt="item.createdAt"
-            ></ChatItem>
-
-            <NoItem 
-                class="cakedetailview-chat-noitem"
-                v-if="cakeChatList.value == undefined" 
-                :content="'아직 대화를 나누지 않은 채팅방이예요'">
-            </NoItem>
+            <div class="cakedetailview-chat-title">채팅방</div>
+            <div class="cakedetailview-chat-container">
+                <ChatItem
+                    v-for="(item, index) in cakeChatList"
+                    class="cakedetailview-chat-item"
+                    :key="index"
+                    :chatRoomId="item.chatRoomId"
+                    :senderLabel="item.senderLabel"
+                    :senderNickname="item.senderNickname"
+                    :senderImg="item.senderImg"
+                    :content="item.content"
+                    :createdAt="item.createdAt"
+                ></ChatItem>
+            </div>
         </div>
-    </div>
-
-    <!-- button -->
-    <RoundButton
-        class="cakedetailview-button"
-        :roundButtonContent="'채팅 참여하기'"
-        :roundButtonFunction="handleChatParticipate"
-        :isRoundDisable="true"
-    ></RoundButton>
+        <RoundButton
+            class="cakedetailview-button"
+            :roundButtonContent="'채팅 참여하기'"
+            :roundButtonFunction="handleChatParticipate"
+            :isRoundDisable="false"
+        ></RoundButton>
     </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import { useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
 import { useCakeDetailStore } from "@/stores/cakedetail";
 import { useUserStore } from "@/stores/user";
-import { useChatRoomStore } from "@/stores/chatroom";
-import { useWebSocketStore } from "@/stores/websocket";
 import ChatItem from "@/components/chat/ChatItem.vue";
 import RoundButton from "@/components/button/RoundButton.vue";
-import NoItem from "@/components/item/NoItem.vue";
 
 const commonStore = useCommonStore();
 const cakeDetailStore = useCakeDetailStore();
 const userStore = useUserStore();
-const chatRoomStore = useChatRoomStore();
-const webSocketStore = useWebSocketStore();
-
 const route = useRoute();
-const router = useRouter();
 
 const concertId = route.params.concertId;
 const cultureId = route.params.cultureId;
@@ -127,7 +100,6 @@ const data = ref({
 
 const cakeHeartState = ref(false);
 const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
-console.log("List: ", cakeChatList.value);
 const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount);
 
 const cultureType = computed(() => cakeDetailStore.getCakeCultureType);
@@ -148,23 +120,29 @@ const handleHeartClick = async () => {
         cakeHeartState.value = newHeartState;
         userStore.setHeartState(data.value.cultureId, newHeartState);
         await cakeDetailStore.fetchHeartCount(data.value.cultureId);
+        triggerBounce();
     } catch (error) {
         console.error("Failed to toggle heart", error);
     }
 };
 
+const triggerBounce = () => {
+    const heartIcon = document.querySelector('.cakedetailview-heart-icon');
+    heartIcon.classList.add('bounce');
+    setTimeout(() => {
+        heartIcon.classList.remove('bounce');
+    }, 1000); // duration of the bounce animation
+};
+
 const handleChatParticipate = async () => {
-    console.log("채팅 참여하기 클릭");
+    alert("채팅 참여하기 클릭");
 
-    const chatRoomId = computed(() => cakeDetailStore.getChatRoomId);
-    const userId = Number(localStorage.getItem("userId"));
-    console.log(typeof userId);
-
-    chatRoomStore.joinChatRoom(chatRoomId.value, userId);
-    chatRoomStore.getChatRoomList(0);
-    router.push({ name: "chatRoom" });
-
-    // TODO: 채팅방 직접 참여하기
+    try {
+        await cakeDetailStore.joinChatRoom(data.value.cultureId);
+        // TODO : 채팅방 이동
+    } catch (error) {
+        console.error("Failed to join chat room", error);
+    }
 };
 
 onMounted(async () => {
@@ -183,23 +161,37 @@ onMounted(async () => {
     }
     
     await cakeDetailStore.fetchHeartCount(cultureId);
-    
+    await cakeDetailStore.findCakeChatList(concertId);
+
     data.value = {
         ...cakeDetailStore.cakeDetail,
     };
     cakeHeartState.value = userStore.getHeartState(cultureId) || cakeDetailStore.cakeDetail.isHearted;
-    
-    // 채팅 조회
-    await cakeDetailStore.findCultureId(cultureId);
 });
 </script>
 
 <style>
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-30px);
+    }
+    60% {
+        transform: translateY(-15px);
+    }
+}
+
+.bounce {
+    animation: bounce 1s;
+}
+
 /* image */
 .cakedetailview-image-image {
     width: 100%;
     height: 360px;
-    object-fit: contain;
+    object-fit: cover;
     user-select: none;
 }
 
@@ -309,10 +301,5 @@ onMounted(async () => {
 /* button */
 .cakedetailview-button {
     margin: 2rem 0 2rem 0;
-}
-
-.cakedetailview-chat-noitem{
-    margin-top: 5rem;
-    margin-bottom: 5rem;
 }
 </style>
