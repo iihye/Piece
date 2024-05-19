@@ -107,6 +107,7 @@ function drawCanvas() {
             context.globalCompositeOperation = "source-over";
             context.drawImage(createImage, -64, -64, createImage.width, createImage.height);
             console.log("layoutImage : " + layoutImage.src);
+            console.log("layoutImage2 : " + selectedLayout.value);
             console.log("layoutImage.split : " + layoutImage.src.split("/").pop());
 
             let textBoxStart = 896;

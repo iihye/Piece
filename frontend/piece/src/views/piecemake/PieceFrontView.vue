@@ -11,8 +11,8 @@
         <!-- choice -->
         <div class="piecefrontview-sub-container">
             <div class="piecefrontview-choice">
-                <img class="piecefrontview-layout" v-for="(layout, index) in layoutssel" :key="index" :src="layout" width="36"
-                    height="56" @click="changeLayout(layouts[index])" />
+                <img class="piecefrontview-layout" v-for="(layout, index) in layoutssel" :key="index" :src="layout"
+                    width="36" height="56" @click="changeLayout(layouts[index])" />
             </div>
             <canvas id="canvas" class="piecefrontview-canvas" width="896" height="1280"></canvas>
         </div>
@@ -57,8 +57,11 @@ const selectedLayout = ref(layout1); // 기본 선택된 레이아웃
 const poster = pieceStore.croppedImageValue;
 
 function changeLayout(layout) {
+    console.log("layout : " + layout);
     selectedLayout.value = layout; // 선택된 레이아웃 변경
+    console.log("selectedLayout.value : " + selectedLayout.value);
     makeStore.selectedLayout = layout;
+    console.log("makeStore.selectedLayout : " + makeStore.selectedLayout);
 }
 
 function drawCanvas() {
