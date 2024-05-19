@@ -11,8 +11,8 @@
         <!-- choice -->
         <div class="piecefrontview-sub-container">
             <div class="piecefrontview-choice">
-                <img class="piecefrontview-layout" v-for="layout in layouts" :key="layout" :src="layout" width="36"
-                    height="56" @click="changeLayout(layout)" />
+                <img class="piecefrontview-layout" v-for="(layout, index) in layoutssel" :key="index" :src="layout" width="36"
+                    height="56" @click="changeLayout(layouts[index])" />
             </div>
             <canvas id="canvas" class="piecefrontview-canvas" width="896" height="1280"></canvas>
         </div>
@@ -30,6 +30,9 @@ import { onMounted, ref, watchEffect } from 'vue';
 import Layout1 from '@/assets/Layout1.png';
 import Layout2 from '@/assets/Layout2.png';
 import Layout3 from '@/assets/Layout3.png';
+import Layout1sel from '@/assets/layout1-select.png';
+import Layout2sel from '@/assets/layout2-select.png';
+import Layout3sel from '@/assets/layout3-select.png';
 import RoundButton from '@/components/button/RoundButton.vue';
 import router from '@/router';
 import { usePieceMakeStore } from "@/stores/piecemake";
@@ -44,7 +47,12 @@ const layout1 = Layout1;
 const layout2 = Layout2;
 const layout3 = Layout3;
 
+const layout1sel = Layout1sel;
+const layout2sel = Layout2sel;
+const layout3sel = Layout3sel;
+
 const layouts = [layout1, layout2, layout3];
+const layoutssel = [layout1sel, layout2sel, layout3sel];
 const selectedLayout = ref(layout1); // 기본 선택된 레이아웃
 const poster = pieceStore.croppedImageValue;
 
@@ -145,8 +153,8 @@ const next = () => {
 
 .piecefrontview-layout {
     background-color: transparent;
-    border: 1px solid black;
-    margin: 0 0.2rem 0 0.2rem;
+    /* border: 1px solid black; */
+    margin: 0 0.4rem 0 0.4rem;
 }
 
 .piecefrontview-canvas {

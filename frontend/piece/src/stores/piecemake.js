@@ -19,6 +19,10 @@ export const usePieceMakeStore = defineStore("piecemake", () => {
   });
 
   // =========== ACTION ===============
+  function resetPieceMakeValue() {
+    backImage.value = '';
+    selectedLayout.value = '';
+  }
 
   const makeImage = function (image) {
     axios({
@@ -44,5 +48,6 @@ export const usePieceMakeStore = defineStore("piecemake", () => {
     getBackImage,
     // action
     makeImage,
+    resetPieceMakeValue,
   };
 });
