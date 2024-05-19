@@ -12,7 +12,9 @@
                     style="color: var(--main-color)"
                     @click="handleHeartClick"
                 />
-                {{ cakeHeartCount }}명이 찜하고 있어요
+                <div class="cakedetailview-heart-message">
+                    {{ cakeHeartCount }}명이 찜하고 있어요
+                </div>
             </div>
         </div>
 
@@ -185,12 +187,14 @@ onMounted(async () => {
     }
 
     await cakeDetailStore.fetchHeartCount(cultureId);
-    await cakeDetailStore.findCakeChatList(concertId);
 
     data.value = {
         ...cakeDetailStore.cakeDetail,
     };
     cakeHeartState.value = userStore.getHeartState(cultureId) || cakeDetailStore.cakeDetail.isHearted;
+
+    // 채팅 조회
+    await cakeDetailStore.findCultureId(cultureId);
 });
 </script>
 
