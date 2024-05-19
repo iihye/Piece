@@ -104,7 +104,7 @@ onMounted(() => {
 /* 버튼 활성화 관련 css */
 .chatroomlistheader-chatRoomListButton.chatroomlistheader-active {
     font-family: "Bold";
-    border-bottom: 1px solid var(--black-color);
+    /* border-bottom: 1px solid var(--black-color); */
 }
 
 /* template CSS*/

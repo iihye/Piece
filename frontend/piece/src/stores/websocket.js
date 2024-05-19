@@ -45,6 +45,7 @@ export const useWebSocketStore = defineStore("websocket", () => {
   };
 
   const unsubscribe = () => {
+    // subscription을 store에서 관리하고있지 않음
     // ?
     if (state.stompClient && state.subscription) {
       state.subscription.unsubscribe();
