@@ -22,11 +22,11 @@ export const useFileUploadStore = defineStore("fileupload", () => {
                 presignedURL: presignedURL,
                 s3path: s3path,
             };
-            console.log("presinged url 받아오기 성공");
-            console.log("presigned url: ", presignedURL);
-            console.log("s3path: ", s3path);
-            console.log("response: ", response);
-            console.log("==========================");
+            // console.log("presinged url 받아오기 성공");
+            // console.log("presigned url: ", presignedURL);
+            // console.log("s3path: ", s3path);
+            // console.log("response: ", response);
+            // console.log("==========================");
 
             return urlands3path;
         } catch (error) {

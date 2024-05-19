@@ -1,7 +1,7 @@
 <template>
     <div class="chatroomview-main-container">
         <chatRoomListHeader />
-        <chatRoomList />
+        <chatRoomList class="chatroomview-list-container"/>
     </div>
     <!-- <div id="chatroomview-chatRoomListPage">
         
@@ -36,6 +36,10 @@ onMounted(() => {
 .chatroomview-main-container {
     display: flex;
     flex-direction: column;
+    height: 100%;
+}
+
+.chatroomview-list-container{
     height: 100%;
 }
 

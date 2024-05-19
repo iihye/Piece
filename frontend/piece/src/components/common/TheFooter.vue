@@ -3,63 +3,47 @@
     <div class="footer-container">
       <div class="footer-all">
         <RouterLink :to="{ name: 'main' }" class="footer-menu">
-          <div
-            :class="{
-              'footer-set': true,
-              active: pageName === 'main',
-            }"
-          >
+          <div :class="{
+          'footer-set': true,
+          active: pageName === 'main',
+        }">
             <font-awesome-icon :icon="['fas', 'house']" class="footer-icon" />
             <div class="footer-name">홈</div>
           </div>
         </RouterLink>
         <RouterLink :to="{ name: 'piecelistmain' }" class="footer-menu">
-          <div
-            :class="{
-              'footer-set': true,
-              active: arrayRoutes.list.includes(pageName),
-            }"
-          >
-            <font-awesome-icon
-              :icon="['fas', 'box-open']"
-              class="footer-icon"
-            />
+          <div :class="{
+          'footer-set': true,
+          active: arrayRoutes.list.includes(pageName),
+        }">
+            <font-awesome-icon :icon="['fas', 'box-open']" class="footer-icon" />
             <div class="footer-name">모아보기</div>
           </div>
         </RouterLink>
         <RouterLink :to="{ name: 'piecemake' }" class="footer-menu">
-          <div
-            :class="{
-              'footer-set': true,
-              active: arrayRoutes.make.includes(pageName),
-            }"
-          >
+          <div :class="{
+          'footer-set': true,
+          active: arrayRoutes.make.includes(pageName),
+        }">
             <font-awesome-icon :icon="['fas', 'cheese']" class="footer-icon" />
             <div class="footer-name">조각 만들기</div>
           </div>
         </RouterLink>
         <!-- TODO: 채팅 router 주소 바꾸기 -->
         <RouterLink :to="{ name: 'chatRoom' }" class="footer-menu">
-          <div
-            :class="{
-              'footer-set': true,
-              active: arrayRoutes.chat.includes(pageName),
-            }"
-          >
-            <font-awesome-icon
-              :icon="['fas', 'paper-plane']"
-              class="footer-icon"
-            />
+          <div :class="{
+          'footer-set': true,
+          active: arrayRoutes.chat.includes(pageName),
+        }">
+            <font-awesome-icon :icon="['fas', 'paper-plane']" class="footer-icon" />
             <div class="footer-name">채팅</div>
           </div>
         </RouterLink>
         <RouterLink :to="{ name: 'mypage' }" class="footer-menu">
-          <div
-            :class="{
-              'footer-set': true,
-              active: arrayRoutes.myinfo.includes(pageName),
-            }"
-          >
+          <div :class="{
+          'footer-set': true,
+          active: arrayRoutes.myinfo.includes(pageName),
+        }">
             <font-awesome-icon :icon="['fas', 'user']" class="footer-icon" />
             <div class="footer-name">내정보</div>
           </div>
@@ -124,8 +108,9 @@ const arrayRoutes = {
 .footer-container {
   position: fixed;
   bottom: 0rem;
-  left: 0;
-  width: 100%;
+  /* left: 0; */
+  /* width: 100%; */
+  width: 360px;
   z-index: 85;
   display: grid;
   text-align: center;

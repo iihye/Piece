@@ -84,9 +84,7 @@ async function handleUpload(presignedURL, s3path) {
     console.log('s3path is ', s3path);
     userStore.updateProfileImage(s3path);
 
-    // ==========================================
-    // successModal.value = true;
-    // ==========================================
+    successModal.value = true;
 
     commonStore.findLoginUserInfo();
 }

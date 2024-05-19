@@ -81,7 +81,7 @@ const getProgress = computed(() => commonStore.getProgress);
 const isCancelWarnModal = ref(false);
 
 const headerBack = () => {
-    if (getProgress.value > 0) {
+    if (getProgress.value > 0 && headerTitle.value === "조각 만들기" && headerType.value === "header2") {
         isCancelWarnModal.value = true;
     } else if(headerTitle === "조각 만들기"){
         router.push({ name: "main" });
@@ -126,7 +126,8 @@ const handleWarn = () => {
 .header-all {
     display: flex;
     align-items: center;
-    width: 100%;
+    /* width: 100%; */
+    width: 360px;
     margin-left: 1rem;
     margin-right: 1rem;
     justify-content: space-between;
@@ -147,7 +148,8 @@ const handleWarn = () => {
 
 .header-title {
     margin: 0;
-    width: 100%;
+    /* width: 100%; */
+    width: 360px;
     font-family: "Bold";
     font-size: 1rem;
     display: flex;
