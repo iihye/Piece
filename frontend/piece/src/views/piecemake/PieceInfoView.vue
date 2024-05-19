@@ -99,14 +99,14 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="piecemake-button-container">
-        <RouterLink :to="{ name: 'piececomment' }">
-            <RoundButton
-                :roundButtonContent="'다음'"
-                :isRoundDisable="isRoundDisable"
-            ></RoundButton>
-        </RouterLink>
+        <div class="piecemake-button-container">
+            <RouterLink :to="{ name: 'piececomment' }">
+                <RoundButton
+                    :roundButtonContent="'다음'"
+                    :isRoundDisable="isRoundDisable"
+                ></RoundButton>
+            </RouterLink>
+        </div>
     </div>
 </template>
 
@@ -201,7 +201,12 @@ onMounted(async () => {
     height: calc(100vh - 9.25rem);
     padding-top: 1rem;
     padding-bottom: 1rem;
-    margin: 0 1rem 0 1rem;
+    margin: 0 0.25rem 0 0.25rem;
+    overflow-y: scroll;
+}
+
+.pieceinfoview-main-container::-webkit-scrollbar {
+    display: none;
 }
 
 /* title */
@@ -261,10 +266,6 @@ label {
 }
 
 .piecemake-button-container {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 4rem;
-    text-align: center;
+    align-self: center;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="pieceDetailItem-main-container">
         <div
-            class="pieceDetailView-flip-card"
+            class="pieceDetailItem-flip-card"
             @click="handleImageClick"
             @mousemove="handleMouseMove"
             @mouseleave="handleMouseOut"
@@ -10,31 +10,31 @@
             @touchend="handleMouseOut"
         >
             <div
-                class="pieceDetailView-flip-card-inner"
+                class="pieceDetailItem-flip-card-inner"
                 :class="{ 'is-flipped': imgFrontBack }"
             >
                 <!-- Front face -->
-                <div class="pieceDetailView-flip-card-front">
+                <div class="pieceDetailItem-flip-card-front">
                     <img
-                        class="pieceDetailView-image-item"
+                        class="pieceDetailItem-image-item"
                         :src="frontImg"
                         :alt="title"
                     />
                 </div>
                 <!-- Back face -->
-                <div class="pieceDetailView-flip-card-back">
+                <div class="pieceDetailItem-flip-card-back">
                     <img
-                        class="pieceDetailView-image-item"
+                        class="pieceDetailItem-image-item"
                         :src="backImg"
                         :alt="title"
                     />
                 </div>
             </div>
         </div>
-        <div v-if="imgFrontBack" class="pieceDetailView-image-message">
+        <div v-if="imgFrontBack" class="pieceDetailItem-image-message">
             클릭해서 앞면을 확인해보세요
         </div>
-        <div v-else class="pieceDetailView-image-message">
+        <div v-else class="pieceDetailItem-image-message">
             클릭해서 뒷면을 확인해보세요
         </div>
     </div>
@@ -100,8 +100,16 @@ function handleTouchStart(event) {
 function handleTouchMove(event) {
     event.preventDefault();
     const touch = event.touches[0];
-    const target = event.currentTarget;
-    transformCard(touch, touchStartX, touchStartY, target);
+    const rect = event.currentTarget.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const clientX = touch.clientX - rect.left;
+    const clientY = touch.clientY - rect.top;
+    const deltaX = clientX - centerX;
+    const deltaY = clientY - centerY;
+    const rotateY = deltaX / 20; // x축 회전 각도 조절
+    const rotateX = -deltaY / 20; // y축 회전 각도 조절
+    event.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 }
 
 function transformCard(event, touchStartX = 0, touchStartY = 0, target = null) {
@@ -130,24 +138,26 @@ function handleMouseOut(event) {
 }
 </script>
 
-<style>
+<style scoped>
 .pieceDetailItem-main-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent; /* 모바일 클릭 효과 제거 */
 }
 
-.pieceDetailView-flip-card {
+.pieceDetailItem-flip-card {
     transition: all 0.25s;
     background-color: transparent;
-    width: 284px;
-    height: 464px;
+    width: 100%;
+    height: 468px;
     perspective: 1000px;
     cursor: pointer;
 }
 
-.pieceDetailView-flip-card-inner {
+.pieceDetailItem-flip-card-inner {
     position: relative;
     width: 100%;
     height: 100%;
@@ -156,12 +166,16 @@ function handleMouseOut(event) {
     transform-style: preserve-3d;
 }
 
-.pieceDetailView-flip-card-inner.is-flipped {
+.pieceDetailItem-flip-card-inner.is-flipped {
     transform: rotateY(180deg);
 }
 
-.pieceDetailView-flip-card-front,
-.pieceDetailView-flip-card-back {
+.pieceDetailItem-image-item{
+    width: 100%;
+}
+
+.pieceDetailItem-flip-card-front,
+.pieceDetailItem-flip-card-back {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -169,7 +183,11 @@ function handleMouseOut(event) {
     backface-visibility: hidden;
 }
 
-.pieceDetailView-flip-card-back {
+.pieceDetailItem-image-message {
+    margin-top: 3rem;
+}
+
+.pieceDetailItem-flip-card-back {
     transform: rotateY(180deg);
 }
 </style>
