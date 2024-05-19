@@ -194,11 +194,6 @@ const handleMouseDown = () => {
   activeDrag.value = true;
 };
 
-onBeforeUnmount(() => {
-  tabMenu.value.removeEventListener("mousedown", handleMouseDown);
-  document.removeEventListener("mouseup", handleMouseUp);
-  tabMenu.value.removeEventListener("mousemove", handleMouseMove);
-});
 // 필터 관련 코드 끝
 const chatRoomList = ref([
   // {
