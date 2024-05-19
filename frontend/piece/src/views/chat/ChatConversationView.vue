@@ -202,7 +202,7 @@ const openModal = (item) => {
 
 // modal에서 chat 클릭했을 때 실행되는 함수
 const handleChat = async (userId) => {
-  alert("1:1 채팅하기 클릭, 현재 창 user Id: " + userId);
+  // alert("1:1 채팅하기 클릭, 현재 창 user Id: " + userId);
 
   try {
     const createdChatRoomId = await chatRoomStore.createPersonalChatRoom(
@@ -229,6 +229,8 @@ const handleChat = async (userId) => {
     chatRoomStore.getPersonalChatRoomInfo(createdChatRoomId);
     chatRoomInfo.value = chatRoomStore.getChatRoom;
 
+    chatRoomStore.setIsPersonal(true);
+    console.log("개인채팅방으로 가시네요?:" + chatRoomStore.getIsPersonal);
     // 구독정보 갱신 필요
     subscription.unsubscribe();
     subscribe(createdChatRoomId);
@@ -242,9 +244,6 @@ const handleChat = async (userId) => {
     console.log("이미 있는 채팅방의 번호는? " + error.response.data.chatRoomId);
 
     const alreadyExistsChatRoomId = error.response.data.chatRoomId;
-    // 에러 처리
-
-    // 개인방 찾기 필요한데?
 
     // 현재 방 번호 갱신
     chatRoomStore.setChatRoomId(alreadyExistsChatRoomId);
@@ -261,6 +260,8 @@ const handleChat = async (userId) => {
     // 상대방 정보 갱신
     partnerInfo.value = chatRoomStore.getPartnerInfo;
 
+    chatRoomStore.setIsPersonal(true);
+    console.log("개인채팅방으로 가시네요?:" + chatRoomStore.getIsPersonal);
     // 구독정보 갱신 필요
     subscription.unsubscribe();
     subscribe(alreadyExistsChatRoomId);
@@ -420,7 +421,9 @@ watch(
 
 const updateHeader = () => {
   if (chatRoomInfo.value.isPersonal) {
-    alert("개인채팅 헤더 적용할게요");
+    // alert("개인채팅 헤더 적용할게요");
+    console.log("개인채팅 헤더를 적용합니다.");
+
     chatRoomInfo.value.participants.forEach((p) => {
       if (p.userId != localStorage.getItem("userId")) {
         commonStore.headerType = "header5";
