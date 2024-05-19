@@ -15,7 +15,11 @@ import { useCommonStore } from "@/stores/common";
 import { useWebSocketStore } from "@/stores/websocket";
 import chatRoomList from "@/components/chat/ChatRoomList.vue";
 import chatRoomListHeader from "@/components/chat/ChatRoomListHeader.vue";
+import { usePieceStore } from "@/stores/piece.js";
+import { usePieceMakeStore } from "@/stores/piecemake.js";
 
+const pieceStore = usePieceStore();
+const pieceMakeStore = usePieceMakeStore();
 const webSocketStore = useWebSocketStore();
 const commonStore = useCommonStore();
 
@@ -30,6 +34,10 @@ onMounted(() => {
   } else {
     webSocketStore.stompConnect();
   }
+
+    // 조각 만들기 상태초기화
+    pieceStore.resetPieceValue();
+    pieceMakeStore.resetPieceMakeValue();
 });
 
 // onBeforeUnmount(() => {

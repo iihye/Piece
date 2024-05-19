@@ -161,6 +161,11 @@ onMounted(async () => {
     padding-top: 1rem;
     padding-bottom: 1rem;
     margin: 0 1rem 0 1rem;
+    overflow-y: scroll;
+}
+
+.piecemakeview-main-container::-webkit-scrollbar {
+    display: none;
 }
 
 .piecemakeview-main-title {
