@@ -1,6 +1,7 @@
 <template>
     <div class="app">
         <TheHeader class="TheHeader" />
+        <PieceProgressBar v-if="isProgressBar" class="pieceProgressBar"></PieceProgressBar>
         <div class="app-content">
             <RouterView />
         </div>
@@ -9,9 +10,17 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { RouterView } from "vue-router";
 import TheHeader from "./components/common/TheHeader.vue";
 import TheFooter from "./components/common/TheFooter.vue";
+import { useCommonStore } from "./stores/common";
+import PieceProgressBar from "./components/item/PieceProgressBar.vue"; 
+
+const commonStore = useCommonStore();
+const headerTitle = computed(() => commonStore.getHeaderTitle);
+const progress = computed(() => commonStore.getProgress);
+const isProgressBar = computed(() => (headerTitle.value === "조각 만들기" && progress.value > 0) ? true : false);
 </script>
 
 <style>
@@ -26,10 +35,18 @@ import TheFooter from "./components/common/TheFooter.vue";
 .TheHeader {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
+    /* left: 0; */
+    /* width: 22.5rem; */
+    width: 360px;
     height: 3.25rem;
     z-index: 85;
+}
+
+.pieceProgressBar {
+    position: fixed;
+    top: 0;
+    width: 360px;
+    margin-top: 3.25rem;
 }
 
 .app-content {
@@ -41,10 +58,11 @@ import TheFooter from "./components/common/TheFooter.vue";
 .TheFooter {
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    /* left: 0; */
+    /* width: 22.5rem; */
+    width: 360px;;
     height: 4rem;
-    z-index: 85;
+    /* z-index: 85; */
     background-color: var(--white-color);
 }
 </style>

@@ -12,11 +12,13 @@
                 class="chatroomlist-sub-container"
             >
                 <div class="chatroomlist-item-container">
-                    <img
-                        class="chatroomlist-item-squreImage"
-                        :src="chatRoom.culture.imageUrl"
-                        alt="profileImage"
-                    />
+                    <div class="chatroomlist-image-container">
+                        <img
+                            class="chatroomlist-item-squreImage"
+                            :src="chatRoom.culture.imageUrl"
+                            alt="profileImage"
+                        />
+                    </div>
                     <div class="chatroomlist-info-conatiner">
                         <div class="chatroomlist-info-nickname">
                             {{ chatRoom.culture.title }}
@@ -24,7 +26,7 @@
                         <div class="chatroomlist-info-message">
                             {{ chatRoom.participantCount }}명이 대화하고 있어요!
                         </div>
-                        <div class="chatroomlist-info-time">n분 전</div>
+                        <!-- <div class="chatroomlist-info-time">n분 전</div> -->
                     </div>
                 </div>
             </div>
@@ -64,7 +66,7 @@
                         <div class="chatroomlist-info-message">
                             {{ chatRoom.lastMessage }}
                         </div>
-                        <div class="chatroomlist-info-time">n분 전</div>
+                        <!-- <div class="chatroomlist-info-time">n분 전</div> -->
                     </div>
                 </div>
             </div>
@@ -150,7 +152,8 @@ onMounted(async () => {
 .chatRoomListHeader-main-container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 7.25em - 3.2rem);
+    overflow-y: auto; /* Enable vertical scroll */
+    max-height: calc(100vh - 7.25rem - 4rem); /* Set a maximum height for the container */
 }
 
 .chatroomlist-cardItems {
@@ -179,12 +182,21 @@ onMounted(async () => {
     margin-right: 1rem;
 }
 
+.chatroomlist-image-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4.4rem;
+    height: 4.4rem;
+    margin-right: 0.6rem;
+}
+
 .chatroomlist-item-squreImage {
     width: 4.4rem;
     height: 4.4rem;
     border: 1px solid var(--gray-color);
     border-radius: 10%;
-    margin-right: 0.6rem;
+    object-fit: fill;
 }
 
 .chatroomlist-item-circleImage {
@@ -210,6 +222,13 @@ onMounted(async () => {
     font-size: 1rem;
     color: var(--black-color);
     margin-bottom: 0.1rem;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+    max-height: 3em;
 }
 
 .chatroomlist-info-message {

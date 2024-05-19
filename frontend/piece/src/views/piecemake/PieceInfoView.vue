@@ -187,6 +187,8 @@ watch(timeValue, (newValue) => {
 onMounted(async () => {
     commonStore.headerTitle = "조각 만들기";
     commonStore.headerType = "header2";
+    commonStore.setProgress(2);
+
     dateValue.value = pieceStore.pieceValue.date;
     timeValue.value = pieceStore.pieceValue.time;
 });

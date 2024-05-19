@@ -143,6 +143,7 @@ const touchEnd = (event) => {
 onMounted(async () => {
     commonStore.headerTitle = "조각 만들기";
     commonStore.headerType = "header2";
+    commonStore.setProgress(0);
 
     // slider
     IMAGE_WIDTH = getImageWidth.value;

@@ -66,12 +66,18 @@
                 class="cakedetailview-chat-item"
                 :key="index"
                 :chatRoomId="item.chatRoomId"
-                :senderLabel="item.senderLabel"
-                :senderNickname="item.senderNickname"
-                :senderImg="item.senderImg"
+                :senderLabel="item.title"
+                :senderNickname="item.nickname"
+                :senderImg="item.profileImage"
                 :content="item.content"
                 :createdAt="item.createdAt"
             ></ChatItem>
+
+            <NoItem 
+                class="cakedetailview-chat-noitem"
+                v-if="cakeChatList.value == undefined" 
+                :content="'아직 대화를 나누지 않은 채팅방이예요'">
+            </NoItem>
         </div>
     </div>
 
@@ -80,7 +86,7 @@
         class="cakedetailview-button"
         :roundButtonContent="'채팅 참여하기'"
         :roundButtonFunction="handleChatParticipate"
-        :isRoundDisable="false"
+        :isRoundDisable="true"
     ></RoundButton>
     </div>
 </template>
@@ -88,16 +94,24 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
 import { useCakeDetailStore } from "@/stores/cakedetail";
 import { useUserStore } from "@/stores/user";
+import { useChatRoomStore } from "@/stores/chatroom";
+import { useWebSocketStore } from "@/stores/websocket";
 import ChatItem from "@/components/chat/ChatItem.vue";
 import RoundButton from "@/components/button/RoundButton.vue";
+import NoItem from "@/components/item/NoItem.vue";
 
 const commonStore = useCommonStore();
 const cakeDetailStore = useCakeDetailStore();
 const userStore = useUserStore();
+const chatRoomStore = useChatRoomStore();
+const webSocketStore = useWebSocketStore();
+
 const route = useRoute();
+const router = useRouter();
 
 const concertId = route.params.concertId;
 const cultureId = route.params.cultureId;
@@ -113,6 +127,7 @@ const data = ref({
 
 const cakeHeartState = ref(false);
 const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
+console.log("List: ", cakeChatList.value);
 const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount);
 
 const cultureType = computed(() => cakeDetailStore.getCakeCultureType);
@@ -139,14 +154,17 @@ const handleHeartClick = async () => {
 };
 
 const handleChatParticipate = async () => {
-    alert("채팅 참여하기 클릭");
+    console.log("채팅 참여하기 클릭");
 
-    try {
-        await cakeDetailStore.joinChatRoom(data.value.cultureId);
-        // TODO : 채팅방 이동
-    } catch (error) {
-        console.error("Failed to join chat room", error);
-    }
+    const chatRoomId = computed(() => cakeDetailStore.getChatRoomId);
+    const userId = Number(localStorage.getItem("userId"));
+    console.log(typeof userId);
+
+    chatRoomStore.joinChatRoom(chatRoomId.value, userId);
+    chatRoomStore.getChatRoomList(0);
+    router.push({ name: "chatRoom" });
+
+    // TODO: 채팅방 직접 참여하기
 };
 
 onMounted(async () => {
@@ -165,12 +183,14 @@ onMounted(async () => {
     }
     
     await cakeDetailStore.fetchHeartCount(cultureId);
-    await cakeDetailStore.findCakeChatList(concertId);
-
+    
     data.value = {
         ...cakeDetailStore.cakeDetail,
     };
     cakeHeartState.value = userStore.getHeartState(cultureId) || cakeDetailStore.cakeDetail.isHearted;
+    
+    // 채팅 조회
+    await cakeDetailStore.findCultureId(cultureId);
 });
 </script>
 
@@ -179,7 +199,7 @@ onMounted(async () => {
 .cakedetailview-image-image {
     width: 100%;
     height: 360px;
-    object-fit: cover;
+    object-fit: contain;
     user-select: none;
 }
 
@@ -289,5 +309,10 @@ onMounted(async () => {
 /* button */
 .cakedetailview-button {
     margin: 2rem 0 2rem 0;
+}
+
+.cakedetailview-chat-noitem{
+    margin-top: 5rem;
+    margin-bottom: 5rem;
 }
 </style>

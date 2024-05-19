@@ -22,6 +22,8 @@ import PieceListMyView from "@/views/piecelist/PieceListMyView.vue";
 import PieceListHeartView from "@/views/piecelist/PieceListHeartView.vue";
 import PieceDetailView from "@/views/piecedetail/PieceDetailView.vue";
 import RecordDetailView from "@/views/piecedetail/RecordDetailView.vue";
+import PieceSearchView from "@/views/piecelist/PieceSearchView.vue";
+import PieceMySearchView from "@/views/piecelist/PieceMySearchView.vue";
 // chat
 import ChatRoomView from "@/views/chat/ChatRoomView.vue";
 import ChatConversationView from "@/views/chat/ChatConversationView.vue";
@@ -38,201 +40,208 @@ import CakeDetailView from "@/views/cake/CakeDetailView.vue";
 import CakeListView from "@/views/cake/CakeListView.vue";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: "/",
-      name: "main",
-      component: MainView,
-    },
-    // login
-    {
-      path: "/login",
-      name: "login",
-      component: LoginView,
-    },
-    {
-      path: "/signin",
-      name: "signin",
-      component: SignInView,
-    },
-    {
-      path: "/kakao",
-      name: "kakao",
-      component: KakaoView,
-    },
-    {
-      path: "/signin/success",
-      name: "signinSuccess",
-      component: SuccessView,
-    },
-    // piecemake
-    {
-      path: "/piece",
-      name: "piecemake",
-      component: PieceMakeView,
-    },
-    {
-      path: "/piece/image",
-      name: "pieceimage",
-      component: PieceImageView,
-    },
-    {
-      path: "/piece/image/crop",
-      name: "pieceimagecrop",
-      component: ImageCropView,
-    },
-    {
-      path: "/piece/info",
-      name: "pieceinfo",
-      component: PieceInfoView,
-    },
-    {
-      path: "/piece/comment",
-      name: "piececomment",
-      component: PieceCommentView,
-    },
-    {
-      path: "/piece/front",
-      name: "piecefront",
-      component: PieceFrontView,
-    },
-    {
-      path: "/piece/background",
-      name: "piecebackground",
-      component: PieceBackgroundView,
-    },
-    {
-      path: "/piece/save",
-      name: "piecesave",
-      component: PieceSaveView,
-    },
-    // piecelist
-    {
-      path: "/piecelist/main",
-      name: "piecelistmain",
-      component: PieceListMainView,
-    },
-    {
-      path: "/piecelist/cake",
-      name: "cakelist",
-      component: CakeListView,
-    },
-    {
-      path: "/piecelist/cake/:cakeId",
-      name: "cakeDetail",
-      component: CakeDetailView,
-    },
-    {
-      path: "/piecelist",
-      name: "pieceList",
-      component: PieceListView,
-    },
-    {
-      path: "/piecelist/my/cal",
-      name: "pieceCalendar",
-      component: PieceCalendarView,
-    },
-    {
-      path: "/piecelist/my/list",
-      name: "pieceListMy",
-      component: PieceListMyView,
-    },
-    {
-      path: "/piecelist/heart/list",
-      name: "pieceListHeart",
-      component: PieceListHeartView,
-    },
-    {
-      path: "/piecelist/:pieceId",
-      name: "pieceDetail",
-      component: PieceDetailView,
-    },
-    {
-      path: "/piecelist/record/:pieceId",
-      name: "recordDetail",
-      component: RecordDetailView,
-    },
-    // chat
-    {
-      path: "/chatroom",
-      name: "chatRoom",
-      component: ChatRoomView,
-    },
-    {
-      path: "/chat",
-      name: "chat",
-      component: ChatConversationView,
-    },
-    // mypage
-    {
-      path: "/mypage",
-      name: "mypage",
-      component: MypageView,
-    },
-    {
-      path: "/mypage/nickname",
-      name: "nickname",
-      component: NicknameView,
-    },
-    {
-      path: "/mypage/password",
-      name: "password",
-      component: PasswordView,
-    },
-    {
-      path: "/mypage/profileimg",
-      name: "profileImg",
-      component: ProfileImgView,
-    },
-    {
-      path: "/mypage/label",
-      name: "label",
-      component: LabelView,
-    },
-    {
-      path: "/mypage/piece",
-      name: "piece",
-      component: PieceStatisticsView,
-    },
-    {
-      path: "/mypage/consume",
-      name: "consume",
-      component: ConsumeStatisticsView,
-    },
-    {
-      path: "/mypage/piece",
-      name: "piecestatistics",
-      component: PieceStatisticsView,
-    },
-    // cake
-    {
-      path: "/cake",
-      name: "cakeList",
-      component: CakeListView,
-    },
-    {
-    //   path: "/views/:id",
-    path: '/detail/:concertId/:cultureId',
-    name: "CakeDetail",
-    component: CakeDetailView,
-    rops: true,
-    },
-  ],
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: [
+        {
+            path: "/",
+            name: "main",
+            component: MainView,
+        },
+        // login
+        {
+            path: "/login",
+            name: "login",
+            component: LoginView,
+        },
+        {
+            path: "/signin",
+            name: "signin",
+            component: SignInView,
+        },
+        {
+            path: "/kakao",
+            name: "kakao",
+            component: KakaoView,
+        },
+        {
+            path: "/signin/success",
+            name: "signinSuccess",
+            component: SuccessView,
+        },
+        // piecemake
+        {
+            path: "/piece",
+            name: "piecemake",
+            component: PieceMakeView,
+        },
+        {
+            path: "/piece/image",
+            name: "pieceimage",
+            component: PieceImageView,
+        },
+        {
+            path: "/piece/image/crop",
+            name: "pieceimagecrop",
+            component: ImageCropView,
+        },
+        {
+            path: "/piece/info",
+            name: "pieceinfo",
+            component: PieceInfoView,
+        },
+        {
+            path: "/piece/comment",
+            name: "piececomment",
+            component: PieceCommentView,
+        },
+        {
+            path: "/piece/front",
+            name: "piecefront",
+            component: PieceFrontView,
+        },
+        {
+            path: "/piece/background",
+            name: "piecebackground",
+            component: PieceBackgroundView,
+        },
+        {
+            path: "/piece/save",
+            name: "piecesave",
+            component: PieceSaveView,
+        },
+        // piecelist
+        {
+            path: "/piecelist/main",
+            name: "piecelistmain",
+            component: PieceListMainView,
+        },
+        {
+            path: "/piecelist/cake",
+            name: "cakelist",
+            component: CakeListView,
+        },
+        {
+            path: "/piecelist/cake/:cakeId",
+            name: "cakeDetail",
+            component: CakeDetailView,
+        },
+        {
+            path: "/piecelist",
+            name: "pieceList",
+            component: PieceListView,
+        },
+        {
+            path: "/piecelist/my/cal",
+            name: "pieceCalendar",
+            component: PieceCalendarView,
+        },
+        {
+            path: "/piecelist/my/list",
+            name: "pieceListMy",
+            component: PieceListMyView,
+        },
+        {
+            path: "/piecelist/heart/list",
+            name: "pieceListHeart",
+            component: PieceListHeartView,
+        },
+        {
+            path: "/piecelist/:pieceId",
+            name: "pieceDetail",
+            component: PieceDetailView,
+        },
+        {
+            path: "/piecelist/record/:pieceId",
+            name: "recordDetail",
+            component: RecordDetailView,
+        },
+        {
+            path: "/piecelist/search/:keyword",
+            name: "piecesearch",
+            component: PieceSearchView,
+        },
+        {
+            path: "/piecelist/search/my/:keyword",
+            name: "piecemysearch",
+            component: PieceMySearchView,
+        },
+        // chat
+        {
+            path: "/chatroom",
+            name: "chatRoom",
+            component: ChatRoomView,
+        },
+        {
+            path: "/chat",
+            name: "chat",
+            component: ChatConversationView,
+        },
+        // mypage
+        {
+            path: "/mypage",
+            name: "mypage",
+            component: MypageView,
+        },
+        {
+            path: "/mypage/nickname",
+            name: "nickname",
+            component: NicknameView,
+        },
+        {
+            path: "/mypage/password",
+            name: "password",
+            component: PasswordView,
+        },
+        {
+            path: "/mypage/profileimg",
+            name: "profileImg",
+            component: ProfileImgView,
+        },
+        {
+            path: "/mypage/label",
+            name: "label",
+            component: LabelView,
+        },
+        {
+            path: "/mypage/piece",
+            name: "piece",
+            component: PieceStatisticsView,
+        },
+        {
+            path: "/mypage/consume",
+            name: "consume",
+            component: ConsumeStatisticsView,
+        },
+        {
+            path: "/mypage/piece",
+            name: "piecestatistics",
+            component: PieceStatisticsView,
+        },
+        // cake
+        {
+            path: "/cake",
+            name: "cakeList",
+            component: CakeListView,
+        },
+        {
+            //   path: "/views/:id",
+            path: "/detail/:concertId/:cultureId",
+            name: "CakeDetail",
+            component: CakeDetailView,
+            rops: true,
+        },
+    ],
 });
 
 // navigation guard
 router.beforeEach((to, from, next) => {
     window.scrollTo(0, 0);
     // token이 없을 때
-    if (
-        localStorage.getItem("accessToken") == "" ||
-        localStorage.getItem("accessToken") == null
-    ) {
+    if (localStorage.getItem("accessToken") == "" || localStorage.getItem("accessToken") == null) {
         if (to.name == "main" || to.name == "login" || to.name == "signin") {
             next();
         } else {
-            window.alert("로그인이 필요합니다.");
+            // window.alert("로그인이 필요합니다.");
             next({ name: "login" });
         }
     } else {

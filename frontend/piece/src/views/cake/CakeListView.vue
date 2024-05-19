@@ -17,23 +17,24 @@
         />
     </div>
 
-    <!-- navbar -->
-    <div class="cakelistview-tab-navigation">
-        <div class="cakelistview-tab-menu" ref="tabMenu">
-            <FilterItem
-                v-for="(item, index) in filterItems"
-                class="cakelistview-tab-btn"
-                :key="index"
-                :labelType="item.labelType"
-                :title="item.title"
-                :isSelect="item.isSelect"
-                @click="handleItemSelectClick(index)"
-            ></FilterItem>
+    <!-- filter -->
+    <div class="cakelistview-scroll-container">
+        <div class="cakelistview-tab-navigation">
+            <div class="cakelistview-tab-menu" ref="tabMenu">
+                <FilterItem
+                    v-for="(item, index) in filterItems"
+                    class="cakelistview-tab-btn"
+                    :key="index"
+                    :labelType="item.labelType"
+                    :title="item.title"
+                    :isSelect="item.isSelect"
+                    @click="handleItemSelectClick(index)"
+                ></FilterItem>
+            </div>
         </div>
     </div>
 
     <!-- list -->
-    <div class="cakelistview-scroll-container">
         <div class="cakelistview-list-container" ref="listContainer">
             <div class="cakelistview-list-grid">
                 <div
@@ -54,7 +55,8 @@
                 </div>
             </div>
         </div>
-    </div>
+
+    <!-- </div> -->
 </template>
 
 <script setup>
@@ -69,7 +71,7 @@ import TextInput from "@/components/text/OnlyInput.vue";
 import InputPreview from "@/components/text/InputPreview.vue";
 
 const commonStore = useCommonStore();
-const store = useCakeStore();
+const store = useCakeStore(); 
 const detailStore = useCakeDetailStore();
 
 const filteredCakeList = computed(() => store.getCakeListFiltered);
@@ -220,30 +222,30 @@ const handleScroll = async () => {
 };
 
 onMounted(async () => {
-  commonStore.headerTitle = "케이크 모아보기";
-  commonStore.headerType = "header2";
+    commonStore.headerTitle = "케이크 모아보기";
+    commonStore.headerType = "header2";
 
-  await store.findCakeList(selectedOptionCakeList.value, 10);
+    await store.findCakeList(selectedOptionCakeList.value, 10);
 
-  const index = filterItems.value.findIndex(
-    (item) => item.labelType === selectedOptionCakeList.value
-  );
+    const index = filterItems.value.findIndex(
+        (item) => item.labelType === selectedOptionCakeList.value
+    );
 
-  if (index !== -1) {
-    filterItems.value[0].isSelect = false;
-    filterItems.value[index].isSelect = true;
-  }
+    if (index !== -1) {
+        filterItems.value[0].isSelect = false;
+        filterItems.value[index].isSelect = true;
+    }
 
-  if (index === 5) {
-    tabMenu.value.scrollLeft = 1000;
-  }
+    if (index === 5) {
+        tabMenu.value.scrollLeft = 1000;
+    }
 
-  if (tabMenu.value) {
-    tabMenu.value.addEventListener("mousedown", handleMouseDown);
-    tabMenu.value.addEventListener("mousemove", handleMouseMove);
-  }
-  document.addEventListener("mouseup", handleMouseUp);
-  listContainer.value.addEventListener("scroll", handleScroll);
+    if (tabMenu.value) {
+        tabMenu.value.addEventListener("mousedown", handleMouseDown);
+        tabMenu.value.addEventListener("mousemove", handleMouseMove);
+    }
+    document.addEventListener("mouseup", handleMouseUp);
+    listContainer.value.addEventListener("scroll", handleScroll);
 });
 
 
@@ -255,79 +257,87 @@ onBeforeUnmount(() => {
     document.removeEventListener("mouseup", handleMouseUp);
     listContainer.value.removeEventListener("scroll", handleScroll);
 });
+
 </script>
 
-
 <style>
-    .cakelistview-scroll-container {
-        position: relative;
-        transition: 0.5s ease;
-        margin-bottom: 2rem;
-    }
+/* filter */
+.cakelistview-scroll-container {
+    position: relative;
+    /* width: 450px; */
+    transition: 0.5s ease;
+    margin-bottom: 1rem;
+}
 
-    .cakelistview-tab-navigation {
-        position: relative;
-        max-width: fit-content;
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+.cakelistview-tab-navigation {
+    position: relative;
+    max-width: fit-content;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    .cakelistview-tab-menu {
-        list-style: none;
-        white-space: nowrap;
-        overflow-x: auto;
-        user-select: none;
-        scroll-behavior: smooth;
-    }
+/* search */
+.cakelistview-search-area {
+    width: 15rem;
+    margin-bottom: 1rem;
+    align-self: end;
+}
 
-    /* search */
-    .cakelistview-search-area {
-        width: 15rem;
-        margin-bottom: 1rem;
-        align-self: end;
-    }
+.cakelistview-tab-menu {
+    list-style: none;
+    white-space: nowrap;
+    overflow-x: auto;
+    user-select: none;
+    scroll-behavior: smooth;
+}
 
-    .cakelistview-tab-menu.dragging {
-        scroll-behavior: unset;
-        cursor: grab;
-    }
+.cakelistview-tab-menu.dragging {
+    scroll-behavior: unset;
+    cursor: grab;
+}
 
-    .cakelistview-tab-menu::-webkit-scrollbar {
-        display: none;
-    }
+.cakelistview-tab-menu::-webkit-scrollbar {
+    display: none;
+}
 
-    .cakelistview-tab-btn {
-        display: inline-block;
-        margin: 0 0.2rem;
-        cursor: pointer;
-        user-select: none;
-        transition: 0.3s ease;
-    }
+.cakelistview-tab-btn {
+    display: inline-block;
+    margin: 0 0.2rem;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.3s ease;
+}
 
-    .cakelistview-tab-menu.dragging .tab-btn {
-        pointer-events: none;
-    }
+.cakelistview-tab-menu.dragging .tab-btn {
+    pointer-events: none;
+}
 
-    .cakelistview-list-container {
-        height: 80vh;
-        overflow-y: auto;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
+/* list */
+.cakelistview-list-container {
+    height: 80vh;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
 
-    .cakelistview-list-container::-webkit-scrollbar {
-        display: none;
-    }
+.cakelistview-list-container::-webkit-scrollbar {
+    display: none;
+}
 
-    .cakelistview-list-grid {
-        display: flex;
-        flex-wrap: wrap;
-    }
+.cakelistview-list-grid {
+    justify-items: left;
+}
 
-    .cakelistview-list-item {
-        width: auto;
-        cursor: pointer;
-    }
+.cakelistview-list-item {
+    width: auto;
+    cursor: pointer;
+}
+
+.cakelistview-list-noitem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 </style>

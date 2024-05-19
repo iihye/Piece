@@ -359,16 +359,18 @@ function hexToRGBA(hex, opacity) {
 onMounted(() => {
     drawCanvas(); // 컴포넌트가 마운트된 후 최초로 캔버스 그리기
     watchEffect(drawCanvas);
+
     // 헤더정보 입력
     commonStore.headerTitle = "조각 만들기";
     commonStore.headerType = "header2";
+    commonStore.setProgress(5);
 });
 
 // 다음단계버튼
 const next = () => {
     const imagefile = canvas.toDataURL();
     pieceStore.setBase64BackImage(imagefile);
-    console.log(imagefile);
+    // console.log(imagefile);
     router.push('/piece/save');
 }
 

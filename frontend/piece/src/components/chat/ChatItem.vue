@@ -6,16 +6,19 @@
             alt="image"
         />
 
-        <div class="chatitem-sender-content">
-            <div class="chatitem-sender-info">
-                <div class="chatitem-sender-label">{{ props.senderLabel }}</div>
-                <div class="chatitem-sender-nickname">
+        <!-- 메시지 관련 부분 시작-->
+        <div class="chatitem-senderview-container">
+            <div class="chatitem-userHeader">
+                <div class="chatitem-userTitle">
+                    {{ props.senderLabel }}
+                </div>
+                <div class="chatitem-userName">
                     {{ props.senderNickname }}
                 </div>
             </div>
-            <div class="chatitem-sender-message">
-                {{ props.content }}
-            </div>
+            <div class="chatitem-sender-container">
+                <div class="chatitem-sender-content">{{ props.content }}</div>
+            </div> 
         </div>
     </div>
 </template>
@@ -50,7 +53,6 @@ const props = defineProps({
     display: flex;
     justify-self: center;
     align-items: top;
-    padding: 0.2rem;
     margin-bottom: 0.6rem;
     user-select: none;
 }
@@ -63,32 +65,65 @@ const props = defineProps({
     object-fit: cover;
 }
 
-.chatitem-sender-content {
-    display: flex;
-    flex-direction: column;
-    margin-left: 0.6rem;
+.chatitem-sender-background{
+    width: 100%;
+    background-color: var(--sub-color);
+    border-radius: 0.4rem;
 }
 
-.chatitem-sender-info {
+.chatitem-sender-message {
+    display: inline;
+    overflow-wrap: break-word;
+    padding: 0.8rem 0.8rem 0.8rem 0.8rem;
+    font-family: "Regular";
+    font-size: 1rem;
+    color: var(--black-color);
+    line-height: 1.2rem;
+}
+
+.chatitem-sender-msg{
+    display: flex;
+    background-color: red;
+}
+
+.chatitem-senderview-container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.4rem;
+}
+
+/* 칭호+이름 */
+.chatitem-userHeader {
     display: flex;
     justify-self: row;
     margin-bottom: 0.4rem;
 }
 
-.chatitem-sender-label {
+/* 칭호 */
+.chatitem-userTitle {
     font-family: "bold";
     font-size: 0.8rem;
     color: var(--main-color);
     margin-right: 0.4rem;
 }
 
-.chatitem-sender-nickname {
+/* 이름 */
+.chatitem-userName {
     font-family: "Semi";
     font-size: 0.8rem;
     color: var(--gray2-color);
 }
 
-.chatitem-sender-message {
+/* 메시지+시간 */
+.chatitem-sender-container{
+    display: flex;
+    justify-content: left;
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* 메시지 */
+.chatitem-sender-content{
     max-width: 14rem;
     overflow-wrap: break-word;
     padding: 0.4rem;
@@ -99,5 +134,15 @@ const props = defineProps({
     font-size: 1rem;
     color: var(--black-color);
     line-height: 1.2rem;
+}
+
+/* 시간 */
+.chatitem-sender-time{
+    font-family: "Regular";
+    font-size: 0.8rem;
+    color: var(--gray2-color);
+    margin-left: 0.2rem;
+    display: flex;
+    align-self: flex-end;
 }
 </style>
