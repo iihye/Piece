@@ -50,6 +50,14 @@ const changeYear = (change) => {
     margin: 0 1rem 0 1rem;
 }
 
+.yearselector-icon {
+    cursor: pointer;
+}
+
+.yearselector-icon:hover {
+    color: var(--main-color);
+}
+
 .year-selector button {
     margin: 0 5px;
 }
