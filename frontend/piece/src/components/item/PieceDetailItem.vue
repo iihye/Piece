@@ -100,8 +100,16 @@ function handleTouchStart(event) {
 function handleTouchMove(event) {
     event.preventDefault();
     const touch = event.touches[0];
-    const target = event.currentTarget;
-    transformCard(touch, touchStartX, touchStartY, target);
+    const rect = event.currentTarget.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const clientX = touch.clientX - rect.left;
+    const clientY = touch.clientY - rect.top;
+    const deltaX = clientX - centerX;
+    const deltaY = clientY - centerY;
+    const rotateY = deltaX / 20; // x축 회전 각도 조절
+    const rotateX = -deltaY / 20; // y축 회전 각도 조절
+    event.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 }
 
 function transformCard(event, touchStartX = 0, touchStartY = 0, target = null) {
@@ -137,6 +145,7 @@ function handleMouseOut(event) {
     align-items: center;
     justify-content: center;
     width: 100%;
+    -webkit-tap-highlight-color: transparent; /* 모바일 클릭 효과 제거 */
 }
 
 .pieceDetailItem-flip-card {
