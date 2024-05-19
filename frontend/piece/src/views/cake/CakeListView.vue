@@ -63,6 +63,7 @@ const cakeList = computed(() => store.getcakeList);
 const filteredCakeList = computed(() => store.getCakeListFiltered);
 const selectedOptionCakeList = computed(() => store.getSelectOptionCakeList);
 
+
 const handleItemClick = (item) => {
     router.push({
         name: "CakeDetail",

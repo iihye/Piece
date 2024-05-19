@@ -1,47 +1,38 @@
 <template>
     <div class="mainview-main-container">
         <div class="mainview-service-container">
-            <img
-                class="mainview-service-image"
-                src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Shortcake.png"
-                alt="Shortcake"
-            />
+            <TutorialModal v-if="isTutorialModal && isLogin" />
+            <!-- <NothingPiece></NothingPiece>
 
-            <div class="mainview-service-content">
-                케이크의 마지막 조각을 <br />감상평으로 채워주세요!
-            </div>
+            <PieceRecentList class="mainview-recent"></PieceRecentList> -->
         </div>
     </div>
+    <RouterLink v-if="!isLogin" class="mainview-login-router" :to="{ name: 'login' }">로그인</RouterLink>
 
-    <!-- <div class="mainview-sub-container">
-        <img
-            class="mainview-sub-image"
-            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Shortcake.png"
-            alt="Shortcake"
-        />
-        <div class="mainview-sub-content">지금 조각이 완성되고 있어요!</div>
-    </div> -->
-
-    <RouterLink v-if="!isLogin" class="mainview-login-router" :to="{ name: 'login' }"
-        >로그인</RouterLink
-    >
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
+import TutorialModal from "@/components/modal/TutorialModal.vue";
+import { isTutorialModal } from '@/stores/util';
+import { useUserStore } from "@/stores/user";
+// import PieceRecentList from '@/components/main/PieceRecentList.vue';
+// import NothingPiece from '@/components/main/NothingPiece.vue';
 
+const userStore = useUserStore();
 const commonStore = useCommonStore();
 const isLogin = ref(false);
 
-onMounted(() => {
+onMounted(async () => {
     commonStore.headerTitle = "piece";
     commonStore.headerType = "header1";
 
-    if(localStorage.getItem("accessToken")) {
+    if (localStorage.getItem("accessToken")) {
         isLogin.value = true;
     }
 });
+
 </script>
 
 <style>
@@ -68,19 +59,6 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.mainview-service-image {
-    width: 6rem;
-    height: 6rem;
-    margin-bottom: 2rem;
-}
-
-.mainview-service-content {
-    font-family: "Semi";
-    font-size: 1.2rem;
-    text-align: center;
-    user-select: none;
 }
 
 .mainview-sub-container {

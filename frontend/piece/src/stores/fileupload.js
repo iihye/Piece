@@ -7,7 +7,7 @@ export const useFileUploadStore = defineStore("fileupload", () => {
     const getPreSignedUrl = async (file) => {
         console.log("=====getPreSignedUrl=====");
         try {
-            // console.log('fileName is ', file.name);
+            console.log('fileName is ', file.name);
             const response = await axios.get(
                 `${
                     import.meta.env.VITE_REST_PIECE_API
@@ -16,7 +16,7 @@ export const useFileUploadStore = defineStore("fileupload", () => {
             const presignedURL = response.data.data[0];
             const s3path = response.data.data[1];
 
-            // console.log('presignedURL is ', presignedURL, ' and s3path is ', s3path);
+            console.log('presignedURL is ', presignedURL, ' and s3path is ', s3path);
 
             const urlands3path = {
                 presignedURL: presignedURL,
@@ -40,9 +40,8 @@ export const useFileUploadStore = defineStore("fileupload", () => {
     async function putFileUpload(presignedURL, file) {
         console.log("=====putFileUpload=====");
         try {
-            console.log('file: ', file)
             console.log('presignedURL: ', presignedURL);
-            console.log('fileType: ',file.type)
+            console.log('file: ', file)
             const response = await axios.put(presignedURL, file, {
                 headers: {
                     "Content-Type": file.type,

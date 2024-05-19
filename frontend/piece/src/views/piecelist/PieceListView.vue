@@ -2,52 +2,32 @@
     <div class="piecelistview-main-container">
         <!-- search -->
         <div class="piecelistview-search-container">
-            <SearchInput
-                :handlePrevClick="handlePrev"
-                :handleSearchClick="handleSearch"
-                @searchContent="handleSearchContent"
-            ></SearchInput>
+            <SearchInput :handlePrevClick="handlePrev" :handleSearchClick="handleSearch"
+                @searchContent="handleSearchContent"></SearchInput>
         </div>
 
         <!-- filter -->
         <div class="piecelistview-scroll-container">
             <div class="piecelistview-tab-navigation">
                 <div class="piecelistview-tab-menu" ref="tabMenu">
-                    <FilterItem
-                        v-for="(item, index) in filterItems"
-                        class="piecelistview-tab-btn"
-                        :key="index"
-                        :labelType="item.labelType"
-                        :title="item.title"
-                        :isSelect="item.isSelect"
-                        @click="handleItemSelectClick(index)"
-                    ></FilterItem>
+                    <FilterItem v-for="(item, index) in filterItems" class="piecelistview-tab-btn" :key="index"
+                        :labelType="item.labelType" :title="item.title" :isSelect="item.isSelect"
+                        @click="handleItemSelectClick(index)"></FilterItem>
                 </div>
             </div>
         </div>
 
         <!-- list -->
-        <div
-            v-if="!piecelistList || filteredList.length === 0"
-            class="piecelistview-list-noitem"
-        >
+        <div v-if="!piecelistList || filteredList.length === 0" class="piecelistview-list-noitem">
             <NoItem :content="'모아볼 조각이 없어요'"></NoItem>
         </div>
         <div v-else>
             <div class="piecelistview-list-container">
                 <div class="piecelistview-list-grid">
-                    <div
-                        v-for="(item, index) in filteredList"
-                        :key="index"
-                        class="piecelistview-list-item"
-                    >
-                        <ListImageItem
-                            :pieceId="item.pieceId"
-                            :performanceType="item.performanceType"
-                            :frontImg="item.frontImg"
-                            :title="item.title"
-                            @click="handleItemClick(item)"
-                        ></ListImageItem>
+                    <div v-for="(item, index) in filteredList" :key="index" class="piecelistview-list-item">
+                        <ListImageItem :pieceId="item.pieceId" :performanceType="item.performanceType"
+                            :frontImg="item.frontImg" :title="item.title" @click="handleItemClick(item)">
+                        </ListImageItem>
                     </div>
                 </div>
             </div>
@@ -56,7 +36,7 @@
 </template>
 
 <script setup>
-import router from "@/router";
+import { useRouter } from "vue-router";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useCommonStore } from "@/stores/common";
 import { usePiecelistStore } from "@/stores/piecelist";
@@ -65,6 +45,7 @@ import FilterItem from "@/components/item/FilterItem.vue";
 import ListImageItem from "@/components/item/ListImageItem.vue";
 import NoItem from "@/components/item/NoItem.vue";
 
+const router = useRouter();
 const commonStore = useCommonStore();
 const store = usePiecelistStore();
 
@@ -76,13 +57,13 @@ const selectedOption = computed(() => store.getSelectOption);
 // search
 // modal에서 prev 클릭했을 때 실행되는 함수
 const handlePrev = () => {
-    alert("이전 클릭");
+    router.go(-1);
 };
 
 // modal에서 search 클릭했을 때 실행되는 함수
 const handleSearch = () => {
-    alert("서비스 준비중입니다!");
-    // console.log(searchValue.value);
+    console.log(searchValue.value);
+    router.push({ name: "piecesearch", params: { keyword: searchValue.value } });
 };
 
 const handleSearchContent = (value) => {
@@ -197,11 +178,11 @@ onBeforeUnmount(() => {
     min-height: calc(100vh - 7.25rem);
 }
 
-.piecelistview-main-container > :first-child {
+.piecelistview-main-container> :first-child {
     flex: 0 0 auto;
 }
 
-.piecelistview-main-container > :not(:first-child) {
+.piecelistview-main-container> :not(:first-child) {
     flex: 1;
 }
 

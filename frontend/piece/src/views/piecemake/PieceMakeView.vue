@@ -3,6 +3,8 @@
         <div class="piecemakeview-main-title">조각을 만들어볼까요?</div>
         <div class="piecemakeview-sub-container">
             <!-- image -->
+            <div class="piecemakeview-image-content" v-html="curContent"></div>
+
             <div class="piecemakeview-image-container">
                 <!-- prev button -->
                 <!-- <font-awesome-icon
@@ -14,11 +16,27 @@
                 <!-- album -->
                 <div class="piecemakeview-image-album">
                     <div class="images">
-                        <img
+                        <!-- <img
                             class="image"
                             v-for="(imageUrl, index) in imageUrls"
                             :key="index"
                             :src="imageUrl"
+                        /> -->
+                        <img
+                            class="image"
+                            src="@/assets/piecemake/sample1.png"
+                        />
+                        <img
+                            class="image"
+                            src="@/assets/piecemake/sample2.png"
+                        />
+                        <img
+                            class="image"
+                            src="@/assets/piecemake/sample3.png"
+                        />
+                        <img
+                            class="image"
+                            src="@/assets/piecemake/sample4.png"
                         />
                     </div>
 
@@ -44,7 +62,6 @@
                 /> -->
             </div>
 
-            <div class="piecemakeview-image-content" v-html="curContent"></div>
         </div>
 
         <!-- button -->
@@ -82,13 +99,13 @@ let IMAGE_WIDTH = 0;
 let images = null;
 const curContent = computed(() => {
     if (curPos.value == 0) {
-        return "앞면에 들어갈 이미지를<br>선택해주세요";
+        return "🖼️ 앞면에 들어갈 이미지를<br>선택해주세요";
     } else if (curPos.value == 1) {
-        return "조각을 완성할 기본 정보를<br>입력해주세요";
+        return "📜 만드는 조각의 정보를<br>입력해주세요";
     } else if (curPos.value == 2) {
-        return "별점과 함께 감상평을<br>남겨주세요";
+        return "🌟 별점과 함께 감상평을<br>남겨주세요";
     } else {
-        return "레이아웃과 AI로 생성된<br>배경으로 조각을 완성해주세요";
+        return "🍰 레이아웃과 AI로 생성된<br>배경으로 조각을 완성해주세요";
     }
 });
 
@@ -126,6 +143,7 @@ const touchEnd = (event) => {
 onMounted(async () => {
     commonStore.headerTitle = "조각 만들기";
     commonStore.headerType = "header2";
+    commonStore.setProgress(0);
 
     // slider
     IMAGE_WIDTH = getImageWidth.value;
@@ -156,7 +174,6 @@ onMounted(async () => {
 .piecemakeview-sub-container {
     width: 100%;
     height: 40rem;
-    background-color: var(--sub2-color);
 }
 
 .piecemakeview-button-container {
@@ -171,8 +188,8 @@ onMounted(async () => {
     background-color: var(--main-color);
     border: 0;
     border-radius: 0.625rem;
-    height: 2.5rem;
-    width: 7.5rem;
+    width: 21.25rem;
+    height: 4rem;
     color: var(--white-color);
     font-family: "Semi";
     font-size: 1rem;
@@ -199,10 +216,11 @@ onMounted(async () => {
 /* album */
 .piecemakeview-image-album {
     width: 18rem;
-    height: 25rem;
+    height: 28rem;
     min-width: 15rem;
     min-height: 18rem;
     overflow: hidden;
+    border: 1px solid var(--main-color);
 }
 
 .images {
@@ -210,6 +228,7 @@ onMounted(async () => {
     display: flex;
     height: auto;
     transition: transform 0.5s;
+    margin-bottom: 2rem;
 }
 
 .image {
@@ -233,8 +252,8 @@ onMounted(async () => {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--white-color);
-    border: 1px solid var(--gray-color);
+    background-color: var(--gray-color);
+    border: 1px solid var(--white-color);
     margin-right: 12px;
 }
 
@@ -243,17 +262,18 @@ onMounted(async () => {
 }
 
 .image-circle.activeImg {
-    background-color: var(--gray2-color);
+    background-color: var(--main-color);
 }
 
 /* content */
 .piecemakeview-image-content {
-    font-family: "Semi";
+    font-family: "Bold";
     font-size: 1.4rem;
     line-height: 1.8rem;
-    color: var(--black-color);
-    margin: 1rem;
+    color: var(--main-color);
+    margin: 1rem 0 0 0;
     user-select: none;
     padding: 0 1rem 0 1rem;
+    text-align: center;
 }
 </style>

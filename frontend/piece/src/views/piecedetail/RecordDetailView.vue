@@ -374,8 +374,7 @@ onMounted(async () => {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--white-color);
-    border: 1px solid var(--gray-color);
+    background-color: var(--gray-color);
     margin-right: 12px;
 }
 
@@ -384,7 +383,7 @@ onMounted(async () => {
 }
 
 .image-circle.activeImg {
-    background-color: var(--gray2-color);
+    background-color: var(--main-color);
 }
 
 /* 사진 없을 때 */

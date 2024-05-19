@@ -90,19 +90,29 @@
             </div> -->
         </div>
     </div>
+
+    <!-- modal -->
+    <ImageSuccessModal
+        v-if="isLogoutModal"
+        :modalTitle="'로그아웃 되었어요<br>오늘도 행복한 시간 보내세요!'"
+        :handleSuccessClick="handleSuccessClick"
+    />
 </template>
 
 <script setup>
 import router from "@/router";
-import { onMounted, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useCommonStore } from "@/stores/common";
 import IconText from "@/components/text/IconText.vue";
 import axios from "axios";
+import ImageSuccessModal from "@/components/modal/ImageSuccessModal.vue";
 
 const commonStore = useCommonStore();
 
 const loginUserInfo = computed(() => commonStore.getLoginUserInfo);
 const loginUserLabel = computed(() => commonStore.getLoginUserLabel);
+const isLogoutModal = ref(false);
+
 function handleMypiece() {
     router.push({ name: "pieceListMy" });
 }
@@ -136,13 +146,17 @@ function handleConsumeClick() {
 }
 
 function handleLogoutClick() {
-    alert("로그아웃 클릭");
+    isLogoutModal.value = true;
 
     // 로그아웃 성공시에 실행
     commonStore.loginUser = "";
     commonStore.isLogin = false;
     localStorage.clear();
     axios.defaults.headers.common["Authorization"] = undefined;
+}
+
+function handleSuccessClick() {
+    isLogoutModal.value = false;
     router.push({ name: "main" });
 }
 
