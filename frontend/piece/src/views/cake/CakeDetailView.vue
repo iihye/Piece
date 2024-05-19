@@ -80,7 +80,7 @@
         class="cakedetailview-button"
         :roundButtonContent="'채팅 참여하기'"
         :roundButtonFunction="handleChatParticipate"
-        :isRoundDisable="false"
+        :isRoundDisable="true"
     ></RoundButton>
     </div>
 </template>
@@ -88,16 +88,23 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
 import { useCakeDetailStore } from "@/stores/cakedetail";
 import { useUserStore } from "@/stores/user";
+import { useChatRoomStore } from "@/stores/chatroom";
+import { useWebSocketStore } from "@/stores/websocket";
 import ChatItem from "@/components/chat/ChatItem.vue";
 import RoundButton from "@/components/button/RoundButton.vue";
 
 const commonStore = useCommonStore();
 const cakeDetailStore = useCakeDetailStore();
 const userStore = useUserStore();
+const chatRoomStore = useChatRoomStore();
+const webSocketStore = useWebSocketStore();
+
 const route = useRoute();
+const router = useRouter();
 
 const concertId = route.params.concertId;
 const cultureId = route.params.cultureId;
@@ -139,14 +146,17 @@ const handleHeartClick = async () => {
 };
 
 const handleChatParticipate = async () => {
-    alert("채팅 참여하기 클릭");
+    console.log("채팅 참여하기 클릭");
 
-    try {
-        await cakeDetailStore.joinChatRoom(data.value.cultureId);
-        // TODO : 채팅방 이동
-    } catch (error) {
-        console.error("Failed to join chat room", error);
-    }
+    const chatRoomId = computed(() => cakeDetailStore.getChatRoomId);
+    const userId = Number(localStorage.getItem("userId"));
+    console.log(typeof userId);
+
+    chatRoomStore.joinChatRoom(chatRoomId.value, userId);
+    chatRoomStore.getChatRoomList(0);
+    router.push({ name: "chatRoom" });
+
+    // TODO: 채팅방 직접 참여하기
 };
 
 onMounted(async () => {
@@ -165,18 +175,17 @@ onMounted(async () => {
     }
     
     await cakeDetailStore.fetchHeartCount(cultureId);
-    await cakeDetailStore.findCakeChatList(concertId);
+    // await cakeDetailStore.findCakeChatList(concertId);
 
     data.value = {
         ...cakeDetailStore.cakeDetail,
     };
     cakeHeartState.value = userStore.getHeartState(cultureId) || cakeDetailStore.cakeDetail.isHearted;
+
+    // 채팅 조회
+    await cakeDetailStore.findCultureId(cultureId);
 });
 </script>
-
-
-
-
 
 <style>
 /* image */
