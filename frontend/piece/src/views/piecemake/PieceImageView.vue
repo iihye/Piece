@@ -86,6 +86,7 @@
                     :roundButtonContent="'다음'"
                     :isRoundDisable="isRoundDisable"
                     :roundButtonFunction="makeBackImage"
+                    class="piecemake-round-button"
                 ></RoundButton>
             </RouterLink>
         </div>
@@ -253,14 +254,19 @@ onMounted(() => {
 })
 </script>
 
-<style>
+<style scoped>
 .pieceimageview-container {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 9.25rem);
     padding-top: 1rem;
     padding-bottom: 1rem;
-    margin: 0 1rem 0 1rem;
+    margin: 0 0.25rem 0 0.25rem;
+    overflow-y: scroll;
+}
+
+.pieceimageview-container::-webkit-scrollbar {
+    display: none;
 }
 
 /* title */
@@ -368,10 +374,11 @@ onMounted(() => {
 
 /* button */
 .piecemake-button-container {
-    position: fixed;
+    /* position: fixed;
     left: 0;
     right: 0;
-    bottom: 4rem;
-    text-align: center;
+    bottom: 4rem; */
+    align-self: center;
+    margin-top: 1rem;
 }
 </style>
