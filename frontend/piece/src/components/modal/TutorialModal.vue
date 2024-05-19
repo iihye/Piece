@@ -12,11 +12,19 @@
             <div class="tutorial-header-content">아이콘을 넘기며 다음 내용을 확인해주세요</div>
 
             <div class="tutorial-content">
-                <div class="tutorial-image-album">
-                    <div class="tutorialimages">
-                        <img class="tutorialimage" v-for="(imageUrl, index) in imageUrls" :key="index"
-                            :src="imageUrl" />
+                <div class="tutorial-slider-buttons">
+                    <button class="tutorial-prev-button" @click="prev">
+                        <font-awesome-icon :icon="['fas', 'chevron-left']" :style="leftButtonStyle" />
+                    </button>
+                    <div class="tutorial-image-album">
+                        <div class="tutorialimages">
+                            <img class="tutorialimage" v-for="(imageUrl, index) in imageUrls" :key="index"
+                                :src="imageUrl" />
+                        </div>
                     </div>
+                    <button class="tutorial-next-button" @click="next">
+                        <font-awesome-icon :icon="['fas', 'chevron-right']" :style="rightButtonStyle" />
+                    </button>
                 </div>
                 <div class="tutorial-content-explain" v-html="curContent"></div>
             </div>
@@ -69,6 +77,7 @@ const startX = ref(0);
 const endX = ref(0);
 let IMAGE_WIDTH = 0;
 let tutorialimages = null;
+
 const curContent = computed(() => {
     if (curPos.value == 0) {
         isRoundDisable.value = false;
@@ -86,6 +95,16 @@ const getImageWidth = computed(() => {
     const imgWidth = document.querySelector(".tutorialimages").offsetWidth;
     return imgWidth;
 });
+
+const leftButtonStyle = computed(() => ({
+    color: curPos.value === 0 ? '#ffe3e1' : '#ff9494',
+    cursor: curPos.value === 0 ? 'default' : 'pointer'
+}));
+
+const rightButtonStyle = computed(() => ({
+    color: curPos.value === imageUrls.value.length - 1 ? '#ffe3e1' : '#ff9494   ',
+    cursor: curPos.value === imageUrls.value.length - 1 ? 'default' : 'pointer'
+}));
 
 const prev = () => {
     if (curPos.value > 0) {
@@ -217,6 +236,20 @@ const tutorialConfirm = () => {
     align-items: center;
     padding-top: 2rem;
     padding-bottom: 2rem;
+}
+
+.tutorial-slider-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.tutorial-prev-button,
+.tutorial-next-button {
+    background-color: transparent;
+    border: none;
+    font-size: 2rem;
+    margin-top: 1rem;
+    cursor: pointer;
 }
 
 .tutorial-image-album {
