@@ -247,6 +247,7 @@ const handleHeartClick = () => {
         store.addPieceDetailHeart(piecelistDetail.value.pieceId);
         store.findPieceDetailHeart(piecelistDetail.value.pieceId);
         heartSuccessModal.value = true;
+        triggerBounce();
 
         isFading.value = true;
         setTimeout(() => {
@@ -255,6 +256,15 @@ const handleHeartClick = () => {
 
         isFading.value = false;
     }
+};
+
+/* 찜할 때 바운스 효과 추가 */
+const triggerBounce = () => {
+    const heartIcon = document.querySelector('.pieceDetailView-heart-icon');
+    heartIcon.classList.add('bounce');
+    setTimeout(() => {
+        heartIcon.classList.remove('bounce');
+    }, 1000);
 };
 
 const handleBackListClick = () => {
