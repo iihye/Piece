@@ -46,6 +46,7 @@
 import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { usePieceStore } from "@/stores/piece.js";
+import { usePieceMakeStore } from "@/stores/piecemake.js";
 import PieceDetailView from "@/components/item/PieceDetailItem.vue";
 import ImageSuccessModal from "@/components/modal/ImageSuccessModal.vue";
 import { useCommonStore } from "@/stores/common.js";
@@ -55,6 +56,7 @@ import LoadingModal from "@/components/modal/LoadingModal.vue";
 import JSConfetti from 'js-confetti';
 
 const pieceStore = usePieceStore();
+const pieceMakeStore = usePieceMakeStore();
 const commonStore = useCommonStore();
 const fileUploadStore = useFileUploadStore();
 const router = useRouter();
@@ -101,9 +103,6 @@ const savePiece = async () => {
         await pieceStore.savePiece();
         isLoading.value = false; // 로딩 종료
         fileUploadSuccessModal.value = true;
-
-        // 상태초기화
-        pieceStore.resetPieceValue();
     } catch (error) {
         console.error("사진 저장 중 에러 발생 :", error);
         isLoading.value = false; // 로딩 종료
@@ -127,6 +126,11 @@ function base64toFile(base_data, filename) {
 
 const handleUploadSuccess = () => {
     fileUploadSuccessModal.value = false;
+
+    // 상태초기화
+    pieceStore.resetPieceValue();
+    pieceMakeStore.resetPieceMakeValue();
+    
     router.push({ name: "piecelistmain" });
 };
 const handleUploadFail = () => {
