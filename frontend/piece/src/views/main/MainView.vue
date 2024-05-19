@@ -21,9 +21,13 @@ import { useUserStore } from "@/stores/user";
 import PieceRecentList from '@/components/main/PieceRecentList.vue';
 import NothingPiece from '@/components/main/NothingPiece.vue';
 import LastYearPiece from '@/components/main/LastYearPiece.vue';
+import { usePieceStore } from "@/stores/piece.js";
+import { usePieceMakeStore } from "@/stores/piecemake.js";
 
 const userStore = useUserStore();
 const commonStore = useCommonStore();
+const pieceStore = usePieceStore();
+const pieceMakeStore = usePieceMakeStore();
 const isLogin = ref(false);
 
 // 일년 전 조각 조회
@@ -38,6 +42,10 @@ onMounted(async () => {
     }
     await userStore.readTutorial();
     await userStore.readOneYearPiece();
+
+    // 조각 만들기 상태초기화
+    pieceStore.resetPieceValue();
+    pieceMakeStore.resetPieceMakeValue();
 });
 
 </script>
