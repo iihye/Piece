@@ -65,16 +65,16 @@
                     class="cakedetailview-chat-item"
                     :key="index"
                     :chatRoomId="item.chatRoomId"
-                    :senderLabel="item.senderLabel"
-                    :senderNickname="item.senderNickname"
-                    :senderImg="item.senderImg"
+                    :senderLabel="item.title"
+                    :senderNickname="item.nickname"
+                    :senderImg="item.profileImage"
                     :content="item.content"
                     :createdAt="item.createdAt"
                 ></ChatItem>
 
                 <NoItem 
                     class="cakedetailview-chat-noitem"
-                    v-if="cakeChatList.value === undefined || cakeChatList.value.length === 0" 
+                    v-if=isCakeChatList
                     :content="'아직 대화를 나누지 않은 채팅방이예요'">
                 </NoItem>
             </div>
@@ -84,7 +84,7 @@
             class="cakedetailview-button"
             :roundButtonContent="'채팅 참여하기'"
             :roundButtonFunction="handleChatParticipate"
-            :isRoundDisable="false"
+            :isRoundDisable="true"
         ></RoundButton>
     </div>
 </template>
@@ -124,6 +124,7 @@ const data = ref({
 
 const cakeHeartState = ref(false);
 const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
+const isCakeChatList = computed(() => cakeChatList.value == undefined);
 const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount);
 
 const cultureType = computed(() => cakeDetailStore.getCakeCultureType);
