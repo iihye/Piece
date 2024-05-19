@@ -48,7 +48,7 @@
     <!-- content -->
     <div class="cakedetailview-content-container">
       <div class="cakedetailview-content-content">{{ data.overview }}</div>
-      <div class="cakedetailview-content-runtime">
+      <div v-if="data.runtime!=0" class="cakedetailview-content-runtime">
         <strong>상영 시간</strong> <br />{{ data.runtime }}
       </div>
       <br />
