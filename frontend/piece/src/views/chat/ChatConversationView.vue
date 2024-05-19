@@ -229,6 +229,8 @@ const handleChat = async (userId) => {
     chatRoomStore.getPersonalChatRoomInfo(createdChatRoomId);
     chatRoomInfo.value = chatRoomStore.getChatRoom;
 
+    chatRoomStore.setIsPersonal(true);
+
     // 구독정보 갱신 필요
     subscription.unsubscribe();
     subscribe(createdChatRoomId);
@@ -242,9 +244,6 @@ const handleChat = async (userId) => {
     console.log("이미 있는 채팅방의 번호는? " + error.response.data.chatRoomId);
 
     const alreadyExistsChatRoomId = error.response.data.chatRoomId;
-    // 에러 처리
-
-    // 개인방 찾기 필요한데?
 
     // 현재 방 번호 갱신
     chatRoomStore.setChatRoomId(alreadyExistsChatRoomId);
@@ -260,6 +259,8 @@ const handleChat = async (userId) => {
 
     // 상대방 정보 갱신
     partnerInfo.value = chatRoomStore.getPartnerInfo;
+
+    chatRoomStore.setIsPersonal(true);
 
     // 구독정보 갱신 필요
     subscription.unsubscribe();
