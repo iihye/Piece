@@ -12,8 +12,6 @@
                     style="color: var(--main-color)"
                     @click="handleHeartClick"
                 />
-            </div>
-            <div class="cakedetailview-heart-message">
                 {{ cakeHeartCount }}명이 찜하고 있어요
             </div>
         </div>
@@ -36,11 +34,11 @@
                     cultureType !== 'CONCERT',
                 }"
             >
-                <p v-if="cultureType === 'MOVIE'">영화</p>
-                <p v-else-if="cultureType === 'THEATER'">연극</p>
-                <p v-else-if="cultureType === 'MUSICAL'">뮤지컬</p>
-                <p v-else-if="cultureType === 'CONCERT'">콘서트</p>
-                <p v-else>기타</p>
+            <p v-if="cultureType === 'MOVIE'">영화</p>
+            <p v-else-if="cultureType === 'THEATER'">연극</p>
+            <p v-else-if="cultureType === 'MUSICAL'">뮤지컬</p>
+            <p v-else-if="cultureType === 'CONCERT'">콘서트</p>
+            <p v-else>기타</p>
             </div>
         </div>
         <div class="cakedetailview-item-title">{{ data.title }}</div>
@@ -48,9 +46,9 @@
         <!-- content -->
         <div class="cakedetailview-content-container">
             <div class="cakedetailview-content-content">{{ data.overview }}</div>
-            <div class="cakedetailview-content-runtime"><strong>상영 시간 </strong><br> {{ data.runtime }}</div><br>
+            <div class="cakedetailview-content-runtime"><strong>상영 시간</strong> <br>{{ data.runtime }}</div><br>
             <div v-if="data.castList && data.castList.length > 0" class="cakedetailview-content-cast">
-                <strong>출연진</strong><br> {{ data.castList.join(', ') }}
+                <strong>출연진</strong> <br>{{ data.castList.join(', ') }}
             </div>
         </div>
 
@@ -71,9 +69,14 @@
                     :content="item.content"
                     :createdAt="item.createdAt"
                 ></ChatItem>
+
+                <NoItem 
+                    class="cakedetailview-chat-noitem"
+                    v-if="cakeChatList.value === undefined || cakeChatList.value.length === 0" 
+                    :content="'아직 대화를 나누지 않은 채팅방이예요'">
+                </NoItem>
             </div>
         </div>
-
         <!-- button -->
         <RoundButton
             class="cakedetailview-button"
@@ -86,17 +89,24 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
 import { useCakeDetailStore } from "@/stores/cakedetail";
 import { useUserStore } from "@/stores/user";
+import { useChatRoomStore } from "@/stores/chatroom";
+import { useWebSocketStore } from "@/stores/websocket";
 import ChatItem from "@/components/chat/ChatItem.vue";
 import RoundButton from "@/components/button/RoundButton.vue";
+import NoItem from "@/components/item/NoItem.vue";
 
 const commonStore = useCommonStore();
 const cakeDetailStore = useCakeDetailStore();
 const userStore = useUserStore();
+const chatRoomStore = useChatRoomStore();
+const webSocketStore = useWebSocketStore();
+
 const route = useRoute();
+const router = useRouter();
 
 const concertId = route.params.concertId;
 const cultureId = route.params.cultureId;
@@ -126,13 +136,13 @@ const handleHeartClick = async () => {
     try {
         if (newHeartState) {
             await cakeDetailStore.toggleHeart(data.value.cultureId);
-            triggerBounce();
         } else {
             await cakeDetailStore.removeHeart(data.value.cultureId);
         }
         cakeHeartState.value = newHeartState;
         userStore.setHeartState(data.value.cultureId, newHeartState);
         await cakeDetailStore.fetchHeartCount(data.value.cultureId);
+        triggerBounce();
     } catch (error) {
         console.error("Failed to toggle heart", error);
     }
@@ -147,14 +157,17 @@ const triggerBounce = () => {
 };
 
 const handleChatParticipate = async () => {
-    alert("채팅 참여하기 클릭");
+    console.log("채팅 참여하기 클릭");
 
-    try {
-        await cakeDetailStore.joinChatRoom(data.value.cultureId);
-        // TODO : 채팅방 이동
-    } catch (error) {
-        console.error("Failed to join chat room", error);
-    }
+    const chatRoomId = computed(() => cakeDetailStore.getChatRoomId);
+    const userId = Number(localStorage.getItem("userId"));
+    console.log(typeof userId);
+
+    chatRoomStore.joinChatRoom(chatRoomId.value, userId);
+    chatRoomStore.getChatRoomList(0);
+    router.push({ name: "chatRoom" });
+
+    // TODO: 채팅방 직접 참여하기
 };
 
 onMounted(async () => {
@@ -165,13 +178,12 @@ onMounted(async () => {
         console.error("Missing required parameters");
         return;
     }
-    if(cultureType.value === "MOVIE") {
+    if (cultureType.value === "MOVIE") {
         await cakeDetailStore.fetchTmdbDetail(concertId);
     } else {
         await cakeDetailStore.fetchConcertCakeDetail(concertId);
-
     }
-    
+
     await cakeDetailStore.fetchHeartCount(cultureId);
     await cakeDetailStore.findCakeChatList(concertId);
 
@@ -202,9 +214,8 @@ onMounted(async () => {
 /* image */
 .cakedetailview-image-image {
     width: 100%;
-    /* height: 360px;
-    object-fit: cover; */
     height: auto;
+    object-fit: contain;
     user-select: none;
 }
 
@@ -314,5 +325,10 @@ onMounted(async () => {
 /* button */
 .cakedetailview-button {
     margin: 2rem 0 2rem 0;
+}
+
+.cakedetailview-chat-noitem {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
 }
 </style>
