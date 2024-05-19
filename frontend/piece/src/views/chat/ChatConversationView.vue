@@ -216,12 +216,12 @@ const handleChat = async (userId) => {
 
     // sender 채팅방 참가 처리
     console.log(createdChatRoomId + "번 방에 참가를 시도합니다.");
-    await chatRoomStore.joinChatRoom(createdChatRoomId, 1); // authenticateduser로 수정 필요
+    await chatRoomStore.joinChatRoom(createdChatRoomId, loginUserId.value); // authenticateduser로 수정 필요
     // receiver 채팅방 참가 처리
     await chatRoomStore.joinChatRoom(createdChatRoomId, userId);
 
     // 참가한 채팅방 목록 갱신
-    await chatRoomStore.getChatRoomList(1, true);
+    await chatRoomStore.getChatRoomList(true);
 
     // 현재 방 번호 갱신
     chatRoomStore.setChatRoomId(createdChatRoomId);
@@ -249,11 +249,9 @@ const handleChat = async (userId) => {
     // 현재 방 번호 갱신
     chatRoomStore.setChatRoomId(alreadyExistsChatRoomId);
     // 개인방 리스트 받아오기
-    await chatRoomStore.getChatRoomList(1);
+    await chatRoomStore.getChatRoomList(true);
     chatRoomStore.getPersonalChatRoomInfo(alreadyExistsChatRoomId);
     // 저장되어 있는 방 리스트(1:1 or open)를 1:1로 갱신. 1:1방 데이터 조회를 위함
-
-    await chatRoomStore.getChatRoomList(1); // 채팅방 리스트를 개인 채팅방으로 변경
     chatRoomInfo.value = chatRoomStore.getChatRoom;
 
     console.log(
@@ -312,17 +310,6 @@ const storeMessages = ref([]);
 const chatRoomInfo = ref({});
 const partnerInfo = ref({});
 
-// chatMessages.value.push({
-//   // 테스트 용도
-//   chatRoomId: 1,
-//   senderId: 2,
-//   title: "얼박사 킬러",
-//   nickname: "user2",
-//   content: "ㅎㅇ",
-//   profileImage: defaultProfileImage, // img 태그에 userId 기반으로 받아온 프사 적용 필요
-//   // createdAt: "오전 7:04",
-// }); // 테스트 데이터
-
 async function fetchLoginUserId() {
   loginUserId.value = await localStorage.getItem("userId");
   console.log("로그인되어 있는 userId:", loginUserId.value);
@@ -338,6 +325,7 @@ async function fetchMessages() {
     chatLogs.forEach((m) => {
       m.createdAt = new Intl.DateTimeFormat("ko-KR", {
         hour: "numeric",
+
         minute: "numeric",
         hour12: true,
       }).format(new Date(m.createdAt));
@@ -440,6 +428,7 @@ onMounted(() => {
   if (chatRoomStore.getIsPersonal === false) {
     chatRoomStore.getOpenChatRoomInfo(chatRoomStore.getChatRoomId);
   } else {
+    console.log("개인 채팅방을 조회하시는 거 같네요");
     chatRoomStore.getPersonalChatRoomInfo(chatRoomStore.getChatRoomId);
 
     partnerInfo.value = chatRoomStore.getPartnerInfo;

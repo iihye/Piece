@@ -40,7 +40,7 @@
             <div class="chatroomlist-info-message">
               {{ chatRoom.participantCount }}명이 대화하고 있어요!
             </div>
-            <div class="chatroomlist-info-time">n분 전</div>
+            <!-- <div class="chatroomlist-info-time">n분 전</div> -->
           </div>
         </div>
       </div>
