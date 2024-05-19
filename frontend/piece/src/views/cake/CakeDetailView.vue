@@ -112,8 +112,8 @@ const data = ref({
 });
 
 const cakeHeartState = ref(false);
-const cakeChatList = computed(() => cakeDetailStore.getCakeChatList());
-const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount());
+const cakeChatList = computed(() => cakeDetailStore.getCakeChatList);
+const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount);
 
 const cultureType = computed(() => cakeDetailStore.getCakeCultureType);
 
@@ -157,8 +157,13 @@ onMounted(async () => {
         console.error("Missing required parameters");
         return;
     }
+    if(cultureType.value === "MOVIE") {
+        await cakeDetailStore.fetchTmdbDetail(concertId);
+    } else {
+        await cakeDetailStore.fetchConcertCakeDetail(concertId);
 
-    await cakeDetailStore.fetchConcertCakeDetail(concertId);
+    }
+    
     await cakeDetailStore.fetchHeartCount(cultureId);
     await cakeDetailStore.findCakeChatList(concertId);
 

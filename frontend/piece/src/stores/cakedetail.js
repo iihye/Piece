@@ -14,6 +14,11 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
     };
 
     const getCakeCultureType = computed(() => cakeCultureType.value);
+    const getCakeDetail = computed(() => cakeDetail.value);
+    const getCakeChatList = computed(() => cakeChatList.value);
+    const getCakeHeartCount = computed(() => cakeHeartCount.value);
+    const getCakeHeartState = computed(() => cakeHeartState.value);
+
 
     const fetchConcertCakeDetail = async (concertId) => {
         try {
@@ -26,6 +31,23 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
             }
         } catch (error) {
             console.error("공연 상세정보 가져오기 실패", error);
+        }
+    };
+
+    const fetchTmdbDetail = async (code) => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_REST_PIECE_API}/cultures/tmdb/${code}`);
+            if (response.data.code === "FIND_TMDB_CULTURE_SUCCESS") {
+                cakeDetail.value = response.data.data;
+                cakeHeartState.value = response.data.data.isHearted;
+            } else {
+                console.error('Failed to fetch TMDB details:', response.data);
+                selectedMovie.value = null;
+            }
+        } catch (error) {
+            console.error("TMDB 상세정보 가져오기 실패", error);
+            selectedMovie.value = null;
+            throw error;
         }
     };
 
@@ -108,16 +130,17 @@ export const useCakeDetailStore = defineStore("cakedetail", () => {
 
         setCakeCultureType,
         fetchConcertCakeDetail,
+        fetchTmdbDetail,
         fetchHeartCount,
         findCakeChatList,
         toggleHeart,
         removeHeart,
         joinChatRoom,
 
-        getCakeDetail: () => cakeDetail.value,
-        getCakeChatList: () => cakeChatList.value,
-        getCakeHeartCount: () => cakeHeartCount.value,
-        getCakeHeartState: () => cakeHeartState.value,
+        getCakeDetail,
+        getCakeChatList,
+        getCakeHeartCount,
+        getCakeHeartState,
         getCakeCultureType,
     };
 });

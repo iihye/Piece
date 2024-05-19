@@ -65,7 +65,7 @@ import { useCakeStore } from "@/stores/cake";
 import { useCakeDetailStore } from "@/stores/cakedetail";
 import FilterItem from "@/components/item/FilterItem.vue";
 import ListCakeItem from "@/components/item/ListCakeItem.vue";
-import TextInput from "@/components/text/TextInput.vue";
+import TextInput from "@/components/text/OnlyInput.vue";
 import InputPreview from "@/components/text/InputPreview.vue";
 
 const commonStore = useCommonStore();
@@ -114,34 +114,30 @@ function handleSelect(item) {
 const handleItemClick = async (item) => {
     try {
         if (item.cultureType === "MOVIE") {
-            await store.fetchTmdbDetails(item.code);
-            const movieData = store.getSelectedMovie;
-            if (movieData && movieData.code && movieData.cultureId) {
+            if (item && item.code && item.cultureId) {
                 router.push({
                     name: "CakeDetail",
                     params: {
-                        concertId: movieData.code,
-                        cultureId: movieData.cultureId
-                    }
-                });
-                detailStore.setCakeCultureType("MOVIE");
-            } else {
-                console.error('Invalid movie data:', movieData);
-            }
-        } else {
-            await store.fetchKopisDetails(item.code);
-            const cultureData = store.getSelectedConcert;
-            if (cultureData && cultureData.code && cultureData.cultureId) {
-                router.push({
-                    name: "CakeDetail",
-                    params: {
-                        concertId: cultureData.code,
-                        cultureId: cultureData.cultureId
+                        concertId: item.code,
+                        cultureId: item.cultureId,
                     }
                 });
                 detailStore.setCakeCultureType(item.cultureType);
             } else {
-                console.error('Invalid concert data:', cultureData);
+                console.error('Invalid movie data:', movieData);
+            }
+        } else {
+            if (item && item.code && item.cultureId) {
+                router.push({
+                    name: "CakeDetail",
+                    params: {
+                        concertId: item.code,
+                        cultureId: item.cultureId,
+                    }
+                });
+                detailStore.setCakeCultureType(item.cultureType);
+            } else {
+                console.error('Invalid concert data:', item);
             }
         }
     } catch (error) {
