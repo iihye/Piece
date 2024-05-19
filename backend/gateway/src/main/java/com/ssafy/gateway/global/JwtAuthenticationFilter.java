@@ -23,53 +23,55 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
         super(Config.class);
     }
 
-    @Override
-    public GatewayFilter apply(Config config) {
-        return (exchange, chain) -> {
-            ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
-                .header("Authenticated-User-Header", "1")
-                .build();
-
-            return chain.filter(exchange.mutate().request(modifiedRequest).build())
-                .then(Mono.fromRunnable(() -> {
-                    log.info("---JwtAuthenticationFilter is working---");
-                }));
-        };
-    }
-
-
 //    @Override
 //    public GatewayFilter apply(Config config) {
-//        log.info("---JwtAuthenticationFilter is working---");
 //        return (exchange, chain) -> {
-//            ServerHttpRequest request = exchange.getRequest();
-//            String token = request.getHeaders().getFirst("Authorization");
-//            log.info("Authorization Header: {}", token);
+//            ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
+//                .header("Authenticated-User-Header", "1")
+//                .build();
 //
-//            if (token != null && token.startsWith("Bearer ")) {
-//                String jwtToken = token.substring(7);
-//                log.info("JWT Token: {}", jwtToken);
-//                try {
-//                    Long userId = Long.valueOf(jwtTokenUtil.getUserIdFromToken(jwtToken));
-//
-//                    if (userId != null) {
-//                        log.info("User ID: {}", userId);
-//                        ServerHttpRequest modifiedRequest = request.mutate()
-//                            .header("Authenticated-User-Header", "1")
-//                            .build();
-//                        return chain.filter(exchange.mutate().request(modifiedRequest).build());
-//                    }
-//                } catch (Exception e) {
-//                    return this.onError(exchange, "Invalid JWT Token", HttpStatus.UNAUTHORIZED);
-//                }
-//            }
-//            return chain.filter(exchange);
+//            return chain.filter(exchange.mutate().request(modifiedRequest).build())
+//                .then(Mono.fromRunnable(() -> {
+//                    log.info("---JwtAuthenticationFilter is working---");
+//                }));
 //        };
 //    }
 
-    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
+
+    @Override
+    public GatewayFilter apply(Config config) {
+        log.info("---JwtAuthenticationFilter is working---");
+        return (exchange, chain) -> {
+            ServerHttpRequest request = exchange.getRequest();
+            String token = request.getHeaders().getFirst("Authorization");
+            log.info("Authorization Header: {}", token);
+
+            if (token != null && token.startsWith("Bearer ")) {
+                String jwtToken = token.substring(7);
+                log.info("JWT Token: {}", jwtToken);
+                try {
+                    Long userId = jwtTokenUtil.getUserIdFromToken(jwtToken);
+                    if (userId != null) {
+                        log.info("User ID: {}", userId);
+                        // 사용자 ID를 커스텀 헤더에 추가
+                        ServerHttpRequest modifiedRequest = request.mutate()
+                            .header("Authorized-User-ID", userId.toString())
+                            .build();
+                        return chain.filter(exchange.mutate().request(modifiedRequest).build());
+                    }
+                } catch (Exception e) {
+                    log.error("JWT validation error: {}", e.getMessage());
+                    return this.onError(exchange, "Invalid JWT Token", HttpStatus.UNAUTHORIZED, e.getMessage());
+                }
+            }
+            return chain.filter(exchange);
+        };
+    }
+
+    private Mono<Void> onError(ServerWebExchange exchange, String errorMessage, HttpStatus httpStatus, String detailedError) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
+        response.getHeaders().add("Error-Details", detailedError); // 오류 상세 정보 추가
         return response.setComplete();
     }
 
