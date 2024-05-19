@@ -503,7 +503,6 @@ export const usePiecelistStore = defineStore(
       })
         .then((res) => {
           recentPieceList.value = res.data.data;
-          console.log(recentPieceList.value);
         })
         .catch((err) => {});
     };

@@ -21,7 +21,6 @@ export const useSearchStore = defineStore("search", () => {
   // =========== ACTION ===============
 
   const searchPiece = function (keyword) {
-    console.log(keyword);
     axios({
       url: `${import.meta.env.VITE_REST_PIECE_API}/search/${keyword}`,
       method: "GET",
