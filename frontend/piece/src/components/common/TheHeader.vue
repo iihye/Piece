@@ -81,7 +81,7 @@ const getProgress = computed(() => commonStore.getProgress);
 const isCancelWarnModal = ref(false);
 
 const headerBack = () => {
-    if (getProgress.value > 0) {
+    if (getProgress.value > 0 && headerTitle.value === "조각 만들기" && headerType.value === "header2") {
         isCancelWarnModal.value = true;
     } else if(headerTitle === "조각 만들기"){
         router.push({ name: "main" });

@@ -46,7 +46,6 @@ const isProgressBar = computed(() => (headerTitle.value === "조각 만들기" &
     position: fixed;
     top: 0;
     width: 360px;
-    z-index: 85;
     margin-top: 3.25rem;
 }
 
@@ -63,7 +62,7 @@ const isProgressBar = computed(() => (headerTitle.value === "조각 만들기" &
     /* width: 22.5rem; */
     width: 360px;;
     height: 4rem;
-    z-index: 85;
+    /* z-index: 85; */
     background-color: var(--white-color);
 }
 </style>
