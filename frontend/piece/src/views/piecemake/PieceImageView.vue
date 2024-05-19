@@ -155,6 +155,8 @@ const searchMovieDebouncing = debounce(async (query) => {
 const emit = defineEmits(["select"]);
 
 function handleSelect(item) {
+    pieceStore.getPieceValue.title = item.title;
+    pieceStore.getPieceValue.performanceType = "MOVIE";
     resetImage();
     getFetchImageFromUrl(item.poster_path);
     handleBlur();
