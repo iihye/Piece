@@ -106,13 +106,14 @@ function drawCanvas() {
         createImage.onload = function () {
             context.globalCompositeOperation = "source-over";
             context.drawImage(createImage, -64, -64, createImage.width, createImage.height);
-            console.log("layoutImage : " + layoutImage.value);
+            console.log("layoutImage : " + layoutImage.src);
+            console.log("layoutImage.split : " + layoutImage.src.split("/").pop());
 
             let textBoxStart = 896;
             switch (layoutImage.src.split("/").pop()) {
                 case "Layout1.png":
                     textBoxStart = 856;
-                    console.log("layoutImage.split : " + layoutImage.src.split("/").pop());
+                    console.log("layoutImage.split2 : " + layoutImage.src.split("/").pop());
                     drawTextBoxForLayout1(context, pieceStore.pieceValue, 0, textBoxStart);
                     break;
                 case "Layout2.png":
