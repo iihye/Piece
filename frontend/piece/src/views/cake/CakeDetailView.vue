@@ -48,7 +48,7 @@
         <!-- content -->
         <div class="cakedetailview-content-container">
             <div class="cakedetailview-content-content">{{ data.overview }}</div>
-            <div class="cakedetailview-content-runtime"><strong>상영 시간</strong> <br>{{ data.runtime }}</div><br>
+            <div v-if="data.runtime!=0" class="cakedetailview-content-runtime"><strong>상영 시간</strong> <br>{{ data.runtime }}</div><br>
             <div v-if="data.castList && data.castList.length > 0" class="cakedetailview-content-cast">
                 <strong>출연진</strong> <br>{{ data.castList.join(', ') }}
             </div>

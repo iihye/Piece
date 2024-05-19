@@ -1,7 +1,7 @@
 <template>
     <!-- search -->
     <div class="cakelistview-search-area">
-        <TextInput
+        <!-- <TextInput
             class="cakelistview-search-input"
             placeholder="검색어를 입력하세요"
             v-model="searchQuery"
@@ -14,7 +14,7 @@
             :searchResults="searchResults"
             :isFocused="isFocused"
             @select="handleSelect"
-        />
+        /> -->
     </div>
 
     <!-- filter -->
