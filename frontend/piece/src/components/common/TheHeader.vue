@@ -91,6 +91,17 @@
       :handleCancelClick="handleCancel"
       :handleWarnClick="handleWarn"
     />
+
+    <!-- chat modal -->
+    <CancelWarnModal
+      v-if="isChatCancelWarnModal"
+      :modalTitle="'방을 나가시겠어요?'"
+      :modalContent="'내 채팅 목록에서 삭제되며,<br>대화 내용을 더이상 볼 수 없어요'"
+      :buttonCancel="'취소'"
+      :buttonWarn="'나가기'"
+      :handleCancelClick="handleChatCancel"
+      :handleWarnClick="handleChatWarn"
+    />
   </div>
 </template>
 
@@ -98,9 +109,11 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/common";
+import { useChatRoomStore } from "@/stores/chatroom";
 import CancelWarnModal from "@/components/modal/CancelWarnModal.vue";
 
 const commonStore = useCommonStore();
+const chatRoomStore = useChatRoomStore();
 const router = useRouter();
 
 const headerType = computed(() => commonStore.getHeaderType);
@@ -111,6 +124,7 @@ const userCount = computed(() => commonStore.getHeaderChatCount);
 const getProgress = computed(() => commonStore.getProgress);
 
 const isCancelWarnModal = ref(false);
+const isChatCancelWarnModal = ref(false);
 
 const headerBack = () => {
   if (
@@ -135,10 +149,9 @@ const headerCalendar = () => {
 };
 
 const headerOut = () => {
-  if (headerType === 5) {
-    isCancelWarnModal.value = true;
+  if (headerType.value === "header5" || headerType.value === "header6") {
+    isChatCancelWarnModal.value = true;
   }
-  router.go(-1);
 };
 
 // modal에서 cancel 클릭했을 때 실행되는 함수
@@ -146,10 +159,27 @@ const handleCancel = () => {
   isCancelWarnModal.value = false;
 };
 
+const handleChatCancel = () => {
+  isChatCancelWarnModal.value = false;
+};
 // modal에서 warn 클릭했을 때 실행되는 함수
 const handleWarn = () => {
   isCancelWarnModal.value = false;
   router.push({ name: "main" });
+};
+
+// 채팅방 퇴장하기
+const handleChatWarn = () => {
+  isChatCancelWarnModal.value = false;
+
+  console.log("현재 채팅방 id:" + chatRoomStore.getChatRoomId);
+  console.log("현재 채팅방 1:1? open?" + chatRoomStore.getIsPersonal);
+
+  chatRoomStore.leaveChatRoom(
+    chatRoomStore.getChatRoomId,
+    chatRoomStore.getIsPersonal
+  );
+  router.push({ name: "chatRoom" });
 };
 </script>
 
