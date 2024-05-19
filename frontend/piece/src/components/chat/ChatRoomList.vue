@@ -28,11 +28,13 @@
         class="chatroomlist-sub-container"
       >
         <div class="chatroomlist-item-container">
-          <img
-            class="chatroomlist-item-squreImage"
-            :src="chatRoom.culture.imageUrl"
-            alt="profileImage"
-          />
+          <div class="chatroomlist-image-conatiner">
+            <img
+              class="chatroomlist-item-squreImage"
+              :src="chatRoom.culture.imageUrl"
+              alt="profileImage"
+            />
+          </div>
           <div class="chatroomlist-info-conatiner">
             <div class="chatroomlist-info-nickname">
               {{ chatRoom.culture.title }}
@@ -272,7 +274,7 @@ onMounted(async () => {
   position: relative;
   /* width: 450px; */
   transition: 0.5s ease;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .chatroomlist-tab-navigation {
@@ -352,6 +354,12 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  margin-right: 0.6rem;
+}
+
+.chatroomlist-image-conatiner{
   width: 4.4rem;
   height: 4.4rem;
   margin-right: 0.6rem;
