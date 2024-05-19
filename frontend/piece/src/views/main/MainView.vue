@@ -40,7 +40,7 @@ onMounted(async () => {
     if (localStorage.getItem("accessToken")) {
         isLogin.value = true;
     }
-    await userStore.readTutorial();
+
     await userStore.readOneYearPiece();
 
     // 조각 만들기 상태초기화
