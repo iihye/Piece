@@ -106,22 +106,23 @@ function drawCanvas() {
         createImage.onload = function () {
             context.globalCompositeOperation = "source-over";
             context.drawImage(createImage, -64, -64, createImage.width, createImage.height);
-            console.log("layoutImage : " + layoutImage.src);
-            console.log("layoutImage2 : " + selectedLayout.value);
-            console.log("layoutImage.split : " + layoutImage.src.split("/").pop());
+
+            const fileName = layoutImage.src.split("/").pop();
+            const layoutNumber = extractLayoutNumber(fileName);
 
             let textBoxStart = 896;
-            switch (layoutImage.src.split("/").pop()) {
-                case "Layout1.png":
+
+            switch (layoutNumber) {
+                case "1":
                     textBoxStart = 856;
                     console.log("layoutImage.split2 : " + layoutImage.src.split("/").pop());
                     drawTextBoxForLayout1(context, pieceStore.pieceValue, 0, textBoxStart);
                     break;
-                case "Layout2.png":
+                case "2":
                     textBoxStart = 800;
                     drawTextBoxForLayout2(context, pieceStore.pieceValue, 0, 800);
                     break;
-                case "Layout3.png":
+                case "3":
                     textBoxStart = 820;
                     drawTextBoxForLayout3(context, pieceStore.pieceValue, 0, 820);
                     break;
@@ -354,6 +355,11 @@ function hexToRGBA(hex, opacity) {
         b = parseInt(hex.slice(5, 7), 16);
 
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+
+function extractLayoutNumber(fileName) {
+    const match = fileName.match(/Layout(\d+)/);
+    return match ? match[1] : null;
 }
 
 onMounted(() => {
