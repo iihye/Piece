@@ -56,7 +56,7 @@ public class ImageMakeService {
         imgContent.put("type", "image_url");
         imgContent.put("image_url", imgUrl);
 
-        String prompt = "달리 이미지 생성을 위한 이미지 설명을 작성해주세요. 글자는 설명하지 마세요. 물체나 인물에 대한 설명은 생략하세요. 색상과 분위기를 중점으로 400자이내로 설명해주세요. 맞게 설명했는지 검토 후 답변해주세요";
+        String prompt = "달리 이미지 생성을 위한 이미지 설명을 작성해주세요. 글자는 설명하지 마세요. 분위기 설명에 불필요한 물체나 인물에 대한 설명은 생략하세요. 색상과 분위기를 중점으로 400자이내로 설명해주세요. 맞게 설명했는지 검토 후 답변해주세요";
 
         Map<String, Object> textContent = new HashMap<>();
         textContent.put("type", "text");
@@ -113,12 +113,12 @@ public class ImageMakeService {
 
         Map<String, Object> request = new HashMap<>();
         request.put("model", dalleModel);
-        request.put("prompt", prompt + "제공된 이미지 설명 중 주요 색상과 분위기를 기반으로 클로드 모네 스타일의 풍경화를 만드세요. 설명 중 배경을 중점으로 이미지를 생성하세요. 이미지 생성시 사람은 그리지마세요. 그림은 유화 느낌의 부드러운 색조의 전환과 빛을 특징으로 해야 합니다. 모네의 인상주의적 붓터치를 표현해주세요.");
+        request.put("prompt", prompt + "제공된 이미지 설명 중 주요 색상과 분위기를 기반으로 인상주의 스타일의 부드러운 색조의 전환과 빛을 특징으로 하는 풍경화를 그려주세요. 설명 중 배경을 중점으로 이미지를 생성하세요. 그림 스타일은 유화 느낌의 부드러운 붓터치를 표현해주세요.");
         request.put("n", 1);
         request.put("response_format", "b64_json");
         request.put("size", "1024x1024");
+//        request.put("style","natural");
 //        request.put("quality", );
-//        request.put("style","");
 
         String response = webClient.post()
             .uri(dalleUrl)
