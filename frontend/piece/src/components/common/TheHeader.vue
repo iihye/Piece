@@ -4,65 +4,33 @@
             <div class="header-title">{{ headerTitle }}</div>
         </div>
         <div v-else-if="headerType === 'header2'" class="header-all">
-            <font-awesome-icon
-                :icon="['fas', 'chevron-left']"
-                class="header-back"
-                @click="headerBack"
-            />
+            <font-awesome-icon :icon="['fas', 'chevron-left']" class="header-back" @click="headerBack" />
             <div class="header-title">{{ headerTitle }}</div>
             <div class="header-blank"></div>
         </div>
         <div v-else-if="headerType === 'header3'" class="header-all">
-            <font-awesome-icon
-                :icon="['fas', 'chevron-left']"
-                class="header-back"
-                @click="headerBack"
-            />
+            <font-awesome-icon :icon="['fas', 'chevron-left']" class="header-back" @click="headerBack" />
             <div class="header-title">{{ headerTitle }}</div>
-            <font-awesome-icon
-                :icon="['fas', 'bars']"
-                class="header-list"
-                @click="headerList"
-            />
+            <font-awesome-icon :icon="['fas', 'bars']" class="header-list" @click="headerList" />
         </div>
         <div v-else-if="headerType === 'header4'" class="header-all">
-            <font-awesome-icon
-                :icon="['fas', 'chevron-left']"
-                class="header-back"
-                @click="headerBack"
-            />
+            <font-awesome-icon :icon="['fas', 'chevron-left']" class="header-back" @click="headerBack" />
             <div class="header-title">{{ headerTitle }}</div>
-            <font-awesome-icon
-                :icon="['far', 'calendar']"
-                class="header-calendar"
-                @click="headerCalendar"
-            />
+            <font-awesome-icon :icon="['far', 'calendar']" class="header-calendar" @click="headerCalendar" />
         </div>
         <div v-else-if="headerType === 'header5'" class="header-all">
             <div class="header-left">
-                <font-awesome-icon
-                    :icon="['fas', 'chevron-left']"
-                    class="header-back"
-                    @click="headerBack"
-                />
+                <font-awesome-icon :icon="['fas', 'chevron-left']" class="header-back" @click="headerBack" />
                 <div class="header-chatinfo">
                     <img :src="userImg" class="header-img" />
                     <div class="header-chatname">{{ userName }}</div>
                 </div>
             </div>
-            <font-awesome-icon
-                :icon="['fas', 'arrow-right-from-bracket']"
-                class="header-out"
-                @click="headerOut"
-            />
+            <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" class="header-out" @click="headerOut" />
         </div>
         <div v-else-if="headerType === 'header6'" class="header-all">
             <div class="header-left">
-                <font-awesome-icon
-                    :icon="['fas', 'chevron-left']"
-                    class="header-back"
-                    @click="headerBack"
-                />
+                <font-awesome-icon :icon="['fas', 'chevron-left']" class="header-back" @click="headerBack" />
                 <div class="header-chatinfo">
                     <img :src="userImg" class="header-img" />
                     <div class="header-chatroom">
@@ -73,11 +41,7 @@
                     </div>
                 </div>
             </div>
-            <font-awesome-icon
-                :icon="['fas', 'arrow-right-from-bracket']"
-                class="header-out"
-                @click="headerOut"
-            />
+            <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" class="header-out" @click="headerOut" />
         </div>
     </div>
 </template>
@@ -125,7 +89,8 @@ const headerOut = () => {
 .header-all {
     display: flex;
     align-items: center;
-    width: 100%;
+    /* width: 100%; */
+    width: 360px;
     margin-left: 1rem;
     margin-right: 1rem;
     justify-content: space-between;
@@ -133,7 +98,8 @@ const headerOut = () => {
 
 .header-title {
     margin: 0;
-    width: 100%;
+    /* width: 100%; */
+    width: 360px;
     font-family: "Bold";
     font-size: 1rem;
     display: flex;
