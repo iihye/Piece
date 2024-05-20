@@ -66,9 +66,13 @@
 import { computed, onMounted } from "vue";
 import { useCommonStore } from "@/stores/common";
 import { usePiecelistStore } from "@/stores/piecelist";
+import { usePieceStore } from "@/stores/piece.js";
+import { usePieceMakeStore } from "@/stores/piecemake.js";
 
 const commonStore = useCommonStore();
 const store = usePiecelistStore();
+const pieceStore = usePieceStore();
+const pieceMakeStore = usePieceMakeStore();
 
 const year = computed(() => store.getYear);
 const month = computed(() => store.getMonth);
@@ -80,6 +84,10 @@ onMounted(async () => {
     store.setSelectOption("ALL");
     store.setSelectOptionMyList("ALL");
     store.setSelectOptionHeartList("ALL");
+
+    // 조각 만들기 상태초기화
+    pieceStore.resetPieceValue();
+    pieceMakeStore.resetPieceMakeValue();
 
     await store.findPiecelistMyCalendar(year.value, month.value + 1);
 });

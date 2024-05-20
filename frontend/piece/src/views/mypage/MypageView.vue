@@ -106,6 +106,11 @@ import { useCommonStore } from "@/stores/common";
 import IconText from "@/components/text/IconText.vue";
 import axios from "axios";
 import ImageSuccessModal from "@/components/modal/ImageSuccessModal.vue";
+import { usePieceStore } from "@/stores/piece.js";
+import { usePieceMakeStore } from "@/stores/piecemake.js";
+
+const pieceStore = usePieceStore();
+const pieceMakeStore = usePieceMakeStore();
 
 const commonStore = useCommonStore();
 
@@ -168,6 +173,10 @@ onMounted(async () => {
     commonStore.headerTitle = "내정보";
     commonStore.headerType = "header2";
 
+    // 조각 만들기 상태초기화
+    pieceStore.resetPieceValue();
+    pieceMakeStore.resetPieceMakeValue();
+    
     await commonStore.findLoginUserInfo();
 });
 </script>

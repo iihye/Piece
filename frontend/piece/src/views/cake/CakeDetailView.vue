@@ -48,7 +48,7 @@
     <!-- content -->
     <div class="cakedetailview-content-container">
       <div class="cakedetailview-content-content">{{ data.overview }}</div>
-      <div class="cakedetailview-content-runtime">
+      <div v-if="data.runtime!=0" class="cakedetailview-content-runtime">
         <strong>상영 시간</strong> <br />{{ data.runtime }}
       </div>
       <br />
@@ -90,10 +90,20 @@
     <RoundButton
       class="cakedetailview-button"
       :roundButtonContent="'채팅 참여하기'"
-      :roundButtonFunction="handleChatParticipate"
+      :roundButtonFunction="handleParticipateClick"
       :isRoundDisable="true"
     ></RoundButton>
   </div>
+  <!-- chat modal -->
+  <YesNoModal
+    v-if="showChatParticipateModal"
+    :modalTitle="'오픈채팅에 참여하시겠어요?'"
+    :modalContent="'참여중인 사람들과 토픽에 대한 대화를 나눌 수 있어요.'"
+    :buttonSuccess="'네'"
+    :buttonFail="'아니요'"
+    :handleFailClick="handleFailClick"
+    :handleSuccessClick="handleSuccessClick"
+  ></YesNoModal>
 </template>
 
 <script setup>
@@ -107,6 +117,7 @@ import { useWebSocketStore } from "@/stores/websocket";
 import ChatItem from "@/components/chat/ChatItem.vue";
 import RoundButton from "@/components/button/RoundButton.vue";
 import NoItem from "@/components/item/NoItem.vue";
+import YesNoModal from "@/components/modal/YesNoModal.vue";
 
 const commonStore = useCommonStore();
 const cakeDetailStore = useCakeDetailStore();
@@ -137,6 +148,21 @@ const isCakeChatList = computed(() => cakeChatList.value == undefined);
 const cakeHeartCount = computed(() => cakeDetailStore.getCakeHeartCount);
 
 const cultureType = computed(() => cakeDetailStore.getCakeCultureType);
+
+// chat modal
+const showChatParticipateModal = ref(false);
+
+const handleParticipateClick = () => {
+  showChatParticipateModal.value = true;
+};
+const handleFailClick = () => {
+  showChatParticipateModal.value = false;
+};
+
+const handleSuccessClick = () => {
+  handleChatParticipate();
+  showChatParticipateModal.value = false;
+};
 
 watch(cakeHeartCount, (newCount) => {
   data.value.heartCnt = newCount;
@@ -169,13 +195,8 @@ const triggerBounce = () => {
 };
 
 const handleChatParticipate = async () => {
-  alert("채팅 참여하기 클릭");
-
   try {
     console.log("cultureId?:" + cultureId);
-
-    // stompclient 생성
-    await webSocketStore.stompConnect();
 
     // 오픈채팅 생성 or 중복 처리
     await cakeDetailStore.findCultureId(cultureId);
@@ -214,6 +235,9 @@ const handleChatParticipate = async () => {
 onMounted(async () => {
   commonStore.headerTitle = "케이크 상세보기";
   commonStore.headerType = "header2";
+
+  // stompclient 생성
+  await webSocketStore.stompConnect();
 
   if (!concertId || !cultureId) {
     console.error("Missing required parameters");
