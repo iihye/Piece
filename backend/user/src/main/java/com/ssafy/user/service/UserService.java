@@ -19,4 +19,9 @@ public class UserService {
             .orElseThrow(() -> new UsernameNotFoundException("해당하는 유저 이메일을 찾을 수 없습니다.: " + userId));
     }
 
+//    public Users getUserById(Long userId) { // UserId로 회원을 찾기.
+//        return usersRepository.findByUserId(userId);
+//
+//
+//    }
 }
