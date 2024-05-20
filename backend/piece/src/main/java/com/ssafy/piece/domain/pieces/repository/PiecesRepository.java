@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface PiecesRepository extends JpaRepository<Pieces, Long> {
 
 
-    @Query("select p from Pieces p where p.openYn = 'Y'")
+    @Query("select p from Pieces p where p.openYn = 'Y' order by p.pieceId desc")
     List<Pieces> findByAll();
 
     @Query("select p from Pieces p where p.userId = :userId")
@@ -30,9 +30,13 @@ public interface PiecesRepository extends JpaRepository<Pieces, Long> {
     @Query("select p from Pieces p order by p.date desc")
     Page<Pieces> findTopPieces(Pageable pageable);
 
-    @Query("select p from Pieces p where p.userId = :userId and p.createdAt BETWEEN :oneYearAgoStart AND :oneYearAgoEnd")
-    Optional<Pieces> findByPieceIdAndCreatedAt(Long userId, LocalDateTime oneYearAgoStart,
-        LocalDateTime oneYearAgoEnd);
+//    @Query("select p from Pieces p where p.userId = :userId and p.date BETWEEN :oneYearAgoStart AND :oneYearAgoEnd")
+//    Optional<Pieces> findByPieceIdAndDate(Long userId, LocalDateTime oneYearAgoStart,
+//        LocalDateTime oneYearAgoEnd);
+
+    @Query("select p from Pieces p where p.userId = :userId and p.date = :dateOneYearAgo")
+    Optional<Pieces> findByPieceIdAndDate(Long userId, LocalDate dateOneYearAgo);
+
 
     List<Pieces> findByUserIdAndDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
 

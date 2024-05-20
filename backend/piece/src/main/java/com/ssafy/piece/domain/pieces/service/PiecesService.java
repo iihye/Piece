@@ -129,11 +129,8 @@ public class PiecesService {
     // 1년 전 조각 조회
     public PieceRecentResponseDto findPieceYear(Long userId) {
         LocalDate dateOneYearAgo = LocalDate.now().minusYears(1);
-        LocalDateTime oneYearAgoStart = dateOneYearAgo.atTime(LocalTime.MIN);
-        LocalDateTime oneYearAgoEnd = dateOneYearAgo.atTime(LocalTime.MAX);
 
-        Pieces pieces = piecesRepository.findByPieceIdAndCreatedAt(userId, oneYearAgoStart,
-                oneYearAgoEnd)
+        Pieces pieces = piecesRepository.findByPieceIdAndDate(userId, dateOneYearAgo)
             .orElseThrow(PiecesRecentNotFoundException::new);
 
         return PieceRecentResponseDto.builder()
