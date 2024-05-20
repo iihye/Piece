@@ -1,6 +1,7 @@
 package com.ssafy.chat.dto.response;
 
-import java.time.LocalDateTime;
+import com.ssafy.chat.entity.CultureType;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +14,16 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ParticipantsResponseDto {
+public class CultureResponseDto {
+    private Long cultureId;
 
-    Long chatRoomId;
-    Long userId;
-    LocalDateTime createdAt;
+    private CultureType cultureType;
+
+    private String code;
+
+    private String title;
+
+    private String imageUrl;
+
+    private List<Long> genreIdList;
 }

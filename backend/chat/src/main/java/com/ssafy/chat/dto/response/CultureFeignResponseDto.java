@@ -1,22 +1,20 @@
-package com.ssafy.chat.entity;
+package com.ssafy.chat.dto.response;
 
-import jakarta.persistence.Id;
+import com.ssafy.chat.global.response.code.ResponseCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@ToString
 @Getter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Document(collection = "chatrooms")
-public class MongoDBChatRooms {
-
-    @Id
-    Long chatRoomId;
+public class CultureFeignResponseDto {
+    private String code;
+    private String message;
+    private CultureResponseDto data;
 }

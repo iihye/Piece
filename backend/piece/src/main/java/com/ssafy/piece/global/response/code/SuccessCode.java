@@ -64,11 +64,20 @@ public enum SuccessCode implements ResponseCode {
 
     // cultures(cake)
     FIND_TMDB_CULTURE_SUCCESS(HttpStatus.OK, "TMDB 케이크 조회에 성공했습니다."),
-    FIND_KOPIS_CULTURE_SUCCESS(HttpStatus.OK, "KOPIS 케이크 조회에 성공했습니다."),
     ADD_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 좋아요에 성공했습니다."),
     REMOVE_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 삭제에 성공했습니다."),
     FIND_CULTURE_SUCCESS(HttpStatus.OK, "케이크 조회에 성공했습니다."),
     COUNT_CULTURE_HEART_SUCCESS(HttpStatus.OK, "케이크 좋아요 개수 조회에 성공했습니다."),
+
+    // Chat
+    CHATROOM_CREATED(HttpStatus.CREATED, "채팅방이 생성되었습니다."),
+    CHATROOM_DELETED(HttpStatus.OK, "채팅방이 삭제되었습니다."),
+    CHATMESSAGE_LIST_SUCCESS(HttpStatus.OK, "채팅메세지 목록을 조회했습니다."),
+    CHATMESSAGE_N_LIST_SUCCESS(HttpStatus.OK, "채팅메세지 목록 n개를 조회했습니다."),
+    PARTICIPATE_SUCCESS(HttpStatus.CREATED, "채팅방에 참여했습니다."),
+    PARTICIPATED_LIST_SUCCESS(HttpStatus.OK, "참여찬 채팅방 목록을 조회했습니다."),
+    LEAVE_CHATROOM_SUCCESS(HttpStatus.OK, "채팅방에서 퇴장했습니다."),
+    PARTICIPANT_COUNT_SUCCESS(HttpStatus.OK, "채팅방 참여 인원 수를 조회했습니다."),
 
 
     // 검색

@@ -1,8 +1,11 @@
 package com.ssafy.chat.global.client;
 
+import com.ssafy.chat.dto.response.CultureResponseDto;
+import com.ssafy.chat.dto.response.UserFeignResponseDto;
 import com.ssafy.chat.global.config.FeignClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * 다른 마이크로 서비스 정보가 필요할 경우 
@@ -13,8 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @FeignClient(name = "user", url = "${external.user.host}", configuration = FeignClientConfig.class)
 public interface UserClient {
-
-    @GetMapping("/welcome")
-    String getWelcome();
-
+    @GetMapping("/users/find/{userId}")
+    UserFeignResponseDto getUser(@PathVariable Long userId);
 }

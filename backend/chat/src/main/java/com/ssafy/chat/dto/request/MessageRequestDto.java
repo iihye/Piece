@@ -1,22 +1,25 @@
-package com.ssafy.chat.entity;
+package com.ssafy.chat.dto.request;
 
-import jakarta.persistence.Id;
+import java.util.Date;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @ToString
-@Getter
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Document(collection = "chatrooms")
-public class MongoDBChatRooms {
+public class MessageRequestDto {
 
-    @Id
     Long chatRoomId;
+
+    Long senderId;
+
+    String content;
+
+    Date createdAt;
 }

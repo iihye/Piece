@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,9 +28,8 @@ public class ChatRooms extends BaseTime {
     @Column(name = "chatroom_id")
     private Long chatRoomId;
 
-//    @OneToOne
-    @JoinColumn(name = "culture_id")
-    private Long culture;
+    @Column(name = "culture_id")
+    private Long cultureId;
 
     @Column(name = "chatroom_name", nullable = false)
     private String chatRoomName;
