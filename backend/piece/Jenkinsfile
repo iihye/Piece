@@ -3,6 +3,7 @@ pipeline {
 
     parameters{
         string(name: 'NAME', defaultValue: 'piece')
+        string(name: 'INSTANCE_COUNT', defaultValue: '3')
     }
 
     stages {
@@ -50,10 +51,16 @@ pipeline {
         stage('Deploy'){
             steps{
                 dir('backend/piece'){
-                    sh '''
-                    echo 'Deploy BE...'
-                    docker run -d --env-file ./.env --name piece hyunjinius/springboot:latest
-                    '''
+                    script {
+                        def instanceCount = params.INSTANCE_COUNT.toInteger()
+                        for (int i = 1; i <= instanceCount; i++) {
+                            def instanceName = "${params.NAME}-${i}"
+                            sh """
+                            echo 'Deploying instance ${instanceName}...'
+                            docker run -d --env-file ./.env --name ${instanceName} -P hyunjinius/springboot:latest
+                            """
+                        }
+                    }
                 }
             }
         }
