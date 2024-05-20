@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    parameters{
+    parameters {
         string(name: 'NAME', defaultValue: 'gateway')
     }
 
@@ -13,9 +13,9 @@ pipeline {
             }
         }
 
-        stage('Springboot build'){
-            steps{
-                dir('backend/gateway'){
+        stage('Springboot build') {
+            steps {
+                dir('backend/gateway') {
                     sh '''
                     echo 'Springboot build...'
                     chmod +x gradlew
@@ -25,19 +25,16 @@ pipeline {
             }
         }
 
-        stage('Dockerimage build'){
+        stage('Dockerimage build') {
             steps {
                 dir('backend/gateway') {
                     script {
                         def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep ${params.NAME}", returnStatus: true) == 0
-
                         if (containerExists) {
                             sh "docker stop ${params.NAME}"
                             sh "docker rm ${params.NAME}"
                             sh "docker rmi hyunjinius/gateway:latest"
                         }
-
-
                         sh '''
                         echo 'Dockerimage build...'
                         docker build -t hyunjinius/gateway:latest .
@@ -47,12 +44,12 @@ pipeline {
             }
         }
 
-        stage('Deploy'){
-            steps{
-                dir('backend/gateway'){
+        stage('Deploy') {
+            steps {
+                dir('backend/gateway') {
                     sh '''
                     echo 'Deploy BE...'
-                    docker run -d --env-file ./.env --name gateway hyunjinius/gateway:latest
+                    docker run -d -p 8000:8000 --env-file ./.env --name gateway hyunjinius/gateway:latest
                     '''
                 }
             }
@@ -60,30 +57,29 @@ pipeline {
     }
 
     post {
-            success {
-                script {
-                    def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
-                    def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
-                    mattermostSend (color: 'good',
+        success {
+            script {
+                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                mattermostSend(color: 'good',
                     message: "##  :velkoz: #${env.BUILD_NUMBER} 빌드 성공 !! ${env.JOB_NAME}\n${Author_ID} (<${env.BUILD_URL}|Details>)",
                     endpoint: 'https://meeting.ssafy.com/hooks/dk7sbx6mmbdp8yignuknexyagh',
                     channel: 'jenkins202'
-    //              icon: 'https://www.pngfind.com/pngs/m/437-4370721_61-kb-png-pepe-giving-thumbs-up-transparent.png'
-                    )
-                }
+                    // icon: 'https://www.pngfind.com/pngs/m/437-4370721_61-kb-png-pepe-giving-thumbs-up-transparent.png'
+                )
             }
+        }
 
-            failure {
-                script {
-                    def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
-                    def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
-                    mattermostSend (color: 'danger',
+        failure {
+            script {
+                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                mattermostSend(color: 'danger',
                     message: "##  :badgun: #${env.BUILD_NUMBER} 빌드 실패 ㅜㅜ ${env.JOB_NAME}\n${Author_ID} (<${env.BUILD_URL}|Details>)",
                     endpoint: 'https://meeting.ssafy.com/hooks/dk7sbx6mmbdp8yignuknexyagh',
                     channel: 'jenkins202'
-    //              icon: 'https://www.iconspng.com/images/sad-pepe-feelsbadman.jpg',
-                    )
-                }
+                    // icon: 'https://www.iconspng.com/images/sad-pepe-feelsbadman.jpg',
+                )
             }
         }
     }
