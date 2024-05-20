@@ -1,7 +1,7 @@
 
-# 🎫 PIECE - 문화생활의 한 조각을 채우는
+# 🍰 PIECE - 문화생활의 한 조각을 채우는
 
-
+<img src="./asset/cover.jpg"/>
 
 # 🌟 서비스 소개
 
@@ -45,7 +45,7 @@ PIECE에서 문화생활의 한 조각을 채워보세요!
 
 # 🛠️ 주요 기술 스택
 
--   Infra : AWS, Jenkins, Docker, Nginx
+-   Infra : AWS, Jenkins, Docker, Nginx, Grafana, Prometheus
 -   BackEnd : Java, Spring, JPA
 -   FrontEnd : Vue
 -   DataBase : MySQL, MongoDB
