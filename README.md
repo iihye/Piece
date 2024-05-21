@@ -1,7 +1,6 @@
-
 # 🍰 PIECE - 문화생활의 한 조각을 채우는
 
-<img src="./asset/cover.jpg"/>
+<img src="exec/asset/cover.jpg"/>
 
 # 🌟 서비스 소개
 
@@ -17,6 +16,11 @@ PIECE에서 문화생활의 한 조각을 채워보세요!
 
 # 💡 주요 기능
 
+<img src="exec/asset/조각만들기.gif" width="360" height="800"/>
+<img src="exec/asset/포스터_검색.gif" width="360" height="800"/>
+
+ <br>
+ 
 ### 조각 만들기
 - 사진을 업로드하거나 제목으로 포스터를 검색할 수 있어요.
 - 조각에 공연명, 날짜, 시간, 출연진 등 정보를 입력할 수 있어요.
@@ -25,19 +29,31 @@ PIECE에서 문화생활의 한 조각을 채워보세요!
 - 생성형 AI를 통해 나만의 조각을 완성할 수 있어요.
 
 
+<img src="exec/asset/내조각모아보기.gif" width="360" height="800"/>
+<img src="exec/asset/자세히 기록하기.gif" width="360" height="800"/>
+
 ### 조각 모아보기
 - 내 조각을 캘린더 형식으로 볼 수 있어요.
 - 조각을 찜하거나 링크를 공유할 수 있어요.
 - 자세히 기록하기를 통해 사진과 글을 추가로 작성할 수 있어요.
 
 
+<img src="exec/asset/케이크 모아보기.gif" width="360" height="800"/>
+
 ### 케이크 모아보기
 - 다양한 케이크의 정보를 한 눈에 볼 수 있어요.
 - 하나의 케이크에서 다른 사람들과 채팅을 나눌 수 있어요.
 
+
+<img src="exec/asset/채팅.gif" width="360" height="800"/>
+
 ### 채팅하기
 - 하나의 케이크에서 비롯된 오픈 채팅을 나눌 수 있어요.
 - 1:1 채팅을 나눌 수 있어요.
+
+
+<img src="exec/asset/칭호.gif" width="360" height="800"/>
+<img src="exec/asset/통계.gif" width="360" height="800"/>
 
 ### 나만의 공간
 - 조각을 완성하면 다양한 칭호가 주어져요.
