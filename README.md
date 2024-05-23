@@ -143,7 +143,7 @@
     </tr>
     <tr>
         <td style="width: 16.66%;">
-            [팀장]<br>[INFRA] CI/CD<br>[FE] 조각 모아보기, 디자인<br>[BE] 조각 만들기
+            [팀장]일정 관리<br>[INFRA] CI/CD<br>[FE] 조각 모아보기, 디자인<br>[BE] 조각 만들기
         </td>
         <td style="width: 16.66%;">
             [FE] 로그인<br>[BE] 로그인, 보안
@@ -155,10 +155,10 @@
             [INFRA] 서버 구축<br>[FE] 조각 통계<br>[BE] S3 이미지 저장
         </td>
         <td style="width: 16.66%;">
-            [FE] 채팅<br>[BE] 채팅
+            [INFRA] MSA<br>[FE] 조각 만들기<br>[BE] 케이크 모아보기
         </td>
         <td style="width: 16.66%;">
-            [INFRA] MSA<br>[FE] 조각 만들기<br>[BE] 케이크 모아보기
+            [FE] 채팅<br>[BE] 채팅
         </td>
     </tr>
 </table>
